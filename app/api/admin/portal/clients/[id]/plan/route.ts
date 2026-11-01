@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { clientServices, services } from '@/lib/db/schema';
 import { and, eq, inArray } from 'drizzle-orm';
 import { TIERS } from '@/lib/billing/domain-catalog';
+import { auditEvent } from '@/lib/kumo/audit';
 
 /**
  * Admin tier-assignment endpoint.
@@ -92,9 +93,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 }
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!await requireStaff()) {
+  const staff = await requireStaff();
+  if (!staff) {
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
   }
+  const staffId = parseInt(staff.user!.id!, 10);
 
   const { id } = await params;
   const clientId = parseInt(id, 10);
@@ -159,7 +162,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       })
       .returning({ id: clientServices.id, serviceId: clientServices.serviceId, status: clientServices.status });
     newRow = inserted;
+    // Kumo One: a plan granted by staff (no payment-provider confirmation)
+    // must be traceable — record who did it, for which plan, and the row.
+    await db
+      .update(clientServices)
+      .set({ notes: `assigned manually by staff user ${staffId}`, updatedAt: new Date() })
+      .where(eq(clientServices.id, inserted.id));
   }
+  await auditEvent({
+    clientId,
+    actorId: staffId,
+    action: targetService ? 'billing.plan_assigned_manually' : 'billing.plan_removed_manually',
+    entityType: 'client_service',
+    entityId: newRow?.id,
+    metadata: { tier: targetService?.slug ?? null },
+  });
 
   return NextResponse.json({
     success: true,

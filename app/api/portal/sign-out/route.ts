@@ -1,6 +1,9 @@
 import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { secureCookiesEnabled } from '@/lib/auth-cookies';
 import { NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { authRevokedSessions } from '@/lib/db/schema';
 
 /**
  * Custom sign-out endpoint that clears session cookies on both the bare domain
@@ -8,6 +11,19 @@ import { NextResponse } from 'next/server';
  * to simplerdevelopment.com to new cookies on .simplerdevelopment.com.
  */
 export async function POST() {
+  // Kumo One: revoke this session server-side first, so a cookie re-issued by
+  // a request that was still in flight cannot bring it back.
+  try {
+    const session = await auth();
+    const sid = (session as { sid?: string } | null)?.sid;
+    const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;
+    if (sid) {
+      await db.insert(authRevokedSessions).values({ sid, userId: Number.isFinite(userId) ? userId : null }).onConflictDoNothing();
+    }
+  } catch (err) {
+    console.error('[sign-out] could not record revoked session:', err);
+  }
+
   const response = NextResponse.json({ success: true });
 
   // Whether NextAuth used the `__Secure-` cookie prefix. Shared with lib/auth.ts

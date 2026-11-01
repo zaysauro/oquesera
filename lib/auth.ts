@@ -5,7 +5,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { compare } from 'bcryptjs';
 import { db } from '@/lib/db';
-import { users } from '@/lib/db/schema';
+import { authRevokedSessions, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { findOrCreateGoogleUser } from '@/lib/signup/service';
 import { checkRateLimit, getClientIp } from '@/lib/security/rate-limit';
@@ -188,6 +188,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.sub = String(resolved.id);
         token.role = resolved.role;
         token.checkedAt = Date.now();
+        token.sid = crypto.randomUUID();
         return token;
       }
       if (user) {
@@ -195,7 +196,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // active. Stamp the validation time so the re-check below is throttled.
         token.role = user.role;
         token.checkedAt = Date.now();
+        token.sid = crypto.randomUUID();
         return token;
+      }
+      // Kumo One: a signed-out session stays dead even if an in-flight
+      // response re-sets its cookie (see authRevokedSessions). One PK lookup
+      // per authenticated request; fails open on DB errors like the check below.
+      if (typeof token.sid === 'string') {
+        try {
+          const [revoked] = await db
+            .select({ sid: authRevokedSessions.sid })
+            .from(authRevokedSessions)
+            .where(eq(authRevokedSessions.sid, token.sid))
+            .limit(1);
+          if (revoked) return null;
+        } catch {
+          /* availability over strictness during a DB blip */
+        }
       }
       // Subsequent requests carry only the JWT (no DB hit at sign-in). Because
       // the token is stateless, a user that was DELETED or DEACTIVATED after
@@ -238,6 +255,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.sub as string;
         session.user.role = token.role as string;
+        // Lets /api/portal/sign-out revoke exactly this session.
+        (session as { sid?: string }).sid = typeof token.sid === 'string' ? token.sid : undefined;
       }
       return session;
     },

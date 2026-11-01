@@ -170,3 +170,15 @@ export const userDashboardPreferences = pgTable(
   (t) => [unique().on(t.userId, t.clientId)],
 );
 
+
+// Kumo One: signed-out sessions. Sessions are stateless JWTs, and the
+// middleware re-issues the cookie on every request, so a request already in
+// flight when the user signs out can hand the browser a fresh cookie and
+// resurrect the session. Each sign-in stamps a random `sid` into the JWT;
+// sign-out records it here and lib/auth.ts rejects any token whose sid is
+// listed. Rows can be pruned once older than the session max age (30 days).
+export const authRevokedSessions = pgTable('auth_revoked_sessions', {
+  sid: varchar('sid', { length: 64 }).primaryKey(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  revokedAt: timestamp('revoked_at').defaultNow().notNull(),
+});
