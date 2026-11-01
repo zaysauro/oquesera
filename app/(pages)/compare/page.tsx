@@ -57,7 +57,7 @@ const faqs = [
   {
     question: 'Isn’t an all-in-one platform worse than best-of-breed tools?',
     answer:
-      'Sometimes a single niche tool has a deeper feature in its category. But integrated data and one vendor usually beat marginally-deeper features that don’t talk to each other — and because SimplerDevelopment is open source, you can extend any module instead of waiting on a vendor roadmap.',
+      'Sometimes a single niche tool has a deeper feature in its category. But integrated data and one vendor usually beat marginally-deeper features that don’t talk to each other — and because Kumo One is open source, you can extend any module instead of waiting on a vendor roadmap.',
   },
   {
     question: 'When should I keep separate point tools?',
@@ -106,7 +106,7 @@ export default function ComparePage() {
               A Stitched Point-Tool Stack
             </div>
             <div className="hidden border-l border-[color-mix(in_srgb,var(--retro-mid)_30%,transparent)] bg-[color-mix(in_srgb,var(--retro-orange)_10%,var(--retro-cream))] p-5 font-display text-xs font-bold uppercase tracking-[0.14em] text-[var(--retro-orange)] md:block">
-              SimplerDevelopment
+              Kumo One
             </div>
             {rows.map((r) => (
               <div key={r.dimension} className="contents">
@@ -121,7 +121,7 @@ export default function ComparePage() {
                 </div>
                 <div className="border-t border-l border-[color-mix(in_srgb,var(--retro-mid)_30%,transparent)] bg-[color-mix(in_srgb,var(--retro-orange)_6%,var(--retro-cream))] p-5 text-sm text-[var(--retro-ink)]">
                   <span className="mb-1 block font-display text-xs font-bold uppercase tracking-wide text-[var(--retro-orange)] md:hidden">
-                    SimplerDevelopment
+                    Kumo One
                   </span>
                   {r.sd}
                 </div>

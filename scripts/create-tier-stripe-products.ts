@@ -13,6 +13,7 @@
 //
 // Run: STRIPE_SECRET_KEY=sk_test_... tsx scripts/create-tier-stripe-products.ts
 
+import { STRIPE_CURRENCY } from '../config/brand';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env' });
@@ -58,7 +59,7 @@ async function main() {
     const price = await stripe.prices.create({
       product: product.id,
       unit_amount: tier.monthlyPriceCents,
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       recurring: { interval: 'month' },
       lookup_key: lookupKey,
       nickname: `${tier.name} (monthly)`,

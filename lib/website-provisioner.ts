@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN, platformSubdomainHost } from '@/config/brand';
 import { randomBytes } from 'crypto';
 import { db } from '@/lib/db';
 import { clientWebsites, websiteEnvironments } from '@/lib/db/schema';
@@ -15,7 +16,7 @@ export async function provisionWebsite(
   subdomain: string,
   description: string,
 ): Promise<void> {
-  const fullDomain = `${subdomain}.simplerdevelopment.com`;
+  const fullDomain = platformSubdomainHost(subdomain);
 
   try {
     // Step 1: Mark as provisioning
@@ -71,7 +72,7 @@ export async function provisionWebsite(
     }
 
     // Step 3c: Set CMS environment variables so the starter can fetch content
-    const cmsApiUrl = process.env.CMS_API_URL || 'https://simplerdevelopment.com';
+    const cmsApiUrl = process.env.CMS_API_URL || process.env.NEXT_PUBLIC_APP_URL || `https://${PLATFORM_ROOT_DOMAIN}`;
     await setEnvVars(vercelId!, [
       { key: 'CMS_API_URL', value: cmsApiUrl },
       { key: 'SITE_ID', value: String(siteId) },
@@ -156,8 +157,8 @@ export async function changeSubdomain(
   newSubdomain: string,
   vercelProjectId: string | null,
 ): Promise<void> {
-  const oldDomain = `${oldSubdomain}.simplerdevelopment.com`;
-  const newDomain = `${newSubdomain}.simplerdevelopment.com`;
+  const oldDomain = platformSubdomainHost(oldSubdomain);
+  const newDomain = platformSubdomainHost(newSubdomain);
 
   if (vercelProjectId) {
     // Dedicated Vercel project — update domain on Vercel
@@ -179,7 +180,7 @@ export async function changeSubdomain(
     }
   } else {
     // Shared hosting — CNAME points to the platform's Railway domain
-    const platformDomain = process.env.RAILWAY_PUBLIC_DOMAIN || 'simplerdevelopment.com';
+    const platformDomain = process.env.RAILWAY_PUBLIC_DOMAIN || PLATFORM_ROOT_DOMAIN;
     await createCnameRecord(newSubdomain, platformDomain);
   }
 

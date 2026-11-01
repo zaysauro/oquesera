@@ -248,7 +248,7 @@ import { assertUserVisibleToClient, OwnershipError } from '@/lib/security/assert
 // MCP clients are off-origin (Claude Desktop, etc.), so relative paths like
 // /portal/brain/knowledge are useless to them. Absolutize against the public
 // portal origin before returning.
-const PORTAL_BASE_URL = (process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com').replace(/\/$/, '');
+const PORTAL_BASE_URL = (process.env.NEXTAUTH_URL || 'https://example.com').replace(/\/$/, '');
 function absolutizeUrl(path: string): string {
   if (/^https?:\/\//i.test(path)) return path;
   return `${PORTAL_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;

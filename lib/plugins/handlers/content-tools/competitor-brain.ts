@@ -31,6 +31,7 @@
 // content_briefs; the brain_note + card-comment are reproducible
 // signal on top of that.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema/auth';
@@ -38,7 +39,7 @@ import { brainNotes } from '@/lib/db/schema/brain';
 import { kanbanCardComments } from '@/lib/db/schema/pm';
 import { contentBriefs, type CompetitorVulnerability } from '@/lib/db/schema/plugins';
 
-const BOT_EMAIL = 'tools-bot@simplerdevelopment.com';
+const BOT_EMAIL = `tools-bot@${EMAIL_DOMAIN}`;
 const BRAIN_NOTE_SOURCE = 'plugin-content-tools';
 
 // In-memory cache; the bot user row is seeded once and never deleted.

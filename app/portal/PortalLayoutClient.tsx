@@ -1,5 +1,6 @@
 'use client';
 
+import { extractPlatformSubdomain } from '@/config/brand';
 import dynamic from 'next/dynamic';
 // SessionProvider is mounted once at the app root in `app/layout.tsx`.
 // We intentionally don't re-wrap here — every nested SessionProvider spins up
@@ -81,11 +82,11 @@ export default function PortalLayoutClient({ children, apps, entitlements }: Por
     setMobileOpen(false);
   }, [pathname]);
 
-  // Auto-resolve subdomain portal: e.g. acme.simplerdevelopment.com/portal
+  // Auto-resolve subdomain portal: e.g. acme.<platform root>/portal
   useEffect(() => {
     const hostname = window.location.hostname;
-    if (hostname.endsWith('.simplerdevelopment.com') && hostname !== 'simplerdevelopment.com' && hostname !== 'www.simplerdevelopment.com') {
-      const subdomain = hostname.replace('.simplerdevelopment.com', '');
+    const subdomain = extractPlatformSubdomain(hostname);
+    if (subdomain) {
       if (subdomain && !subdomain.includes('.')) {
         fetch(`/api/portal/resolve-subdomain?subdomain=${encodeURIComponent(subdomain)}`)
           .then(r => r.ok ? r.json() : null)

@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClients } from '@/lib/portal-client';
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
     path: '/',
     maxAge: 60 * 60 * 24 * 365, // 1 year
     secure: process.env.NODE_ENV === 'production',
-    domain: process.env.NODE_ENV === 'production' ? '.simplerdevelopment.com' : undefined,
+    domain: process.env.NODE_ENV === 'production' ? `.${PLATFORM_ROOT_DOMAIN}` : undefined,
   });
 
   return response;

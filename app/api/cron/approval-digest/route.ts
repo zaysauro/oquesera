@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { isAuthorizedCron } from '@/lib/cron-auth';
@@ -48,8 +49,8 @@ export const runtime = 'nodejs';
  * `app/api/cron/failing-automations-notify/route.ts`).
  */
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'portal@simplerdevelopment.com';
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://example.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `portal@${EMAIL_DOMAIN}`;
 const EMAILS_ENABLED = process.env.MCP_APPROVAL_EMAILS_ENABLED !== 'false';
 
 type DigestRow = {
@@ -103,7 +104,7 @@ function renderDigestEmail(params: {
       </div>
       <div style="padding:24px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
         <p style="margin:0;font-size:12px;color:#94a3b8;">
-          Simpler Development &middot; Set <code>MCP_APPROVAL_EMAILS_ENABLED=false</code> to disable
+          Kumo One &middot; Set <code>MCP_APPROVAL_EMAILS_ENABLED=false</code> to disable
         </p>
       </div>
     </div>
@@ -190,7 +191,7 @@ async function _GET(req: Request) {
       const html = renderDigestEmail({ clientName, items, reviewUrl });
 
       await resend.emails.send({
-        from: `Simpler Development <${FROM_EMAIL}>`,
+        from: `Kumo One <${FROM_EMAIL}>`,
         to: user.email,
         subject,
         html,

@@ -22,6 +22,7 @@
  * are 47 cron routes registered in vercel.json.
  */
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { escapeHtml } from '@/lib/utils/html';
 import { db } from '@/lib/db';
 import { surveys, clients, users, clientMembers } from '@/lib/db/schema';
@@ -29,8 +30,8 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { onEvent, type AutomationEvent } from './event-bus';
 import { resend } from '@/lib/email';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
-const BASE_URL = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://simplerdevelopment.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
+const BASE_URL = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
 
 interface SurveyResponsePayload {
   surveyId: number;

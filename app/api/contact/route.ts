@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { asc, eq } from 'drizzle-orm';
@@ -17,8 +18,8 @@ import { ATTRIBUTION_COOKIE, parseAttributionCookie, type Attribution } from '@/
 const HONEYPOT_FIELD = 'website';
 
 // Where contact-form submissions are delivered.
-const CONTACT_INBOX = process.env.CONTACT_INBOX || 'info@simplerdevelopment.com';
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'SimplerDevelopment <noreply@simplerdevelopment.com>';
+const CONTACT_INBOX = process.env.CONTACT_INBOX || `info@${EMAIL_DOMAIN}`;
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `Kumo One <noreply@${EMAIL_DOMAIN}>`;
 
 // This is SimplerDevelopment's OWN marketing form, not a tenant route — there
 // is no session and no site-resolver to derive a tenant from, so the owning

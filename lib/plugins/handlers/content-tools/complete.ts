@@ -18,6 +18,7 @@
 // run id from one tenant can't be completed by another. This mirrors the
 // IDOR pattern in scripts.ts.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { z } from 'zod';
 import { and, eq, inArray } from 'drizzle-orm';
 import { db } from '@/lib/db';
@@ -410,7 +411,7 @@ export const completeHandlers: CallbackHandler[] = [postComplete];
 // dedup is a single round trip instead of N. Insert failures are swallowed
 // (and counted) — a single bad URL shouldn't fail the whole run.
 
-const TOOLS_BOT_EMAIL = 'tools-bot@simplerdevelopment.com';
+const TOOLS_BOT_EMAIL = `tools-bot@${EMAIL_DOMAIN}`;
 const BRAIN_NOTE_SOURCE = 'plugin-content-tools';
 let toolsBotUserIdCache: number | null | undefined;
 

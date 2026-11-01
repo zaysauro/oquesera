@@ -16,6 +16,7 @@
  *    `https://<host>/slides/<slug>` (preserving the query string), so decks are
  *    served on the owning tenant's domain.
  */
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { notFound, redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { eq, and, inArray } from 'drizzle-orm';
@@ -108,10 +109,10 @@ async function resolvePrimaryHost(clientId: number): Promise<string | null> {
     .where(and(eq(clientWebsites.clientId, clientId), eq(clientWebsites.active, true)))
     .orderBy(clientWebsites.id)
     .limit(5);
-  const primary = sites.find((s) => s.domain && !s.domain.endsWith('.simplerdevelopment.com')) ?? sites[0];
+  const primary = sites.find((s) => s.domain && !s.domain.endsWith(`.${PLATFORM_ROOT_DOMAIN}`)) ?? sites[0];
   if (!primary) return null;
   if (primary.domain) return primary.domain;
-  if (primary.subdomain) return `${primary.subdomain}.simplerdevelopment.com`;
+  if (primary.subdomain) return `${primary.subdomain}.${PLATFORM_ROOT_DOMAIN}`;
   return null;
 }
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import SprintRetroPanel from './SprintRetroPanel';
 
@@ -546,7 +547,7 @@ function CycleTable({ payload, projectKey }: { payload: CyclePayload; projectKey
                 <td className="px-4 py-2 text-xs text-muted-foreground">{r.storyPoints ?? '—'}</td>
                 <td className="px-4 py-2 text-xs">{fmt(r.leadTimeMinutes)}</td>
                 <td className="px-4 py-2 text-xs">{fmt(r.cycleTimeMinutes)}</td>
-                <td className="px-4 py-2 text-xs text-muted-foreground">{new Date(r.doneAt).toLocaleDateString('en-US')}</td>
+                <td className="px-4 py-2 text-xs text-muted-foreground">{new Date(r.doneAt).toLocaleDateString(APP_LOCALE)}</td>
               </tr>
             );
           })}

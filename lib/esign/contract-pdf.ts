@@ -14,6 +14,7 @@
  * DropboxSign upload artifact.
  */
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { PDFDocument, StandardFonts, rgb, type PDFPage } from 'pdf-lib';
 import type { ContractClause } from '@/lib/db/schema/crm';
 
@@ -76,9 +77,9 @@ function hexToRgb(hex: string): [number, number, number] {
 function formatCents(cents: number, currency: string): string {
   const dollars = cents / 100;
   try {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(APP_LOCALE, {
       style: 'currency',
-      currency: currency || 'USD',
+      currency: currency || APP_CURRENCY,
       minimumFractionDigits: 2,
     }).format(dollars);
   } catch {
@@ -92,7 +93,7 @@ export async function renderContractPdf(input: ContractPdfInput): Promise<Buffer
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   const accentRgb = input.accentColor ? hexToRgb(input.accentColor) : [0.145, 0.388, 0.922] as [number, number, number];
-  const currency = input.currency || 'USD';
+  const currency = input.currency || APP_CURRENCY;
 
   // Try to fetch and embed the logo image.
   let logoImageEmbed: Awaited<ReturnType<PDFDocument['embedPng']>> | null = null;

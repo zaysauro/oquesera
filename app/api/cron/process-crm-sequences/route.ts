@@ -12,6 +12,7 @@
  *
  * Auth: Vercel cron header OR `Authorization: Bearer ${CRON_SECRET}`.
  */
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { isAuthorizedCron } from '@/lib/cron-auth';
@@ -29,8 +30,8 @@ import { resend } from '@/lib/email';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'crm@simplerdevelopment.com';
-const FROM_NAME = 'Simpler Development';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `crm@${EMAIL_DOMAIN}`;
+const FROM_NAME = 'Kumo One';
 const MAX_SENDS_PER_TICK = 100;
 
 async function _GET(req: Request): Promise<Response> {

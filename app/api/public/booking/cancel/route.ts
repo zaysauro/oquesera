@@ -1,3 +1,4 @@
+import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { bookings, bookingPages, clients, users } from '@/lib/db/schema';
@@ -78,10 +79,10 @@ export async function POST(req: Request) {
         try {
           const { resend } = await import('@/lib/email/index');
           resend.emails.send({
-            from: `SimplerDevelopment <${process.env.RESEND_FROM_EMAIL || 'bookings@simplerdevelopment.com'}>`,
+            from: `Kumo One <${process.env.RESEND_FROM_EMAIL || `bookings@${EMAIL_DOMAIN}`}>`,
             to: host.email,
             subject: `Booking Cancelled: ${booking.guestName} — ${page.title}`,
-            html: `<p><strong>${booking.guestName}</strong> cancelled their ${page.title} appointment on ${new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'short', timeZone: booking.timezone }).format(booking.startTime)}.</p>`,
+            html: `<p><strong>${booking.guestName}</strong> cancelled their ${page.title} appointment on ${new Intl.DateTimeFormat(APP_LOCALE, { dateStyle: 'full', timeStyle: 'short', timeZone: booking.timezone }).format(booking.startTime)}.</p>`,
           }).catch(() => {});
         } catch {
           // Resend unconfigured — cancellation must still succeed.

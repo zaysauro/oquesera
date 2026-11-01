@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/components/storefront/account/CustomerAuthContext';
@@ -61,7 +62,7 @@ export function AccountDashboardClient({ siteId, domain }: { siteId: number; dom
             <div className="border border-gray-200 rounded-xl p-4">
               <p className="text-xs text-gray-500 mb-1">Member Since</p>
               <p className="text-lg font-semibold text-gray-900">
-                {customer?.createdAt ? new Date(customer.createdAt as unknown as string).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '---'}
+                {customer?.createdAt ? new Date(customer.createdAt as unknown as string).toLocaleDateString(APP_LOCALE, { month: 'short', year: 'numeric' }) : '---'}
               </p>
             </div>
           </div>

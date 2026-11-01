@@ -64,7 +64,7 @@ export function StepPowerUp({ state, setAnswers, next, persist }: StepProps) {
   return (
     <div className="space-y-5">
       <p className="text-[14px] text-muted-foreground leading-relaxed">
-        SimplerDevelopment plays nicely with <strong>Claude Code</strong>, <strong>Claude Desktop</strong>,
+        Kumo One plays nicely with <strong>Claude Code</strong>, <strong>Claude Desktop</strong>,
         and any MCP-compatible client. Pair both halves below and you can draft pages, decks, emails, surveys,
         and more by chatting.
       </p>
@@ -88,7 +88,7 @@ export function StepPowerUp({ state, setAnswers, next, persist }: StepProps) {
             )}
           </header>
           <p className="text-[12.5px] text-muted-foreground leading-[1.45] mt-0">
-            One installer adds every SimplerDevelopment skill to your assistant.
+            One installer adds every Kumo One skill to your assistant.
           </p>
 
           <div className="flex gap-2.5">

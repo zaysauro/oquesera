@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useAgencyChrome } from './AgencyChromeProvider';
 import { buildPortalNavItems, type PortalNavItem } from '@/lib/portal-nav';
 
-const DEFAULT_APP = 'SimplerDevelopment';
+const DEFAULT_APP = 'Kumo One';
 
 // Order matters: more-specific patterns must come before broader ones.
 const ROUTES: { match: RegExp; title: string }[] = [

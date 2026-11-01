@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import {
@@ -479,7 +480,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     // Check if website has Stripe Connect (use connected account for payouts)
     let stripeParams: Parameters<typeof stripe.paymentIntents.create>[0] = {
       amount: total,
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       metadata: {
         type: 'booking',
         bookingId: String(booking.id),
@@ -499,7 +500,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
 
         stripeParams = {
           ...stripeParams,
-          currency: store.currency?.toLowerCase() || 'usd',
+          currency: store.currency?.toLowerCase() || STRIPE_CURRENCY,
           application_fee_amount: applicationFee,
           transfer_data: { destination: store.stripeAccountId },
         };

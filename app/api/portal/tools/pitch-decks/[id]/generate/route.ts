@@ -121,7 +121,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         // SSRF guard — re-resolve DNS at fetch time, reject private/loopback.
         await assertSafeUrl(trimmedUrl);
         const siteRes = await fetch(trimmedUrl, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SimplerDev/1.0)' },
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; KumoOne/1.0)' },
           redirect: 'manual',
           signal: AbortSignal.timeout(10000),
         });

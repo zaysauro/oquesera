@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { db } from '@/lib/db';
@@ -277,8 +278,8 @@ async function executeEmailStep(
 
   const subject = (cfg?.subject as string | undefined) ?? `Message from ${journey?.name ?? 'us'}`;
   const htmlContent = (cfg?.htmlContent as string | undefined) ?? '<p>This is an automated email.</p>';
-  const fromName = (cfg?.fromName as string | undefined) ?? 'SimplerDevelopment';
-  const fromEmail = (cfg?.fromEmail as string | undefined) ?? (process.env.DEFAULT_FROM_EMAIL ?? 'noreply@simplerdevelopment.com');
+  const fromName = (cfg?.fromName as string | undefined) ?? 'Kumo One';
+  const fromEmail = (cfg?.fromEmail as string | undefined) ?? (process.env.DEFAULT_FROM_EMAIL ?? `noreply@${EMAIL_DOMAIN}`);
 
   const unsubscribeUrl = buildUnsubscribeUrl(subscriber.unsubscribeToken);
   const html = htmlContent.replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl);

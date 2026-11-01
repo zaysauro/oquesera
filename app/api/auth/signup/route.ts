@@ -2,6 +2,7 @@
 // Creates user (role 'client', unverified) + client (billingMode 'saas') and
 // emails a verification link. The Google path lives in lib/auth.ts instead.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { createSelfServeAccount, SignupError } from '@/lib/signup/service';
 import { sendEmail } from '@/lib/email';
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
       company: body.company,
     });
 
-    const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://simplerdevelopment.com';
+    const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com';
     const verifyUrl = `${origin}/api/auth/verify-email?token=${verificationToken}`;
 
     // In local dev there's usually no RESEND_API_KEY, so the email silently
@@ -64,13 +65,13 @@ export async function POST(req: Request) {
     let verificationSent = false;
     try {
       await sendEmail({
-        from: process.env.RESEND_FROM_EMAIL ?? 'SimplerDevelopment <noreply@simplerdevelopment.com>',
+        from: process.env.RESEND_FROM_EMAIL ?? `Kumo One <noreply@${EMAIL_DOMAIN}>`,
         to: body.email.trim().toLowerCase(),
-        subject: 'Verify your email to get started',
+        subject: 'Confirme seu e-mail para começar',
         html: [
-          `<p>Welcome${body.name ? ` ${body.name.trim()}` : ''} — one click to activate your account:</p>`,
-          `<p><a href="${verifyUrl}" style="color:#6366f1;font-weight:600;">Verify my email →</a></p>`,
-          `<p style="color:#6b7280;font-size:12px;">This link expires in 24 hours. If you didn't sign up, ignore this email.</p>`,
+          `<p>Boas-vindas${body.name ? `, ${body.name.trim()}` : ''}! Falta só um clique para ativar sua conta no Kumo One:</p>`,
+          `<p><a href="${verifyUrl}" style="color:#0a0a0a;background:#facc15;padding:10px 16px;border-radius:6px;text-decoration:none;font-weight:600;">Confirmar meu e-mail</a></p>`,
+          `<p style="color:#6b7280;font-size:12px;">Este link expira em 24 horas. Se você não criou esta conta, ignore este e-mail.</p>`,
         ].join('\n'),
       });
       verificationSent = true;

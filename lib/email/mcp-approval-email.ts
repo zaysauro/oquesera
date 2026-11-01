@@ -7,6 +7,7 @@
  * the email is skipped to avoid flooding during bursts of agent activity.
  */
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { escapeHtml } from '@/lib/utils/html';
 import { db } from '@/lib/db';
 import { crmNotifications, users, clients } from '@/lib/db/schema';
@@ -14,8 +15,8 @@ import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { resend } from './index';
 import { shouldDeliverNotification } from '@/lib/crm/notifications';
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'portal@simplerdevelopment.com';
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://example.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `portal@${EMAIL_DOMAIN}`;
 const COOLDOWN_MINUTES = 10;
 const EMAILS_ENABLED = process.env.MCP_APPROVAL_EMAILS_ENABLED !== 'false';
 
@@ -74,7 +75,7 @@ function renderEmail(params: {
           You're receiving this because you're an owner or admin on this account.
         </p>
         <p style="margin:0;font-size:12px;color:#94a3b8;">
-          Simpler Development &middot; Set <code>MCP_APPROVAL_EMAILS_ENABLED=false</code> to disable
+          Kumo One &middot; Set <code>MCP_APPROVAL_EMAILS_ENABLED=false</code> to disable
         </p>
       </div>
     </div>
@@ -169,7 +170,7 @@ export async function sendApprovalEmails(params: SendApprovalEmailsParams): Prom
         if (recentCount > 1) return; // flurry cooldown; another email was sent recently
         try {
           await resend.emails.send({
-            from: `Simpler Development <${FROM_EMAIL}>`,
+            from: `Kumo One <${FROM_EMAIL}>`,
             to: u.email,
             subject,
             html,

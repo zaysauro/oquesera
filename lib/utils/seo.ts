@@ -138,11 +138,7 @@ export function generateOrganizationSchema() {
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.png`,
-    sameAs: [
-      siteConfig.links.twitter,
-      siteConfig.links.github,
-      siteConfig.links.linkedin,
-    ],
+    logo: `${siteConfig.url}/brand/kumo-mark-512.png`,
+    sameAs: [siteConfig.links.github],
   };
 }

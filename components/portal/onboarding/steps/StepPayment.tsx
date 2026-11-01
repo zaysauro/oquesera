@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import type { StepProps } from './types';
@@ -143,7 +144,7 @@ export function StepPayment({
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
 
   if (checkoutSuccess) {
     return (

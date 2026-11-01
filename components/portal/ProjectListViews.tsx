@@ -7,6 +7,7 @@
  * no behavior change.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { RelatedModulesStrip } from '@/components/portal/billing/RelatedModulesStrip';
@@ -88,13 +89,13 @@ export function ProjectGrid({
             {project.startDate && (
               <span className="flex items-center gap-1">
                 <span className="material-icons text-xs">calendar_today</span>
-                {new Date(project.startDate).toLocaleDateString('en-US')}
+                {new Date(project.startDate).toLocaleDateString(APP_LOCALE)}
               </span>
             )}
             {project.dueDate && (
               <span className="flex items-center gap-1">
                 <span className="material-icons text-xs">event</span>
-                Due {new Date(project.dueDate).toLocaleDateString('en-US')}
+                Due {new Date(project.dueDate).toLocaleDateString(APP_LOCALE)}
               </span>
             )}
           </div>
@@ -161,8 +162,8 @@ export function ProjectTable({
                       </span>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{project.myRole ? roleLabel[project.myRole] : '—'}</td>
-                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{project.startDate ? new Date(project.startDate).toLocaleDateString('en-US') : '—'}</td>
-                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{project.dueDate ? new Date(project.dueDate).toLocaleDateString('en-US') : '—'}</td>
+                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{project.startDate ? new Date(project.startDate).toLocaleDateString(APP_LOCALE) : '—'}</td>
+                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{project.dueDate ? new Date(project.dueDate).toLocaleDateString(APP_LOCALE) : '—'}</td>
                   </tr>
                 );
               })}

@@ -1,3 +1,4 @@
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { clients, suggestedProjects } from '@/lib/db/schema';
@@ -31,7 +32,7 @@ const categoryIcon: Record<string, string> = {
 const categoryOrder = ['website', 'ecommerce', 'mobile', 'development', 'maintenance', 'branding', 'other'];
 
 function formatCents(cents: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cents / 100);
+  return new Intl.NumberFormat(APP_LOCALE, { style: 'currency', currency: APP_CURRENCY, maximumFractionDigits: 0 }).format(cents / 100);
 }
 
 export default async function SuggestedProjectsPage() {

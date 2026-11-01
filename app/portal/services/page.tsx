@@ -50,7 +50,7 @@ export default async function PortalServicesPage({
       <PortalPageHeader
         eyebrow="Catalog"
         title="Add a Service"
-        subtitle="Extend your workspace with powerful add-ons managed by Simpler Development."
+        subtitle="Extend your workspace with powerful add-ons managed by Kumo One."
       />
 
       {purchased === '1' && (

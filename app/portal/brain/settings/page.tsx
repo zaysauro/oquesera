@@ -1,5 +1,6 @@
 'use client';
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import Link from 'next/link';
 import { useEffect, useState, useCallback } from 'react';
 import type { BrainEnabledModules } from '@/lib/db/schema';
@@ -439,7 +440,7 @@ function NameField({
 
 function EmailIngestField({ token }: { token: string }) {
   const [copied, setCopied] = useState(false);
-  const address = `brain+${token}@simplerdevelopment.com`;
+  const address = `brain+${token}@${EMAIL_DOMAIN}`;
 
   async function copy() {
     try {

@@ -44,7 +44,7 @@ const STEP_META: Record<
   features: { title: 'What brings you here?', subtitle: "Pick what you want to explore first — we'll tailor your setup around it.", rail: 'Your goals', icon: 'interests', eyebrow: 'Your goals' },
   upsell: { title: 'Supercharge your plan', subtitle: 'Modules other teams like yours add first.', rail: 'Add-ons', icon: 'auto_awesome', eyebrow: 'Add-ons' },
   'power-up': { title: 'Power up with Claude', subtitle: 'Optional, but the magic happens when you wire this up.', rail: 'Power up', icon: 'bolt', eyebrow: 'Power up' },
-  done: { title: "You're all set!", subtitle: 'Welcome to SimplerDevelopment.', rail: 'Done', icon: 'celebration', eyebrow: 'All set' },
+  done: { title: "You're all set!", subtitle: 'Welcome to Kumo One.', rail: 'Done', icon: 'celebration', eyebrow: 'All set' },
 };
 
 function seedTimezone(s: OnboardingState): OnboardingState {

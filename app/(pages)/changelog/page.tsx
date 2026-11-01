@@ -7,7 +7,7 @@ import { RetroBadge, Star } from '@/components/retro/primitives';
 export const metadata = generateSEO({
   title: 'Changelog',
   description:
-    'What’s new in SimplerDevelopment — the open-source, MCP-native all-in-one agency platform. Release notes and product updates.',
+    'What’s new in Kumo One — the open-source, MCP-native all-in-one agency platform. Release notes and product updates.',
   path: '/changelog',
 });
 

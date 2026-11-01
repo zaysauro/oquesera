@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
       const priceParams: Record<string, unknown> = {
         product: product.id,
         unit_amount: body.price,
-        currency: 'usd',
+        currency: STRIPE_CURRENCY,
         metadata: { serviceId: String(svc.id) },
       };
       if (body.billingCycle === 'monthly') priceParams.recurring = { interval: 'month' };

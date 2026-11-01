@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 
@@ -88,7 +89,7 @@ function CancelContent() {
   if (!booking) return null;
 
   const startDate = new Date(booking.startTime);
-  const formatted = new Intl.DateTimeFormat('en-US', {
+  const formatted = new Intl.DateTimeFormat(APP_LOCALE, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',

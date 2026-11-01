@@ -1,3 +1,4 @@
+import { platformSubdomainHost } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
     domain: domain || null,
     description: description || null,
     subdomain,
-    vercelDomain: `${subdomain}.simplerdevelopment.com`,
+    vercelDomain: platformSubdomainHost(subdomain),
     deploymentStatus: 'pending',
     active: true,
   }).returning();

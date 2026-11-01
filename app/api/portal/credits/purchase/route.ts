@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
     mode: 'payment',
     line_items: [{
       price_data: {
-        currency: 'usd',
+        currency: STRIPE_CURRENCY,
         product_data: { name: pkg.name, description: `${(pkg.tokens / 1000).toFixed(0)}K AI tokens` },
         unit_amount: pkg.price,
       },
@@ -58,8 +59,8 @@ export async function POST(req: Request) {
       tokens: String(pkg.tokens),
       packageName: pkg.name,
     },
-    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://simplerdevelopment.com'}/portal/dashboard?credits=purchased`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://simplerdevelopment.com'}/portal/dashboard`,
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/portal/dashboard?credits=purchased`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/portal/dashboard`,
   });
 
   return NextResponse.json({ url: checkoutSession.url });

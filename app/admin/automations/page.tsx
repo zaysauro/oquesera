@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 
 interface AutomationRule {
@@ -63,7 +64,7 @@ function statusBadge(status: string) {
 
 function formatDate(d: string | null) {
   if (!d) return '--';
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return new Date(d).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
 }
 
 export default function AdminAutomationsPage() {

@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -171,7 +172,7 @@ export async function POST(req: Request) {
       companyId: body.companyId || null,
       title: body.title.trim(),
       value: body.value != null ? body.value : null,
-      currency: body.currency || 'USD',
+      currency: body.currency || APP_CURRENCY,
       status: body.status || 'open',
       priority: body.priority || 'medium',
       expectedCloseDate: body.expectedCloseDate ? new Date(body.expectedCloseDate) : null,

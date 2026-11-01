@@ -12,6 +12,7 @@
  * boundary — a `*` key holds write + approvals:manage). See ./self-approval.
  */
 
+import { APP_CURRENCY } from '@/config/brand';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { isSelfApproval } from './self-approval';
 import { z } from 'zod';
@@ -887,7 +888,7 @@ export async function applyPendingChange(change: typeof mcpPendingChanges.$infer
         sections: ((payload.sections as ProposalSection[] | undefined) ?? []) as ProposalSection[],
         lineItems: ((payload.lineItems as ProposalLineItem[] | undefined) ?? []) as ProposalLineItem[],
         fees: ((payload.fees as ProposalFee[] | undefined) ?? []) as ProposalFee[],
-        currency: (payload.currency as string | undefined) ?? 'USD',
+        currency: (payload.currency as string | undefined) ?? APP_CURRENCY,
         validUntil: payload.validUntil ? new Date(payload.validUntil as string) : null,
         clientToken: crypto.randomBytes(32).toString('hex'),
         accentColor: (payload.accentColor as string | undefined) ?? '#2563eb',

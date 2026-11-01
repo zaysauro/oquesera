@@ -43,7 +43,7 @@ export default async function PortalAppsIndex() {
           </h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
             Your account does not have any plugins enabled yet. Contact your
-            account manager at Simpler Development to add one.
+            account manager at Kumo One to add one.
           </p>
         </div>
       ) : (

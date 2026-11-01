@@ -1,11 +1,12 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import type {
   MessageSource,
   VisualEditorMessage,
 } from '@/types/visual-editor';
 
 const ALLOWED_ORIGINS = [
-  'simplerdevelopment.com',
-  '.simplerdevelopment.com',
+  PLATFORM_ROOT_DOMAIN,
+  `.${PLATFORM_ROOT_DOMAIN}`,
   '.up.railway.app',
 ];
 

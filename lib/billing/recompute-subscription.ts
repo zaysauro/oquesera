@@ -15,6 +15,7 @@
 // Matching is by Stripe Product id: each module has its own product, the bundle
 // its own, and the seat SKU its own — so items survive across recomputes.
 
+import { STRIPE_CURRENCY } from '@/config/brand';
 import type Stripe from 'stripe';
 import { db } from '@/lib/db';
 import { clientServices, services, clients } from '@/lib/db/schema';
@@ -31,7 +32,7 @@ type ItemUpdate = Stripe.SubscriptionUpdateParams.Item;
 
 function monthlyPriceData(productId: string, unitAmountCents: number): Stripe.SubscriptionUpdateParams.Item.PriceData {
   return {
-    currency: 'usd',
+    currency: STRIPE_CURRENCY,
     product: productId,
     unit_amount: unitAmountCents,
     recurring: { interval: 'month' },

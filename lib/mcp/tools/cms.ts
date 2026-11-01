@@ -5,6 +5,7 @@
  * registrar function below is invoked by buildMcpServer() and registers each
  * tool with its scope guard. Behavior is unchanged from the monolithic file.
  */
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { and, desc, eq, ilike, inArray, isNull, or, sql, gte, lte } from 'drizzle-orm';
@@ -203,7 +204,7 @@ export function registerCmsTools(server: McpServer, ctx: PortalMcpContext): void
             domain: args.domain ?? null,
             description: args.description ?? null,
             subdomain: sub,
-            vercelDomain: `${sub}.simplerdevelopment.com`,
+            vercelDomain: `${sub}.${PLATFORM_ROOT_DOMAIN}`,
             deploymentStatus: 'pending',
             active: true,
           }).returning();

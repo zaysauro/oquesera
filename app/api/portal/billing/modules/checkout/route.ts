@@ -9,6 +9,7 @@
 // First-time self-serve clients (clients.trialUsedAt null) get a 14-day
 // card-required trial; the webhook stamps trialUsedAt on activation.
 
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { clients, services, clientServices, users } from '@/lib/db/schema';
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
       {
         success: false,
         message:
-          'Your plan is managed by SimplerDevelopment — contact us to make changes.',
+          'Your plan is managed by Kumo One — contact us to make changes.',
       },
       { status: 403 },
     );
@@ -133,6 +134,22 @@ export async function POST(req: Request) {
   // ── 5. No payment processor on this instance: grant locally, bypass checkout.
   // This is a server-side env check — a client cannot force this path on an
   // instance where Stripe IS configured, so paid instances always charge.
+  //
+  // Kumo One: a commercial instance must never hand out paid plans for free
+  // just because the payment processor is not wired yet. The local grant only
+  // happens when the operator opts in with BILLING_ALLOW_UNPAID_ACTIVATION=true
+  // (self-hosted / internal use). Otherwise plans are assigned by a platform
+  // admin, which goes through the audited admin plan route.
+  if (!stripeKey && process.env.BILLING_ALLOW_UNPAID_ACTIVATION !== 'true') {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          'O pagamento on-line ainda não está disponível nesta instalação. Fale com o suporte para ativar o seu plano.',
+      },
+      { status: 503 },
+    );
+  }
   if (!stripeKey) {
     await db.insert(clientServices).values(
       rows.map((r) => ({
@@ -174,7 +191,7 @@ export async function POST(req: Request) {
   // ── 6. Trial: first self-serve subscription per client only ──────────────
   const trialEligible = client.trialUsedAt == null;
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://simplerdevelopment.com';
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com';
   const returnPath = body.returnTo === 'onboarding'
     ? '/portal/onboarding?checkout='
     : '/portal/settings/billing/plans?status=';
@@ -266,7 +283,7 @@ export async function POST(req: Request) {
       namedItems = rows.map((r) => ({
         quantity: 1,
         price_data: {
-          currency: 'usd',
+          currency: STRIPE_CURRENCY,
           product_data: { name: r.name },
           unit_amount: r.price as number,
           recurring: { interval: 'month' },

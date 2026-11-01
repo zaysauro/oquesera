@@ -3,6 +3,7 @@
 // production-grade — no retries, no durable queue, no parallelism. The point
 // is to make the canvas demoable end-to-end.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import {
   workflows,
@@ -400,7 +401,7 @@ export async function executeAction(
         const idempotencyKey =
           runId != null && nodeId ? `wf:${runId}:${nodeId}` : undefined;
         const fromEmail =
-          process.env.DEFAULT_FROM_EMAIL ?? 'noreply@simplerdevelopment.com';
+          process.env.DEFAULT_FROM_EMAIL ?? `noreply@${EMAIL_DOMAIN}`;
 
         const result = await emailTransport.send({
           from: fromEmail,

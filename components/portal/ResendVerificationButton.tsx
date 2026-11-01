@@ -1,6 +1,6 @@
 'use client';
 
-// Inline "Resend verification email" action used on the signup error path and
+// Inline "Reenviar verification email" action used on the signup error path and
 // the verification-expired redirect path. Accepts an optional prefillEmail so
 // the field is pre-populated when the user has already typed their address.
 
@@ -37,7 +37,7 @@ export function ResendVerificationButton({ prefillEmail = '' }: Props) {
     return (
       <div className="flex items-center gap-1.5 text-green-700 dark:text-green-400 text-xs">
         <span className="material-icons text-sm">mark_email_read</span>
-        If that address has a pending verification, a new link is on its way.
+        Se esse endereço tiver uma confirmação pendente, um novo link está a caminho.
       </div>
     );
   }
@@ -45,14 +45,14 @@ export function ResendVerificationButton({ prefillEmail = '' }: Props) {
   return (
     <div className="flex flex-col gap-1.5">
       <p className="text-xs opacity-80">
-        Need a new verification link? Enter your email and we&apos;ll resend it.
+        Precisa de um novo link de confirmação? Informe seu e-mail e reenviaremos.
       </p>
       <div className="flex gap-2">
         <input
           type="email"
           value={inputEmail}
           onChange={(e) => setInputEmail(e.target.value)}
-          placeholder="you@company.com"
+          placeholder="voce@empresa.com.br"
           className="flex-1 min-w-0 px-2 py-1 rounded border border-current/30 bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-primary"
         />
         <button
@@ -64,18 +64,18 @@ export function ResendVerificationButton({ prefillEmail = '' }: Props) {
           {status === 'sending' ? (
             <>
               <span className="material-icons text-xs animate-spin">refresh</span>
-              Sending...
+              Enviando...
             </>
           ) : (
             <>
               <span className="material-icons text-xs">send</span>
-              Resend
+              Reenviar
             </>
           )}
         </button>
       </div>
       {status === 'error' && (
-        <p className="text-xs text-destructive">Something went wrong — try again.</p>
+        <p className="text-xs text-destructive">Algo deu errado — tente novamente.</p>
       )}
     </div>
   );

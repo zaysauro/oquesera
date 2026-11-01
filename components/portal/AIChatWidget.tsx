@@ -100,7 +100,7 @@ function MessageBubble({ msg }: { msg: Message }) {
         {isInjected && (
           <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-1 flex items-center gap-1">
             <span className="material-icons text-xs">support_agent</span>
-            Simpler Development Team
+            Kumo One Team
           </p>
         )}
         {isUser ? (

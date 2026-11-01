@@ -1,3 +1,4 @@
+import { APP_LOCALE } from '@/config/brand';
 import { getAllBlogPosts, getAllCategories, type BlogPostWithRelations } from '@/lib/actions/blog';
 import { generateSEO } from '@/lib/utils/seo';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -8,7 +9,7 @@ import { RetroBadge, RetroButton } from '@/components/retro/primitives';
 
 export const metadata = generateSEO({
   title: 'Blog',
-  description: 'Insights, tutorials, and thoughts on web design, development, and automation from the SimplerDevelopment team.',
+  description: 'Insights, tutorials, and thoughts on web design, development, and automation from the Kumo One team.',
   path: '/blog',
 });
 
@@ -52,7 +53,7 @@ function BlogPostCard({ post }: { post: BlogPostWithRelations }) {
               dateTime={new Date(post.publishedAt).toISOString()}
               className="text-xs text-[color-mix(in_srgb,var(--retro-ink)_60%,transparent)]"
             >
-              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+              {new Date(post.publishedAt).toLocaleDateString(APP_LOCALE, {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',

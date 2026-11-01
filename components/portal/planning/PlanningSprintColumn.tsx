@@ -5,6 +5,7 @@
 // expand/collapse, status badge, progress, dates, goal, actions, then the
 // card list body).
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState } from 'react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SprintDropzone, SortableSprintCard } from './PlanningCardRow';
@@ -18,7 +19,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: string 
 
 function formatDate(d: string | null) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(d).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 interface Props {

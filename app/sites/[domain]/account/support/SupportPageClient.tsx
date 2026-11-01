@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/components/storefront/account/CustomerAuthContext';
@@ -180,7 +181,7 @@ export function SupportPageClient({ siteId, domain }: { siteId: number; domain: 
                       <p className="text-xs text-gray-500">
                         {categories.find(c => c.value === msg.category)?.label ?? msg.category}
                         {' -- '}
-                        {new Date(msg.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {new Date(msg.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric' })}
                       </p>
                     </div>
                     <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColor[msg.status] ?? 'bg-gray-100 text-gray-700'}`}>

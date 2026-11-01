@@ -236,7 +236,7 @@ const faqs: { question: string; answer: string }[] = [
       'Yes. Code lands in your repository under your licence, with no runtime dependency on us and no per-seat fee to keep using it. Our own platform is Apache-2.0 for the same reason: we do not think lock-in is a business model.',
   },
   {
-    question: 'Do we have to use the SimplerDevelopment platform?',
+    question: 'Do we have to use the Kumo One platform?',
     answer:
       'No. Most engagements build into the client’s existing stack. The platform is there if you want somewhere to run the result — CRM, documents, automations, and a 478-tool MCP server already wired up — but choosing it is optional and never a condition of the work.',
   },

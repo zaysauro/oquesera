@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { secureCookiesEnabled } from '@/lib/auth-cookies';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
@@ -132,13 +133,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // would inherit the operator default below and the browser would reject
         // the cookie, bouncing users back to /portal/login after a "successful"
         // sign-in. When AUTH_COOKIE_DOMAIN is unset we fall back to the operator's
-        // own behavior: pin `.simplerdevelopment.com` ONLY on the real production
+        // own behavior: pin `.<NEXT_PUBLIC_PLATFORM_ROOT_DOMAIN>` ONLY on the real production
         // deploy (VERCEL_ENV==='production'); previews/local stay host-only
         // (undefined), since pinning a domain on a `*.vercel.app` preview or
         // localhost makes the browser reject the cookie outright.
         domain:
           process.env.AUTH_COOKIE_DOMAIN ??
-          (process.env.VERCEL_ENV === 'production' ? '.simplerdevelopment.com' : undefined),
+          (process.env.VERCEL_ENV === 'production' && process.env.NEXT_PUBLIC_PLATFORM_ROOT_DOMAIN
+            ? `.${PLATFORM_ROOT_DOMAIN}`
+            : undefined),
       },
     },
   },

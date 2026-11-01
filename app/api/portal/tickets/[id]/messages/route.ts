@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -71,10 +72,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         if (clientRow?.userEmail) {
           const baseUrl = process.env.NEXTAUTH_URL || 'https://app.simplerdevelopment.com';
           const portalLink = `${baseUrl}/portal/tickets/${ticketId}`;
-          const from = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
+          const from = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
 
           await resend.emails.send({
-            from: `Simpler Development Support <${from}>`,
+            from: `Kumo One Support <${from}>`,
             to: clientRow.userEmail,
             subject: `New reply on ticket #${ticket.number}`,
             html: `<!DOCTYPE html>
@@ -97,7 +98,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           </tr>
           <tr>
             <td style="padding:16px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
-              <p style="margin:0;font-size:12px;color:#9ca3af;">Powered by SimplerDevelopment</p>
+              <p style="margin:0;font-size:12px;color:#9ca3af;">Powered by Kumo One</p>
             </td>
           </tr>
         </table>

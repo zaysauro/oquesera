@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 
 interface ProjectRequest {
@@ -30,7 +31,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: string
 const STATUSES = Object.keys(STATUS_CONFIG);
 
 function formatDate(s: string) {
-  return new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return new Date(s).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 export default function AdminProjectRequestsPage() {

@@ -63,7 +63,7 @@ export async function syncTranscriptForSubscription(
   // doing the auth-code flow), but the helper requires it; pass a stable
   // production URL so env validation passes.
   const credentials = getEnvMicrosoftCredentials(
-    'https://www.simplerdevelopment.com/api/portal/integrations/microsoft/callback',
+    'https://example.com/api/portal/integrations/microsoft/callback',
   );
 
   const fetched = await fetchTeamsTranscript({

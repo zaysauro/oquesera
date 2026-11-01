@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import UsageMeters from '@/components/portal/billing/UsageMeters';
@@ -26,12 +27,12 @@ interface PaymentMethod {
 }
 
 function formatCents(cents: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+  return new Intl.NumberFormat(APP_LOCALE, { style: 'currency', currency: APP_CURRENCY }).format(cents / 100);
 }
 
 function formatDate(iso: string | null) {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(iso).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 const invoiceStatusStyles: Record<string, string> = {

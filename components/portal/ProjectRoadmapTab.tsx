@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
@@ -104,7 +105,7 @@ export default function ProjectRoadmapTab({ projectId, projectKey }: { projectId
     start.setUTCDate(1);
     start.setUTCHours(0, 0, 0, 0);
     for (let d = new Date(start); d.getTime() <= range.max; d.setUTCMonth(d.getUTCMonth() + 1)) {
-      ticks.push({ t: d.getTime(), label: d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }) });
+      ticks.push({ t: d.getTime(), label: d.toLocaleDateString(APP_LOCALE, { month: 'short', year: '2-digit' }) });
     }
   }
 
@@ -194,7 +195,7 @@ export default function ProjectRoadmapTab({ projectId, projectKey }: { projectId
             href={`/portal/projects/${projectId}?tab=sprints#${s.id}`}
             className="text-xs px-3 py-1.5 rounded border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
           >
-            {s.name} · {new Date(s.startDate!).toLocaleDateString('en-US')} → {new Date(s.endDate!).toLocaleDateString('en-US')}
+            {s.name} · {new Date(s.startDate!).toLocaleDateString(APP_LOCALE)} → {new Date(s.endDate!).toLocaleDateString(APP_LOCALE)}
           </Link>
         ))}
       </div>

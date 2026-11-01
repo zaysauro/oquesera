@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, DM_Sans, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { defaultSEO } from "@/config/seo";
+import { APP_LOCALE, PLATFORM_ROOT_DOMAIN } from "@/config/brand";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { generateOrganizationSchema } from "@/lib/utils/structured-data";
 import { headers } from "next/headers";
@@ -67,14 +68,21 @@ export default async function RootLayout({
   const host = headersList.get("host") || "";
   // Detect client site requests — those supply their own nav/footer and skip
   // the app marketing chrome. On a dedicated client host (e.g. a client's own domain)
-  // the hostname check is enough. But `staging.simplerdevelopment.com` is an app
+  // the hostname check is enough. But the platform root domain is an app
   // host that multiplexes BOTH the marketing site (/) and client sites
   // (/sites/<domain>) on one host, so hostname alone can't tell them apart —
   // the middleware forwards `x-site-pathname` on /sites/* routes to mark them.
-  const APP_HOSTS = ["localhost", "127.0.0.1", "simplerdevelopment.com", "www.simplerdevelopment.com", "staging.simplerdevelopment.com"];
+  const APP_HOSTS = ["localhost", "127.0.0.1", PLATFORM_ROOT_DOMAIN, `www.${PLATFORM_ROOT_DOMAIN}`];
   const hostname = host.split(":")[0];
   const isSitesRoute = headersList.get("x-site-pathname") !== null;
-  const isClientSite = isSitesRoute || (!APP_HOSTS.includes(hostname) && !hostname.endsWith(".railway.app"));
+  let appUrlHost = "";
+  try { appUrlHost = new URL(process.env.NEXT_PUBLIC_APP_URL || "").hostname; } catch {}
+  const isAppHost =
+    APP_HOSTS.includes(hostname) ||
+    hostname === appUrlHost ||
+    hostname.endsWith(".railway.app") ||
+    hostname.endsWith(".vercel.app");
+  const isClientSite = isSitesRoute || !isAppHost;
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
   // Fonts declared with next/font in THIS file are attributed to the root
   // layout, which is in every route's graph — so Next emitted their
@@ -109,7 +117,7 @@ export default async function RootLayout({
     // class-driven `dark:` variant (globals.css), keeps every dark: utility
     // inert on tenant pages. The theme script below is portal-only — a
     // visitor's OS preference must never restyle a tenant's brand.
-    <html lang="en" className={isClientSite ? 'light' : undefined} suppressHydrationWarning>
+    <html lang={APP_LOCALE} className={isClientSite ? 'light' : undefined} suppressHydrationWarning>
       <head>
         <StructuredData data={generateOrganizationSchema()} />
         {/* Material Icons only for the app/portal. Public client sites load it

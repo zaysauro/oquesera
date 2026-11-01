@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 import { siteConfig } from '@/config/site';
 
 /**
@@ -122,13 +123,9 @@ export function generateOrganizationSchema(): OrganizationSchema {
     '@type': 'Organization',
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.png`,
+    logo: `${siteConfig.url}/brand/kumo-mark-512.png`,
     description: siteConfig.description,
-    sameAs: [
-      siteConfig.links.twitter,
-      siteConfig.links.github,
-      siteConfig.links.linkedin,
-    ],
+    sameAs: [siteConfig.links.github],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
@@ -202,29 +199,23 @@ export function generateSoftwareApplicationSchema(): SoftwareApplicationSchema {
     url: siteConfig.url,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
-    description:
-      'Multi-tenant agency SaaS platform covering website builder, CRM, Company Brain AI knowledge base, email campaigns, bookings, project management, and a 450-tool MCP server. Apache-2.0 licensed and self-hostable.',
-    license: 'https://www.apache.org/licenses/LICENSE-2.0',
-    dateModified: '2026-06-27',
+    description: siteConfig.description,
     offers: {
       '@type': 'Offer',
-      priceCurrency: 'USD',
-      price: '0',
+      priceCurrency: APP_CURRENCY,
+      price: '49.90',
       priceSpecification: {
         '@type': 'UnitPriceSpecification',
-        description: 'Per-module subscriptions. See pricing page for details.',
+        description: 'Assinatura mensal a partir do plano Essencial. Veja a página de preços.',
       },
     },
     featureList: [
-      'Block-based visual website editor with 47 built-in block types',
-      'CRM with contacts, companies, deals, proposals, and e-signed contracts',
-      'Company Brain AI knowledge base with RAG and semantic search (pgvector)',
-      '450-tool MCP server at POST /api/mcp (Streamable HTTP)',
-      'Email campaign builder with A/B subject-line testing',
-      'Online booking and scheduling with Stripe payments',
-      'Project management with kanban, sprints, and time logging',
-      'White-label agency portal with custom domain and branding',
-      'Self-hostable on any Next.js host connected to Postgres',
+      'CRM com contatos, empresas, oportunidades e funil em Kanban',
+      'Criador de sites com editor visual e modelos por segmento',
+      'Agendamento online com página pública',
+      'Gestão de projetos e tarefas',
+      'Contratos e propostas com assinatura eletrônica simples',
+      'Automações e assistente de IA',
     ],
   };
 }

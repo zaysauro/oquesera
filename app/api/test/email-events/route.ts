@@ -6,6 +6,7 @@
  * Only available in development or when TEST_EMAIL_SECRET matches.
  */
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import {
   sendTransactionalEmail,
@@ -21,7 +22,7 @@ import { eq } from 'drizzle-orm';
 export const runtime = 'nodejs';
 
 const TEST_EMAIL_BASE = 'info';
-const TEST_EMAIL_DOMAIN = 'simplerdevelopment.com';
+const TEST_EMAIL_DOMAIN = PLATFORM_ROOT_DOMAIN;
 
 function testEmail(eventName: string): string {
   return `${TEST_EMAIL_BASE}+${eventName}@${TEST_EMAIL_DOMAIN}`;
@@ -74,7 +75,7 @@ const SAMPLE_CUSTOMER = {
 
 async function triggerEvent(event: string, websiteId: number): Promise<TestEventResult> {
   const to = testEmail(event.replace('.', '_'));
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://example.com';
 
   // Resolve the website domain for correct storefront URLs
   const [site] = await db.select({

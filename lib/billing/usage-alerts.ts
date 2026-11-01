@@ -8,6 +8,7 @@
 //
 // Tenancy: every query is scoped by clientId. No unscoped table reads.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import {
   clients,
@@ -464,7 +465,7 @@ export async function runUsageAlerts(): Promise<UsageAlertsResult> {
         if (alert.notifyEmail && ownerEmail) {
           try {
             await sendEmail({
-              from: `SimplerDevelopment <${process.env.BILLING_EMAIL || 'billing@simplerdevelopment.com'}>`,
+              from: `Kumo One <${process.env.BILLING_EMAIL || `billing@${EMAIL_DOMAIN}`}>`,
               to: ownerEmail,
               subject: alertSubject(alert),
               html: alertBody(alert, ownerEmail),

@@ -16,6 +16,7 @@
  * are untouched and continue to flow through `renderHtmlTemplate`.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import { db } from '@/lib/db';
 import { posts, postTypes, customFields, postCustomFieldValues } from '@/lib/db/schema';
 import { and, asc, desc, eq, inArray, ne, notInArray, sql } from 'drizzle-orm';
@@ -199,7 +200,7 @@ async function fetchLoopItems(
   // Pre-build a localized formatter once per fetch so we don't allocate a
   // new Intl instance per row. en-US long form (`May 19, 2026`) is the
   // shape every Cardiff card and most existing list templates expect.
-  const dateFmt = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const dateFmt = new Intl.DateTimeFormat(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' });
   const items = rows.map(r => ({
     id: r.id,
     title: r.title || '',

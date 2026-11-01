@@ -21,6 +21,7 @@
  * matching app/api/cron/process-embeddings/route.ts.
  */
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { db } from '@/lib/db';
@@ -38,8 +39,8 @@ import { isAuthorizedCron } from '@/lib/cron-auth';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'surveys@simplerdevelopment.com';
-const FROM_NAME = 'Simpler Development';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `surveys@${EMAIL_DOMAIN}`;
+const FROM_NAME = 'Kumo One';
 const MAX_SENDS_PER_TICK = 100;
 
 /**

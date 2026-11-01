@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 import { db } from '@/lib/db';
 import { createDecisionFromReviewItem } from './decisions';
 import {
@@ -261,7 +262,7 @@ export async function approveReviewItem(args: ApproveItemArgs): Promise<ApproveI
           companyId: dc.companyId ?? null,
           title: dc.title.slice(0, 255),
           value: typeof dc.value === 'number' && dc.value > 0 ? dc.value : null,
-          currency: dc.currency ?? 'USD',
+          currency: dc.currency ?? APP_CURRENCY,
           priority: dc.priority ?? 'medium',
           expectedCloseDate: dc.expectedCloseDate ? new Date(dc.expectedCloseDate) : null,
           ownerId: args.actorId,

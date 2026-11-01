@@ -3,6 +3,7 @@
  */
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { formatActivity } from '../_lib/format';
 import type { Activity } from '../_lib/types';
 
@@ -36,7 +37,7 @@ export function CardActivity({ activities, showActivity, setShowActivity }: Prop
                 <span className="material-icons text-sm text-muted-foreground mt-0.5">history</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-foreground">{formatActivity(a)}</p>
-                  <p className="text-muted-foreground">{new Date(a.createdAt).toLocaleString('en-US')}</p>
+                  <p className="text-muted-foreground">{new Date(a.createdAt).toLocaleString(APP_LOCALE)}</p>
                 </div>
               </li>
             ))}

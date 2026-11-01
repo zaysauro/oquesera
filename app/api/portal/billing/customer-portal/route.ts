@@ -35,7 +35,7 @@ export async function POST() {
       .where(eq(clients.id, client.id));
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://simplerdevelopment.com';
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com';
 
   try {
     const session = await stripe.billingPortal.sessions.create({

@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 const CF_API = 'https://api.cloudflare.com/client/v4';
 
 function headers() {
@@ -80,7 +81,7 @@ export async function deleteDnsRecord(recordId: string): Promise<void> {
 export async function listDnsRecords(
   name: string,
 ): Promise<Array<{ id: string; type: string; name: string; content: string }>> {
-  const params = new URLSearchParams({ name: `${name}.simplerdevelopment.com`, type: 'CNAME' });
+  const params = new URLSearchParams({ name: `${name}.${PLATFORM_ROOT_DOMAIN}`, type: 'CNAME' });
   const res = await fetch(`${CF_API}/zones/${zoneId()}/dns_records?${params}`, {
     headers: headers(),
   });

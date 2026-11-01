@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -55,7 +56,7 @@ function formatDue(iso: string | null): { label: string; tone: 'overdue' | 'soon
   const d = new Date(iso);
   const now = new Date();
   const deltaDays = Math.floor((d.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: deltaDays > 180 ? 'numeric' : undefined });
+  const label = d.toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: deltaDays > 180 ? 'numeric' : undefined });
   if (deltaDays < 0) return { label, tone: 'overdue' };
   if (deltaDays < 7) return { label, tone: 'soon' };
   return { label, tone: 'later' };

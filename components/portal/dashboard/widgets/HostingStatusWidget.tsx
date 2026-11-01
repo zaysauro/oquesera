@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { clientWebsites, hostedSites } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -69,7 +70,7 @@ export default async function HostingStatusWidget({
           {websites.map((site) => {
             const displayDomain =
               site.domain ??
-              (site.subdomain ? `${site.subdomain}.simplerdevelopment.com` : site.name);
+              (site.subdomain ? `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}` : site.name);
             const status = site.deploymentStatus ?? 'pending';
             return (
               <li key={`cw-${site.id}`}>

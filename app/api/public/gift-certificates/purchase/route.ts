@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { giftCertificates, clientWebsites, storeSettings } from '@/lib/db/schema';
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
 
     let stripeParams: Parameters<typeof stripe.paymentIntents.create>[0] = {
       amount,
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       metadata: {
         type: 'gift_certificate',
         giftCertificateId: String(cert.id),
@@ -96,7 +97,7 @@ export async function POST(req: Request) {
 
       stripeParams = {
         ...stripeParams,
-        currency: store.currency?.toLowerCase() || 'usd',
+        currency: store.currency?.toLowerCase() || STRIPE_CURRENCY,
         application_fee_amount: applicationFee,
         transfer_data: { destination: store.stripeAccountId },
       };

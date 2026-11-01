@@ -4,6 +4,7 @@
  * Extracted from the original CardDetailModal.tsx so section components can
  * import them without dragging in the dispatcher.
  */
+import { APP_LOCALE } from '@/config/brand';
 import type { Activity } from './types';
 
 export const ARTIFACT_ICONS: Record<string, string> = {
@@ -78,7 +79,7 @@ export function formatMinutes(mins: number): string {
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', {
+  return new Date(iso).toLocaleDateString(APP_LOCALE, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',

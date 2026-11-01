@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { bookingPages, clientWebsites } from '@/lib/db/schema';
@@ -7,7 +8,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ domain:
   const { domain } = await params;
 
   // Find site by domain, subdomain, or subdomain.simplerdevelopment.com
-  const bareSubdomain = domain.replace('.simplerdevelopment.com', '');
+  const bareSubdomain = domain.replace(`.${PLATFORM_ROOT_DOMAIN}`, '');
   const [site] = await db
     .select({ id: clientWebsites.id, clientId: clientWebsites.clientId })
     .from(clientWebsites)

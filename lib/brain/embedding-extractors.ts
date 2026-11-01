@@ -12,6 +12,7 @@
  * batcher, store) doesn't change.
  */
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { db } from '@/lib/db';
 import {
   brainNotes,
@@ -227,7 +228,7 @@ async function extractDeal(clientId: number, id: number): Promise<ExtractedConte
   }
 
   const valueStr = d.value !== null && d.value !== undefined
-    ? `${(d.value / 100).toLocaleString('en-US', { style: 'currency', currency: d.currency ?? 'USD' })}`
+    ? `${(d.value / 100).toLocaleString(APP_LOCALE, { style: 'currency', currency: d.currency ?? APP_CURRENCY })}`
     : null;
 
   const meta = [

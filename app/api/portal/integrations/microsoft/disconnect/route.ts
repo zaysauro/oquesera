@@ -55,7 +55,7 @@ export async function POST() {
     try {
       const credentials = getEnvMicrosoftCredentials(
         // redirectUri is unused for /subscriptions calls but the helper requires it
-        'https://www.simplerdevelopment.com/api/portal/integrations/microsoft/callback',
+        'https://example.com/api/portal/integrations/microsoft/callback',
       );
       await deleteTranscriptsSubscription({
         connection: {

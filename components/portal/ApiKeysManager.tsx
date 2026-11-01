@@ -173,9 +173,9 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
         <p className="text-xs font-medium text-foreground mb-2">Quick Start</p>
         <pre className="text-xs text-muted-foreground font-mono overflow-x-auto">{`npm install @simplerdevelopment/sdk
 
-import { SimplerDevelopment } from '@simplerdevelopment/sdk';
+import { Kumo One } from '@simplerdevelopment/sdk';
 
-const sd = new SimplerDevelopment({
+const sd = new Kumo One({
   siteId: ${siteId},
   apiKey: 'your-api-key-here',
 });

@@ -1,3 +1,4 @@
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 // Canonical money formatter. Input is integer cents (the storage unit across
 // billing/storefront/CRM). Default: USD, thousands separators, 2 decimals.
 // Pass fractionDigits:0 for whole-dollar display; pass currency for storefront
@@ -7,12 +8,12 @@ export function formatMoney(
   cents: number,
   opts: { currency?: string; fractionDigits?: number } = {},
 ): string {
-  const { currency = 'USD', fractionDigits } = opts;
+  const { currency = APP_CURRENCY, fractionDigits } = opts;
   // A non-finite amount means a bug upstream (usually a missing field on untyped
   // JSON). Render $0.00 rather than "$NaN" — this formatter feeds client-facing
   // proposals, invoices and storefront checkout, where "$NaN" is unshippable.
   const amount = Number.isFinite(cents) ? cents : 0;
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(APP_LOCALE, {
     style: 'currency',
     currency,
     ...(fractionDigits != null

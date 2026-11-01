@@ -7,7 +7,7 @@ import { Star } from '@/components/retro/primitives';
 export const metadata = generateSEO({
   title: 'FAQ',
   description:
-    'Answers about SimplerDevelopment — the open-source, MCP-native all-in-one agency platform: what it does, pricing, self-hosting, AI & MCP, security, and data ownership.',
+    'Answers about Kumo One — the open-source, MCP-native all-in-one agency platform: what it does, pricing, self-hosting, AI & MCP, security, and data ownership.',
   path: '/faq',
 });
 
@@ -21,7 +21,7 @@ const groups: { category: string; items: { question: string; answer: string }[] 
     category: 'Product',
     items: [
       {
-        question: 'What is SimplerDevelopment?',
+        question: 'What is Kumo One?',
         answer:
           'An open-source, multi-tenant platform that replaces a stack of separate SaaS tools with one connected system: per-tenant client websites and a block-based CMS, a CRM, an AI "Company Brain" (retrieval-augmented knowledge base), automations, bookings, a storefront, email campaigns, surveys, e-signatures, and Stripe billing — all driveable by an AI agent through a Model Context Protocol (MCP) server.',
       },

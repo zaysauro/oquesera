@@ -62,9 +62,10 @@ export interface FeatureDomain {
   icon: string;
   /** seed default + display fallback; live price = services.price */
   monthlyPriceCents: number;
-  /** Live Stripe IDs (created 2026-06-11 in acct SimplerDevelopment.com via
-   * Stripe MCP) — copied onto the services row by scripts/seed-domain-modules.ts.
-   * Repricing: create a new Stripe Price, update services.stripePriceId. */
+  /** Stripe IDs for THIS deployment's Stripe account. Kumo One ships none:
+   * scripts/billing/sync-stripe-products.ts creates the products/prices in
+   * whatever account STRIPE_SECRET_KEY points at (test or live) and writes the
+   * IDs onto the `services` rows. Repricing: new Stripe Price + services row. */
   stripeProductId?: string;
   stripePriceId?: string;
   /** marketing bullets for the pricing card */
@@ -82,7 +83,7 @@ export interface FeatureDomain {
 
 export const AI_TOKENS_METER: Omit<DomainMeter, 'includedPerMonth' | 'bundleIncludedPerMonth'> = {
   resource: 'ai_tokens',
-  label: 'AI usage',
+  label: 'Uso de IA',
   unit: 'tokens',
   overageRateCents: 100, // $1.00 per 100k tokens past the included grant
   overageUnitSize: 100_000,
@@ -93,23 +94,21 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'websites',
     slug: 'module-websites',
-    stripeProductId: 'prod_UgUqarrMNckesj',
-    stripePriceId: 'price_1Th7smCVr9RJZQZPIMZLs3ae',
-    name: 'Websites & CMS',
-    tagline: 'Build, edit, and A/B test client websites with the visual editor.',
+    name: 'Sites e CMS',
+    tagline: 'Crie, edite e publique sites com o editor visual.',
     icon: 'language',
-    monthlyPriceCents: 2_900,
+    monthlyPriceCents: 2_490,
     features: [
-      'Block-based CMS with visual editor',
-      'Custom content types and taxonomies',
-      'A/B experiments built in',
-      'Media library',
-      'Managed hosting and domains',
+      'CMS em blocos com editor visual',
+      'Tipos de conteúdo e categorias personalizados',
+      'Testes A/B integrados',
+      'Biblioteca de mídia',
+      'Hospedagem gerenciada e domínios',
     ],
     meters: [
       {
         resource: 'hosting_bandwidth_gb',
-        label: 'Bandwidth',
+        label: 'Transferência',
         unit: 'GB',
         includedPerMonth: 100,
         bundleIncludedPerMonth: 500,
@@ -119,7 +118,7 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
       },
       {
         resource: 'hosting_storage_gb',
-        label: 'Storage',
+        label: 'Armazenamento',
         unit: 'GB',
         includedPerMonth: 10,
         bundleIncludedPerMonth: 50,
@@ -136,17 +135,15 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'crm',
     slug: 'module-crm',
-    stripeProductId: 'prod_UgUqG2GHti3xYa',
-    stripePriceId: 'price_1Th7ssCVr9RJZQZPB9zMaKJE',
-    name: 'CRM & Sales',
-    tagline: 'Contacts, companies, deals, and pipelines — your whole sales motion.',
+    name: 'CRM e Vendas',
+    tagline: 'Contatos, empresas, oportunidades e funis — todo o seu processo comercial.',
     icon: 'contacts',
-    monthlyPriceCents: 2_500,
+    monthlyPriceCents: 2_490,
     features: [
-      'Contacts, companies, and deal pipelines',
-      'Custom fields and saved views',
-      'Lead scoring rules',
-      'Activity timeline',
+      'Contatos, empresas e funis de oportunidades',
+      'Campos personalizados e visões salvas',
+      'Regras de pontuação de leads',
+      'Linha do tempo de atividades',
     ],
     meters: [],
     includedAiCredits: 0,
@@ -157,18 +154,16 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'brain',
     slug: 'module-brain',
-    stripeProductId: 'prod_UgUqs3KNQfEH6N',
-    stripePriceId: 'price_1Th7szCVr9RJZQZPVQjvdKTH',
-    name: 'Company Brain',
-    tagline: 'Your company knowledge, searchable and AI-powered.',
+    name: 'Cérebro da Empresa (IA)',
+    tagline: 'O conhecimento da sua empresa, pesquisável e com IA.',
     icon: 'psychology',
-    monthlyPriceCents: 4_900,
+    monthlyPriceCents: 3_990,
     features: [
-      'Knowledge base with AI search (RAG)',
-      'Meetings, decisions, and playbooks',
-      'People, org chart, and expertise map',
-      'AI assistant connected to your data',
-      '500k AI tokens included monthly',
+      'Base de conhecimento com busca por IA (RAG)',
+      'Reuniões, decisões e manuais',
+      'Pessoas, organograma e mapa de competências',
+      'Assistente de IA conectado aos seus dados',
+      '500 mil tokens de IA incluídos por mês',
     ],
     meters: [
       { ...AI_TOKENS_METER, includedPerMonth: 500_000, bundleIncludedPerMonth: 2_000_000 },
@@ -181,22 +176,20 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'email',
     slug: 'module-email',
-    stripeProductId: 'prod_UgUrAZ5RszK5x3',
-    stripePriceId: 'price_1Th7t5CVr9RJZQZPwEXxBPz4',
-    name: 'Email Marketing',
-    tagline: 'Campaigns, lists, segments, and analytics that close the loop.',
+    name: 'E-mail Marketing',
+    tagline: 'Campanhas, listas, segmentos e métricas.',
     icon: 'email',
-    monthlyPriceCents: 1_900,
+    monthlyPriceCents: 2_490,
     features: [
-      'Campaigns and templates',
-      'Lists, segments, and subscriber management',
-      'Open and click analytics',
-      '10,000 sends included monthly',
+      'Campanhas e modelos',
+      'Listas, segmentos e gestão de inscritos',
+      'Métricas de abertura e cliques',
+      '10.000 envios incluídos por mês',
     ],
     meters: [
       {
         resource: 'email_send',
-        label: 'Email sends',
+        label: 'Envios de e-mail',
         unit: 'emails',
         includedPerMonth: 10_000,
         bundleIncludedPerMonth: 25_000,
@@ -213,17 +206,15 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'projects',
     slug: 'module-projects',
-    stripeProductId: 'prod_UgUrn3zfznBau4',
-    stripePriceId: 'price_1Th7tACVr9RJZQZPhlUUXRqi',
-    name: 'Projects & Tickets',
-    tagline: 'Kanban boards, tasks, and support tickets in one place.',
+    name: 'Projetos e Chamados',
+    tagline: 'Quadros Kanban, tarefas e chamados de suporte em um só lugar.',
     icon: 'view_kanban',
-    monthlyPriceCents: 1_500,
+    monthlyPriceCents: 1_990,
     features: [
-      'Kanban projects with sprints',
-      'My Tasks across every source',
-      'Support ticket inbox',
-      'Time logging and checklists',
+      'Projetos Kanban com sprints',
+      'Minhas tarefas de todas as origens',
+      'Caixa de chamados de suporte',
+      'Registro de horas e checklists',
     ],
     meters: [],
     includedAiCredits: 0,
@@ -234,17 +225,15 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'surveys',
     slug: 'module-surveys',
-    stripeProductId: 'prod_UgUrx6tpbS3czo',
-    stripePriceId: 'price_1Th7tGCVr9RJZQZPd5NsGxsW',
-    name: 'Surveys & Forms',
-    tagline: 'Branded surveys with conditional logic and recommendations.',
+    name: 'Pesquisas e Formulários',
+    tagline: 'Pesquisas com a sua marca, lógica condicional e recomendações.',
     icon: 'poll',
-    monthlyPriceCents: 1_200,
+    monthlyPriceCents: 1_490,
     features: [
-      'Survey builder with conditional logic',
-      'Pre-built templates',
-      'Response analytics',
-      'Approval workflows',
+      'Construtor de pesquisas com lógica condicional',
+      'Modelos prontos',
+      'Análise de respostas',
+      'Fluxos de aprovação',
     ],
     meters: [],
     includedAiCredits: 0,
@@ -255,16 +244,14 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'bookings',
     slug: 'module-bookings',
-    stripeProductId: 'prod_UgUrhitHG1fgcH',
-    stripePriceId: 'price_1Th7tMCVr9RJZQZPg4KtLZM4',
-    name: 'Bookings & Scheduling',
-    tagline: 'Booking pages your clients can self-schedule against.',
+    name: 'Agendamentos',
+    tagline: 'Páginas de agendamento para seus clientes marcarem horários sozinhos.',
     icon: 'event_available',
-    monthlyPriceCents: 1_500,
+    monthlyPriceCents: 1_990,
     features: [
-      'Public booking pages',
-      'Calendar sync',
-      'Cancellation and reschedule flows',
+      'Páginas públicas de agendamento',
+      'Sincronização de calendário',
+      'Cancelamento e reagendamento',
     ],
     meters: [],
     includedAiCredits: 0,
@@ -275,17 +262,15 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'store',
     slug: 'module-store',
-    stripeProductId: 'prod_UgUrV2etRzxQgH',
-    stripePriceId: 'price_1Th7tSCVr9RJZQZPbHouVDCO',
-    name: 'Storefront & Commerce',
-    tagline: 'Sell products on your site — orders, discounts, fulfillment.',
+    name: 'Loja Virtual',
+    tagline: 'Venda produtos no seu site — pedidos, descontos e entregas.',
     icon: 'shopping_cart',
-    monthlyPriceCents: 2_900,
+    monthlyPriceCents: 2_990,
     features: [
-      'Products, variants, and inventory',
-      'Orders, discounts, and gift certificates',
-      'Stripe Connect or bring your own Stripe',
-      'Print-on-demand fulfillment',
+      'Produtos, variações e estoque',
+      'Pedidos, descontos e vales-presente',
+      'Pagamentos via Stripe (requer conta Stripe)',
+      'Impressão sob demanda',
     ],
     meters: [], // monetized via Stripe Connect platform fee, not a usage meter
     includedAiCredits: 0,
@@ -296,16 +281,14 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'esign',
     slug: 'module-esign',
-    stripeProductId: 'prod_UgUrJfd9PT982L',
-    stripePriceId: 'price_1Th7tXCVr9RJZQZPAjHE1EPH',
-    name: 'E-Sign & Contracts',
-    tagline: 'Send contracts for legally binding signature without leaving the portal.',
+    name: 'Contratos e Assinatura Eletrônica',
+    tagline: 'Envie contratos para assinatura eletrônica simples sem sair do portal.',
     icon: 'draw',
-    monthlyPriceCents: 1_500,
+    monthlyPriceCents: 2_490,
     features: [
-      'Contract sending and tracking',
-      'Approval workflows',
-      '20 envelopes included monthly',
+      'Envio e acompanhamento de contratos',
+      'Fluxos de aprovação',
+      '20 envelopes incluídos por mês',
     ],
     meters: [
       {
@@ -327,16 +310,14 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'pitch-decks',
     slug: 'module-pitch-decks',
-    stripeProductId: 'prod_UgUrRnSBfrd82m',
-    stripePriceId: 'price_1Th7tdCVr9RJZQZP6uUcusl1',
-    name: 'Pitches & Proposals',
-    tagline: 'AI-generated pitch decks and proposals that win work.',
+    name: 'Apresentações e Propostas',
+    tagline: 'Apresentações e propostas comerciais geradas com IA.',
     icon: 'slideshow',
-    monthlyPriceCents: 1_900,
+    monthlyPriceCents: 1_990,
     features: [
-      'AI deck generation',
-      'Proposal builder',
-      '100k AI tokens included monthly',
+      'Geração de apresentações com IA',
+      'Construtor de propostas',
+      '100 mil tokens de IA incluídos por mês',
     ],
     meters: [
       { ...AI_TOKENS_METER, includedPerMonth: 100_000, bundleIncludedPerMonth: 0 /* pooled into bundle grant */ },
@@ -349,21 +330,19 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'automations',
     slug: 'module-automations',
-    stripeProductId: 'prod_UgUrXz3woZSM0N',
-    stripePriceId: 'price_1Th7tiCVr9RJZQZPSrJJ0oZg',
-    name: 'Automations',
-    tagline: 'Triggers, schedules, and workflows that run your busywork.',
+    name: 'Automações',
+    tagline: 'Gatilhos, agendamentos e fluxos que fazem o trabalho repetitivo.',
     icon: 'bolt',
-    monthlyPriceCents: 1_900,
+    monthlyPriceCents: 2_490,
     features: [
-      'Event and schedule triggers',
-      'Run logs and previews',
-      '1,000 runs included monthly',
+      'Gatilhos por evento e por horário',
+      'Histórico de execuções e pré-visualização',
+      '1.000 execuções incluídas por mês',
     ],
     meters: [
       {
         resource: 'automation_runs',
-        label: 'Automation runs',
+        label: 'Execuções de automação',
         unit: 'runs',
         includedPerMonth: 1_000,
         bundleIncludedPerMonth: 5_000,
@@ -380,16 +359,14 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
   {
     key: 'publishing',
     slug: 'module-publishing',
-    stripeProductId: 'prod_UgUsQZqCuMM1d1',
-    stripePriceId: 'price_1Th7toCVr9RJZQZPofgLDdmH',
-    name: 'Publishing Command Center',
-    tagline: 'Plan, schedule, and publish content across every channel.',
+    name: 'Central de Publicação',
+    tagline: 'Planeje, agende e publique conteúdo em vários canais.',
     icon: 'rocket_launch',
-    monthlyPriceCents: 1_500,
+    monthlyPriceCents: 1_990,
     features: [
-      'Content calendar and board',
-      'Multi-channel scheduling',
-      'Campaign grouping and permissions',
+      'Calendário e quadro de conteúdo',
+      'Agendamento multicanal',
+      'Campanhas e permissões',
     ],
     meters: [],
     includedAiCredits: 0,
@@ -404,21 +381,21 @@ export const FEATURE_DOMAINS: FeatureDomain[] = [
     // measured (build-plan rule: measure provider cost before pricing). The
     // entitlement gate is live from day one; seed Stripe products at launch
     // via scripts/seed-domain-modules.ts like the other modules.
-    name: 'SEO Intelligence',
-    tagline: 'Site audits, Search Console insights, and AI-ranked fixes for any domain.',
+    name: 'SEO',
+    tagline: 'Auditorias de site, dados do Search Console e correções priorizadas por IA.',
     icon: 'travel_explore',
-    monthlyPriceCents: 2_900,
+    monthlyPriceCents: 2_990,
     features: [
-      'Site audits: own crawler + 50 technical checks',
-      'Internal link authority (PageRank) and orphan detection',
-      'Google Search Console performance insights',
-      'AI recommendations: the fixes worth doing, ranked',
+      'Auditoria de site: rastreador próprio + 50 verificações técnicas',
+      'Autoridade de links internos e páginas órfãs',
+      'Desempenho no Google Search Console (requer integração)',
+      'Recomendações de IA priorizadas',
       'Audit any domain — including sites we don\'t host',
     ],
     meters: [
       {
         resource: 'seo_crawled_urls',
-        label: 'Crawled URLs',
+        label: 'URLs rastreadas',
         unit: 'URLs',
         includedPerMonth: 10_000,
         bundleIncludedPerMonth: 50_000,
@@ -456,13 +433,11 @@ export function sumOfModulePricesCents(): number {
 
 export const BUNDLE: BundleDef = {
   slug: BUNDLE_SLUG,
-  name: 'SimplerDev Complete',
-  tagline: 'Every module, one subscription — about 40% off buying them separately.',
+  name: 'Kumo Completo',
+  tagline: 'Todos os módulos em uma única assinatura.',
   icon: 'all_inclusive',
-  monthlyPriceCents: 15_900, // vs $261 sum of the 12 module prices
+  monthlyPriceCents: 19_990, // same price as the Empresarial plan
   includedAiCredits: 2_000_000,
-  stripeProductId: 'prod_UgUsJfBtYuBJyu',
-  stripePriceId: 'price_1Th7ttCVr9RJZQZP5SLpYwVJ',
 };
 
 // ── Volume discount (à-la-carte bulk pricing) ────────────────────────────────
@@ -561,7 +536,7 @@ export const INCLUDED_SEATS = 1;
  */
 export const SEAT_SKU = {
   slug: 'platform-seat',
-  name: 'Additional seats',
+  name: 'Usuários adicionais',
   /** Live Stripe Product id — set after running create-seat-product.ts. */
   stripeProductId: undefined as string | undefined,
 };
@@ -642,51 +617,59 @@ export interface TierDef {
   stripePriceId?: string;
 }
 
+// Kumo One plans. `key`/`slug` keep the upstream values because entitlements,
+// subscriptions and admin tooling key off them; only the commercial surface
+// (name, copy, BRL price, module set) is Kumo's. Prices are the seed default
+// for `services.price` — the live price is whatever that row holds.
 export const TIERS: TierDef[] = [
   {
     key: 'starter',
     slug: 'plan-starter',
-    name: 'Starter',
-    tagline: 'The essentials to run the basics.',
-    monthlyPriceCents: 1_900,
-    domains: ['websites', 'crm', 'projects'],
+    name: 'Essencial',
+    tagline: 'Site, CRM, agenda e projetos para começar a organizar o negócio.',
+    monthlyPriceCents: 4_990,
+    domains: ['websites', 'crm', 'projects', 'bookings'],
     includedAiCredits: 100_000,
     byokEligible: false,
     features: [
-      'Websites & CMS, CRM, and Projects',
-      '100k AI tokens/mo',
+      'Criador de sites com modelos prontos',
+      'CRM com funil de vendas em Kanban',
+      'Agendamento online com página pública',
+      'Projetos, tarefas e chamados',
+      '100 mil tokens de IA por mês',
     ],
   },
   {
     key: 'growth',
     slug: 'plan-growth',
-    name: 'Growth',
-    tagline: 'The AI agent that runs your business — just chat to get work done.',
-    monthlyPriceCents: 5_900,
-    domains: ['websites', 'crm', 'projects', 'brain', 'email', 'automations', 'surveys', 'bookings'],
+    name: 'Profissional',
+    tagline: 'Automações, e-mail marketing, contratos e o assistente de IA.',
+    monthlyPriceCents: 9_990,
+    domains: ['websites', 'crm', 'projects', 'bookings', 'brain', 'email', 'automations', 'surveys', 'esign', 'pitch-decks'],
     includedAiCredits: 1_000_000,
     byokEligible: false,
     features: [
-      'Everything in Starter',
-      'Company Brain + the in-app AI agent, included',
-      'Email, Automations, Surveys, and Bookings',
-      '1M AI tokens/mo included',
+      'Tudo do Essencial',
+      'Cérebro da Empresa: base de conhecimento e assistente de IA',
+      'E-mail marketing, automações e pesquisas',
+      'Contratos com assinatura eletrônica simples e propostas',
+      '1 milhão de tokens de IA por mês',
     ],
   },
   {
     key: 'scale',
     slug: 'plan-scale',
-    name: 'Scale',
-    tagline: 'Everything, plus bring-your-own-key and white-label.',
-    monthlyPriceCents: 11_900,
+    name: 'Empresarial',
+    tagline: 'Todos os módulos, sua própria chave de IA e marca própria.',
+    monthlyPriceCents: 19_990,
     domains: 'all',
     includedAiCredits: 3_000_000,
     byokEligible: true,
     features: [
-      'Every module',
-      '3M AI tokens/mo included',
-      'BYOK — spend tokens at cost (no markup)',
-      'White-label, governance, and priority support',
+      'Todos os módulos, incluindo loja virtual, SEO e central de publicação',
+      '3 milhões de tokens de IA por mês',
+      'Use sua própria chave de IA (BYOK) sem margem sobre os tokens',
+      'Marca própria (white-label) e governança',
     ],
   },
 ];

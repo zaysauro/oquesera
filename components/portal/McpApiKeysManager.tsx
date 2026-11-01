@@ -113,7 +113,7 @@ interface McpApiKeysManagerProps {
 
 export default function McpApiKeysManager({
   heading = 'API Keys',
-  subheading = 'Use these keys to authenticate the SimplerDevelopment MCP server. Connect from Claude Desktop, Claude Code, ChatGPT, or any MCP-compatible client to control your portal programmatically.',
+  subheading = 'Use these keys to authenticate the Kumo One MCP server. Connect from Claude Desktop, Claude Code, ChatGPT, or any MCP-compatible client to control your portal programmatically.',
 }: McpApiKeysManagerProps) {
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);

@@ -35,7 +35,7 @@ export function BookingPageClient({ slug }: { slug: string }) {
         showSteps={!embedFlags.hideSteps}
       />
       <p className="text-center text-xs text-gray-400 pb-6">
-        Powered by Simpler Development
+        Powered by Kumo One
       </p>
     </div>
   );

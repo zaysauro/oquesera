@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 
 type GoalStatus = 'draft' | 'active' | 'achieved' | 'missed' | 'dropped';
@@ -262,7 +263,7 @@ export default function ProjectGoalsPanel({ projectId, canEdit }: { projectId: n
                 </div>
                 {g.targetDate && (
                   <p className="text-[10px] text-muted-foreground">
-                    Target: {new Date(g.targetDate).toLocaleDateString('en-US')}
+                    Target: {new Date(g.targetDate).toLocaleDateString(APP_LOCALE)}
                   </p>
                 )}
               </div>

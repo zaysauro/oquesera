@@ -5,6 +5,7 @@
 // optimistic — fetch the live list on mount, update the local cache on each
 // mutation, refetch on error.
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useCallback, useEffect } from 'react';
 import CampaignEditor from './CampaignEditor';
 
@@ -207,7 +208,7 @@ function StatusChip({ status }: { status: string }) {
 
 function formatRange(start: string | null, end: string | null): string {
   if (!start && !end) return '—';
-  const fmt = (s: string) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const fmt = (s: string) => new Date(s).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
   if (start && end) return `${fmt(start)} → ${fmt(end)}`;
   if (start) return `from ${fmt(start)}`;
   return `until ${fmt(end!)}`;

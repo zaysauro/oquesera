@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
@@ -37,7 +38,7 @@ function formatNumber(n: number): string {
 }
 
 function formatCents(cents: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+  return new Intl.NumberFormat(APP_LOCALE, { style: 'currency', currency: APP_CURRENCY }).format(cents / 100);
 }
 
 /** Compute estimated overage cost for a snapshot row. */

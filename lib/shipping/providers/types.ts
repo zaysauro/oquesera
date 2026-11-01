@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 // Shared types for shipping providers.
 //
 // The `CarrierProvider` interface is the contract every concrete provider
@@ -32,7 +33,7 @@ export interface RateQuote {
   carrier: string;        // 'USPS' | 'UPSDAP' | 'FedExDefault' | 'DHLExpress' | ...
   service: string;        // 'Priority' | 'Ground' | 'Express' | ...
   amountCents: number;
-  currency: string;       // ISO, e.g. 'USD'
+  currency: string;       // ISO, e.g. APP_CURRENCY
   estDeliveryDays: number | null;
 }
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import { getDomainByKey } from '@/lib/billing/domain-catalog';
 
@@ -11,9 +12,9 @@ export function DomainUpsellCard({ domainKey }: DomainUpsellCardProps) {
   const domain = getDomainByKey(domainKey);
   if (!domain) return null;
 
-  const dollars = (domain.monthlyPriceCents / 100).toLocaleString('en-US', {
+  const dollars = (domain.monthlyPriceCents / 100).toLocaleString(APP_LOCALE, {
     style: 'currency',
-    currency: 'USD',
+    currency: APP_CURRENCY,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });

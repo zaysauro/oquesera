@@ -1,5 +1,6 @@
 'use client';
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { slugify } from '@/lib/publishing/slug';
@@ -126,7 +127,7 @@ export default function WebsiteSettingsForm({
               />
             </div>
             <div className="px-3 py-2.5 bg-muted/50 border border-l-0 border-border rounded-r-lg text-sm text-muted-foreground font-mono shrink-0">
-              .simplerdevelopment.com
+              .{PLATFORM_ROOT_DOMAIN}
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-1">Lowercase letters, numbers, and hyphens only. 3-63 characters.</p>
@@ -162,7 +163,7 @@ export default function WebsiteSettingsForm({
             <label className="block text-sm font-medium text-foreground">Preview access code</label>
             <p className="text-xs text-muted-foreground mt-0.5">
               Optional. Share this code with stakeholders so they can preview the site at{' '}
-              <span className="font-mono">simplerdevelopment.com</span> while it&apos;s still gated.
+              <span className="font-mono">{PLATFORM_ROOT_DOMAIN}</span> while it&apos;s still gated.
             </p>
           </div>
           <button

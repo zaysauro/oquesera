@@ -5,6 +5,7 @@
  * registrar function below is invoked by buildMcpServer() and registers each
  * tool with its scope guard. Behavior is unchanged from the monolithic file.
  */
+import { APP_CURRENCY } from '@/config/brand';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { and, desc, eq, ilike, inArray, isNull, or, sql, gte, lte } from 'drizzle-orm';
@@ -1207,7 +1208,7 @@ export function registerCrmTools(server: McpServer, ctx: PortalMcpContext): void
             sections: (args.sections ?? []) as ProposalSection[],
             lineItems: (args.lineItems ?? []) as ProposalLineItem[],
             fees: (args.fees ?? []) as ProposalFee[],
-            currency: args.currency ?? 'USD',
+            currency: args.currency ?? APP_CURRENCY,
             validUntil: args.validUntil ? new Date(args.validUntil) : null,
             clientToken: crypto.randomBytes(32).toString('hex'),
             accentColor: args.accentColor ?? '#2563eb',
@@ -1423,7 +1424,7 @@ export function registerCrmTools(server: McpServer, ctx: PortalMcpContext): void
         clauses: (args.clauses ?? []) as ContractClause[],
         lineItems: (args.lineItems ?? []) as ProposalLineItem[],
         fees: (args.fees ?? []) as ProposalFee[],
-        currency: args.currency ?? 'USD',
+        currency: args.currency ?? APP_CURRENCY,
         validUntil: args.validUntil ? new Date(args.validUntil) : null,
         clientToken: crypto.randomBytes(32).toString('hex'),
         accentColor: args.accentColor ?? '#2563eb',

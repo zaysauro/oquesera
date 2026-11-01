@@ -95,7 +95,7 @@ export default function NewCampaignPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>From Name *</label>
-              <input required value={form.fromName} onChange={set('fromName')} className={inputClass} placeholder="e.g. Simpler Development" />
+              <input required value={form.fromName} onChange={set('fromName')} className={inputClass} placeholder="e.g. Kumo One" />
             </div>
             <div>
               <label className={labelClass}>From Email *</label>

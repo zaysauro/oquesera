@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import type { StepProps } from './types';
 import { obPrimaryBtn, obChip, obChipOn, obFootbar } from '../ob-styles';
@@ -27,7 +28,7 @@ const BUNDLE_KEY = 'bundle';
 
 // Where BYOK ("bring your own AI key") enquiries go — no self-serve price.
 const BYOK_MAILTO =
-  'mailto:sales@simplerdevelopment.com?subject=BYOK%20pricing%20—%20bring%20your%20own%20AI%20key';
+  `mailto:sales@${EMAIL_DOMAIN}?subject=BYOK%20pricing%20—%20bring%20your%20own%20AI%20key`;
 
 export function StepChooseModules({ state, setAnswers, persist, next }: StepProps) {
   const [modules, setModules] = useState<ModuleItem[]>([]);
@@ -162,7 +163,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
 
   return (
     <div className="space-y-5">
@@ -335,7 +336,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
                   onClick={switchToBundle}
                   className="underline text-primary hover:text-primary/80 font-medium"
                 >
-                  switch to SimplerDev Complete
+                  switch to Kumo Complete
                 </button>
               </p>
             </div>

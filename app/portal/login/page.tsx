@@ -1,5 +1,6 @@
 'use client';
 
+import { isPlatformHost, platformSubdomainHost } from '@/config/brand';
 import { Suspense, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
@@ -66,7 +67,7 @@ function LoginForm() {
       });
     } catch {
       setLoading(false);
-      setError('Unable to connect — please check your internet connection and try again.');
+      setError('Não foi possível conectar — verifique sua internet e tente novamente.');
       return;
     }
 
@@ -75,7 +76,7 @@ function LoginForm() {
     if (result?.error) {
       // We can't tell password-vs-2FA apart (NextAuth hides the reason), so guide
       // the user to the code if they have 2FA on.
-      setError('Invalid email or password — if you have two-factor enabled, include your authenticator code.');
+      setError('E-mail ou senha inválidos — se você ativou dois fatores, informe também o código do autenticador.');
     } else {
       // Check if the user's client has a subdomain portal
       try {
@@ -89,16 +90,16 @@ function LoginForm() {
           return;
         }
 
-        // Only hop to the client's `*.simplerdevelopment.com` subdomain when we
-        // are ALREADY on a simplerdevelopment.com host (prod/staging), where the
+        // Only hop to the client's platform subdomain when we
+        // are ALREADY on a platform-domain host (prod/staging), where the
         // subdomain resolves and the session cookie is shared across subdomains.
         // From localhost the subdomain doesn't resolve; from a `*.vercel.app`
         // preview the hop would bounce the user OFF the preview to production and
         // the host-only preview cookie wouldn't follow. In both cases, stay put —
         // the just-issued session is scoped to the current host.
-        const onSimplerDevHost = window.location.hostname.endsWith('.simplerdevelopment.com');
-        if (onSimplerDevHost && subData.subdomain && window.location.hostname !== `${subData.subdomain}.simplerdevelopment.com`) {
-          window.location.href = `https://${subData.subdomain}.simplerdevelopment.com${callbackUrl}`;
+        const onSimplerDevHost = isPlatformHost(window.location.hostname);
+        if (onSimplerDevHost && subData.subdomain && window.location.hostname !== platformSubdomainHost(subData.subdomain)) {
+          window.location.href = `${window.location.protocol}//${platformSubdomainHost(subData.subdomain)}${window.location.port ? `:${window.location.port}` : ''}${callbackUrl}`;
           return;
         }
       } catch {}
@@ -123,12 +124,12 @@ function LoginForm() {
         body: JSON.stringify({ clientId: portal.clientId }),
       });
 
-      // Only hop to the subdomain when already on a simplerdevelopment.com host
+      // Only hop to the subdomain when already on a platform-domain host
       // (see handleSubmit) — never from localhost or a *.vercel.app preview.
-      const onSimplerDevHost = window.location.hostname.endsWith('.simplerdevelopment.com');
+      const onSimplerDevHost = isPlatformHost(window.location.hostname);
       if (portal.subdomain && onSimplerDevHost) {
         // eslint-disable-next-line react-hooks/immutability -- pre-existing pattern, predates this change
-        window.location.href = `https://${portal.subdomain}.simplerdevelopment.com${callbackUrl}`;
+        window.location.href = `${window.location.protocol}//${platformSubdomainHost(portal.subdomain)}${window.location.port ? `:${window.location.port}` : ''}${callbackUrl}`;
       } else {
         // eslint-disable-next-line react-hooks/immutability -- pre-existing pattern, predates this change
         window.location.href = callbackUrl;
@@ -140,10 +141,10 @@ function LoginForm() {
 
   if (choosingPortal) {
     return (
-      <AuthShell panelSubtitle="Pick up right where you left off.">
+      <AuthShell panelSubtitle="Continue de onde parou.">
         <div className={authEyebrow}>{'// Choose portal'}</div>
-        <h1 className={authHeading}>Choose your portal.</h1>
-        <p className={authSubtext}>You have access to multiple portals. Select one to continue.</p>
+        <h1 className={authHeading}>Escolha a empresa.</h1>
+        <p className={authSubtext}>Você tem acesso a mais de uma empresa. Selecione uma para continuar.</p>
 
         <div className="mt-7 space-y-2.5">
           {portals.map((portal) => (
@@ -159,7 +160,7 @@ function LoginForm() {
               <div className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-semibold text-foreground">{portal.company}</span>
                 {portal.subdomain && (
-                  <span className="text-xs text-muted-foreground">{portal.subdomain}.simplerdevelopment.com</span>
+                  <span className="text-xs text-muted-foreground">{platformSubdomainHost(portal.subdomain)}</span>
                 )}
               </div>
               <span className="material-icons text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary">arrow_forward</span>
@@ -168,24 +169,24 @@ function LoginForm() {
         </div>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          This will be set as your default. You can change it in Settings.
+          Ela será definida como padrão. Você pode alterar isso em Configurações.
         </p>
       </AuthShell>
     );
   }
 
   return (
-    <AuthShell panelSubtitle="Welcome back — sign in to your command center.">
+    <AuthShell panelSubtitle="Bem-vindo de volta — entre para gerenciar a sua empresa.">
       <div className={authEyebrow}>{'// Welcome back'}</div>
-      <h1 className={authHeading}>Sign in to your portal.</h1>
-      <p className={authSubtext}>One login for your sites, CRM, content, and everything in between.</p>
+      <h1 className={authHeading}>Entre na sua conta.</h1>
+      <p className={authSubtext}>Um único acesso para clientes, site, agenda, projetos e tudo mais.</p>
 
       <div className="mt-7">
         {/* Email-verified success banner */}
         {verified && (
           <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-700 dark:text-green-400">
             <span className="material-icons text-base">check_circle</span>
-            Email verified — sign in to continue.
+            E-mail confirmado — entre para continuar.
           </div>
         )}
 
@@ -194,7 +195,7 @@ function LoginForm() {
           <>
             <button type="button" onClick={() => signIn('google', { callbackUrl })} className={authGhostBtn}>
               <GoogleMark />
-              Continue with Google
+              Continuar com o Google
             </button>
             <AuthDivider />
           </>
@@ -209,7 +210,7 @@ function LoginForm() {
 
         <form method="post" onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className={authLabel}>Email</label>
+            <label className={authLabel}>E-mail</label>
             <AuthField icon="mail_outline">
               <input
                 type="email"
@@ -218,12 +219,12 @@ function LoginForm() {
                 required
                 autoComplete="email"
                 className={authInput}
-                placeholder="you@company.com"
+                placeholder="voce@empresa.com.br"
               />
             </AuthField>
           </div>
           <div>
-            <label className={authLabel}>Password</label>
+            <label className={authLabel}>Senha</label>
             <AuthField icon="lock_outline">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -239,19 +240,19 @@ function LoginForm() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-muted-foreground transition-colors hover:text-foreground"
                 tabIndex={-1}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
               >
                 <span className="material-icons text-lg">{showPassword ? 'visibility_off' : 'visibility'}</span>
               </button>
             </AuthField>
             <div className="mt-2 flex justify-end">
               <a href="/portal/forgot-password" className="text-[13.5px] font-semibold text-primary hover:underline">
-                Forgot your password?
+                Esqueceu a senha?
               </a>
             </div>
           </div>
           <div>
-            <label className={authLabel}>Two-factor code <span className="font-normal text-muted-foreground">(only if enabled)</span></label>
+            <label className={authLabel}>Código de dois fatores <span className="font-normal text-muted-foreground">(somente se ativado)</span></label>
             <AuthField icon="pin">
               <input
                 type="text"
@@ -270,11 +271,11 @@ function LoginForm() {
             {loading ? (
               <>
                 <span className="material-icons animate-spin text-base">refresh</span>
-                Signing in…
+                Entrando…
               </>
             ) : (
               <>
-                Sign in
+                Entrar
                 <span className="material-icons text-[19px] transition group-hover:translate-x-0.5">arrow_forward</span>
               </>
             )}
@@ -285,21 +286,21 @@ function LoginForm() {
           <p className="mt-6 text-sm text-muted-foreground">
             New here?{' '}
             <a href="/contact" className="font-bold text-foreground hover:text-primary">
-              Contact us for managed hosting
+              Fale com a equipe Kumo One
             </a>
           </p>
         ) : (
           <p className="mt-6 text-sm text-muted-foreground">
             New here?{' '}
             <a href="/portal/signup" className="font-bold text-foreground hover:text-primary">
-              Create an account
+              Criar uma conta
             </a>
           </p>
         )}
         <p className="mt-2 text-xs text-muted-foreground">
           Need access?{' '}
           <a href="/contact" className="text-primary hover:underline">
-            Contact us
+            Fale conosco
           </a>
         </p>
       </div>

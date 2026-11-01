@@ -13,6 +13,7 @@
  * they're excluded from BYOK routing on purpose, not by oversight.
  */
 
+import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { websiteEmailTemplates, clientWebsites, brandingProfiles } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
@@ -23,7 +24,7 @@ import { getDefaultTemplates } from './default-email-templates';
 import { applyBrandingToBlocks, brandingProfileToEmailBranding } from './apply-branding-to-blocks';
 import type { Block, BlockEditorData } from '@/types/blocks';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
 
 interface SendTransactionalEmailOptions {
   websiteId: number;
@@ -75,7 +76,7 @@ function wrapEmailHtml(innerHtml: string, previewText?: string): string {
           <tr>
             <td style="padding:16px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
               <p style="margin:0;font-size:12px;color:#9ca3af;">
-                Powered by SimplerDevelopment
+                Powered by Kumo One
               </p>
             </td>
           </tr>
@@ -129,7 +130,7 @@ async function getWebsiteInfo(websiteId: number) {
     .where(eq(clientWebsites.id, websiteId))
     .limit(1);
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://example.com';
   // The domain slug used in /sites/[domain] routes
   const domainSlug = site?.domain || site?.subdomain || '';
 
@@ -298,7 +299,7 @@ export function formatAddress(addr: {
 export function formatEmailDate(date: Date | string | null): string {
   if (!date) return 'N/A';
   const d = typeof date === 'string' ? new Date(date) : date;
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(APP_LOCALE, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',

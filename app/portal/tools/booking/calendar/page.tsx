@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { PortalPageHeader } from '@/components/portal/PortalPageHeader';
@@ -33,7 +34,7 @@ type ViewMode = 'week' | 'day';
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 7); // 7am to 8pm
 
 function formatTime(date: Date) {
-  return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  return date.toLocaleTimeString(APP_LOCALE, { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
 function getWeekDays(date: Date): Date[] {
@@ -160,8 +161,8 @@ export default function CombinedCalendarPage() {
           </button>
           <span className="text-sm font-semibold text-foreground ml-2">
             {viewMode === 'week'
-              ? `${weekDays[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} — ${weekDays[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-              : currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+              ? `${weekDays[0].toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric' })} — ${weekDays[6].toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' })}`
+              : currentDate.toLocaleDateString(APP_LOCALE, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
             }
           </span>
         </div>
@@ -249,7 +250,7 @@ export default function CombinedCalendarPage() {
                   className={`px-2 py-3 text-center border-r border-border last:border-r-0 ${isToday ? 'bg-primary/5' : ''}`}
                 >
                   <div className="text-xs text-muted-foreground">
-                    {day.toLocaleDateString('en-US', { weekday: 'short' })}
+                    {day.toLocaleDateString(APP_LOCALE, { weekday: 'short' })}
                   </div>
                   <div className={`text-lg font-semibold ${isToday ? 'text-primary' : 'text-foreground'}`}>
                     {day.getDate()}
@@ -359,7 +360,7 @@ export default function CombinedCalendarPage() {
               <div>
                 <span className="text-xs text-muted-foreground">Time</span>
                 <p className="text-sm text-foreground">
-                  {new Date(selectedBooking.startTime).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                  {new Date(selectedBooking.startTime).toLocaleDateString(APP_LOCALE, { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
                 <p className="text-sm text-foreground">
                   {formatTime(new Date(selectedBooking.startTime))} — {formatTime(new Date(selectedBooking.endTime))}

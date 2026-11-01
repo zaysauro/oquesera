@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/components/storefront/account/CustomerAuthContext';
@@ -85,7 +86,7 @@ export function OrdersPageClient({ siteId, domain }: { siteId: number; domain: s
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <p className="text-sm text-gray-500">
-                        {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        {new Date(order.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </p>
                     </div>
                     <div className="col-span-4 sm:col-span-2">

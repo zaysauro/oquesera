@@ -186,7 +186,7 @@ export default function StackCalculator() {
           ) : (
             <>
               <Line label="Your point-tool stack" value={formatMoney(stackCents)} />
-              <Line label="SimplerDevelopment" value={formatMoney(sd.totalCents)} accent />
+              <Line label="Kumo One" value={formatMoney(sd.totalCents)} accent />
 
               <div className="mt-5 border-t border-[color-mix(in_srgb,var(--retro-cream)_25%,transparent)] pt-5">
                 <p className="eyebrow eyebrow--on-ink">{saving ? 'You keep' : 'Difference'}</p>
@@ -200,7 +200,7 @@ export default function StackCalculator() {
                 </p>
                 <p className="mt-1 text-sm text-[color-mix(in_srgb,var(--retro-cream)_78%,transparent)]">
                   {formatMoney(Math.abs(savingsCents) * 12)} a year
-                  {!saving && ' more on SimplerDevelopment — see the note below.'}
+                  {!saving && ' more on Kumo One — see the note below.'}
                 </p>
               </div>
 
@@ -234,7 +234,7 @@ export default function StackCalculator() {
           <div className={`overflow-x-auto rounded-md border ${RULE}`}>
             <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
               <caption className="sr-only">
-                Line-by-line monthly cost of each point tool against the SimplerDevelopment module
+                Line-by-line monthly cost of each point tool against the Kumo One module
                 that replaces it, at {seats} seat
                 {seats === 1 ? '' : 's'}.
               </caption>

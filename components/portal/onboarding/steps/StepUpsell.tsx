@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { StepProps } from './types';
@@ -131,13 +132,13 @@ export function StepUpsell({ next }: StepProps) {
   }
 
   function handleAddBundle() {
-    if (!window.confirm('Switch to SimplerDev Complete? This will replace your individual modules with the bundle subscription.')) return;
+    if (!window.confirm('Switch to Kumo Complete? This will replace your individual modules with the bundle subscription.')) return;
     setBundleState('loading');
     void addModule(BUNDLE_SLUG, '__bundle__', setBundleState);
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
 
   if (!mounted) {
     return (

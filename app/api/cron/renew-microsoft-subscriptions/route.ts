@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { eq, and, isNull, lt, or } from 'drizzle-orm';
@@ -46,7 +47,7 @@ async function _GET(req: Request) {
   // Build credentials once. If env isn't configured, return early so we don't
   // surface this as a cron failure on environments that haven't enabled the
   // Teams integration yet.
-  const redirectUri = `${process.env.NEXTAUTH_URL ?? 'https://www.simplerdevelopment.com'}/api/portal/integrations/microsoft/callback`;
+  const redirectUri = `${process.env.NEXTAUTH_URL ?? 'https://www.${PLATFORM_ROOT_DOMAIN}'}/api/portal/integrations/microsoft/callback`;
   let credentials;
   try {
     credentials = getEnvMicrosoftCredentials(redirectUri);

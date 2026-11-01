@@ -1,3 +1,4 @@
+import { APP_LOCALE } from '@/config/brand';
 /**
  * PDF-01/02 — pure helpers for the completion-certificate PDF.
  *
@@ -30,7 +31,7 @@ export function formatCompletionDate(input: Date | string | null | undefined): s
         : new Date();
   if (Number.isNaN(d.getTime())) return formatCompletionDate(new Date());
   // Always en-US to keep the certificate copy stable across environments.
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return d.toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 /**

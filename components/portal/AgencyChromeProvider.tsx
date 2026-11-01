@@ -33,7 +33,7 @@ interface AgencyChrome {
   brandLogoUrl: string;
 }
 
-const DEFAULT_BRAND_NAME = 'Simpler Development';
+const DEFAULT_BRAND_NAME = 'Kumo One';
 const DEFAULT_LOGO_URL = '/iconLogo.png';
 
 const DEFAULT_VALUE: AgencyChrome = {

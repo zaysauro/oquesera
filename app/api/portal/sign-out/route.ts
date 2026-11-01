@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { secureCookiesEnabled } from '@/lib/auth-cookies';
 import { NextResponse } from 'next/server';
 
@@ -28,7 +29,7 @@ export async function POST() {
       expires: new Date(0),
       path: '/',
       secure: secure,
-      domain: secure ? 'simplerdevelopment.com' : undefined,
+      domain: secure ? PLATFORM_ROOT_DOMAIN : undefined,
     });
     // Prod also scopes cookies to the wildcard domain — clear that too.
     if (secure) {
@@ -36,7 +37,7 @@ export async function POST() {
         expires: new Date(0),
         path: '/',
         secure: true,
-        domain: '.simplerdevelopment.com',
+        domain: `.${PLATFORM_ROOT_DOMAIN}`,
       });
     }
   }

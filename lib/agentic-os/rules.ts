@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import type { AgenticOsRule } from './types';
 
 /**
@@ -45,7 +46,7 @@ export const RULES: AgenticOsRule[] = [
   {
     id: 'migration-email-pattern',
     title: 'Site migrations: auto-derive client email from domain',
-    body: 'When migrating a site, auto-derive the client email as {sitename}@simplerdevelopment.com — never prompt the user, never use a generic placeholder.',
+    body: `When migrating a site, auto-derive the client email as {sitename}@${EMAIL_DOMAIN} — never prompt the user, never use a generic placeholder.`,
   },
   {
     id: 'huashu-not-pasteable',

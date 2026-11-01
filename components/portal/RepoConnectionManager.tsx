@@ -110,7 +110,7 @@ export default function RepoConnectionManager({
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Connect a GitHub repository to use your own codebase with the SimplerDevelopment SDK.
+        Connect a GitHub repository to use your own codebase with the Kumo One SDK.
         Without a repo, your site is served by the built-in rendering engine.
       </p>
 

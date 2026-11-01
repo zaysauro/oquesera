@@ -26,6 +26,7 @@
 // the session cookie is cross-site and never sent, and replace this
 // domain-pinned handoff with a signed URL param / postMessage handshake.
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { secureCookiesEnabled } from '@/lib/auth-cookies';
 
 
@@ -39,7 +40,7 @@ function sharedCookieDomain(): string | undefined {
   // browser would reject every plugin cookie.
   const explicit = process.env.AUTH_COOKIE_DOMAIN?.trim();
   if (explicit) return explicit;
-  return process.env.VERCEL_ENV === 'production' ? '.simplerdevelopment.com' : undefined;
+  return process.env.VERCEL_ENV === 'production' ? `.${PLATFORM_ROOT_DOMAIN}` : undefined;
 }
 
 export function pluginTenantCookieOptions(httpOnly: boolean) {

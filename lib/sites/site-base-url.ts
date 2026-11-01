@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 /**
  * Canonical public base URL for a tenant site: custom domain first, then the
  * Vercel-attached domain, then the platform subdomain. Shared by the tenant
@@ -12,5 +13,5 @@ export function siteBaseUrl(site: {
     ? `https://${site.domain}`
     : site.vercelDomain
       ? `https://${site.vercelDomain}`
-      : `https://${site.subdomain}.simplerdevelopment.com`;
+      : `https://${site.subdomain}.${PLATFORM_ROOT_DOMAIN}`;
 }

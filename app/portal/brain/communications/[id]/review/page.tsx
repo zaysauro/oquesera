@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY } from '@/config/brand';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState, useCallback, useMemo } from 'react';
@@ -265,7 +266,7 @@ function ReviewCard({ item, busy, onApprove, onReject }: {
   } else if (item.proposedType === 'crm_deal_link') {
     summary = `Link this email to deal #${p.dealId}`;
   } else if (item.proposedType === 'crm_deal_create') {
-    const value = typeof p.value === 'number' ? ` (${formatCents(p.value, typeof p.currency === 'string' ? p.currency : 'USD')})` : '';
+    const value = typeof p.value === 'number' ? ` (${formatCents(p.value, typeof p.currency === 'string' ? p.currency : APP_CURRENCY)})` : '';
     summary = `Create deal: ${typeof p.title === 'string' ? p.title : '(untitled)'}${value}`;
   } else if (item.proposedType === 'crm_company_link') {
     const candidates = Array.isArray(p.candidateCompanyIds) ? p.candidateCompanyIds : [];

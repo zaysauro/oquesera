@@ -16,6 +16,7 @@
  * Edit mode swaps the body for the shared `<GlossaryTermForm>`.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import { useCallback, useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
@@ -71,7 +72,7 @@ function looksLikeMarkdown(s: string): boolean {
 
 function formatDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(iso).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
   } catch {
     return iso;
   }

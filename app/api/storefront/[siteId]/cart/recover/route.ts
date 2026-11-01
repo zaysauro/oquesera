@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { carts, clientWebsites } from '@/lib/db/schema';
@@ -83,8 +84,8 @@ export async function GET(
     const baseUrl = website?.domain
       ? `https://${website.domain}`
       : website?.subdomain
-        ? `https://${website.subdomain}.simplerdevelopment.com`
-        : (process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com');
+        ? `https://${website.subdomain}.${PLATFORM_ROOT_DOMAIN}`
+        : (process.env.NEXTAUTH_URL || 'https://example.com');
 
     const redirectUrl = `${baseUrl}/store/cart?recovered=1`;
 

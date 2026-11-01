@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/components/storefront/account/CustomerAuthContext';
@@ -110,7 +111,7 @@ export function SupportThreadClient({ siteId, domain, messageId }: { siteId: num
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">{thread.subject}</h1>
                   <p className="text-sm text-gray-500 mt-1">
-                    {thread.category} -- Opened {new Date(thread.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    {thread.category} -- Opened {new Date(thread.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' })}
                   </p>
                 </div>
                 <span className={`text-sm px-3 py-1.5 rounded-full font-medium ${statusColor[thread.status] ?? 'bg-gray-100 text-gray-700'}`}>
@@ -131,7 +132,7 @@ export function SupportThreadClient({ siteId, domain, messageId }: { siteId: num
                         {customer?.firstName ?? 'You'}
                       </p>
                       <p className="text-xs text-gray-400">
-                        {new Date(thread.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                        {new Date(thread.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                       </p>
                     </div>
                     <p className="text-sm text-gray-700 whitespace-pre-wrap">{thread.body}</p>
@@ -152,7 +153,7 @@ export function SupportThreadClient({ siteId, domain, messageId }: { siteId: num
                           {reply.fromStaff ? (reply.staffName ?? 'Support Team') : (customer?.firstName ?? 'You')}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {new Date(reply.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                          {new Date(reply.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                         </p>
                       </div>
                       <p className="text-sm text-gray-700 whitespace-pre-wrap">{reply.body}</p>

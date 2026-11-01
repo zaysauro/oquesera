@@ -9,10 +9,11 @@
 // All functions are intentionally standalone (no DB imports) so they can be
 // tested independently of the webhook handler.
 
+import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { resend } from '@/lib/email';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'portal@simplerdevelopment.com';
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `portal@${EMAIL_DOMAIN}`;
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://example.com';
 const BILLING_URL = `${BASE_URL}/portal/settings/billing/plans`;
 
 /** Common HTML shell shared by all dunning emails. */
@@ -33,11 +34,11 @@ function wrapInShell(headline: string, bodyHtml: string): string {
     </div>
     <p style="font-size:12px;color:#94a3b8;line-height:1.5;">
       If you believe this is a mistake, reply to this email or
-      contact <a href="mailto:${process.env.BILLING_EMAIL || 'billing@simplerdevelopment.com'}" style="color:#2563eb;">${process.env.BILLING_EMAIL || 'billing@simplerdevelopment.com'}</a>.
+      contact <a href="mailto:${process.env.BILLING_EMAIL || `billing@${EMAIL_DOMAIN}`}" style="color:#2563eb;">${process.env.BILLING_EMAIL || `billing@${EMAIL_DOMAIN}`}</a>.
     </p>
   </div>
   <div style="padding:24px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
-    <p style="margin:0;font-size:12px;color:#94a3b8;">Simpler Development &middot; Design, Dev &amp; Automation</p>
+    <p style="margin:0;font-size:12px;color:#94a3b8;">Kumo One &middot; Design, Dev &amp; Automation</p>
   </div>
 </div>`;
 }
@@ -60,7 +61,7 @@ export async function sendPaymentFailedEmail(opts: {
     'Action required: payment failed',
     `<p style="font-size:15px;color:#334155;line-height:1.6;">${greeting}</p>
      <p style="font-size:15px;color:#334155;line-height:1.6;">
-       A payment for your Simpler Development subscription could not be processed.
+       A payment for your Kumo One subscription could not be processed.
        Stripe will retry automatically — but to avoid any interruption to your
        service please update your payment method as soon as possible.
      </p>
@@ -68,9 +69,9 @@ export async function sendPaymentFailedEmail(opts: {
   );
 
   await resend.emails.send({
-    from: `Simpler Development Billing <${FROM_EMAIL}>`,
+    from: `Kumo One Billing <${FROM_EMAIL}>`,
     to: opts.toEmail,
-    subject: 'Action required: your Simpler Development payment failed',
+    subject: 'Action required: your Kumo One payment failed',
     html,
   });
 }
@@ -85,7 +86,7 @@ export async function sendTrialWillEndEmail(opts: {
   trialEndDate: Date;
 }): Promise<void> {
   const greeting = opts.companyName ? `Hi ${opts.companyName},` : 'Hi there,';
-  const formatted = opts.trialEndDate.toLocaleDateString('en-US', {
+  const formatted = opts.trialEndDate.toLocaleDateString(APP_LOCALE, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
@@ -97,7 +98,7 @@ export async function sendTrialWillEndEmail(opts: {
     'Your free trial ends in 3 days',
     `<p style="font-size:15px;color:#334155;line-height:1.6;">${greeting}</p>
      <p style="font-size:15px;color:#334155;line-height:1.6;">
-       Your Simpler Development free trial ends on <strong>${formatted}</strong>.
+       Your Kumo One free trial ends on <strong>${formatted}</strong>.
        After that, you'll be billed at your plan's regular rate.
      </p>
      <p style="font-size:15px;color:#334155;line-height:1.6;">
@@ -107,9 +108,9 @@ export async function sendTrialWillEndEmail(opts: {
   );
 
   await resend.emails.send({
-    from: `Simpler Development Billing <${FROM_EMAIL}>`,
+    from: `Kumo One Billing <${FROM_EMAIL}>`,
     to: opts.toEmail,
-    subject: 'Your Simpler Development trial ends in 3 days',
+    subject: 'Your Kumo One trial ends in 3 days',
     html,
   });
 }
@@ -131,7 +132,7 @@ export async function sendSubscriptionSuspendedEmail(opts: {
   };
 
   const html = wrapInShell(
-    'Your Simpler Development access has been suspended',
+    'Your Kumo One access has been suspended',
     `<p style="font-size:15px;color:#334155;line-height:1.6;">${greeting}</p>
      <p style="font-size:15px;color:#334155;line-height:1.6;">
        Unfortunately, ${reasonCopy[opts.reason]}.
@@ -143,9 +144,9 @@ export async function sendSubscriptionSuspendedEmail(opts: {
   );
 
   await resend.emails.send({
-    from: `Simpler Development Billing <${FROM_EMAIL}>`,
+    from: `Kumo One Billing <${FROM_EMAIL}>`,
     to: opts.toEmail,
-    subject: 'Your Simpler Development access has been suspended',
+    subject: 'Your Kumo One access has been suspended',
     html,
   });
 }

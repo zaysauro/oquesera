@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { clientWebsites, siteTracking, websiteDomains, websiteEnvironments } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
@@ -119,7 +120,7 @@ export default async function WebsiteSettingsPage({
           <GitHubConnectButton siteId={site.id} />
           <GoogleConnectionCard
             siteId={site.id}
-            websiteDomain={site.domain || (site.subdomain ? `${site.subdomain}.simplerdevelopment.com` : null)}
+            websiteDomain={site.domain || (site.subdomain ? `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}` : null)}
             websiteName={site.name}
           />
         </>

@@ -39,7 +39,7 @@ import { getPortalClient } from '@/lib/portal-client';
 import { generatePortalApiKey } from '@/lib/mcp-auth';
 
 const MOBILE_REDIRECT = 'sd-chat://callback';
-const KEY_NAME = 'SimplerDev Chat (Mobile)';
+const KEY_NAME = 'Kumo Chat (Mobile)';
 const KEY_TTL_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
 
 async function mintTokenAndRedirect() {
@@ -143,7 +143,7 @@ export default async function MobileAuthPage() {
           <span style={{ fontFamily: '"Material Icons"', fontSize: 32 }}>auto_awesome</span>
         </div>
         <h1 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 700, color: '#0B0F19' }}>
-          Connect SimplerDev Chat
+          Connect Kumo Chat
         </h1>
         <p style={{ margin: '0 0 24px', fontSize: 14, lineHeight: 1.5, color: '#5E6473' }}>
           You&rsquo;re signed in as <strong>{session.user!.email}</strong>. Tap the button below to

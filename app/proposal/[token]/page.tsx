@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/security/sanitize-html';
@@ -346,7 +347,7 @@ export default function PublicProposalPage() {
             </svg>
             <span>
               This proposal was accepted on{' '}
-              {proposal.acceptedAt ? new Date(proposal.acceptedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+              {proposal.acceptedAt ? new Date(proposal.acceptedAt).toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
               {proposal.signatureName ? ` by ${proposal.signatureName}` : ''}
             </span>
           </div>
@@ -360,7 +361,7 @@ export default function PublicProposalPage() {
             </svg>
             <span>
               This proposal was declined on{' '}
-              {proposal.declinedAt ? new Date(proposal.declinedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+              {proposal.declinedAt ? new Date(proposal.declinedAt).toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
             </span>
           </div>
         </div>
@@ -411,7 +412,7 @@ export default function PublicProposalPage() {
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Valid until {new Date(proposal.validUntil).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              Valid until {new Date(proposal.validUntil).toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' })}
               {daysLeft !== null && daysLeft <= 7 && daysLeft > 0 && ` (${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining)`}
             </div>
           )}
@@ -545,7 +546,7 @@ export default function PublicProposalPage() {
                         Signed by {proposal.signatureName}
                         {proposal.signedAt && (
                           <span className="text-gray-500 ml-1">
-                            on {new Date(proposal.signedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            on {new Date(proposal.signedAt).toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'long', day: 'numeric' })}
                           </span>
                         )}
                       </div>

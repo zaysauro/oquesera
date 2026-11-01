@@ -117,7 +117,7 @@ export default function AgencyHubPage() {
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   When enabled, the portal chrome shows your agency name and logo instead of
-                  &quot;Simpler Development&quot;. Available on the Scale tier.
+                  &quot;Kumo One&quot;. Available on the Scale tier.
                 </p>
                 {!canEnable && (
                   <p className="text-xs text-amber-700 dark:text-amber-400 mt-2 flex items-center gap-1">

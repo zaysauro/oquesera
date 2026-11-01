@@ -4,6 +4,7 @@
  */
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { priorityColor } from '@/lib/portal-utils';
 import type { Assignee, CardDetail, MentionUser, CardType, WorkflowState } from '../_lib/types';
 import { CARD_TYPE_OPTIONS, CARD_TYPE_META, WORKFLOW_STATE_OPTIONS, WORKFLOW_STATE_META, POINTS_OPTIONS } from '../_lib/agile';
@@ -235,7 +236,7 @@ export function CardSidebar({
         ) : (
           <span className="text-sm text-foreground">
             {card.dueDate ? (
-              new Date(card.dueDate).toLocaleDateString('en-US')
+              new Date(card.dueDate).toLocaleDateString(APP_LOCALE)
             ) : (
               <span className="text-muted-foreground">—</span>
             )}

@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
   if (client.billingMode === 'agency') {
     return NextResponse.json(
-      { success: false, message: 'Your plan is managed by SimplerDevelopment — contact us to make changes.' },
+      { success: false, message: 'Your plan is managed by Kumo One — contact us to make changes.' },
       { status: 403 },
     );
   }

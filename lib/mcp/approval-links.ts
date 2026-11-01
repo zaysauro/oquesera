@@ -75,7 +75,7 @@ export interface ApprovalLinkResult {
 const TOKEN_BYTES = 32; // 64 hex chars
 
 function baseUrl(): string {
-  return process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+  return process.env.NEXTAUTH_URL || 'https://example.com';
 }
 
 export function formatApprovalUrl(token: string): string {

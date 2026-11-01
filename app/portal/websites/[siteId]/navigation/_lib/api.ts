@@ -1,5 +1,6 @@
 // ─── API helpers for the navigation editor ───────────────────────────────────
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import type { Branding, NavItem } from './types';
 import { withSequentialSortOrder } from './tree';
 
@@ -95,7 +96,7 @@ export function resolvePreviewBase(
   status: SiteStatus | null,
   windowHost: string | null,
 ): string | null {
-  const domain = status?.vercelDomain || (status?.subdomain ? `${status.subdomain}.simplerdevelopment.com` : null);
+  const domain = status?.vercelDomain || (status?.subdomain ? `${status.subdomain}.${PLATFORM_ROOT_DOMAIN}` : null);
   if (!domain) return null;
   const onTenantHost = !!windowHost && windowHost === domain;
   return onTenantHost ? '' : `/sites/${domain}`;

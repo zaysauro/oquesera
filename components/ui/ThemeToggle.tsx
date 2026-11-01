@@ -9,7 +9,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className="rounded-md p-2 hover:bg-accent transition-colors"
-      aria-label="Toggle theme"
+      aria-label="Alternar tema claro/escuro"
     >
       {resolvedTheme === 'dark' ? (
         <svg

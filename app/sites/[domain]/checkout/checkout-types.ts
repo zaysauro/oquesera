@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 import { loadStripe } from '@stripe/stripe-js/pure';
 import type { Stripe as StripeClient } from '@stripe/stripe-js';
 import { formatMoney } from '@/lib/utils/money';
@@ -56,7 +57,7 @@ export interface CheckoutPageClientProps {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-export function formatPrice(cents: number, currency = 'USD') {
+export function formatPrice(cents: number, currency = APP_CURRENCY) {
   return formatMoney(cents, { currency });
 }
 

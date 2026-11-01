@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { clientWebsites, posts } from '@/lib/db/schema';
 import { eq, sql } from 'drizzle-orm';
@@ -127,7 +128,7 @@ export default async function PortalCmsPage({
                           {site.name}
                         </h2>
                         {site.subdomain ? (
-                          <p className="text-xs font-mono text-muted-foreground mt-0.5 truncate">{site.subdomain}.simplerdevelopment.com</p>
+                          <p className="text-xs font-mono text-muted-foreground mt-0.5 truncate">{site.subdomain}.{PLATFORM_ROOT_DOMAIN}</p>
                         ) : site.domain ? (
                           <p className="text-xs font-mono text-muted-foreground mt-0.5 truncate">{site.domain}</p>
                         ) : (

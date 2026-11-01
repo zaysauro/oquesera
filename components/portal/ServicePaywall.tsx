@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -14,7 +15,7 @@ interface ServicePaywallProps {
 }
 
 function formatCents(cents: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+  return new Intl.NumberFormat(APP_LOCALE, { style: 'currency', currency: APP_CURRENCY }).format(cents / 100);
 }
 
 export default function ServicePaywall({

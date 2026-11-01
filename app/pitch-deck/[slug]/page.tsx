@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { notFound, redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { db } from '@/lib/db';
@@ -143,7 +144,7 @@ async function getTenantHostForDeck(clientId: number): Promise<string | null> {
     .orderBy(clientWebsites.id)
     .limit(1);
   if (!site) return null;
-  if (site.subdomain) return `${site.subdomain}.simplerdevelopment.com`;
+  if (site.subdomain) return `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}`;
   if (site.domain) return site.domain;
   return null;
 }

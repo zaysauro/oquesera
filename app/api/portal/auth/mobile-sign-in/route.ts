@@ -34,7 +34,7 @@ import { checkRateLimit, getClientIp } from '@/lib/security/rate-limit';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const KEY_NAME = 'SimplerDev Chat (Mobile)';
+const KEY_NAME = 'Kumo Chat (Mobile)';
 const KEY_TTL_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

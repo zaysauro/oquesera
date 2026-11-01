@@ -1,6 +1,6 @@
 // Public-site host gate used by middleware: is this incoming Host header a
 // hostname some tenant has actually claimed (a verified custom domain or a
-// *.simplerdevelopment.com subdomain)? The regex check (isPlausibleTenantHost)
+// *.<platform root> subdomain)? The regex check (isPlausibleTenantHost)
 // only confirms a host LOOKS like a domain; this confirms it BELONGS to a real
 // site before we rewrite the request into the /sites/<host> renderer. Closes
 // the mild-SSRF / host-injection surface where any valid-looking FQDN was
@@ -13,6 +13,7 @@
 // regex-only behaviour instead of 504-ing every request.
 
 import { db } from '@/lib/db';
+import { extractPlatformSubdomain } from '@/config/brand';
 import { clientWebsites, websiteDomains, posts, abExperiments, siteRedirects } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
 
@@ -75,13 +76,13 @@ async function lookup(host: string): Promise<SiteHostInfo | null> {
     .limit(1);
   if (viaDomains[0]) return withExperimentState(viaDomains[0]);
 
-  // 3. Platform subdomain (<sub>.simplerdevelopment.com → clientWebsites.subdomain).
-  const sub = host.match(/^([^.]+)\.simplerdevelopment\.com$/);
-  if (sub) {
+  // 3. Platform subdomain (<sub>.<platform root> → clientWebsites.subdomain).
+  const subdomain = extractPlatformSubdomain(host);
+  if (subdomain) {
     const subSite = await db
       .select(cols)
       .from(clientWebsites)
-      .where(and(eq(clientWebsites.subdomain, sub[1]), eq(clientWebsites.active, true)))
+      .where(and(eq(clientWebsites.subdomain, subdomain), eq(clientWebsites.active, true)))
       .limit(1);
     if (subSite[0]) return withExperimentState(subSite[0]);
   }

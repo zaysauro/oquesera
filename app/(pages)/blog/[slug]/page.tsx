@@ -1,3 +1,4 @@
+import { APP_LOCALE } from '@/config/brand';
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/actions/blog';
 import { generateSEO } from '@/lib/utils/seo';
 import { notFound } from 'next/navigation';
@@ -101,7 +102,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             {post.publishedAt && (
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-[color-mix(in_srgb,var(--retro-cream)_65%,transparent)]">
                 <time dateTime={post.publishedAt.toISOString()}>
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  {new Date(post.publishedAt).toLocaleDateString(APP_LOCALE, {
                     month: 'long',
                     day: 'numeric',
                     year: 'numeric',

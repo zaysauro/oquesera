@@ -50,7 +50,7 @@ export default async function PortalHostingPage() {
       <PortalPageHeader
         eyebrow="Infrastructure"
         title="Hosting"
-        subtitle="Your managed hosting environments, powered by Railway and managed by Simpler Development."
+        subtitle="Your managed hosting environments, powered by Railway and managed by Kumo One."
       />
 
       {sites.length === 0 ? (
@@ -58,7 +58,7 @@ export default async function PortalHostingPage() {
           <span className="material-icons text-5xl text-muted-foreground mb-3">cloud_off</span>
           <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground mb-1">No hosted sites yet</h2>
           <p className="text-sm text-muted-foreground max-w-sm">
-            When Simpler Development provisions a hosting environment for you, it will appear here with status, domain info, and DNS setup instructions.
+            When Kumo One provisions a hosting environment for you, it will appear here with status, domain info, and DNS setup instructions.
           </p>
           <Link
             href="/portal/tickets/new"

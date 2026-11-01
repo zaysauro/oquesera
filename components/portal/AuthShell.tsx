@@ -1,8 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import { KumoLogo } from '@/components/kumo/KumoLogo';
 import { useAgencyChrome } from '@/components/portal/AgencyChromeProvider';
 
 /**
@@ -15,7 +15,7 @@ import { useAgencyChrome } from '@/components/portal/AgencyChromeProvider';
 export function AuthShell({
   children,
   panelTitle,
-  panelSubtitle = 'Sign in to your command center.',
+  panelSubtitle = 'Entre para gerenciar a sua empresa.',
 }: {
   children: ReactNode;
   /** Overrides the big panel heading. Defaults to the tenant brand name. */
@@ -31,16 +31,12 @@ export function AuthShell({
     <div className="grid min-h-screen w-full lg:grid-cols-[46%_54%]">
       {/* LEFT — form */}
       <div className="relative flex flex-col justify-center bg-background px-6 py-16 sm:px-12 lg:px-[7vw]">
-        {/* wordmark — the main-site logo (icon + Simpler Development), from the
-            top-nav. Note: this is the platform mark, not the tenant brand. */}
+        {/* wordmark — the Kumo One platform mark, not the tenant brand. */}
         <Link
           href="/"
           className="absolute left-5 top-6 flex items-center font-heading text-xl text-foreground sm:left-11 lg:left-[6.5vw]"
         >
-          <Image src="/iconLogo.png" alt="" width={56} height={56} className="nav-logo-icon" priority />
-          <span>
-            <b>Simpler</b> Development
-          </span>
+          <KumoLogo size={34} />
         </Link>
 
         <div className="mx-auto w-full max-w-[400px] lg:mx-0">{children}</div>
@@ -49,16 +45,16 @@ export function AuthShell({
       {/* RIGHT — living brand panel (hidden on small screens) */}
       <div className="relative hidden overflow-hidden bg-[#0e0d0c] px-[6vw] text-white lg:flex lg:flex-col lg:justify-center">
         <div className="auth-mesh">
-          <span className="auth-blob" style={{ width: 520, height: 520, background: '#2563eb', top: '-6%', left: '6%' }} />
-          <span className="auth-blob" style={{ width: 460, height: 460, background: '#10b981', bottom: '-10%', left: '30%', animationDelay: '-6s' }} />
-          <span className="auth-blob" style={{ width: 420, height: 420, background: '#f59e0b', top: '22%', right: '-6%', animationDelay: '-11s' }} />
+          <span className="auth-blob" style={{ width: 520, height: 520, background: '#facc15', top: '-6%', left: '6%' }} />
+          <span className="auth-blob" style={{ width: 460, height: 460, background: '#a16207', bottom: '-10%', left: '30%', animationDelay: '-6s' }} />
+          <span className="auth-blob" style={{ width: 420, height: 420, background: '#fde047', top: '22%', right: '-6%', animationDelay: '-11s' }} />
         </div>
         <div className="auth-grain" />
 
         <div className="relative z-10 max-w-[520px]">
           <div className="mb-5 flex items-center gap-2.5 font-mono text-[12px] uppercase tracking-[0.2em] text-white/55">
-            <span className="auth-dot inline-block h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
-            Client Portal
+            <span className="auth-dot inline-block h-[7px] w-[7px] rounded-full bg-yellow-400 shadow-[0_0_10px_#facc15]" />
+            Portal da empresa
           </div>
           <h2 className="font-display text-[clamp(2.5rem,4vw,3.4rem)] font-extrabold leading-[1.03] tracking-[-0.03em]">
             {panelTitle ?? brandName}
@@ -95,7 +91,7 @@ export function AuthField({ icon, children }: { icon: string; children: ReactNod
 }
 
 /** "or with email" divider. */
-export function AuthDivider({ label = 'or with email' }: { label?: string }) {
+export function AuthDivider({ label = 'ou com e-mail' }: { label?: string }) {
   return (
     <div className="my-5 flex items-center gap-3.5 text-[12.5px] text-muted-foreground/70">
       <span className="h-px flex-1 bg-border" />

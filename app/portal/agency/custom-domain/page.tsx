@@ -128,7 +128,7 @@ export default function CustomDomainPage() {
       <PortalPageHeader
         eyebrow="Agency"
         title="Custom Portal Domain"
-        subtitle="Map your own apex or subdomain to this portal so clients see your brand instead of simplerdevelopment.com."
+        subtitle="Map your own apex or subdomain to this portal so clients see your brand instead of the Kumo One domain."
       />
 
       {message && (

@@ -1,5 +1,6 @@
 'use client';
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { useEffect, useState } from 'react';
 
 interface StatusData {
@@ -85,7 +86,7 @@ export default function ProvisioningStatus({ siteId }: { siteId: number }) {
           <div>
             <h3 className="font-semibold text-foreground">Deploy your website</h3>
             <p className="text-sm text-muted-foreground">
-              Set up a GitHub repo, Vercel deployment, and {data.subdomain}.simplerdevelopment.com subdomain.
+              Set up a GitHub repo, Vercel deployment, and {data.subdomain}.{PLATFORM_ROOT_DOMAIN} subdomain.
             </p>
           </div>
         </div>
@@ -198,7 +199,7 @@ export default function ProvisioningStatus({ siteId }: { siteId: number }) {
           <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-lg">
             <span className="material-icons text-muted-foreground text-lg">info</span>
             <p className="text-xs text-muted-foreground">
-              Hosted on simplerdevelopment.com — manage content with the block editor. Add a custom domain in settings.
+              Hosted on {PLATFORM_ROOT_DOMAIN} — manage content with the block editor. Add a custom domain in settings.
             </p>
           </div>
         )}

@@ -8,6 +8,7 @@
  * is a `<Link>` to the detail page.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import type {
   BrainDocumentStatus,
@@ -32,7 +33,7 @@ export interface DocumentCardData {
 function formatDate(d: string | Date | null): string {
   if (!d) return '—';
   try {
-    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(d).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
   } catch {
     return String(d);
   }

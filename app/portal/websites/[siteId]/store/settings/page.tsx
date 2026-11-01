@@ -100,7 +100,8 @@ interface TestResultErr {
 type TestResult = TestResultOk | TestResultErr;
 
 const currencies = [
-  { value: 'USD', label: 'USD - US Dollar' },
+  { value: 'BRL', label: 'BRL - Real brasileiro' },
+  { value: 'USD', label: 'USD - Dólar americano' },
   { value: 'EUR', label: 'EUR - Euro' },
   { value: 'GBP', label: 'GBP - British Pound' },
   { value: 'CAD', label: 'CAD - Canadian Dollar' },
@@ -1291,20 +1292,20 @@ export default function StoreSettingsPage() {
             <div>
               <p className="text-foreground font-medium">Stripe BYOK is not enabled for this site.</p>
               <p className="text-muted-foreground mt-1">
-                Contact SimplerDevelopment to enable using your own Stripe account.
+                Contact Kumo One to enable using your own Stripe account.
               </p>
             </div>
           </div>
         ) : (
           <>
             <p className="text-sm text-muted-foreground">
-              Choose whether payments route through SimplerDevelopment Connect or your own Stripe account (BYOK).
+              Choose whether payments route through Kumo One Connect or your own Stripe account (BYOK).
             </p>
 
             {/* Mode radio */}
             <div className="flex flex-wrap gap-3">
               {([
-                { value: 'connect' as const, label: 'Connect', icon: 'hub', desc: 'Default — SimplerDevelopment Connect' },
+                { value: 'connect' as const, label: 'Connect', icon: 'hub', desc: 'Default — Kumo One Connect' },
                 { value: 'byok' as const, label: 'BYOK', icon: 'vpn_key', desc: 'Your own Stripe account' },
               ]).map((opt) => (
                 <label

@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -49,7 +50,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         const priceParams: Record<string, unknown> = {
           product: current.stripeProductId,
           unit_amount: body.price,
-          currency: 'usd',
+          currency: STRIPE_CURRENCY,
         };
         if (cycle === 'monthly') priceParams.recurring = { interval: 'month' };
         else if (cycle === 'annually') priceParams.recurring = { interval: 'year' };

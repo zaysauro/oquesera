@@ -1,6 +1,7 @@
 /**
  * CRM AI tools — contacts, companies, deals, activities, pipelines, proposals.
  */
+import { APP_CURRENCY } from '@/config/brand';
 import type { PortalTool } from './types';
 import { db } from '@/lib/db';
 import {
@@ -507,7 +508,7 @@ export const crmHandlers: Record<string, CrmHandler> = {
       dealId: input.deal_id ? Number(input.deal_id) : null,
       summary: (input.summary as string)?.trim() || null,
       lineItems, fees: [], sections: [],
-      currency: 'USD', status: 'draft', clientToken,
+      currency: APP_CURRENCY, status: 'draft', clientToken,
       validUntil: input.valid_until ? new Date(input.valid_until as string) : null,
       createdBy: userId,
     }).returning();

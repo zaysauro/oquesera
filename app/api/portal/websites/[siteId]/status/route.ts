@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -30,7 +31,7 @@ export async function GET(
     data: {
       deploymentStatus: site.deploymentStatus,
       subdomain: site.subdomain,
-      fullDomain: site.subdomain ? `${site.subdomain}.simplerdevelopment.com` : null,
+      fullDomain: site.subdomain ? `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}` : null,
       githubRepoName: site.githubRepoName,
       githubRepoUrl: site.githubRepoUrl,
       vercelProjectId: site.vercelProjectId,

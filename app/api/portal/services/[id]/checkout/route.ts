@@ -1,3 +1,4 @@
+import { STRIPE_CURRENCY } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -46,7 +47,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     lineItems = [{ price: svc.stripePriceId, quantity: 1 }];
   } else {
     const priceData: Record<string, unknown> = {
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       unit_amount: svc.price,
       product_data: { name: svc.name, description: svc.description ?? undefined },
     };

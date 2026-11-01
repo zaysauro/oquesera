@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { clientWebsites, storeSettings, storeCustomers } from '@/lib/db/schema';
@@ -208,8 +209,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sit
         const baseUrl = site?.domain
           ? `https://${site.domain}`
           : site?.subdomain
-            ? `https://${site.subdomain}.simplerdevelopment.com`
-            : process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+            ? `https://${site.subdomain}.${PLATFORM_ROOT_DOMAIN}`
+            : process.env.NEXTAUTH_URL || 'https://example.com';
 
         sendTransactionalEmail({
           websiteId,

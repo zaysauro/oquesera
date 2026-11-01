@@ -25,20 +25,20 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <AuthShell panelSubtitle="Set a new password for your account.">
+      <AuthShell panelSubtitle="Crie uma nova senha para a sua conta.">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/10">
           <span className="material-icons text-3xl text-destructive">link_off</span>
         </div>
-        <h1 className={`${authHeading} mt-5`}>Invalid reset link.</h1>
+        <h1 className={`${authHeading} mt-5`}>Link inválido.</h1>
         <p className={authSubtext}>
-          This password reset link is invalid or has expired.
+          Este link de redefinição é inválido ou expirou.
         </p>
         <a
           href="/portal/forgot-password"
           className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
         >
           <span className="material-icons text-sm">refresh</span>
-          Request a new link
+          Solicitar novo link
         </a>
       </AuthShell>
     );
@@ -49,11 +49,11 @@ function ResetPasswordForm() {
     setError('');
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
+      setError('A senha deve ter pelo menos 8 caracteres.');
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('As senhas não coincidem.');
       return;
     }
 
@@ -68,10 +68,10 @@ function ResetPasswordForm() {
       if (data.success) {
         setSuccess(true);
       } else {
-        setError(data.error || 'Something went wrong.');
+        setError(data.error || 'Algo deu errado.');
       }
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError('Algo deu errado. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -79,19 +79,19 @@ function ResetPasswordForm() {
 
   if (success) {
     return (
-      <AuthShell panelSubtitle="Your account password has been updated.">
+      <AuthShell panelSubtitle="A senha da sua conta foi atualizada.">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/10">
           <span className="material-icons text-3xl text-emerald-500">check_circle</span>
         </div>
-        <h1 className={`${authHeading} mt-5`}>Password reset.</h1>
+        <h1 className={`${authHeading} mt-5`}>Senha redefinida.</h1>
         <p className={authSubtext}>
-          Your password has been updated. You can now sign in with your new password.
+          Sua senha foi atualizada. Agora você pode entrar com a nova senha.
         </p>
         <a
           href="/portal/login"
           className={`${authPrimaryBtn} mt-6`}
         >
-          Sign in
+          Entrar
           <span className="material-icons text-[19px] transition group-hover:translate-x-0.5">arrow_forward</span>
         </a>
       </AuthShell>
@@ -99,13 +99,13 @@ function ResetPasswordForm() {
   }
 
   return (
-    <AuthShell panelSubtitle="Set a new password — choose something strong and unique.">
+    <AuthShell panelSubtitle="Crie uma nova senha — escolha algo forte e exclusivo.">
       <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
         <span className="material-icons text-3xl text-primary">lock_reset</span>
       </div>
       <div className={authEyebrow}>{'// Account recovery'}</div>
-      <h1 className={authHeading}>Set a new password.</h1>
-      <p className={authSubtext}>Enter your new password below. Must be at least 8 characters.</p>
+      <h1 className={authHeading}>Crie uma nova senha.</h1>
+      <p className={authSubtext}>Digite a nova senha abaixo. Ela deve ter pelo menos 8 caracteres.</p>
 
       <div className="mt-7">
         {error && (
@@ -117,7 +117,7 @@ function ResetPasswordForm() {
 
         <form method="post" onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className={authLabel}>New Password</label>
+            <label className={authLabel}>Nova senha</label>
             <AuthField icon="lock">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -128,7 +128,7 @@ function ResetPasswordForm() {
                 autoComplete="new-password"
                 autoFocus
                 className={authInput}
-                placeholder="At least 8 characters"
+                placeholder="Pelo menos 8 caracteres"
               />
               <button
                 type="button"
@@ -141,7 +141,7 @@ function ResetPasswordForm() {
             </AuthField>
           </div>
           <div>
-            <label className={authLabel}>Confirm Password</label>
+            <label className={authLabel}>Confirmar senha</label>
             <AuthField icon="lock_outline">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -151,7 +151,7 @@ function ResetPasswordForm() {
                 minLength={8}
                 autoComplete="new-password"
                 className={authInput}
-                placeholder="Confirm your password"
+                placeholder="Confirme sua senha"
               />
             </AuthField>
           </div>
@@ -159,11 +159,11 @@ function ResetPasswordForm() {
             {loading ? (
               <>
                 <span className="material-icons animate-spin text-base">refresh</span>
-                Resetting…
+                Redefinindo…
               </>
             ) : (
               <>
-                Reset password
+                Redefinir senha
                 <span className="material-icons text-[19px] transition group-hover:translate-x-0.5">lock_open</span>
               </>
             )}
@@ -175,7 +175,7 @@ function ResetPasswordForm() {
           className="mt-5 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <span className="material-icons text-sm">arrow_back</span>
-          Back to sign in
+          Voltar para o login
         </a>
       </div>
     </AuthShell>

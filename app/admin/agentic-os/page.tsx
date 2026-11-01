@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 // ─── Types mirrored from lib/agentic-os/* (kept inline so this page is purely payload-driven) ──
@@ -76,7 +77,7 @@ function renderPromptTemplate(template: string, values: Record<string, string | 
 
 function formatDate(d: string | null) {
   if (!d) return '--';
-  return new Date(d).toLocaleDateString('en-US', {
+  return new Date(d).toLocaleDateString(APP_LOCALE, {
     month: 'short',
     day: 'numeric',
     hour: 'numeric',

@@ -1,3 +1,4 @@
+import { APP_LOCALE } from '@/config/brand';
 import { getBlogPostsByCategory, getCategoryBySlug, getAllCategories, type BlogPostWithRelations } from '@/lib/actions/blog';
 import { generateSEO } from '@/lib/utils/seo';
 import { notFound } from 'next/navigation';
@@ -86,7 +87,7 @@ function BlogPostCard({ post }: { post: BlogPostWithRelations }) {
               dateTime={new Date(post.publishedAt).toISOString()}
               className="text-xs text-[color-mix(in_srgb,var(--retro-ink)_60%,transparent)]"
             >
-              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+              {new Date(post.publishedAt).toLocaleDateString(APP_LOCALE, {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',

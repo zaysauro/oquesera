@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
@@ -7,8 +8,8 @@ import { resend } from '@/lib/email';
 import { hashToken } from '@/lib/security/token-hash';
 import { checkRateLimit, getClientIp, isAuthRateLimitDisabled } from '@/lib/security/rate-limit';
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://simplerdevelopment.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://example.com';
 
 export async function POST(req: Request) {
   // 5 requests per 15 minutes per IP — prevents automated reset-token harvesting
@@ -53,9 +54,9 @@ export async function POST(req: Request) {
 
   try {
     const result = await resend.emails.send({
-      from: `Simpler Development <${FROM_EMAIL}>`,
+      from: `Kumo One <${FROM_EMAIL}>`,
       to: email.toLowerCase().trim(),
-      subject: 'Reset your password — Simpler Development',
+      subject: 'Redefinição de senha — Kumo One',
       html: `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8" /></head>
@@ -66,24 +67,24 @@ export async function POST(req: Request) {
         <table role="presentation" width="600" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
           <tr>
             <td style="padding:32px 40px;">
-              <h1 style="margin:0 0 16px;font-size:24px;color:#111;">Reset your password</h1>
+              <h1 style="margin:0 0 16px;font-size:24px;color:#111;">Redefina sua senha</h1>
               <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#333;">
-                Hi${user.name ? ` ${user.name}` : ''},
+                Olá${user.name ? `, ${user.name}` : ''},
               </p>
               <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#333;">
-                We received a request to reset your password for the Simpler Development portal. Click the button below to set a new password.
+                Recebemos um pedido para redefinir a senha da sua conta no Kumo One. Clique no botão abaixo para criar uma nova senha.
               </p>
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 24px;">
                 <tr>
-                  <td style="border-radius:6px;background:#2563eb;">
-                    <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;font-size:16px;font-weight:600;color:#ffffff;text-decoration:none;">
-                      Reset Password
+                  <td style="border-radius:6px;background:#facc15;">
+                    <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;font-size:16px;font-weight:600;color:#0a0a0a;text-decoration:none;">
+                      Redefinir senha
                     </a>
                   </td>
                 </tr>
               </table>
               <p style="margin:0 0 8px;font-size:14px;color:#666;">
-                This link expires in 1 hour. If you didn't request this, you can safely ignore this email.
+                Este link expira em 1 hora. Se você não fez este pedido, ignore este e-mail.
               </p>
               <p style="margin:0;font-size:12px;color:#999;word-break:break-all;">
                 ${resetUrl}
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
           </tr>
           <tr>
             <td style="padding:16px 40px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
-              <p style="margin:0;font-size:12px;color:#9ca3af;">Simpler Development</p>
+              <p style="margin:0;font-size:12px;color:#9ca3af;">Kumo One</p>
             </td>
           </tr>
         </table>

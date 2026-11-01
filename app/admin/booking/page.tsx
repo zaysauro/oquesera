@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 
 interface BookingPage {
@@ -53,7 +54,7 @@ function bookingStatusBadge(status: string) {
 }
 
 function formatDateTime(d: string) {
-  return new Date(d).toLocaleDateString('en-US', {
+  return new Date(d).toLocaleDateString(APP_LOCALE, {
     month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
   });
 }

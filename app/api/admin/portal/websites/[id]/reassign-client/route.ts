@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { randomBytes } from 'node:crypto';
 import { hash } from 'bcryptjs';
@@ -87,7 +88,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '')
         .slice(0, 60);
-      const derivedEmail = `${slug}@simplerdevelopment.com`;
+      const derivedEmail = `${slug}@${EMAIL_DOMAIN}`;
       const [existingUser] = await tx
         .select({ id: users.id })
         .from(users)

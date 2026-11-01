@@ -30,7 +30,7 @@ import {
  */
 
 export const metadata = generateSEO({
-  title: 'Migration Services — Move To SimplerDevelopment',
+  title: 'Migration Services — Move To Kumo One',
   description:
     'Done-for-you migration from WordPress, Squarespace, Wix, Webflow, HubSpot, Mailchimp, ActiveCampaign, Monday, Trello, Asana or ClickUp. We set it up on your hosting and hand over the keys — no forever fees.',
   path: '/migrate',
@@ -69,14 +69,14 @@ const process: { title: string; body: string }[] = [
 
 const faqs = [
   {
-    question: 'What does a migration to SimplerDevelopment cost?',
+    question: 'What does a migration to Kumo One cost?',
     answer:
       'It is quoted per project, because the honest answer depends on page count, record count and how much custom behaviour has to be rebuilt rather than moved. We audit the real account first and give you a fixed scope and a fixed price before any work begins. That price does not move once agreed.',
   },
   {
     question: 'Will I be locked into paying you forever?',
     answer:
-      'No, and this is the main reason people migrate here. SimplerDevelopment is Apache-2.0 and self-hostable, so we can deploy it onto your hosting and your database and hand over the keys. After that you pay your infrastructure provider, not a licence fee to us. Managed hosting is available if you prefer it, but it is optional.',
+      'No, and this is the main reason people migrate here. Kumo One is Apache-2.0 and self-hostable, so we can deploy it onto your hosting and your database and hand over the keys. After that you pay your infrastructure provider, not a licence fee to us. Managed hosting is available if you prefer it, but it is optional.',
   },
   {
     question: 'Will migrating hurt my SEO?',
@@ -100,7 +100,7 @@ export default function MigratePage() {
   const schema = [
     generateServiceSchema(
       'Platform migration services',
-      'Done-for-you migration of websites, CRM data and project boards onto SimplerDevelopment, deployed to the client’s own hosting under an Apache-2.0 licence.',
+      'Done-for-you migration of websites, CRM data and project boards onto Kumo One, deployed to the client’s own hosting under an Apache-2.0 licence.',
       'Website and CRM migration'
     ),
     generateFAQSchema(faqs),
@@ -116,7 +116,7 @@ export default function MigratePage() {
 
       <PageHeader
         eyebrow="Change Of Orbit"
-        title="Migrate To SimplerDevelopment."
+        title="Migrate To Kumo One."
         subtitle="Bring your site, your CRM and your boards across in one move — then run it on your own hosting, under an open licence, with no fee that follows you around forever."
       />
 
@@ -158,7 +158,7 @@ export default function MigratePage() {
           </h2>
           <p className="mt-5 text-base leading-relaxed text-[color-mix(in_srgb,var(--retro-cream)_82%,transparent)]">
             Most migrations just move you from one subscription to another, and the meter starts
-            again on the far side. This one doesn’t have to. SimplerDevelopment is Apache-2.0 and
+            again on the far side. This one doesn’t have to. Kumo One is Apache-2.0 and
             self-hostable, so we deploy it onto your hosting and your database, move your data in,
             hand over the credentials, and step back. From then on you pay your infrastructure
             provider — not a per-seat licence to us, and not a bill that grows every time your list

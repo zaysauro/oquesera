@@ -25,7 +25,7 @@ export const clients = pgTable('clients', {
   customDomainVerifiedAt: timestamp('custom_domain_verified_at'),
   customDomainVerificationToken: varchar('custom_domain_verification_token', { length: 64 }), // DNS TXT verification value
   whiteLabelEnabled: boolean('white_label_enabled').default(false).notNull(),
-  agencyName: varchar('agency_name', { length: 255 }), // overrides "Simpler Development" in portal chrome
+  agencyName: varchar('agency_name', { length: 255 }), // overrides "Kumo One" in portal chrome
   agencyLogoUrl: varchar('agency_logo_url', { length: 500 }), // overrides /iconLogo.png and login wordmark
   agencyPrimaryColor: varchar('agency_primary_color', { length: 20 }), // optional accent for portal chrome
   // Self-serve / PLG brain trial — when non-null and > now() the entitlement

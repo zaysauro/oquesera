@@ -21,6 +21,7 @@
 //   which is an email-bombing vector aimed at whatever address the caller
 //   names. (Not a credential-guess vector — the token is 256-bit.) AUTH79-017.
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
 import { db } from '@/lib/db';
@@ -99,7 +100,7 @@ export async function POST(req: Request) {
     .where(eq(users.id, user.id));
 
   // Send the verification email (non-fatal — same pattern as signup route).
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://simplerdevelopment.com';
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com';
   const verifyUrl = `${origin}/api/auth/verify-email?token=${verificationToken}`;
 
   // Dev convenience: surface the link in the server console so a developer can
@@ -112,13 +113,13 @@ export async function POST(req: Request) {
 
   try {
     await sendEmail({
-      from: process.env.RESEND_FROM_EMAIL ?? 'SimplerDevelopment <noreply@simplerdevelopment.com>',
+      from: process.env.RESEND_FROM_EMAIL ?? `Kumo One <noreply@${EMAIL_DOMAIN}>`,
       to: user.email,
-      subject: 'Verify your email — new link',
+      subject: 'Confirme seu e-mail — novo link',
       html: [
-        `<p>Hi${user.name ? ` ${user.name.trim()}` : ''} — here is a fresh verification link:</p>`,
-        `<p><a href="${verifyUrl}" style="color:#6366f1;font-weight:600;">Verify my email →</a></p>`,
-        `<p style="color:#6b7280;font-size:12px;">This link expires in 24 hours. If you didn't request this, you can safely ignore it.</p>`,
+        `<p>Olá${user.name ? `, ${user.name.trim()}` : ''}! Aqui está um novo link de confirmação:</p>`,
+        `<p><a href="${verifyUrl}" style="color:#0a0a0a;background:#facc15;padding:10px 16px;border-radius:6px;text-decoration:none;font-weight:600;">Confirmar meu e-mail</a></p>`,
+        `<p style="color:#6b7280;font-size:12px;">Este link expira em 24 horas. Se você não pediu este e-mail, ignore-o.</p>`,
       ].join('\n'),
     });
   } catch (err) {

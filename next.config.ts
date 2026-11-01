@@ -180,6 +180,30 @@ const nextConfig: NextConfig = {
       // runs before middleware, so the tenant rewrite never sees the old
       // path).
       { source: '/pitch-deck/:slug', destination: '/slides/:slug', permanent: true },
+      // Kumo One public site. The upstream marketing pages describe the
+      // upstream product (its pricing, comparisons, migration offers), so they
+      // are routed to the Kumo equivalents instead of being served.
+      { source: '/pricing', destination: '/precos', permanent: false },
+      { source: '/about', destination: '/sobre', permanent: false },
+      { source: '/terms', destination: '/termos', permanent: false },
+      { source: '/privacy', destination: '/privacidade', permanent: false },
+      { source: '/faq', destination: '/#perguntas', permanent: false },
+      { source: '/contact', destination: '/sobre', permanent: false },
+      { source: '/solutions/:path*', destination: '/funcionalidades', permanent: false },
+      { source: '/solutions', destination: '/funcionalidades', permanent: false },
+      { source: '/compare/:path*', destination: '/precos', permanent: false },
+      { source: '/calculator', destination: '/precos', permanent: false },
+      { source: '/migrate/:path*', destination: '/', permanent: false },
+      { source: '/migrate', destination: '/', permanent: false },
+      { source: '/ai-consulting', destination: '/funcionalidades', permanent: false },
+      { source: '/apps-and-products', destination: '/funcionalidades', permanent: false },
+      { source: '/agile-after-ai', destination: '/', permanent: false },
+      { source: '/changelog', destination: '/', permanent: false },
+      { source: '/blog/:path*', destination: '/', permanent: false },
+      { source: '/blog', destination: '/', permanent: false },
+      { source: '/install', destination: '/', permanent: false },
+      { source: '/docs/:path*', destination: '/', permanent: false },
+      { source: '/docs', destination: '/', permanent: false },
     ];
   },
 

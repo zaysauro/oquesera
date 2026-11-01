@@ -55,20 +55,20 @@
   /* Neutral secondary surface for the button `secondary` variant — VEQA-039. */
   --secondary: #e7e5e4;
   --secondary-foreground: #292524;
-  --background: #fafaf9;
+  --background: #fafafa;
   --foreground: #1c1917;
   --card: #ffffff;
   --card-foreground: #1c1917;
   --popover: #ffffff;
   --popover-foreground: #1c1917;
-  --primary: #2563eb;
+  --primary: #0a0a0a;
   --primary-foreground: #ffffff;
   --muted: #f5f5f4;
   --muted-foreground: #78716c;
   --accent: #f5f5f4;
   --accent-foreground: #1c1917;
   --border: #e7e5e4;
-  --accent-warm: #f59e0b;
+  --accent-warm: #facc15;
   --accent-secondary: #10b981;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
@@ -78,7 +78,7 @@
   --portal-ok: #15803d;        --portal-ok-bg: rgba(21,128,61,0.09);
   --portal-warn: #b45309;      --portal-warn-bg: rgba(180,83,9,0.10);
   --portal-bad: #dc2626;       --portal-bad-bg: rgba(220,38,38,0.08);
-  --portal-accent-soft: rgba(37,99,235,0.10);
+  --portal-accent-soft: rgba(250,204,21,0.22);
   --portal-surface-2: #f7f6f4;
   --portal-border-strong: #c9c5c1;
 }
@@ -93,20 +93,20 @@
 .force-light {
   --secondary: #e7e5e4;
   --secondary-foreground: #292524;
-  --background: #fafaf9;
+  --background: #fafafa;
   --foreground: #1c1917;
   --card: #ffffff;
   --card-foreground: #1c1917;
   --popover: #ffffff;
   --popover-foreground: #1c1917;
-  --primary: #2563eb;
+  --primary: #0a0a0a;
   --primary-foreground: #ffffff;
   --muted: #f5f5f4;
   --muted-foreground: #78716c;
   --accent: #f5f5f4;
   --accent-foreground: #1c1917;
   --border: #e7e5e4;
-  --accent-warm: #f59e0b;
+  --accent-warm: #facc15;
   --accent-secondary: #10b981;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
@@ -127,9 +127,9 @@
 .dark {
   --secondary: #3f3f46;
   --secondary-foreground: #fafafa;
-  --background: #18181b;
+  --background: #0a0a0a;
   --foreground: #ededed;
-  --card: #0c0c0d;
+  --card: #141414;
   --card-foreground: #ededed;
   --popover: #1f1f23;
   --popover-foreground: #ededed;
@@ -145,21 +145,21 @@
      keeps `text-primary` where it was rather than making it worse.
      Splitting the roles into two tokens is the real fix, but `text-primary`
      has ~1459 usages, so that is its own piece of work. */
-  --primary: #3b82f6;
-  --primary-foreground: #0b1220;
+  --primary: #facc15;
+  --primary-foreground: #0a0a0a;
   --muted: #27272a;
   --muted-foreground: #a1a1aa;
   --accent: #27272a;
   --accent-foreground: #ededed;
   --border: #3f3f46;
-  --accent-warm: #f59e0b;
+  --accent-warm: #facc15;
   --accent-secondary: #10b981;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --portal-ok: #34d399;        --portal-ok-bg: rgba(52,211,153,0.14);
   --portal-warn: #fbbf24;      --portal-warn-bg: rgba(251,191,36,0.14);
   --portal-bad: #f87171;       --portal-bad-bg: rgba(248,113,113,0.14);
-  --portal-accent-soft: rgba(59,130,246,0.18);
+  --portal-accent-soft: rgba(250,204,21,0.16);
   --portal-surface-2: #1c1c1f;
   --portal-border-strong: #52525b;
 }
@@ -168,28 +168,28 @@
   :root:not(.light) {
     --secondary: #3f3f46;
     --secondary-foreground: #fafafa;
-    --background: #18181b;
+    --background: #0a0a0a;
     --foreground: #ededed;
-    --card: #0c0c0d;
+    --card: #141414;
     --card-foreground: #ededed;
     --popover: #1f1f23;
     --popover-foreground: #ededed;
     /* Keep in step with the .dark block above — same AA contrast reason. */
-    --primary: #3b82f6;
-    --primary-foreground: #0b1220;
+    --primary: #facc15;
+    --primary-foreground: #0a0a0a;
     --muted: #27272a;
     --muted-foreground: #a1a1aa;
     --accent: #27272a;
     --accent-foreground: #ededed;
     --border: #3f3f46;
-    --accent-warm: #f59e0b;
+    --accent-warm: #facc15;
     --accent-secondary: #10b981;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
     --portal-ok: #34d399;        --portal-ok-bg: rgba(52,211,153,0.14);
     --portal-warn: #fbbf24;      --portal-warn-bg: rgba(251,191,36,0.14);
     --portal-bad: #f87171;       --portal-bad-bg: rgba(248,113,113,0.14);
-    --portal-accent-soft: rgba(59,130,246,0.18);
+    --portal-accent-soft: rgba(250,204,21,0.16);
     --portal-surface-2: #1c1c1f;
     --portal-border-strong: #52525b;
   }
@@ -746,8 +746,8 @@ html,body {
   --accent: rgba(255, 255, 255, 0.06);
   --accent-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.09);
-  --primary: #60a5fa;             /* lighter blue reads on the dark surface */
-  --primary-foreground: #0b1220;
+  --primary: #facc15;             /* Kumo yellow reads on the dark surface */
+  --primary-foreground: #0a0a0a;
   --portal-accent-soft: rgba(255, 255, 255, 0.09);
   --portal-surface-2: #1a1917;
   --portal-border-strong: rgba(255, 255, 255, 0.18);

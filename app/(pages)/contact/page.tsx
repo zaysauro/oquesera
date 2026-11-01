@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import Image from 'next/image';
 import { generateSEO } from '@/lib/utils/seo';
 import { siteConfig } from '@/config/site';
@@ -29,7 +30,7 @@ const BOOKING_STYLE = {
 
 export const metadata = generateSEO({
   title: 'Contact Us',
-  description: 'Get in touch with SimplerDevelopment - Let\'s discuss your next project and how we can help transform your digital presence.',
+  description: 'Get in touch with Kumo One - Let\'s discuss your next project and how we can help transform your digital presence.',
   path: '/contact',
 });
 
@@ -81,7 +82,7 @@ export default function ContactPage() {
               {[
                 {
                   title: 'Email',
-                  value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@simplerdevelopment.com',
+                  value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || `info@${EMAIL_DOMAIN}`,
                   art: 'satellite',
                 },
                 {

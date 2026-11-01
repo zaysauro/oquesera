@@ -11,6 +11,7 @@
 // hardcoded in lib/billing/domain-catalog.ts are the live-mode set, used as
 // seed defaults only.
 
+import { STRIPE_CURRENCY } from '../../config/brand';
 import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
@@ -63,12 +64,12 @@ async function main() {
     // 2. Monthly recurring price at the catalog amount.
     const prices = await stripe.prices.list({ product: product.id, active: true, limit: 20 });
     let price = prices.data.find(
-      (p) => p.recurring?.interval === 'month' && p.unit_amount === entry.priceCents && p.currency === 'usd',
+      (p) => p.recurring?.interval === 'month' && p.unit_amount === entry.priceCents && p.currency === STRIPE_CURRENCY,
     );
     if (!price) {
       price = await stripe.prices.create({
         product: product.id,
-        currency: 'usd',
+        currency: STRIPE_CURRENCY,
         unit_amount: entry.priceCents,
         recurring: { interval: 'month' },
       });
@@ -104,12 +105,12 @@ async function main() {
 
     const tierPrices = await stripe.prices.list({ product: product.id, active: true, limit: 20 });
     let price = tierPrices.data.find(
-      (p) => p.recurring?.interval === 'month' && p.unit_amount === tier.monthlyPriceCents && p.currency === 'usd',
+      (p) => p.recurring?.interval === 'month' && p.unit_amount === tier.monthlyPriceCents && p.currency === STRIPE_CURRENCY,
     );
     if (!price) {
       price = await stripe.prices.create({
         product: product.id,
-        currency: 'usd',
+        currency: STRIPE_CURRENCY,
         unit_amount: tier.monthlyPriceCents,
         recurring: { interval: 'month' },
       });

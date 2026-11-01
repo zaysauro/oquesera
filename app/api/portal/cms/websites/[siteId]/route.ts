@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -60,13 +61,13 @@ export async function PUT(
         const { createCnameRecord } = await import('@/lib/cloudflare-dns');
         if (site.vercelProjectId) {
           const { addDomain, getDomainConfig } = await import('@/lib/vercel');
-          const fullDomain = `${subdomain}.simplerdevelopment.com`;
+          const fullDomain = `${subdomain}.${PLATFORM_ROOT_DOMAIN}`;
           await addDomain(site.vercelProjectId, fullDomain);
           const config = await getDomainConfig(fullDomain);
           const target = config.cnames[0] || 'cname.vercel-dns.com';
           await createCnameRecord(subdomain, target);
         } else {
-          const platformDomain = process.env.RAILWAY_PUBLIC_DOMAIN || 'simplerdevelopment.com';
+          const platformDomain = process.env.RAILWAY_PUBLIC_DOMAIN || PLATFORM_ROOT_DOMAIN;
           await createCnameRecord(subdomain, platformDomain);
         }
       }
@@ -81,7 +82,7 @@ export async function PUT(
   if (description !== undefined) updates.description = description.trim() || null;
   if (subdomain !== undefined) {
     updates.subdomain = subdomain || null;
-    updates.vercelDomain = subdomain ? `${subdomain}.simplerdevelopment.com` : null;
+    updates.vercelDomain = subdomain ? `${subdomain}.${PLATFORM_ROOT_DOMAIN}` : null;
   }
   if (githubRepoName !== undefined) updates.githubRepoName = githubRepoName?.trim() || null;
   if (githubRepoUrl !== undefined) updates.githubRepoUrl = githubRepoUrl?.trim() || null;

@@ -10,6 +10,7 @@
 // palette, this page stops importing it and defines its own retro-styled
 // `LegalSection` locally — every section body below is untouched, only the
 // chrome around it changed. See terms/page.tsx for the identical pattern.
+import { EMAIL_DOMAIN } from '@/config/brand';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { generateSEO } from '@/lib/utils/seo';
@@ -18,7 +19,7 @@ import { PageHeader, CreamBand } from '@/components/retro/sections';
 export const metadata = generateSEO({
   title: 'Privacy Policy',
   description:
-    'How SimplerDevelopment collects, uses, shares, and protects personal information across its platform, integrations, and connectors.',
+    'How Kumo One collects, uses, shares, and protects personal information across its platform, integrations, and connectors.',
   path: '/privacy',
 });
 
@@ -42,13 +43,13 @@ export default function PrivacyPolicyPage() {
       <CreamBand>
         <div className="mx-auto max-w-[70ch]">
           <p className="text-base leading-relaxed text-[color-mix(in_srgb,var(--retro-ink)_82%,transparent)]">
-            This Privacy Policy explains how SimplerDevelopment (“we,” “us,” “our”) collects, uses, discloses, and safeguards information when you use our platform, websites, APIs, and connectors (the “Service”).
+            This Privacy Policy explains how Kumo One (“we,” “us,” “our”) collects, uses, discloses, and safeguards information when you use our platform, websites, APIs, and connectors (the “Service”).
           </p>
 
           <div className="mt-10 divide-y divide-[color-mix(in_srgb,var(--retro-mid)_35%,transparent)]">
             <LegalSection heading="1. Who This Policy Covers">
               <p>
-                SimplerDevelopment provides a multi-tenant platform for agencies and their clients,
+                Kumo One provides a multi-tenant platform for agencies and their clients,
                 including a client portal, hosted websites, a CRM, an AI-powered “Company Brain,”
                 marketing and automation tools, and integrations with third-party services. This policy
                 applies to people who create an account, visitors to pages we host, and end users whose
@@ -209,8 +210,8 @@ export default function PrivacyPolicyPage() {
 
             <LegalSection heading="14. Contact Us">
               <p>
-                SimplerDevelopment — [Legal entity name], [Mailing address]. Email{' '}
-                <a href="mailto:info@simplerdevelopment.com">info@simplerdevelopment.com</a>.
+                Kumo One — [Legal entity name], [Mailing address]. Email{' '}
+                <a href={`mailto:info@${EMAIL_DOMAIN}`}>info@${EMAIL_DOMAIN}</a>.
               </p>
             </LegalSection>
           </div>
@@ -218,8 +219,8 @@ export default function PrivacyPolicyPage() {
           <div className="mt-16 border-t border-[color-mix(in_srgb,var(--retro-mid)_35%,transparent)] pt-8 text-sm text-[color-mix(in_srgb,var(--retro-ink)_70%,transparent)]">
             <p className="mb-2">
               Questions about this document? Contact us at{' '}
-              <a href="mailto:info@simplerdevelopment.com" className="font-semibold text-[var(--retro-orange)] hover:underline">
-                info@simplerdevelopment.com
+              <a href={`mailto:info@${EMAIL_DOMAIN}`} className="font-semibold text-[var(--retro-orange)] hover:underline">
+                {`info@${EMAIL_DOMAIN}`}
               </a>
               .
             </p>

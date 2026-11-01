@@ -11,6 +11,7 @@
 // for the DNS lookup itself, so it's straightforward to unit-test by
 // mocking `node:dns/promises`.
 
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { randomBytes } from 'node:crypto';
 import { resolveTxt } from 'node:dns/promises';
 
@@ -77,7 +78,7 @@ export function isPlausibleDomain(domain: string): boolean {
   if (/[\s/:?#]/.test(trimmed)) return false;
   // Reject our own apex — agencies should not be able to claim
   // `simplerdevelopment.com` as a custom domain.
-  if (trimmed === 'simplerdevelopment.com' || trimmed.endsWith('.simplerdevelopment.com')) {
+  if (trimmed === PLATFORM_ROOT_DOMAIN || trimmed.endsWith(`.${PLATFORM_ROOT_DOMAIN}`)) {
     return false;
   }
   // At least one dot, valid hostname labels.

@@ -1,3 +1,4 @@
+import { APP_LOCALE } from '@/config/brand';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { projects, kanbanColumns, kanbanCards, kanbanCardFiles, kanbanCardLabels, kanbanLabels, kanbanCardChecklistItems, kanbanCardAssignees, kanbanCardDependencies, kanbanCardComments, kanbanCardWatchers, notifications, users, sprints } from '@/lib/db/schema';
@@ -334,7 +335,7 @@ export default async function ProjectKanbanPage({ params, searchParams }: { para
               {project.dueDate && (
                 <span className="text-sm text-muted-foreground flex items-center gap-1">
                   <span className="material-icons text-base">event</span>
-                  Due {new Date(project.dueDate).toLocaleDateString('en-US')}
+                  Due {new Date(project.dueDate).toLocaleDateString(APP_LOCALE)}
                 </span>
               )}
             </div>

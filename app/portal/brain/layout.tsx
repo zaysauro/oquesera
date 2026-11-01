@@ -9,6 +9,7 @@
  * (e.g. "review this proposed task") still land on a useful page.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
@@ -69,7 +70,7 @@ export default async function BrainLayout({ children }: { children: React.ReactN
 type TrialState = 'none' | 'active' | 'expired';
 
 function formatTrialDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 function BrainUpsell({

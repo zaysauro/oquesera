@@ -6,6 +6,7 @@
 // (route files aren't supposed to be imported by other server modules —
 // Next.js treats them as route definitions, not utilities).
 
+import { APP_LOCALE } from '@/config/brand';
 import { unstable_cache, revalidateTag } from 'next/cache';
 import { db } from '@/lib/db';
 import {
@@ -26,7 +27,7 @@ function monthKeys(n: number): { key: string; label: string }[] {
     const m = new Date(now.getFullYear(), now.getMonth() - i, 1);
     out.push({
       key: `${m.getFullYear()}-${String(m.getMonth() + 1).padStart(2, '0')}`,
-      label: m.toLocaleString('en-US', { month: 'short' }),
+      label: m.toLocaleString(APP_LOCALE, { month: 'short' }),
     });
   }
   return out;

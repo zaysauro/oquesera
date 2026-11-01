@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { slugify } from '@/lib/publishing/slug';
@@ -69,14 +70,14 @@ function isToday(d: Date) {
 }
 
 function formatMonthYear(d: Date) {
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  return d.toLocaleDateString(APP_LOCALE, { month: 'long', year: 'numeric' });
 }
 
 function formatWeekRange(d: Date) {
   const s = startOfWeek(d);
   const e = endOfWeek(d);
   const fmt = (x: Date) =>
-    x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    x.toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric' });
   return `${fmt(s)} - ${fmt(e)}, ${e.getFullYear()}`;
 }
 
@@ -317,7 +318,7 @@ function CreatePostModal({
         </div>
 
         <p className="text-sm text-muted-foreground mb-4">
-          {date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+          {date.toLocaleDateString(APP_LOCALE, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
 
         {error && (

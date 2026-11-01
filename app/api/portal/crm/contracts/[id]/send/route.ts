@@ -9,6 +9,7 @@
  * the two state machines never sync each other.
  */
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -64,14 +65,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }).where(eq(crmContracts.id, contractId));
 
   // Send signing emails to each signer
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://simplerdevelopment.com';
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
 
   for (const signer of signers) {
     const signingUrl = `${baseUrl}/contract/${signer.token}`;
     try {
       await resend.emails.send({
-        from: `${client.company || 'Simpler Development'} <${fromEmail}>`,
+        from: `${client.company || 'Kumo One'} <${fromEmail}>`,
         to: signer.email,
         subject: `Contract for your signature: ${contract.title}`,
         html: `

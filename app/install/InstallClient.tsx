@@ -29,7 +29,7 @@ const MCP_CONFIG_SNIPPET = `{
 }`;
 
 const MANUAL_CURL = `mkdir -p ~/.claude/skills && \\
-  curl -fsSL https://simplerdevelopment.com/api/skills/bundle \\
+  curl -fsSL https://example.com/api/skills/bundle \\
   | tar -xz -C ~/.claude/skills`;
 
 export function InstallClient() {
@@ -46,13 +46,13 @@ export function InstallClient() {
       <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         <header className="mb-12">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            SimplerDevelopment
+            Kumo One
           </p>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Install the Claude skills
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            One-click installer for the SimplerDevelopment skills bundle. After installing,
+            One-click installer for the Kumo One skills bundle. After installing,
             you can draft pages, decks, emails, surveys, and full multi-page sites directly
             from Claude Desktop or Claude Code.
           </p>

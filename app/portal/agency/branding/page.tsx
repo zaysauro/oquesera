@@ -115,7 +115,7 @@ export default function AgencyBrandingPage() {
               className={`mt-1 ${pInput}`}
             />
             <span className="text-xs text-muted-foreground mt-1 block">
-              Replaces &quot;Simpler Development&quot; in the sidebar and login page.
+              Replaces &quot;Kumo One&quot; in the sidebar and login page.
             </span>
           </label>
 

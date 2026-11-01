@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PLATFORM_ROOT_DOMAIN, extractPlatformSubdomain } from '@/config/brand';
 import { auth } from '@/lib/auth';
 import { resolveCustomDomain } from '@/lib/agency/custom-domain';
 import { resolveSiteForHost } from '@/lib/sites/host-resolver';
@@ -31,10 +32,6 @@ const APP_HOSTNAMES = new Set([
   '127.0.0.1',
   '127.0.0.1:3000',
   '127.0.0.1:3100',
-  'simplerdevelopment.com',
-  'www.simplerdevelopment.com',
-  'staging.simplerdevelopment.com',
-  'dev.simplerdevelopment.com',
 ]);
 
 function getAppHostname(): string | null {
@@ -49,6 +46,8 @@ function getAppHostname(): string | null {
 
 function isAppHostname(host: string): boolean {
   if (APP_HOSTNAMES.has(host)) return true;
+  const bareHost = host.split(':')[0].toLowerCase();
+  if (bareHost === PLATFORM_ROOT_DOMAIN || bareHost === `www.${PLATFORM_ROOT_DOMAIN}`) return true;
   const appHost = getAppHostname();
   if (appHost && host === appHost) return true;
   // Vercel preview/prod defaults (e.g. simplerdevelopment.vercel.app,
@@ -60,20 +59,11 @@ function isAppHostname(host: string): boolean {
 }
 
 /**
- * Extract the subdomain from a hostname if it's a *.simplerdevelopment.com address.
- * Returns null for bare simplerdevelopment.com or non-matching hostnames.
+ * Extract the subdomain from a hostname if it's a *.<platform root> address.
+ * Returns null for bare <platform root> or non-matching hostnames.
  */
 function extractSubdomain(host: string): string | null {
-  const bare = host.split(':')[0]; // strip port
-  const appDomains = ['simplerdevelopment.com', 'www.simplerdevelopment.com'];
-  for (const base of appDomains) {
-    if (bare === base) return null; // bare domain, not a subdomain
-  }
-  if (bare.endsWith('.simplerdevelopment.com')) {
-    const sub = bare.replace('.simplerdevelopment.com', '');
-    if (sub && !sub.includes('.')) return sub;
-  }
-  return null;
+  return extractPlatformSubdomain(host);
 }
 
 /**
@@ -283,7 +273,7 @@ export async function middleware(req: NextRequest) {
     // redirected to the canonical app URL so portal auth + session work correctly.
     const subdomain = extractSubdomain(host);
     if (subdomain && pathname.startsWith('/portal')) {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.simplerdevelopment.com';
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${PLATFORM_ROOT_DOMAIN}`;
       const target = new URL(req.nextUrl.toString());
       target.host = new URL(appUrl).host;
       return NextResponse.redirect(target.toString(), { status: 308 });
@@ -295,7 +285,7 @@ export async function middleware(req: NextRequest) {
     }
 
     // ── White-label custom domain ────────────────────────────────────────────
-    // If the host doesn't belong to *.simplerdevelopment.com, before falling
+    // If the host doesn't belong to *.<platform root>, before falling
     // through to the public-site renderer we check whether some agency has
     // claimed + DNS-verified this hostname as their portal custom domain.
     // If so, rewrite as if the request had arrived at /portal on the
@@ -405,7 +395,7 @@ export async function middleware(req: NextRequest) {
     if (siteDomain) headers['x-site-domain'] = siteDomain;
     // Forward the same markers as REQUEST headers too, so server components
     // (e.g. the root layout's marketing-chrome detection) can tell this is a
-    // client-site route even on an app host like staging.simplerdevelopment.com,
+    // client-site route even on an app host like staging.<platform root>,
     // where the marketing site and client sites share one hostname.
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set('x-site-pathname', sitePath);
@@ -546,7 +536,7 @@ async function handlePluginRoute(
   // 5. Mint a user-context tenancy JWT for the iframe handoff. The
   //    catch-all page renders an <iframe> pointing at the plugin host; the
   //    plugin host needs the JWT to authenticate the user. We drop the JWT
-  //    into a cookie scoped to `.simplerdevelopment.com` so the browser
+  //    into a cookie scoped to `.<platform root>` so the browser
   //    sends it on the iframe's cross-subdomain request. SameSite=Lax is
   //    fine because the portal and the plugin host share an eTLD+1.
   //

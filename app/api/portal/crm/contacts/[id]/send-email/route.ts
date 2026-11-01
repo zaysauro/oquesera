@@ -1,3 +1,4 @@
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -63,8 +64,8 @@ export async function POST(
     );
 
   // Send email via Resend
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@simplerdevelopment.com';
-  const senderName = client.company || 'Simpler Development';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || `noreply@${EMAIL_DOMAIN}`;
+  const senderName = client.company || 'Kumo One';
 
   try {
     const result = await resend.emails.send({

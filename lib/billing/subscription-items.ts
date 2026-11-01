@@ -5,6 +5,7 @@
 // checkout route (Checkout line_items) and the recompute reconciler
 // (subscription item updates). Pure: no Stripe API calls.
 
+import { STRIPE_CURRENCY } from '@/config/brand';
 import type Stripe from 'stripe';
 import { computeAccountBilling, type AccountBilling } from './domain-catalog';
 
@@ -76,7 +77,7 @@ export function buildDesiredItems(input: BuildInput): {
 /** Monthly recurring price_data for a desired item. */
 export function toPriceData(item: DesiredItem): Stripe.SubscriptionCreateParams.Item.PriceData {
   return {
-    currency: 'usd',
+    currency: STRIPE_CURRENCY,
     product: item.productId,
     unit_amount: item.unitAmountCents,
     recurring: { interval: 'month' },
@@ -96,7 +97,7 @@ export function toNamedCheckoutLineItem(
   return {
     quantity: item.quantity,
     price_data: {
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       product_data: { name },
       unit_amount: item.unitAmountCents,
       recurring: { interval: 'month' },
@@ -109,7 +110,7 @@ export function toCheckoutLineItem(item: DesiredItem): Stripe.Checkout.SessionCr
   return {
     quantity: item.quantity,
     price_data: {
-      currency: 'usd',
+      currency: STRIPE_CURRENCY,
       product: item.productId,
       unit_amount: item.unitAmountCents,
       recurring: { interval: 'month' },

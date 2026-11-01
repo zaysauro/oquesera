@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { siteConfig } from './site';
+import { OG_LOCALE } from './brand';
 
 export const defaultSEO: Metadata = {
   title: {
@@ -17,7 +18,7 @@ export const defaultSEO: Metadata = {
   creator: siteConfig.name,
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: OG_LOCALE,
     url: siteConfig.url,
     title: siteConfig.name,
     description: siteConfig.description,
@@ -36,7 +37,6 @@ export const defaultSEO: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: '@simplerdevelopment',
   },
   robots: {
     index: true,

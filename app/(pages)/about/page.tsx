@@ -7,7 +7,7 @@ import { SectionHeading, StatBlock, OrbitDivider } from '@/components/retro/prim
 export const metadata = generateSEO({
   title: 'About Us',
   description:
-    'Simpler Development replaces the stack of disconnected tools small businesses juggle — website, email, CRM, booking, projects — with one platform, backed by a team that helps you use it.',
+    'Kumo One replaces the stack of disconnected tools small businesses juggle — website, email, CRM, booking, projects — with one platform, backed by a team that helps you use it.',
   path: '/about',
 });
 

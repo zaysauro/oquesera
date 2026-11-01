@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/components/storefront/account/CustomerAuthContext';
@@ -214,7 +215,7 @@ export function OrderDetailClient({ siteId, domain, orderNumber }: { siteId: num
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900">Order {order.orderNumber}</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                      Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                      Placed on {new Date(order.createdAt).toLocaleDateString(APP_LOCALE, { month: 'long', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
                   <span className={`text-sm px-3 py-1.5 rounded-full font-medium ${statusColor[order.status] ?? 'bg-gray-100 text-gray-700'}`}>
@@ -310,7 +311,7 @@ export function OrderDetailClient({ siteId, domain, orderNumber }: { siteId: num
                         return (
                           <div key={i} className="flex items-baseline gap-3 px-5 py-3 text-sm">
                             <span className="text-xs text-gray-400 whitespace-nowrap min-w-[7.5rem]">
-                              {new Date(ev.processedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                              {new Date(ev.processedAt).toLocaleString(APP_LOCALE, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                             </span>
                             <span className="text-gray-900 font-medium">{ev.eventType}</span>
                             <span className="text-gray-500">— {status}</span>
@@ -418,7 +419,7 @@ export function OrderDetailClient({ siteId, domain, orderNumber }: { siteId: num
                             </p>
                             {entry.note && <p className="text-xs text-gray-500 mt-0.5">{entry.note}</p>}
                             <p className="text-xs text-gray-400 mt-0.5">
-                              {new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                              {new Date(entry.createdAt).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
                             </p>
                           </div>
                         </div>

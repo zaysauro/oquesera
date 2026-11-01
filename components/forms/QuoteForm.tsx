@@ -1,5 +1,6 @@
 'use client';
 
+import { EMAIL_DOMAIN } from '@/config/brand';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -234,8 +235,8 @@ export function QuoteForm() {
         <div role="alert" className="rounded-md border border-red-500 bg-red-50 p-4">
           <p className="text-sm text-red-700">
             That didn’t send. Try again, or email{' '}
-            <a className="underline" href="mailto:info@simplerdevelopment.com">
-              info@simplerdevelopment.com
+            <a className="underline" href={`mailto:info@${EMAIL_DOMAIN}`}>
+              {`info@${EMAIL_DOMAIN}`}
             </a>
             .
           </p>

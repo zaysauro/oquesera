@@ -12,6 +12,7 @@
  *   - Reject     → soft-reject (DELETE), flips status to 'rejected'. Confirm
  *                  dialog first; on success redirects to the list.
  */
+import { APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -331,7 +332,7 @@ export default function DecisionDetailPage() {
       ?? `User #${d.decisionMakerId}`
     : 'Unspecified';
 
-  const decidedAtNice = new Date(d.decidedAt).toLocaleDateString('en-US', {
+  const decidedAtNice = new Date(d.decidedAt).toLocaleDateString(APP_LOCALE, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',

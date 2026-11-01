@@ -1,3 +1,4 @@
+import { APP_CURRENCY } from '@/config/brand';
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -101,7 +102,7 @@ export async function POST(req: Request) {
     clauses: clauses || [],
     lineItems: lineItems || [],
     fees: fees || [],
-    currency: currency || 'USD',
+    currency: currency || APP_CURRENCY,
     validUntil: validUntil ? new Date(validUntil) : null,
     clientToken,
     accentColor: accentColor || '#2563eb',

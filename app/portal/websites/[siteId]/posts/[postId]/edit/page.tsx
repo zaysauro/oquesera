@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { posts, postCategories, postTags } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
@@ -40,8 +41,8 @@ export default async function PortalEditPostPage({
   // Always use internal /sites/ route — avoids X-Frame-Options SAMEORIGIN block
   // when the portal is accessed from a tenant subdomain (different origin to site domain)
   const subdomain = site.subdomain;
-  const fullDomain = site.vercelDomain || (subdomain ? `${subdomain}.simplerdevelopment.com` : null);
-  const appUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://simplerdevelopment.com';
+  const fullDomain = site.vercelDomain || (subdomain ? `${subdomain}.${PLATFORM_ROOT_DOMAIN}` : null);
+  const appUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
   const previewToken = generatePreviewToken(site.id);
   const siteIdentifier = fullDomain || site.domain || null;
   const siteUrl = siteIdentifier ? `${appUrl}/sites/${siteIdentifier}` : null;

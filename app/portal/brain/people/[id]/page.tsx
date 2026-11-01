@@ -16,6 +16,7 @@
  * dedicated edit page (`./edit`). Delete is a confirm-and-redirect modal.
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import { use, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -69,7 +70,7 @@ function fmtDate(value: string | Date | null | undefined): string | null {
   if (!value) return null;
   const d = typeof value === 'string' ? new Date(value) : value;
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString(APP_LOCALE, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 export default function BrainPersonProfilePage({

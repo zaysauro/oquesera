@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CURRENCY } from '@/config/brand';
 import Link from 'next/link';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -1129,7 +1130,7 @@ function describeProposal(item: ReviewItem): string {
     case 'crm_deal_link': return `Link to deal #${n('dealId')}`;
     case 'crm_deal_create': {
       const value = n('value');
-      const v = value !== null ? ` (${formatCents(value, s('currency') || 'USD')})` : '';
+      const v = value !== null ? ` (${formatCents(value, s('currency') || APP_CURRENCY)})` : '';
       return `Create deal: ${s('title') || '(untitled)'}${v}`;
     }
     case 'crm_company_link': {

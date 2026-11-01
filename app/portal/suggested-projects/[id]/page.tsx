@@ -1,3 +1,4 @@
+import { APP_CURRENCY, APP_LOCALE } from '@/config/brand';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { clients, suggestedProjects } from '@/lib/db/schema';
@@ -217,7 +218,7 @@ const configs: Record<string, CategoryConfig> = {
 };
 
 function formatCents(cents: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cents / 100);
+  return new Intl.NumberFormat(APP_LOCALE, { style: 'currency', currency: APP_CURRENCY, maximumFractionDigits: 0 }).format(cents / 100);
 }
 
 const categoryLabel: Record<string, string> = {

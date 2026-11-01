@@ -66,7 +66,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'website',
     tagline: 'Keep the content and the SEO. Lose the plugin maintenance.',
     description:
-      'Migrate a WordPress site to SimplerDevelopment — posts, pages, media, categories and redirects moved for you, rebuilt in a visual block editor with no plugins to patch.',
+      'Migrate a WordPress site to Kumo One — posts, pages, media, categories and redirects moved for you, rebuilt in a visual block editor with no plugins to patch.',
     reasons: [
       'Plugin and core updates are a standing maintenance job, and a security one',
       'Page speed degrades as plugins accumulate, and nobody owns the cleanup',
@@ -111,7 +111,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'website',
     tagline: 'A site you can actually extend, without leaving the visual editor.',
     description:
-      'Migrate from Squarespace to SimplerDevelopment — pages, blog posts and media rebuilt in a visual block editor, with a CRM, email and bookings in the same login.',
+      'Migrate from Squarespace to Kumo One — pages, blog posts and media rebuilt in a visual block editor, with a CRM, email and bookings in the same login.',
     reasons: [
       'You have outgrown the template and cannot extend past it',
       'Client work needs multiple sites under one roof, not one account per site',
@@ -156,7 +156,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'website',
     tagline: 'Get your site — and your content — back under your own control.',
     description:
-      'Migrate from Wix to SimplerDevelopment. Because Wix has no full-site export, we rebuild your pages faithfully from the live site and hand you a portable, self-hostable result.',
+      'Migrate from Wix to Kumo One. Because Wix has no full-site export, we rebuild your pages faithfully from the live site and hand you a portable, self-hostable result.',
     reasons: [
       'There is no way to take the site with you, which is itself the reason to go',
       'The editor makes structural change harder the bigger the site gets',
@@ -201,7 +201,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'website',
     tagline: 'Keep the craft. Add a CRM, email and bookings behind it.',
     description:
-      'Migrate from Webflow to SimplerDevelopment — your exported HTML bundle uploads straight into the editor, and CMS collections become native posts with a CRM behind them.',
+      'Migrate from Webflow to Kumo One — your exported HTML bundle uploads straight into the editor, and CMS collections become native posts with a CRM behind them.',
     reasons: [
       'The design is finished; what is missing is everything behind it',
       'CMS item limits and seat pricing bite as the site and team grow',
@@ -248,7 +248,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'crm',
     tagline: 'The same pipeline, without the per-seat bill or the upgrade wall.',
     description:
-      'Migrate from HubSpot to SimplerDevelopment. Contacts, companies and deals import by CSV with every row previewed before it writes, and your pipelines are rebuilt stage for stage.',
+      'Migrate from HubSpot to Kumo One. Contacts, companies and deals import by CSV with every row previewed before it writes, and your pipelines are rebuilt stage for stage.',
     reasons: [
       'Cost climbs with seats and contacts faster than the value does',
       'The feature you need sits one tier up, every time',
@@ -293,7 +293,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'crm',
     tagline: 'Your list, in the same system as the site it signed up on.',
     description:
-      'Migrate from Mailchimp to SimplerDevelopment — audiences, segments and templates moved into a campaign builder that shares one database with your CRM and website.',
+      'Migrate from Mailchimp to Kumo One — audiences, segments and templates moved into a campaign builder that shares one database with your CRM and website.',
     reasons: [
       'Pricing scales on audience size including people who never open anything',
       'The list lives apart from the CRM and the website that created it',
@@ -338,7 +338,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'crm',
     tagline: 'Keep the automation thinking. Drop a subscription.',
     description:
-      'Migrate from ActiveCampaign to SimplerDevelopment — contacts, lists and deals imported by CSV, with automations rebuilt against a CRM and website that share one database.',
+      'Migrate from ActiveCampaign to Kumo One — contacts, lists and deals imported by CSV, with automations rebuilt against a CRM and website that share one database.',
     reasons: [
       'Contact-tier pricing keeps stepping up as the list grows',
       'Automations are powerful but live away from the site that triggers them',
@@ -385,7 +385,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'projects',
     tagline: 'The same boards, next to the client work they are actually about.',
     description:
-      'Migrate from Monday.com to SimplerDevelopment — boards, groups, items and updates rebuilt as projects and kanban cards that sit beside the CRM and the sites they relate to.',
+      'Migrate from Monday.com to Kumo One — boards, groups, items and updates rebuilt as projects and kanban cards that sit beside the CRM and the sites they relate to.',
     reasons: [
       'Per-seat pricing means the people who only need to look cost the same as the people doing the work',
       'The board knows nothing about the client record or the site it concerns',
@@ -430,7 +430,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'projects',
     tagline: 'Same cards. Now attached to the client, the site and the invoice.',
     description:
-      'Migrate from Trello to SimplerDevelopment — lists, cards, checklists, labels and comments rebuilt as kanban boards that live alongside your CRM, sites and billing.',
+      'Migrate from Trello to Kumo One — lists, cards, checklists, labels and comments rebuilt as kanban boards that live alongside your CRM, sites and billing.',
     reasons: [
       'Boards are fine until you need them connected to a client or an invoice',
       'Power-Ups accumulate to cover the gaps, each with its own cost',
@@ -475,7 +475,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'projects',
     tagline: 'Projects that know which client, site and deal they belong to.',
     description:
-      'Migrate from Asana to SimplerDevelopment — projects, sections, tasks, subtasks and custom fields rebuilt as kanban boards connected to your CRM and client sites.',
+      'Migrate from Asana to Kumo One — projects, sections, tasks, subtasks and custom fields rebuilt as kanban boards connected to your CRM and client sites.',
     reasons: [
       'Per-seat cost rises with every occasional collaborator',
       'Projects sit apart from the client record and the work product',
@@ -520,7 +520,7 @@ export const migrationSources: MigrationSource[] = [
     category: 'projects',
     tagline: 'Fewer features you never turned on. The ones you use, connected.',
     description:
-      'Migrate from ClickUp to SimplerDevelopment — spaces, lists, tasks, statuses and custom fields rebuilt as projects and kanban boards, with docs landing in a searchable knowledge base.',
+      'Migrate from ClickUp to Kumo One — spaces, lists, tasks, statuses and custom fields rebuilt as projects and kanban boards, with docs landing in a searchable knowledge base.',
     reasons: [
       'Configuration surface is larger than the team will ever use',
       'Performance and complexity grow together as the workspace fills',

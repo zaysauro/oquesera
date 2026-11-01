@@ -63,10 +63,10 @@ export function buildMcpServer(ctx: PortalMcpContext): McpServer {
     {
       capabilities: { tools: {}, resources: {}, prompts: {} },
       instructions: multiClient
-        ? `You are connected to the SimplerDevelopment portal as a user who acts for ${reachable.length} companies:\n` +
+        ? `You are connected to the Kumo One portal as a user who acts for ${reachable.length} companies:\n` +
           `${describeRoster(reachable)}\n` +
           `Pass "clientId" on EVERY tool call to say which company it applies to. If the user has not said which company they mean, ASK — never guess, and never assume the last one used. Call whoami for the full roster.`
-        : `You are connected to the SimplerDevelopment portal for client "${ctx.client.company ?? `#${ctx.client.id}`}" (id ${ctx.client.id}). Use these tools to manage projects, tickets, CRM, content, media, websites, and email campaigns. All operations are automatically scoped to this client.`,
+        : `You are connected to the Kumo One portal for client "${ctx.client.company ?? `#${ctx.client.id}`}" (id ${ctx.client.id}). Use these tools to manage projects, tickets, CRM, content, media, websites, and email campaigns. All operations are automatically scoped to this client.`,
     },
   );
 

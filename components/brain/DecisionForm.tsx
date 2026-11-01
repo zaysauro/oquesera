@@ -17,6 +17,7 @@
  * also raised so the parent can POST /api/portal/brain/topics/attach AFTER
  * the decision row exists.
  */
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   BrainDecisionReversibility,
@@ -553,7 +554,7 @@ function meetingDisplayRow(raw: unknown): EntityPickerRow | null {
   const date = r.meetingDate ?? r.createdAt;
   const dateStr =
     typeof date === 'string' || date instanceof Date
-      ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      ? new Date(date).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' })
       : null;
   return {
     id: r.id,
@@ -569,7 +570,7 @@ function noteDisplayRow(raw: unknown): EntityPickerRow | null {
   const updated = r.updatedAt;
   const dateStr =
     typeof updated === 'string' || updated instanceof Date
-      ? new Date(updated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      ? new Date(updated).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric' })
       : null;
   return {
     id: r.id,

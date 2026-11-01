@@ -1,3 +1,4 @@
+import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { clientWebsites, websiteDomains } from '@/lib/db/schema';
@@ -8,7 +9,7 @@ import { generateUnlockToken, normalizeCode } from '@/lib/preview-unlock';
 // domain). On any other host — localhost, Vercel previews, agency white-label
 // portals — we keep the unlock flow on the same host the visitor is on, and
 // reach the tenant via the internal `/sites/<domain>/` rewrite.
-const PROD_APP_HOSTS = new Set(['simplerdevelopment.com', 'www.simplerdevelopment.com']);
+const PROD_APP_HOSTS = new Set([PLATFORM_ROOT_DOMAIN, `www.${PLATFORM_ROOT_DOMAIN}`]);
 
 function bareHost(host: string): string {
   return host.split(':')[0].toLowerCase();
@@ -43,7 +44,7 @@ async function resolveTenantHost(site: {
   subdomain: string | null;
   domain: string | null;
 }): Promise<string | null> {
-  if (site.subdomain) return `${site.subdomain}.simplerdevelopment.com`;
+  if (site.subdomain) return `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}`;
   if (site.domain) return site.domain;
   const [extra] = await db
     .select({ domain: websiteDomains.domain })

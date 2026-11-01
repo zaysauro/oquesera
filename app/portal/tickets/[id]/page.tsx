@@ -151,7 +151,7 @@ export default async function TicketDetailPage({ params }: { params: Promise<{ i
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">{msg.authorName}</p>
-                    {isStaffMsg && <p className="text-xs text-muted-foreground">Simpler Development</p>}
+                    {isStaffMsg && <p className="text-xs text-muted-foreground">Kumo One</p>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

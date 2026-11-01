@@ -184,7 +184,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
     if (innerConnection.subscriptionId) {
       try {
         const credentials = getEnvMicrosoftCredentials(
-          'https://www.simplerdevelopment.com/api/portal/integrations/microsoft/callback',
+          'https://example.com/api/portal/integrations/microsoft/callback',
         );
         await deleteTranscriptsSubscription({
           connection: {
@@ -293,7 +293,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
           <span className="material-icons text-5xl text-muted-foreground mb-3">workspace_premium</span>
           <h3 className="font-display font-extrabold tracking-[-0.01em] text-foreground mb-1">Workspace integration is an enterprise feature</h3>
           <p className="text-sm text-muted-foreground max-w-md">
-            This account uses standard email tracking (incoming mail to your SimplerDevelopment domain). To enable
+            This account uses standard email tracking (incoming mail to your Kumo One domain). To enable
             full Workspace ingestion (sent mail, calendar, Drive, contacts), upgrade and we&apos;ll provision
             the integration with your Google Workspace.
           </p>
@@ -313,7 +313,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
           <div>
             <h3 className="font-display font-extrabold tracking-[-0.01em] text-foreground">Workspace integration paused</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Status: <code className="font-mono">{tenant.status}</code>. Contact your SimplerDevelopment administrator to resume.
+              Status: <code className="font-mono">{tenant.status}</code>. Contact your Kumo One administrator to resume.
             </p>
           </div>
         </div>
@@ -340,7 +340,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
             </a>
           </div>
           <p className="text-xs text-muted-foreground">
-            You&apos;ll be redirected to Google to grant read-only access. SimplerDevelopment never sends email or modifies your account.
+            You&apos;ll be redirected to Google to grant read-only access. Kumo One never sends email or modifies your account.
           </p>
         </div>
       )}
@@ -427,7 +427,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
             <h3 className="font-display font-extrabold tracking-[-0.01em] text-foreground">Not yet enabled on this deploy</h3>
             <p className="text-sm text-muted-foreground mt-1">
               The Teams integration requires <code className="font-mono">MICROSOFT_TEAMS_CLIENT_ID</code> and{' '}
-              <code className="font-mono">MICROSOFT_TEAMS_CLIENT_SECRET</code> in the environment. Contact your SimplerDevelopment administrator.
+              <code className="font-mono">MICROSOFT_TEAMS_CLIENT_SECRET</code> in the environment. Contact your Kumo One administrator.
             </p>
           </div>
         </div>
@@ -449,7 +449,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
           <div className="border border-amber-500/30 bg-amber-500/5 text-amber-700 dark:text-amber-400 rounded-lg p-3 flex items-start gap-2">
             <span className="material-icons text-base mt-0.5">info</span>
             <div className="text-xs leading-relaxed">
-              <strong>Heads up:</strong> only meetings where you are organizer or co-organizer will sync. Microsoft does not allow read access to a transcript when you are only an attendee — that&apos;s a Microsoft Graph permission constraint, not a SimplerDevelopment limitation.
+              <strong>Heads up:</strong> only meetings where you are organizer or co-organizer will sync. Microsoft does not allow read access to a transcript when you are only an attendee — that&apos;s a Microsoft Graph permission constraint, not a Kumo One limitation.
             </div>
           </div>
 
@@ -463,7 +463,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
             </a>
           </div>
           <p className="text-xs text-muted-foreground">
-            You&apos;ll be redirected to Microsoft to grant read-only transcript access. SimplerDevelopment can never read meetings you didn&apos;t organize, and never sees the recording — just the transcript text.
+            You&apos;ll be redirected to Microsoft to grant read-only transcript access. Kumo One can never read meetings you didn&apos;t organize, and never sees the recording — just the transcript text.
           </p>
         </div>
       )}
@@ -520,7 +520,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
         <div className="border border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-400 rounded-xl p-4 flex items-start gap-3">
           <span className="material-icons text-base mt-0.5">check_circle</span>
           <div className="text-sm">
-            LinkedIn connected. You can now schedule and publish posts directly from SimplerDevelopment.
+            LinkedIn connected. You can now schedule and publish posts directly from Kumo One.
           </div>
         </div>
       )}
@@ -537,7 +537,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
         <div>
           <h2 className="text-lg font-display font-extrabold tracking-[-0.01em] text-foreground">LinkedIn</h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Connect your LinkedIn profile to schedule and publish posts directly from the SimplerDevelopment content calendar.
+            Connect your LinkedIn profile to schedule and publish posts directly from the Kumo One content calendar.
           </p>
         </div>
       </div>
@@ -549,7 +549,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
             <h3 className="font-display font-extrabold tracking-[-0.01em] text-foreground">Not yet enabled on this deploy</h3>
             <p className="text-sm text-muted-foreground mt-1">
               The LinkedIn integration requires <code className="font-mono">LINKEDIN_CLIENT_ID</code> and{' '}
-              <code className="font-mono">LINKEDIN_CLIENT_SECRET</code> in the environment. Contact your SimplerDevelopment administrator.
+              <code className="font-mono">LINKEDIN_CLIENT_SECRET</code> in the environment. Contact your Kumo One administrator.
             </p>
           </div>
         </div>
@@ -576,7 +576,7 @@ export default async function SettingsIntegrationsPage({ searchParams }: PagePro
             </a>
           </div>
           <p className="text-xs text-muted-foreground">
-            You&apos;ll be redirected to LinkedIn to authorize posting on your behalf. SimplerDevelopment only publishes what you explicitly schedule — it never reads your connections or messages.
+            You&apos;ll be redirected to LinkedIn to authorize posting on your behalf. Kumo One only publishes what you explicitly schedule — it never reads your connections or messages.
           </p>
         </div>
       )}

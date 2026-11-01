@@ -111,7 +111,7 @@ export default function CalculatorPage() {
               onboarding fee alone is $1,500, and Shopify Basic keeps 2% of every sale.
             </Rule>
             <Rule label="Our side comes from the billing code">
-              The SimplerDevelopment column is not typed into this page. It calls the same
+              The Kumo One column is not typed into this page. It calls the same
               function that generates the real Stripe line items, reading the same module prices,
               the same volume tiers ({VOLUME_TIERS.map((t) => `${t.percentOff}% at ${t.minModules}`).join(', ')}{' '}
               modules) and the same $30 seat cap. It cannot quote you a price that checkout then

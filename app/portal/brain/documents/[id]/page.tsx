@@ -18,6 +18,7 @@
  *   - Compliance card (summary partition; click to expand to per-person)
  */
 
+import { APP_LOCALE } from '@/config/brand';
 import Link from 'next/link';
 import { use, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -59,7 +60,7 @@ const STATUS_ICONS = {
 function formatDate(d: string | Date | null | undefined): string {
   if (!d) return '—';
   try {
-    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(d).toLocaleDateString(APP_LOCALE, { month: 'short', day: 'numeric', year: 'numeric' });
   } catch {
     return String(d);
   }

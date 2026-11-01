@@ -1,3 +1,4 @@
+import { APP_CURRENCY, PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -95,7 +96,7 @@ export async function POST(
     if (body.create && body.accountId) {
       // Create a new GA4 property
       const domain = site.domain || site.subdomain
-        ? `${site.subdomain}.simplerdevelopment.com`
+        ? `${site.subdomain}.${PLATFORM_ROOT_DOMAIN}`
         : site.name;
 
       const propRes = await analyticsAdmin.properties.create({
@@ -103,7 +104,7 @@ export async function POST(
           parent: body.accountId,
           displayName: body.displayName || site.name,
           timeZone: 'America/New_York',
-          currencyCode: 'USD',
+          currencyCode: APP_CURRENCY,
         },
       });
       propertyId = propRes.data.name!;

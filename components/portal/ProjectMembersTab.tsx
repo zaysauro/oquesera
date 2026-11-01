@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 
 type ProjectRole = 'owner' | 'editor' | 'commenter' | 'viewer';
@@ -229,7 +230,7 @@ export default function ProjectMembersTab({ projectId, canManage }: { projectId:
                     )}
                   </td>
                   <td className="px-4 py-3 text-xs text-muted-foreground">
-                    {new Date(m.addedAt).toLocaleDateString('en-US')}
+                    {new Date(m.addedAt).toLocaleDateString(APP_LOCALE)}
                   </td>
                   {canManage && (
                     <td className="px-4 py-3 text-right">
