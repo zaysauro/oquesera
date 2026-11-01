@@ -362,7 +362,7 @@ describe('getWebsiteUrls', () => {
     H.dbState.clientWebsiteForInfo = [];
     const urls = await getWebsiteUrls(1);
     expect(urls.siteName).toBe('Our Store');
-    expect(urls.baseUrl).toBe('https://simplerdevelopment.com');
+    expect(urls.baseUrl).toBe('https://kumo.localhost');
   });
 });
 
@@ -392,7 +392,7 @@ describe('sendTransactionalEmail', () => {
     expect(payload.from).toMatch(/^Acme <[^>]+>$/);
     expect(payload.html).toContain('<!DOCTYPE html>');
     expect(payload.html).toContain('<rendered>heading</rendered>');
-    expect(payload.html).toContain('Powered by SimplerDevelopment');
+    expect(payload.html).toContain('Powered by Kumo One');
   });
 
   it('falls back to a generic subject when event has no definition', async () => {

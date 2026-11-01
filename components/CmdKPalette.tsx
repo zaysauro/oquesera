@@ -61,24 +61,24 @@ interface CreateAction {
 const CREATE_ACTIONS: CreateAction[] = [
   {
     id: 'new-knowledge-note',
-    label: 'New knowledge note',
-    description: 'Create a knowledge note',
+    label: 'Nova nota de conhecimento',
+    description: 'Criar nota de conhecimento',
     icon: 'note_add',
     tone: 'text-amber-600 dark:text-amber-400',
     href: '/portal/brain/knowledge?new=1',
   },
   {
     id: 'new-survey',
-    label: 'New survey',
-    description: 'Start a survey',
+    label: 'Nova pesquisa',
+    description: 'Criar pesquisa',
     icon: 'add_circle',
     tone: 'text-foreground',
     href: '/portal/surveys/new',
   },
   {
     id: 'new-pitch-deck',
-    label: 'New pitch deck',
-    description: 'Start a deck',
+    label: 'Nova apresentação',
+    description: 'Criar apresentação',
     icon: 'add_to_queue',
     tone: 'text-foreground',
     href: '/portal/tools/pitch-decks?new=1',
@@ -368,7 +368,7 @@ export default function CmdKPalette({ apps, entitlements, open: controlledOpen, 
     } else {
       const title =
         item.kind === 'create' ? 'Create' :
-        item.kind === 'nav' ? (trimmedQuery ? 'Navigate' : 'Quick access') :
+        item.kind === 'nav' ? (trimmedQuery ? 'Navigate' : 'Acesso rápido') :
         'Search results';
       grouped.push({ kind: item.kind, title, items: [{ item, index }] });
     }
@@ -380,7 +380,7 @@ export default function CmdKPalette({ apps, entitlements, open: controlledOpen, 
       style={{ paddingTop: 80 }}
       role="dialog"
       aria-modal="true"
-      aria-label="Command palette"
+      aria-label="Paleta de comandos"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) close();
       }}
@@ -406,7 +406,7 @@ export default function CmdKPalette({ apps, entitlements, open: controlledOpen, 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Jump to a page, search notes, contacts, deals…"
+            placeholder="Vá a uma página, busque notas, contatos, oportunidades…"
             className="flex-1 bg-transparent outline-none text-base text-foreground placeholder:text-muted-foreground"
             autoFocus
             spellCheck={false}
@@ -479,7 +479,7 @@ export default function CmdKPalette({ apps, entitlements, open: controlledOpen, 
                             )}
                           </span>
                           <span className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium shrink-0">
-                            Page
+                            Página
                           </span>
                         </button>
                       </li>
@@ -531,13 +531,13 @@ export default function CmdKPalette({ apps, entitlements, open: controlledOpen, 
               <span className="material-icons text-3xl text-muted-foreground mb-2 block">
                 search_off
               </span>
-              <p className="text-sm text-muted-foreground">No matches. Try different words.</p>
+              <p className="text-sm text-muted-foreground">Nenhum resultado. Tente outras palavras.</p>
             </div>
           )}
 
           {showEmptyHint && (
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-              Type to jump to any page, or search notes, meetings, CRM…
+              Digite para ir a qualquer página ou buscar notas, reuniões, CRM…
             </div>
           )}
         </div>

@@ -94,18 +94,18 @@ export const FEATURE_CATALOG: Array<{ id: string; label: string; icon: string; d
 ];
 
 export const BRAND_TONES: Array<{ id: string; label: string; icon: string }> = [
-  { id: 'professional', label: 'Professional', icon: 'badge' },
-  { id: 'friendly', label: 'Friendly', icon: 'sentiment_satisfied' },
-  { id: 'bold', label: 'Bold', icon: 'bolt' },
-  { id: 'playful', label: 'Playful', icon: 'celebration' },
-  { id: 'calm', label: 'Calm', icon: 'spa' },
-  { id: 'smart', label: 'Smart', icon: 'psychology' },
-  { id: 'warm', label: 'Warm', icon: 'wb_sunny' },
-  { id: 'confident', label: 'Confident', icon: 'star' },
+  { id: 'professional', label: 'Profissional', icon: 'badge' },
+  { id: 'friendly', label: 'Amigável', icon: 'sentiment_satisfied' },
+  { id: 'bold', label: 'Ousado', icon: 'bolt' },
+  { id: 'playful', label: 'Descontraído', icon: 'celebration' },
+  { id: 'calm', label: 'Tranquilo', icon: 'spa' },
+  { id: 'smart', label: 'Inteligente', icon: 'psychology' },
+  { id: 'warm', label: 'Acolhedor', icon: 'wb_sunny' },
+  { id: 'confident', label: 'Confiante', icon: 'star' },
 ];
 
 export const COMPANY_SIZES: Array<{ id: string; label: string }> = [
-  { id: 'solo', label: 'Just me' },
+  { id: 'solo', label: 'Só eu' },
   { id: 'small', label: '2–10' },
   { id: 'mid', label: '11–50' },
   { id: 'large', label: '51–250' },
@@ -113,13 +113,13 @@ export const COMPANY_SIZES: Array<{ id: string; label: string }> = [
 ];
 
 export const ROLE_PRESETS: Array<{ id: string; label: string; icon: string }> = [
-  { id: 'owner', label: 'Owner / Founder', icon: 'workspace_premium' },
+  { id: 'owner', label: 'Dono(a) / Fundador(a)', icon: 'workspace_premium' },
   { id: 'marketing', label: 'Marketing', icon: 'campaign' },
-  { id: 'sales', label: 'Sales', icon: 'trending_up' },
-  { id: 'ops', label: 'Operations', icon: 'settings_suggest' },
-  { id: 'engineering', label: 'Engineering / IT', icon: 'code' },
-  { id: 'consultant', label: 'Consultant / Agency', icon: 'support_agent' },
-  { id: 'other', label: 'Other', icon: 'more_horiz' },
+  { id: 'sales', label: 'Vendas', icon: 'trending_up' },
+  { id: 'ops', label: 'Operações', icon: 'settings_suggest' },
+  { id: 'engineering', label: 'Tecnologia / TI', icon: 'code' },
+  { id: 'consultant', label: 'Consultoria / Agência', icon: 'support_agent' },
+  { id: 'other', label: 'Outro', icon: 'more_horiz' },
 ];
 
 export const COLOR_PRESETS: string[] = [

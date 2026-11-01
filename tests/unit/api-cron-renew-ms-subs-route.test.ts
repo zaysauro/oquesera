@@ -260,7 +260,7 @@ describe('GET /api/cron/renew-microsoft-subscriptions', () => {
       }),
     );
     expect(getEnvMicrosoftCredentialsMock).toHaveBeenCalledWith(
-      'https://www.simplerdevelopment.com/api/portal/integrations/microsoft/callback',
+      'https://www.kumo.localhost/api/portal/integrations/microsoft/callback',
     );
   });
 

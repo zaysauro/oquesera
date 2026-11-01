@@ -59,7 +59,7 @@ export function StepFeatures({ state, setAnswers, next }: StepProps) {
           data-testid="onboarding-features-next"
           className={obPrimaryBtn}
         >
-          Continue
+          Continuar
           <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
         </button>
       </div>

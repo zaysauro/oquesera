@@ -374,7 +374,7 @@ describe('GET /api/portal/service-requests', () => {
       {
         id: 1,
         serviceId: 10,
-        serviceName: 'Website',
+        serviceName: 'Site',
         status: 'pending',
         answers: { q1: 'a' },
         message: 'hi',
@@ -395,7 +395,7 @@ describe('GET /api/portal/service-requests', () => {
     const body = await res.json();
     expect(body.success).toBe(true);
     expect(body.data).toHaveLength(2);
-    expect(body.data[0].serviceName).toBe('Website');
+    expect(body.data[0].serviceName).toBe('Site');
   });
 
   it('returns empty array when no requests exist', async () => {
@@ -465,7 +465,7 @@ describe('POST /api/portal/service-requests', () => {
   it('creates a service request with answers and message', async () => {
     authMock.mockResolvedValue(SESSION);
     getPortalClientMock.mockResolvedValue({ id: 5 });
-    selectQueue.push([{ id: 10, active: true, name: 'Website' }]);
+    selectQueue.push([{ id: 10, active: true, name: 'Site' }]);
     insertReturnQueue.push([
       { id: 1, serviceId: 10, clientId: 5, status: 'pending', answers: { q1: 'a' }, message: 'hi' },
     ]);
@@ -493,7 +493,7 @@ describe('POST /api/portal/service-requests', () => {
   it('creates a service request with null answers and null message when not provided', async () => {
     authMock.mockResolvedValue(SESSION);
     getPortalClientMock.mockResolvedValue({ id: 5 });
-    selectQueue.push([{ id: 10, active: true, name: 'Website' }]);
+    selectQueue.push([{ id: 10, active: true, name: 'Site' }]);
     insertReturnQueue.push([{ id: 2 }]);
     const res = await serviceRequestsRoute.POST(
       makeJsonReq('http://x/api/portal/service-requests', 'POST', { serviceId: 10 }),

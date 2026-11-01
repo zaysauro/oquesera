@@ -13,6 +13,7 @@
  * they're excluded from BYOK routing on purpose, not by oversight.
  */
 
+import { formatMoney } from '@/lib/utils/money';
 import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { db } from '@/lib/db';
 import { websiteEmailTemplates, clientWebsites, brandingProfiles } from '@/lib/db/schema';
@@ -280,7 +281,7 @@ async function renderDefaultTemplate(
 
 /** Format cents to dollars (e.g. 14999 -> "$149.99") */
 export function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 /** Format an address object to a single-line string */

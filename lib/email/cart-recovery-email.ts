@@ -23,7 +23,7 @@ export async function sendCartRecoveryEmail(opts: {
     from: `Your Cart <${FROM_EMAIL}>`,
     to: opts.to,
     subject: 'You left items in your cart',
-    html: `<p>You still have ${opts.itemCount} item${opts.itemCount === 1 ? '' : 's'} waiting in your cart (total $${dollars}).</p>
+    html: `<p>You still have ${opts.itemCount} item${opts.itemCount === 1 ? '' : 's'} waiting in your cart (total R$ ${dollars}).</p>
 <p><a href="${link}">Return to your cart</a> to finish checking out.</p>`,
   });
 }

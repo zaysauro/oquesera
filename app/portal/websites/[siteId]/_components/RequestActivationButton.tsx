@@ -29,7 +29,7 @@ export default function RequestActivationButton({ siteId }: Props) {
         router.refresh();
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('Erro de rede. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ export default function RequestActivationButton({ siteId }: Props) {
     return (
       <span className="inline-flex items-center gap-1 text-xs text-blue-700 dark:text-blue-300 font-medium shrink-0">
         <span className="material-icons text-sm">check</span>
-        Activation requested
+        Ativação solicitada
       </span>
     );
   }
@@ -54,12 +54,12 @@ export default function RequestActivationButton({ siteId }: Props) {
         {loading ? (
           <>
             <span className="material-icons text-sm animate-spin" style={{ animationDuration: '1.5s' }}>autorenew</span>
-            Requesting…
+            Solicitando…
           </>
         ) : (
           <>
             <span className="material-icons text-sm">rocket_launch</span>
-            Request activation
+            Solicitar ativação
           </>
         )}
       </button>

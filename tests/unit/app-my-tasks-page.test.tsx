@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * Unit tests for `app/portal/my-tasks/page.tsx` — the "My Tasks" portal
+ * Unit tests for `app/portal/my-tasks/page.tsx` — the "Minhas tarefas" portal
  * page that aggregates Kanban cards + Brain tasks assigned to the user.
  *
  * The page is one big Suspense-wrapped client component:
@@ -150,7 +150,7 @@ describe('MyTasksPage — shell', () => {
     setupResponse();
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('My Tasks');
+      expect(container.textContent).toContain('Minhas tarefas');
     });
   });
 
@@ -182,8 +182,8 @@ describe('MyTasksPage — shell', () => {
     setupResponse();
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('Nothing assigned');
-      expect(container.textContent).toContain('You have no open tasks. Great job!');
+      expect(container.textContent).toContain('Nada atribuído');
+      expect(container.textContent).toContain('Você não tem tarefas abertas. Ótimo trabalho!');
     });
   });
 
@@ -192,7 +192,7 @@ describe('MyTasksPage — shell', () => {
     setupResponse();
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('Nothing assigned in projects or Brain.');
+      expect(container.textContent).toContain('Nada atribuído em projetos ou no Cérebro.');
     });
   });
 
@@ -221,7 +221,7 @@ describe('MyTasksPage — shell', () => {
     fetchMock.mockImplementation(async () => { throw new Error('network'); });
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('Nothing assigned');
+      expect(container.textContent).toContain('Nada atribuído');
     });
   });
 
@@ -357,7 +357,7 @@ describe('MyTasksPage — filter chip interactions', () => {
   it('clicks the Kanban source chip → router.replace with source=kanban', async () => {
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const kanbanBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       /Kanban\s*$/.test((b.textContent || '').trim()) || (b.textContent || '').trim().endsWith('Kanban'),
     ) as HTMLButtonElement;
@@ -371,7 +371,7 @@ describe('MyTasksPage — filter chip interactions', () => {
     searchParamsValue = new URLSearchParams('projectIds=5');
     setupResponse({ projectsAvailable: [{ id: 5, name: 'P5', projectKey: null }] });
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const brainBtn = Array.from(container.querySelectorAll('button')).find((b) => {
       const t = (b.textContent || '').trim();
       return t.endsWith('Brain') && !t.includes('Project');
@@ -388,7 +388,7 @@ describe('MyTasksPage — filter chip interactions', () => {
     searchParamsValue = new URLSearchParams('source=brain');
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const allBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       (b.textContent || '').trim() === 'All',
     ) as HTMLButtonElement;
@@ -401,7 +401,7 @@ describe('MyTasksPage — filter chip interactions', () => {
   it('toggles a priority chip on', async () => {
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const highBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       b.textContent?.trim() === 'high',
     ) as HTMLButtonElement;
@@ -414,7 +414,7 @@ describe('MyTasksPage — filter chip interactions', () => {
     searchParamsValue = new URLSearchParams('priorities=high');
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const highBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       b.textContent?.trim() === 'high',
     ) as HTMLButtonElement;
@@ -426,7 +426,7 @@ describe('MyTasksPage — filter chip interactions', () => {
   it('clicks the Overdue button toggles overdue=1', async () => {
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const overdueBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       /Overdue/.test(b.textContent || ''),
     ) as HTMLButtonElement;
@@ -438,7 +438,7 @@ describe('MyTasksPage — filter chip interactions', () => {
   it('toggles Hide completed checkbox to openOnly=0', async () => {
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     const cb = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
     expect(cb).toBeTruthy();
     fireEvent.click(cb);
@@ -481,7 +481,7 @@ describe('MyTasksPage — filter chip interactions', () => {
       projectsAvailable: [{ id: 7, name: 'Awesome', projectKey: 'AW' }],
     });
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
     // The Awesome chip should NOT render
     expect(container.textContent).not.toContain('Awesome');
   });
@@ -490,16 +490,16 @@ describe('MyTasksPage — filter chip interactions', () => {
     searchParamsValue = new URLSearchParams('priorities=high');
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('Clear filters'));
+    await waitFor(() => expect(container.textContent).toContain('Limpar filtros'));
   });
 
   it('Clear filters resets URL but preserves openOnly', async () => {
     searchParamsValue = new URLSearchParams('priorities=high&openOnly=0');
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('Clear filters'));
+    await waitFor(() => expect(container.textContent).toContain('Limpar filtros'));
     const clearBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Clear filters'),
+      b.textContent?.includes('Limpar filtros'),
     ) as HTMLButtonElement;
     fireEvent.click(clearBtn);
     await waitFor(() => expect(replaceMock).toHaveBeenCalled());
@@ -511,8 +511,8 @@ describe('MyTasksPage — filter chip interactions', () => {
   it('does not render Clear filters when no filters active', async () => {
     setupResponse();
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('My Tasks'));
-    expect(container.textContent).not.toContain('Clear filters');
+    await waitFor(() => expect(container.textContent).toContain('Minhas tarefas'));
+    expect(container.textContent).not.toContain('Limpar filtros');
   });
 });
 
@@ -727,7 +727,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Card 1'));
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     expect(completeBtn).toBeTruthy();
     fireEvent.click(completeBtn);
     await waitFor(() => {
@@ -755,7 +755,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Card 5'));
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     fireEvent.click(completeBtn);
     await waitFor(() => {
       const putCall = fetchMock.mock.calls.find((c) => (c[1] as any)?.method === 'PUT');
@@ -777,7 +777,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Roll back me'));
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     fireEvent.click(completeBtn);
     // Wait for PATCH to be attempted
     await waitFor(() => {
@@ -799,7 +799,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Card 1'));
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     fireEvent.click(completeBtn);
     await waitFor(() => {
       const patchCall = fetchMock.mock.calls.find((c) => (c[1] as any)?.method === 'PATCH');
@@ -825,7 +825,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('To complete'));
-    const completeBtns = container.querySelectorAll('button[aria-label="Mark complete"]');
+    const completeBtns = container.querySelectorAll('button[aria-label="Marcar como concluída"]');
     fireEvent.click(completeBtns[0] as HTMLButtonElement);
     await waitFor(() => {
       expect(container.textContent).not.toContain('To complete');
@@ -845,7 +845,7 @@ describe('MyTasksPage — complete card', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Stay visible'));
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     fireEvent.click(completeBtn);
     await waitFor(() => {
       const patchCall = fetchMock.mock.calls.find((c) => (c[1] as any)?.method === 'PATCH');
@@ -863,7 +863,7 @@ describe('MyTasksPage — complete card', () => {
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Card 1'));
     // Button is disabled
-    const completeBtn = container.querySelector('button[aria-label="Mark complete"]') as HTMLButtonElement;
+    const completeBtn = container.querySelector('button[aria-label="Marcar como concluída"]') as HTMLButtonElement;
     expect(completeBtn.disabled).toBe(true);
     // Even if forced, the click won't fire fetch
     fireEvent.click(completeBtn);
@@ -895,7 +895,7 @@ describe('MyTasksPage — load more / pagination', () => {
       total: 1,
     });
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('Load more'));
+    await waitFor(() => expect(container.textContent).toContain('Carregar mais'));
   });
 
   it('does not render Load more when nextCursor is null', async () => {
@@ -906,7 +906,7 @@ describe('MyTasksPage — load more / pagination', () => {
     });
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Card 1'));
-    expect(container.textContent).not.toContain('Load more');
+    expect(container.textContent).not.toContain('Carregar mais');
   });
 
   it('clicking Load more fetches with cursor= and appends results', async () => {
@@ -930,7 +930,7 @@ describe('MyTasksPage — load more / pagination', () => {
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('A1'));
     const loadMoreBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Load more'),
+      b.textContent?.includes('Carregar mais'),
     ) as HTMLButtonElement;
     fireEvent.click(loadMoreBtn);
     await waitFor(() => {
@@ -963,7 +963,7 @@ describe('MyTasksPage — load more / pagination', () => {
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Proj A'));
     const loadMoreBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Load more'),
+      b.textContent?.includes('Carregar mais'),
     ) as HTMLButtonElement;
     fireEvent.click(loadMoreBtn);
     await waitFor(() => {
@@ -988,7 +988,7 @@ describe('MyTasksPage — load more / pagination', () => {
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Proj A'));
     const loadMoreBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Load more'),
+      b.textContent?.includes('Carregar mais'),
     ) as HTMLButtonElement;
     fireEvent.click(loadMoreBtn);
     await waitFor(() => {
@@ -1012,9 +1012,9 @@ describe('MyTasksPage — load more / pagination', () => {
       return new Promise((res) => { resolveSecond = res; }) as any;
     });
     const { container } = renderPage();
-    await waitFor(() => expect(container.textContent).toContain('Load more'));
+    await waitFor(() => expect(container.textContent).toContain('Carregar mais'));
     const loadMoreBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Load more'),
+      b.textContent?.includes('Carregar mais'),
     ) as HTMLButtonElement;
     fireEvent.click(loadMoreBtn);
     await waitFor(() => expect(container.textContent).toContain('Loading'));

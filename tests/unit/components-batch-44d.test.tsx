@@ -136,7 +136,7 @@ describe('CardChecklist', () => {
       />,
     );
     const btn = container.querySelector(
-      'button[aria-label="Mark complete"]',
+      'button[aria-label="Marcar como concluída"]',
     ) as HTMLButtonElement;
     expect(btn).toBeTruthy();
     fireEvent.click(btn);
@@ -155,14 +155,14 @@ describe('CardChecklist', () => {
       />,
     );
     const btn = container.querySelector(
-      'button[aria-label="Mark incomplete"]',
+      'button[aria-label="Marcar como pendente"]',
     ) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
     fireEvent.click(btn);
     expect(toggle).not.toHaveBeenCalled();
     // No remove button when canEdit is false
     expect(
-      container.querySelector('button[aria-label="Delete item"]'),
+      container.querySelector('button[aria-label="Excluir item"]'),
     ).toBeNull();
     // No add-item input row when canEdit is false
     expect(container.querySelector('input[type="text"]')).toBeNull();
@@ -179,7 +179,7 @@ describe('CardChecklist', () => {
       />,
     );
     const btn = container.querySelector(
-      'button[aria-label="Delete item"]',
+      'button[aria-label="Excluir item"]',
     ) as HTMLButtonElement;
     fireEvent.click(btn);
     expect(remove).toHaveBeenCalledWith(42);
@@ -212,19 +212,19 @@ describe('CardChecklist', () => {
       <CardChecklist {...baseProps} newChecklistText="" />,
     );
     let btn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Add',
+      (b) => b.textContent === 'Adicionar',
     ) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
 
     rerender(<CardChecklist {...baseProps} newChecklistText="   " />);
     btn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Add',
+      (b) => b.textContent === 'Adicionar',
     ) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
 
     rerender(<CardChecklist {...baseProps} newChecklistText="real" />);
     btn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Add',
+      (b) => b.textContent === 'Adicionar',
     ) as HTMLButtonElement;
     expect(btn.disabled).toBe(false);
   });

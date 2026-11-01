@@ -1121,7 +1121,7 @@ export const ProductDesigner: React.FC<ProductDesignerProps> = ({
       
       if (result.success) {
         // Success - show success message
-        alert(`Successfully added ${result.summary.totalItems} item(s) to cart!\nTotal: $${result.summary.totalPrice.toFixed(2)}`);
+        alert(`Successfully added ${result.summary.totalItems} item(s) to cart!\nTotal: R$ ${result.summary.totalPrice.toFixed(2)}`);
         
         // Close cart mode after successful add and clear persisted selections
         setCartMode(false);

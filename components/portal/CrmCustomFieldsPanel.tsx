@@ -59,7 +59,7 @@ interface Props {
 const inputClass =
   'w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50';
 
-const DEFAULT_CATEGORY = 'General';
+const DEFAULT_CATEGORY = 'Geral';
 
 function splitMulti(v: string | null): string[] {
   if (!v) return [];
@@ -214,7 +214,7 @@ export default function CrmCustomFieldsPanel({
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
         <span className="material-icons animate-spin text-base">refresh</span>
-        Loading custom fields...
+        Carregando campos personalizados...
       </div>
     );
   }
@@ -224,7 +224,7 @@ export default function CrmCustomFieldsPanel({
       <p className="text-sm text-muted-foreground py-2">
         No custom fields defined.{' '}
         <a href="/portal/crm/settings" className="text-primary hover:underline">
-          Add some in settings
+          Adicione nas configurações
         </a>
         .
       </p>
@@ -313,13 +313,13 @@ export default function CrmCustomFieldsPanel({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="material-icons text-base">{mode === 'view' ? 'visibility' : 'edit'}</span>
-            {mode === 'view' ? 'View mode' : 'Edit mode'}
+            {mode === 'view' ? 'Modo visualização' : 'Modo edição'}
           </div>
           <button
             type="button"
             onClick={() => {
               if (mode === 'edit' && dirty) {
-                if (!confirm('Discard unsaved changes?')) return;
+                if (!confirm('Descartar alterações não salvas?')) return;
                 load();
               }
               setMode(prev => (prev === 'view' ? 'edit' : 'view'));
@@ -428,7 +428,7 @@ export default function CrmCustomFieldsPanel({
                   )}
                   {d.fieldType === 'select' && (
                     <select value={val} onChange={e => setValue(d.id, e.target.value)} className={inputClass}>
-                      <option value="">— Select —</option>
+                      <option value="">— Selecione —</option>
                       {(d.options ?? []).map(o => (
                         <option key={o} value={o}>
                           {o}
@@ -476,7 +476,7 @@ export default function CrmCustomFieldsPanel({
           {saved && (
             <span className="text-xs text-green-700 flex items-center gap-1">
               <span className="material-icons text-sm">check_circle</span>
-              Saved
+              Salvo
             </span>
           )}
           <button
@@ -486,7 +486,7 @@ export default function CrmCustomFieldsPanel({
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
             {saving && <span className="material-icons animate-spin text-sm">refresh</span>}
-            Save Custom Fields
+            Save Campos personalizados
           </button>
         </div>
       )}
@@ -495,7 +495,7 @@ export default function CrmCustomFieldsPanel({
         <div className="flex items-center justify-end">
           <span className="text-xs text-green-700 flex items-center gap-1">
             <span className="material-icons text-sm">check_circle</span>
-            Saved
+            Salvo
           </span>
         </div>
       )}

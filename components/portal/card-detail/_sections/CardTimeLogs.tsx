@@ -53,14 +53,14 @@ export function CardTimeLogs({
           onClick={() => setShowTimeForm(v => !v)}
           className="flex items-center gap-1 text-xs text-primary hover:text-primary/80"
         >
-          <span className="material-icons text-sm">add</span>Log time
+          <span className="material-icons text-sm">add</span>Registrar tempo
         </button>
       </div>
       {showTimeForm && (
         <div className="bg-muted/50 rounded-lg p-3 mb-3 space-y-2">
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block text-xs text-muted-foreground mb-1">Hours</label>
+              <label className="block text-xs text-muted-foreground mb-1">Horas</label>
               <input
                 type="number"
                 min="0"
@@ -72,7 +72,7 @@ export function CardTimeLogs({
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs text-muted-foreground mb-1">Minutes</label>
+              <label className="block text-xs text-muted-foreground mb-1">Minutos</label>
               <input
                 type="number"
                 min="0"
@@ -88,7 +88,7 @@ export function CardTimeLogs({
             type="text"
             value={timeNote}
             onChange={e => setTimeNote(e.target.value)}
-            placeholder="Note (optional)"
+            placeholder="Observação (opcional)"
             className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <div className="flex gap-2">
@@ -104,7 +104,7 @@ export function CardTimeLogs({
               onClick={() => setShowTimeForm(false)}
               className="px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
-              Cancel
+              Cancelar
             </button>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function CardTimeLogs({
           ))}
         </div>
       ) : (
-        <p className="text-xs text-muted-foreground italic">No time logged yet.</p>
+        <p className="text-xs text-muted-foreground italic">Nenhum tempo registrado.</p>
       )}
     </div>
   );

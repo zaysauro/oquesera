@@ -24,9 +24,9 @@ export function StepWelcome({ state, next }: StepProps) {
 
       <ul className="mt-8 mx-auto max-w-md text-left space-y-3">
         {[
-          { icon: 'palette', label: 'Drop in your brand vibe' },
-          { icon: 'checklist', label: 'Pick what you want to use' },
-          { icon: 'auto_awesome', label: 'Hook up Claude in one click' },
+          { icon: 'palette', label: 'Defina a identidade da marca' },
+          { icon: 'checklist', label: 'Escolha o que você quer usar' },
+          { icon: 'auto_awesome', label: 'Conecte um assistente de IA' },
         ].map((row, i) => (
           <motion.li
             key={row.icon}

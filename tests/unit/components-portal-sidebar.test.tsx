@@ -47,7 +47,7 @@ vi.mock('@/components/portal/CreditBalance', () => ({
 }));
 
 // AgencyChromeProvider hook — return controllable values
-const mockBrandName = { value: 'Simpler Development' };
+const mockBrandName = { value: 'Kumo One' };
 const mockBrandLogoUrl = { value: 'https://example.com/logo.png' };
 
 vi.mock('@/components/portal/AgencyChromeProvider', () => ({
@@ -63,7 +63,7 @@ vi.mock('@/components/portal/AgencyChromeProvider', () => ({
 const MOCK_NAV_ITEMS = [
   {
     href: '/portal/dashboard',
-    label: 'Dashboard',
+    label: 'Painel',
     icon: 'dashboard',
     exact: true,
   },
@@ -130,7 +130,7 @@ function setupFetch() {
 beforeEach(() => {
   vi.clearAllMocks();
   mockPathname.mockReturnValue('/portal/dashboard');
-  mockBrandName.value = 'Simpler Development';
+  mockBrandName.value = 'Kumo One';
   mockBrandLogoUrl.value = 'https://example.com/logo.png';
   mockSessionRole.value = 'client';
   localStorage.clear();
@@ -174,17 +174,17 @@ describe('PortalSidebar — initial render (closed state)', () => {
   });
 
   it('renders the default brand name on the brand-mark link', async () => {
-    // Default brandName ('Simpler Development') is consumed by useAgencyChrome and
+    // Default brandName ('Kumo One') is consumed by useAgencyChrome and
     // passed to the brand-mark link's title attr — the same render path the custom
     // brand test below checks. Asserts the brand identity actually renders, not just
     // that the (always-present, mocked) CompanySwitcher stub mounted.
     render(<PortalSidebar />);
     await waitFor(() => {
-      expect(document.querySelector('a[title="Simpler Development"]')).toBeTruthy();
+      expect(document.querySelector('a[title="Kumo One"]')).toBeTruthy();
     });
   });
 
-  it('renders a custom (non-Simpler Development) brand name as plain text', async () => {
+  it('renders a custom (non-Kumo One) brand name as plain text', async () => {
     mockBrandName.value = 'Acme Corp';
     // The brand name is consumed by useAgencyChrome and passed to the collapsed
     // brand mark link's title attribute.
@@ -251,7 +251,7 @@ describe('PortalSidebar — open/close toggle', () => {
     // When the sidebar is open (mobileOpen={true}), verify the close button
     // inside the aside is present instead.
     render(<PortalSidebar mobileOpen={true} />);
-    const closeBtn = document.querySelector('button[aria-label="Close navigation"]');
+    const closeBtn = document.querySelector('button[aria-label="Fechar navegação"]');
     expect(closeBtn).toBeTruthy();
   });
 });
@@ -260,7 +260,7 @@ describe('PortalSidebar — nav items', () => {
   // The sidebar always renders the nav (it is always in the DOM; hidden via CSS on mobile).
   it('renders nav items from buildPortalNavItems', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Painel')).toBeInTheDocument();
     expect(screen.getByText('Company Brain')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });
@@ -274,7 +274,7 @@ describe('PortalSidebar — nav items', () => {
     mockPathname.mockReturnValue('/portal/dashboard');
     render(<PortalSidebar mobileOpen={true} />);
     // Dashboard link should carry active classes (bg-[var(--portal-accent-soft)] text-primary)
-    const dashLink = screen.getByText('Dashboard').closest('a');
+    const dashLink = screen.getByText('Painel').closest('a');
     expect(dashLink?.className).toContain('bg-[var(--portal-accent-soft)]');
   });
 
@@ -295,7 +295,7 @@ describe('PortalSidebar — nav items', () => {
 
   it('renders a link element for leaf nav items', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    const dashLink = screen.getByText('Dashboard').closest('a');
+    const dashLink = screen.getByText('Painel').closest('a');
     expect(dashLink).toBeTruthy();
     expect(dashLink?.getAttribute('href')).toBe('/portal/dashboard');
   });
@@ -430,7 +430,7 @@ describe('PortalSidebar — AI credits badge (footer)', () => {
     render(<PortalSidebar mobileOpen={true} />);
 
     await waitFor(() => {
-      const link = screen.getByText('AI Credits').closest('a');
+      const link = screen.getByText('Créditos de IA').closest('a');
       expect(link).toBeTruthy();
       expect(link?.getAttribute('href')).toBe('/portal/settings/ai');
       expect(link?.textContent).toContain('12K');
@@ -445,7 +445,7 @@ describe('PortalSidebar — AI credits badge (footer)', () => {
         (c: any[]) => c[0].includes('/api/portal/credits'),
       )).toBe(true);
     });
-    expect(screen.queryByText('AI Credits')).toBeNull();
+    expect(screen.queryByText('Créditos de IA')).toBeNull();
   });
 });
 
@@ -498,12 +498,12 @@ describe('PortalSidebar — theme cycling', () => {
 describe('PortalSidebar — sign out', () => {
   it('renders the Sign Out button', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    expect(screen.getByText('Sign Out')).toBeInTheDocument();
+    expect(screen.getByText('Sair')).toBeInTheDocument();
   });
 
   it('calls signOut with callbackUrl on click', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    const signOutBtn = screen.getByText('Sign Out').closest('button');
+    const signOutBtn = screen.getByText('Sair').closest('button');
     await act(async () => { fireEvent.click(signOutBtn!); });
     await waitFor(() => {
       expect(signOut).toHaveBeenCalledWith({ callbackUrl: '/portal/login' });
@@ -512,7 +512,7 @@ describe('PortalSidebar — sign out', () => {
 
   it('POSTs to /api/portal/sign-out before calling signOut', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    const signOutBtn = screen.getByText('Sign Out').closest('button');
+    const signOutBtn = screen.getByText('Sair').closest('button');
     await act(async () => { fireEvent.click(signOutBtn!); });
     await waitFor(() => {
       const call = (global.fetch as any).mock.calls.find(

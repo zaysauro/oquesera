@@ -258,7 +258,7 @@ describe('sendApprovalEmails — dispatch', () => {
 
     expect(H.resendSendMock).toHaveBeenCalledTimes(2);
     const firstPayload = H.resendSendMock.mock.calls[0][0];
-    expect(firstPayload.from).toBe('Simpler Development <portal@example.test>');
+    expect(firstPayload.from).toBe('Kumo One <portal@example.test>');
     expect([firstPayload.to, H.resendSendMock.mock.calls[1][0].to]).toEqual(
       expect.arrayContaining(['alice@example.test', 'bob@example.test']),
     );
@@ -425,7 +425,7 @@ describe('sendApprovalEmails — dispatch', () => {
     });
 
     const payload = H.resendSendMock.mock.calls[0][0];
-    expect(payload.html).toContain('https://simplerdevelopment.com/portal/approvals?id=777');
+    expect(payload.html).toContain('https://kumo.localhost/portal/approvals?id=777');
   });
 
   it('uses the default FROM_EMAIL when RESEND_FROM_EMAIL is unset', async () => {
@@ -445,7 +445,7 @@ describe('sendApprovalEmails — dispatch', () => {
     });
 
     const payload = H.resendSendMock.mock.calls[0][0];
-    expect(payload.from).toBe('Simpler Development <portal@simplerdevelopment.com>');
+    expect(payload.from).toBe('Kumo One <portal@kumo.localhost>');
   });
 
   it('swallows per-recipient Resend errors via Promise.allSettled', async () => {
@@ -524,7 +524,7 @@ describe('sendApprovalEmails — dispatch', () => {
     expect(payload.html).toContain('Review &amp; Approve');
     expect(payload.html).toContain('href="https://example.test/portal/approvals?id=321"');
     expect(payload.html).toContain('MCP_APPROVAL_EMAILS_ENABLED=false');
-    expect(payload.html).toContain('Simpler Development');
+    expect(payload.html).toContain('Kumo One');
   });
 });
 

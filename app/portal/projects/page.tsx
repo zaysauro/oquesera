@@ -116,8 +116,8 @@ export default function PortalProjectsPage() {
       {/* Header */}
       <PortalPageHeader
         eyebrow="Delivery"
-        title="Projects"
-        subtitle="All projects you have access to — agency-managed and your own."
+        title="Projetos"
+        subtitle="Todos os projetos aos quais você tem acesso."
         actions={
           <div className="flex gap-2 flex-wrap">
             <Link
@@ -125,14 +125,14 @@ export default function PortalProjectsPage() {
               className={pBtnGhost}
             >
               <span className="material-icons text-base">bolt</span>
-              Automations
+              Automações
             </Link>
             <button
               onClick={() => setShowCreateForm(!showCreateForm)}
               className={pBtnPrimary}
             >
               <span className="material-icons text-base">{showCreateForm ? 'close' : 'add'}</span>
-              {showCreateForm ? 'Cancel' : 'New Project'}
+              {showCreateForm ? 'Cancel' : 'Novo projeto'}
             </button>
           </div>
         }
@@ -145,21 +145,21 @@ export default function PortalProjectsPage() {
         <div className="bg-card border border-border rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <span className="material-icons text-base text-green-600">play_circle</span>
-            <span className="text-xs text-muted-foreground font-medium">Active</span>
+            <span className="text-xs text-muted-foreground font-medium">Ativo</span>
           </div>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-foreground">{counts.active}</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <span className="material-icons text-base text-yellow-600">pause_circle</span>
-            <span className="text-xs text-muted-foreground font-medium">Paused</span>
+            <span className="text-xs text-muted-foreground font-medium">Pausado</span>
           </div>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-foreground">{counts.paused}</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <span className="material-icons text-base text-blue-600">check_circle</span>
-            <span className="text-xs text-muted-foreground font-medium">Completed</span>
+            <span className="text-xs text-muted-foreground font-medium">Concluídas</span>
           </div>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-foreground">{counts.completed}</p>
         </div>
@@ -178,7 +178,7 @@ export default function PortalProjectsPage() {
           <span className="material-icons text-muted-foreground text-base">search</span>
           <input
             className="bg-transparent text-sm outline-none flex-1 text-foreground placeholder:text-muted-foreground/50"
-            placeholder="Search projects..."
+            placeholder="Buscar projetos..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -222,15 +222,15 @@ export default function PortalProjectsPage() {
       {/* Create form */}
       {showCreateForm && (
         <form onSubmit={handleCreate} className="bg-card border border-border rounded-2xl p-5 space-y-4">
-          <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Create Project</h2>
+          <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Criar projeto</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Project Name <span className="text-destructive">*</span></label>
+              <label className="text-sm font-medium text-foreground">Nome do projeto <span className="text-destructive">*</span></label>
               <input
                 value={createForm.name}
                 onChange={e => setCreateForm(p => ({ ...p, name: e.target.value }))}
                 required
-                placeholder="e.g. Q2 Marketing Campaign"
+                placeholder="ex.: Reforma da loja"
                 className={pInput}
               />
             </div>
@@ -241,14 +241,14 @@ export default function PortalProjectsPage() {
                 onChange={e => setCreateForm(p => ({ ...p, status: e.target.value }))}
                 className={pSelect}
               >
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
-                <option value="completed">Completed</option>
-                <option value="archived">Archived</option>
+                <option value="active">Ativo</option>
+                <option value="paused">Pausado</option>
+                <option value="completed">Concluídas</option>
+                <option value="archived">Arquivado</option>
               </select>
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="text-sm font-medium text-foreground">Descrição</label>
               <textarea
                 rows={2}
                 value={createForm.description}
@@ -258,7 +258,7 @@ export default function PortalProjectsPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Start Date</label>
+              <label className="text-sm font-medium text-foreground">Data de início</label>
               <input
                 type="date"
                 value={createForm.startDate}
@@ -267,7 +267,7 @@ export default function PortalProjectsPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Due Date</label>
+              <label className="text-sm font-medium text-foreground">Prazo</label>
               <input
                 type="date"
                 value={createForm.dueDate}
@@ -277,18 +277,18 @@ export default function PortalProjectsPage() {
             </div>
             {projects.length > 0 && (
               <div className="space-y-1.5 sm:col-span-2">
-                <label className="text-sm font-medium text-foreground">Clone from existing project</label>
+                <label className="text-sm font-medium text-foreground">Copiar de um projeto existente</label>
                 <select
                   value={createForm.cloneFromProjectId}
                   onChange={e => setCreateForm(p => ({ ...p, cloneFromProjectId: e.target.value }))}
                   className={pSelect}
                 >
-                  <option value="">— Start from scratch —</option>
+                  <option value="">— Começar do zero —</option>
                   {projects.map(p => (
                     <option key={p.id} value={p.id}>{p.name}</option>
                   ))}
                 </select>
-                <p className="text-xs text-muted-foreground">Copies columns, labels, and card templates. Cards are not copied.</p>
+                <p className="text-xs text-muted-foreground">Copia colunas, etiquetas e modelos de cartão. Os cartões não são copiados.</p>
               </div>
             )}
           </div>
@@ -299,7 +299,7 @@ export default function PortalProjectsPage() {
               className={pBtnPrimary}
             >
               {creating && <span className="material-icons text-base animate-spin">refresh</span>}
-              Create Project
+              Criar projeto
             </button>
           </div>
         </form>
@@ -315,8 +315,8 @@ export default function PortalProjectsPage() {
           projects={filtered}
           emptyMessage={
             search || statusFilter !== 'all'
-              ? 'No projects match your filters.'
-              : 'No projects yet. Create your first project, or wait for your team to set one up.'
+              ? 'Nenhum projeto corresponde aos filtros.'
+              : 'Nenhum projeto ainda. Crie o primeiro.'
           }
         />
       ) : (
@@ -324,8 +324,8 @@ export default function PortalProjectsPage() {
           projects={filtered}
           emptyMessage={
             search || statusFilter !== 'all'
-              ? 'No projects match your filters.'
-              : 'No projects yet. Create your first project, or wait for your team to set one up.'
+              ? 'Nenhum projeto corresponde aos filtros.'
+              : 'Nenhum projeto ainda. Crie o primeiro.'
           }
         />
       )}

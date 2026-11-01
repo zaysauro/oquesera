@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { BookingPaymentForm } from '@/components/blocks/render/BookingPaymentForm';
@@ -7,7 +8,7 @@ import { BookingPaymentForm } from '@/components/blocks/render/BookingPaymentFor
 const PRESET_AMOUNTS = [2500, 5000, 7500, 10000, 15000, 20000]; // cents
 
 function formatCents(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 export default function GiftCertificatePurchasePage() {

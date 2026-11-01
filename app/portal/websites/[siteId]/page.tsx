@@ -93,10 +93,9 @@ export default async function PortalCmsDashboardPage({
         <div className="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-yellow-900 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-300">
           <span className="material-icons text-yellow-600 mt-0.5">pending</span>
           <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm">Hosting not yet activated</p>
+            <p className="font-medium text-sm">Hospedagem dedicada não ativada</p>
             <p className="text-xs mt-0.5 text-yellow-700 dark:text-yellow-400">
-              Your site has been created but hosting infrastructure has not been provisioned.
-              Request activation to make it live.
+              O site foi criado, mas a hospedagem dedicada não foi provisionada. Solicite a ativação.
             </p>
           </div>
           <RequestActivationButton siteId={site.id} />
@@ -107,8 +106,8 @@ export default async function PortalCmsDashboardPage({
         <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300">
           <span className="material-icons text-blue-600 animate-spin" style={{ animationDuration: '2s' }}>autorenew</span>
           <div>
-            <p className="font-medium text-sm">Hosting activation in progress</p>
-            <p className="text-xs mt-0.5 text-blue-700 dark:text-blue-400">This usually takes a few minutes. Refresh to check the latest status.</p>
+            <p className="font-medium text-sm">Ativação da hospedagem em andamento</p>
+            <p className="text-xs mt-0.5 text-blue-700 dark:text-blue-400">Costuma levar alguns minutos. Atualize a página para ver o status.</p>
           </div>
         </div>
       )}
@@ -117,9 +116,9 @@ export default async function PortalCmsDashboardPage({
         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-900 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
           <span className="material-icons text-red-600">error</span>
           <div>
-            <p className="font-medium text-sm">Hosting activation failed</p>
+            <p className="font-medium text-sm">Falha na ativação da hospedagem</p>
             <p className="text-xs mt-0.5 text-red-700 dark:text-red-400">
-              There was a problem provisioning your site. Please contact support.
+              Houve um problema ao provisionar o site. Fale com o suporte.
             </p>
           </div>
         </div>
@@ -128,19 +127,19 @@ export default async function PortalCmsDashboardPage({
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-card border border-border rounded-2xl p-4">
-          <p className="text-xs text-muted-foreground mb-1">Total Entries</p>
+          <p className="text-xs text-muted-foreground mb-1">Total de entradas</p>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-foreground">{sitePosts.length}</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4">
-          <p className="text-xs text-muted-foreground mb-1">Published</p>
+          <p className="text-xs text-muted-foreground mb-1">Publicado</p>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-green-600">{published.length}</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4">
-          <p className="text-xs text-muted-foreground mb-1">Drafts</p>
+          <p className="text-xs text-muted-foreground mb-1">Rascunhos</p>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-yellow-600">{drafts.length}</p>
         </div>
         <div className="bg-card border border-border rounded-2xl p-4">
-          <p className="text-xs text-muted-foreground mb-1">Content Types</p>
+          <p className="text-xs text-muted-foreground mb-1">Tipos de conteúdo</p>
           <p className="text-2xl font-display font-extrabold tracking-[-0.02em] text-foreground">{Object.keys(typeCounts).length}</p>
         </div>
       </div>
@@ -148,36 +147,36 @@ export default async function PortalCmsDashboardPage({
       {/* Quick links — grouped so authors find related areas together. */}
       <div className="space-y-5">
         <DashboardLinkGroup
-          title="Content"
+          title="Conteúdo"
           links={[
-            { href: `/portal/websites/${site.id}/entries`, icon: 'article', label: 'Entries', desc: 'All posts, pages and CPT entries' },
-            { href: `/portal/websites/${site.id}/content-types`, icon: 'description', label: 'Content Types', desc: 'Templates, fields, and code per type' },
-            { href: `/portal/websites/${site.id}/taxonomy`, icon: 'account_tree', label: 'Taxonomy', desc: 'Categories, tags, custom taxonomies' },
+            { href: `/portal/websites/${site.id}/entries`, icon: 'article', label: 'Entradas', desc: 'All posts, pages and CPT entries' },
+            { href: `/portal/websites/${site.id}/content-types`, icon: 'description', label: 'Tipos de conteúdo', desc: 'Templates, fields, and code per type' },
+            { href: `/portal/websites/${site.id}/taxonomy`, icon: 'account_tree', label: 'Categorias', desc: 'Categories, tags, custom taxonomies' },
             { href: `/portal/websites/${site.id}/calendar`, icon: 'calendar_month', label: 'Calendar', desc: 'Schedule and publish view' },
-            { href: '/portal/media', icon: 'perm_media', label: 'Media', desc: 'Shared media library' },
+            { href: '/portal/media', icon: 'perm_media', label: 'Mídia', desc: 'Shared media library' },
           ]}
         />
         <DashboardLinkGroup
           title="Design"
           links={[
-            { href: `/portal/websites/${site.id}/branding`, icon: 'palette', label: 'Branding', desc: 'Logo, colors, fonts, button styles' },
-            { href: `/portal/websites/${site.id}/navigation`, icon: 'menu', label: 'Navigation', desc: 'Site nav menu and footer links' },
-            { href: `/portal/websites/${site.id}/code`, icon: 'code', label: 'Custom Code', desc: 'Site-wide CSS & JS' },
+            { href: `/portal/websites/${site.id}/branding`, icon: 'palette', label: 'Marca', desc: 'Logo, colors, fonts, button styles' },
+            { href: `/portal/websites/${site.id}/navigation`, icon: 'menu', label: 'Navegação', desc: 'Site nav menu and footer links' },
+            { href: `/portal/websites/${site.id}/code`, icon: 'code', label: 'Código personalizado', desc: 'Site-wide CSS & JS' },
           ]}
         />
         <DashboardLinkGroup
-          title="Engagement"
+          title="Engajamento"
           links={[
             { href: `/portal/websites/${site.id}/automations`, icon: 'bolt', label: 'Automations', desc: 'Notifications and workflow triggers' },
             { href: `/portal/websites/${site.id}/email`, icon: 'mail', label: 'Email', desc: 'Transactional & marketing templates' },
-            { href: `/portal/websites/${site.id}/store`, icon: 'shopping_cart', label: 'Store', desc: 'Products, orders, checkout' },
+            { href: `/portal/websites/${site.id}/store`, icon: 'shopping_cart', label: 'Loja', desc: 'Products, orders, checkout' },
           ]}
         />
         <DashboardLinkGroup
-          title="System"
+          title="Sistema"
           links={[
             { href: `/portal/websites/${site.id}/settings`, icon: 'settings', label: 'Settings', desc: 'Domains, deployments, environments' },
-            { href: '#api-keys', icon: 'vpn_key', label: 'Developer', desc: 'API keys for SDK / REST access' },
+            { href: '#api-keys', icon: 'vpn_key', label: 'Desenvolvedor', desc: 'API keys for SDK / REST access' },
           ]}
         />
       </div>
@@ -185,18 +184,18 @@ export default async function PortalCmsDashboardPage({
       {/* Recent entries */}
       <div className={`${pCard} overflow-hidden`}>
         <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground text-sm">Recent Entries</h2>
+          <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground text-sm">Entradas recentes</h2>
           <Link
             href={`/portal/websites/${site.id}/entries`}
             className="text-xs text-primary hover:underline"
           >
-            View all
+            Ver tudo
           </Link>
         </div>
         {recentPosts.length === 0 ? (
           <div className="p-8 text-center">
             <span className="material-icons text-4xl text-muted-foreground/30">article</span>
-            <p className="text-sm text-muted-foreground mt-2">No entries yet. Create your first page to get started.</p>
+            <p className="text-sm text-muted-foreground mt-2">Nenhuma entrada ainda. Crie a primeira página.</p>
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -220,7 +219,7 @@ export default async function PortalCmsDashboardPage({
                     ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'
                     : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'
                 }`}>
-                  {post.published ? 'Published' : 'Draft'}
+                  {post.published ? 'Publicado' : 'Draft'}
                 </span>
               </Link>
             ))}
@@ -233,10 +232,10 @@ export default async function PortalCmsDashboardPage({
         <div className="px-5 py-4 border-b border-border">
           <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground text-sm flex items-center gap-2">
             <span className="material-icons text-base">code</span>
-            Developer API Keys
+            Chaves de API para desenvolvedores
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Create API keys to access your site data via the SDK or REST API.
+            Crie chaves de API para acessar os dados do site pelo SDK ou API REST.
           </p>
         </div>
         <div className="p-5">
@@ -248,7 +247,7 @@ export default async function PortalCmsDashboardPage({
       {Object.keys(typeCounts).length > 0 && (
         <div className={`${pCard} overflow-hidden`}>
           <div className="px-5 py-4 border-b border-border">
-            <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground text-sm">By Content Type</h2>
+            <h2 className="font-display font-extrabold tracking-[-0.01em] text-foreground text-sm">Por tipo de conteúdo</h2>
           </div>
           <div className="divide-y divide-border">
             {Object.entries(typeCounts).map(([type, cnt]) => {

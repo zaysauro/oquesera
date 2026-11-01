@@ -167,7 +167,7 @@ describe('BookingFormInline — loading and not-found', () => {
       utils = render(<BookingFormInline slug="test-slug" />);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Page Not Found');
+    expect(utils!.container.textContent).toContain('Página não encontrada');
     expect(utils!.container.textContent).toContain('event_busy');
   });
 
@@ -180,7 +180,7 @@ describe('BookingFormInline — loading and not-found', () => {
       utils = render(<BookingFormInline slug="test-slug" />);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Page Not Found');
+    expect(utils!.container.textContent).toContain('Página não encontrada');
   });
 
   it('renders not-found when fetch throws', async () => {
@@ -192,7 +192,7 @@ describe('BookingFormInline — loading and not-found', () => {
       utils = render(<BookingFormInline slug="test-slug" />);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Page Not Found');
+    expect(utils!.container.textContent).toContain('Página não encontrada');
   });
 });
 
@@ -274,8 +274,8 @@ describe('BookingFormInline — initial render', () => {
     // The step indicator labels live in `title` attributes on the bubbles.
     const bubbles = container.querySelectorAll('[title]');
     const titles = Array.from(bubbles).map((b) => b.getAttribute('title'));
-    expect(titles).toContain('Date');
-    expect(titles).toContain('Time');
+    expect(titles).toContain('Data');
+    expect(titles).toContain('Horário');
     expect(titles).toContain('Details');
   });
 
@@ -470,7 +470,7 @@ describe('BookingFormInline — date → time flow', () => {
       fireEvent.click(dayBtn);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Back');
+    expect(container.textContent).toContain('Voltar');
     // fetchSlots was called.
     expect(slotsCalls.length).toBeGreaterThan(0);
     void fetchMock;
@@ -614,8 +614,8 @@ describe('BookingFormInline — time → info flow', () => {
     await act(async () => {
       fireEvent.click(slotBtns[0]);
     });
-    expect(container.textContent).toContain('Name');
-    expect(container.textContent).toContain('Email');
+    expect(container.textContent).toContain('Nome');
+    expect(container.textContent).toContain('E-mail');
   });
 
   it('renders the group-size selector when maxGuests > 1', async () => {
@@ -636,7 +636,7 @@ describe('BookingFormInline — time → info flow', () => {
       fireEvent.click(dayBtn);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Group size');
+    expect(container.textContent).toContain('Número de pessoas');
     // Click the "+" once to bump from 1 → 2.
     const addIcons = Array.from(container.querySelectorAll('.material-icons')).filter(
       (i) => i.textContent === 'add',
@@ -704,8 +704,8 @@ describe('BookingFormInline — staff selection', () => {
         { userId: 22, name: 'Brett', color: null },
       ],
     });
-    expect(container.textContent).toContain('Choose a staff member');
-    expect(container.textContent).toContain('Any available');
+    expect(container.textContent).toContain('Escolha o profissional');
+    expect(container.textContent).toContain('Qualquer disponível');
     expect(container.textContent).toContain('Alex');
     expect(container.textContent).toContain('Brett');
     // Click "Alex".
@@ -776,7 +776,7 @@ describe('BookingFormInline — info form & submit', () => {
       fireEvent.click(submitBtn);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Booking Confirmed');
+    expect(container.textContent).toContain('Agendamento confirmado');
     expect(container.textContent).toContain('jane@example.com');
     expect(bookCalls.length).toBe(1);
     expect(bookCalls[0].name).toBe('Jane Doe');
@@ -819,7 +819,7 @@ describe('BookingFormInline — info form & submit', () => {
       fireEvent.click(submitBtn);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Something went wrong');
+    expect(container.textContent).toContain('Algo deu errado');
   });
 
   it('navigates to the payment step when the book response includes clientSecret', async () => {
@@ -842,7 +842,7 @@ describe('BookingFormInline — info form & submit', () => {
       await flushPromises();
     });
     expect(container.querySelector('[data-testid="payment-form-mock"]')).toBeTruthy();
-    expect(container.textContent).toContain('Complete Payment');
+    expect(container.textContent).toContain('Concluir pagamento');
   });
 
   it('payment success callback advances to confirmed', async () => {
@@ -868,7 +868,7 @@ describe('BookingFormInline — info form & submit', () => {
     await act(async () => {
       fireEvent.click(okBtn);
     });
-    expect(container.textContent).toContain('Booking Confirmed');
+    expect(container.textContent).toContain('Agendamento confirmado');
   });
 
   it('renders the meeting link when book returns one', async () => {
@@ -892,7 +892,7 @@ describe('BookingFormInline — info form & submit', () => {
     });
     const link = container.querySelector('a[href="https://meet.example.com/abc"]');
     expect(link).toBeTruthy();
-    expect(container.textContent).toContain('Join Video Call');
+    expect(container.textContent).toContain('Entrar na videochamada');
   });
 
   it('shows the checkin code on the confirmed step when provided', async () => {
@@ -915,7 +915,7 @@ describe('BookingFormInline — info form & submit', () => {
       await flushPromises();
     });
     expect(container.textContent).toContain('XYZ-123');
-    expect(container.textContent).toContain('Check-in code');
+    expect(container.textContent).toContain('Código de check-in');
   });
 
   it('does not submit when name or email are empty (early return)', async () => {
@@ -1036,7 +1036,7 @@ describe('BookingFormInline — discount + gift cert', () => {
         }),
     });
     const codeInputs = Array.from(container.querySelectorAll('input[type="text"]')).filter(
-      (i) => (i as HTMLInputElement).placeholder === 'Enter code',
+      (i) => (i as HTMLInputElement).placeholder === 'Digite o código',
     ) as HTMLInputElement[];
     expect(codeInputs.length).toBe(1);
     await act(async () => {
@@ -1065,7 +1065,7 @@ describe('BookingFormInline — discount + gift cert', () => {
         jsonResponse({ success: false, message: 'Code expired' }),
     });
     const codeInput = Array.from(container.querySelectorAll('input[type="text"]')).find(
-      (i) => (i as HTMLInputElement).placeholder === 'Enter code',
+      (i) => (i as HTMLInputElement).placeholder === 'Digite o código',
     ) as HTMLInputElement;
     await act(async () => {
       fireEvent.change(codeInput, { target: { value: 'BAD' } });
@@ -1087,7 +1087,7 @@ describe('BookingFormInline — discount + gift cert', () => {
       },
     });
     const codeInput = Array.from(container.querySelectorAll('input[type="text"]')).find(
-      (i) => (i as HTMLInputElement).placeholder === 'Enter code',
+      (i) => (i as HTMLInputElement).placeholder === 'Digite o código',
     ) as HTMLInputElement;
     await act(async () => {
       fireEvent.change(codeInput, { target: { value: 'X' } });
@@ -1099,7 +1099,7 @@ describe('BookingFormInline — discount + gift cert', () => {
       fireEvent.click(applyBtns[0]);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Failed to validate code');
+    expect(container.textContent).toContain('Não foi possível validar o cupom');
   });
 
   it('applies a fixed_amount discount type via calculateTotal', async () => {
@@ -1116,7 +1116,7 @@ describe('BookingFormInline — discount + gift cert', () => {
         }),
     });
     const codeInput = Array.from(container.querySelectorAll('input[type="text"]')).find(
-      (i) => (i as HTMLInputElement).placeholder === 'Enter code',
+      (i) => (i as HTMLInputElement).placeholder === 'Digite o código',
     ) as HTMLInputElement;
     await act(async () => {
       fireEvent.change(codeInput, { target: { value: 'FLAT5' } });
@@ -1129,7 +1129,7 @@ describe('BookingFormInline — discount + gift cert', () => {
       await flushPromises();
     });
     expect(container.textContent).toContain('FLAT5 applied');
-    expect(container.textContent).toContain('Discount');
+    expect(container.textContent).toContain('Desconto');
   });
 
   it('applies a gift certificate', async () => {
@@ -1197,7 +1197,7 @@ describe('BookingFormInline — discount + gift cert', () => {
       fireEvent.click(applyBtns[applyBtns.length - 1]);
       await flushPromises();
     });
-    expect(container.textContent).toContain('Failed to validate certificate');
+    expect(container.textContent).toContain('Não foi possível validar o vale-presente');
   });
 });
 
@@ -1247,7 +1247,7 @@ describe('BookingFormInline — add-ons step', () => {
       fireEvent.click(slotBtn);
     });
     // We should be on the add-ons step.
-    expect(container.textContent).toContain('Add extras');
+    expect(container.textContent).toContain('Adicionais');
     expect(container.textContent).toContain('Notebook');
     expect(container.textContent).toContain('Hardcover');
     // Bump the quantity.
@@ -1277,6 +1277,6 @@ describe('BookingFormInline — add-ons step', () => {
     await act(async () => {
       fireEvent.click(continueBtn);
     });
-    expect(container.textContent).toContain('Name');
+    expect(container.textContent).toContain('Nome');
   });
 });

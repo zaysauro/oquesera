@@ -168,7 +168,7 @@ describe('CrmCompaniesPage — import/export wiring (CRM79-017)', () => {
 
   it('places the control next to the Add Company action in the header', async () => {
     const { container } = await renderPage();
-    const addBtn = screen.getByText('Add Company');
+    const addBtn = screen.getByText('Adicionar empresa');
     const control = screen.getByTestId('crm-import-export');
     // Both live inside the same header actions wrapper.
     const actionsWrapper = addBtn.closest('div');
@@ -183,7 +183,7 @@ describe('CrmCompaniesPage — import/export wiring (CRM79-017)', () => {
       expect(crmImportExportCalls.length).toBeGreaterThan(0);
     });
     const searchInput = document.querySelector(
-      'input[placeholder="Search companies..."]',
+      'input[placeholder="Buscar empresas..."]',
     ) as HTMLInputElement;
     fireEvent.change(searchInput, { target: { value: 'acme' } });
     await vi.advanceTimersByTimeAsync(350);

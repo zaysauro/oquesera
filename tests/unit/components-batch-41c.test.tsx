@@ -323,7 +323,7 @@ describe('PortalTitle component', () => {
 
   it('sets document.title using the default app name when white-label is off', () => {
     render(<PortalTitle />);
-    expect(document.title).toBe('Dashboard | SimplerDevelopment');
+    expect(document.title).toBe('Dashboard | Kumo One');
   });
 
   it('uses the agency name when white-label is enabled', () => {
@@ -339,7 +339,7 @@ describe('PortalTitle component', () => {
     agencyState.whiteLabelEnabled = true;
     pathnameRef.current = '/portal';
     render(<PortalTitle />);
-    expect(document.title).toBe('Portal | SimplerDevelopment');
+    expect(document.title).toBe('Portal | Kumo One');
   });
 
   it('returns null (renders nothing visible)', () => {

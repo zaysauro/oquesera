@@ -123,7 +123,7 @@ export default function DomainGetStarted({ domainKey }: { domainKey: string }) {
         <button
           type="button"
           onClick={handleDismiss}
-          aria-label="Dismiss getting started"
+          aria-label="Ocultar primeiros passos"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
           <span className="material-icons text-base">close</span>
@@ -165,7 +165,7 @@ export default function DomainGetStarted({ domainKey }: { domainKey: string }) {
                   className="shrink-0 text-xs text-primary hover:text-primary/80 font-medium whitespace-nowrap"
                   aria-label={`Open ${action.label}`}
                 >
-                  Open
+                  Abrir
                   <span className="material-icons text-sm align-middle ml-0.5">arrow_forward</span>
                 </Link>
               )}

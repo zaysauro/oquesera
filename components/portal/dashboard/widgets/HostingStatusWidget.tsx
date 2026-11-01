@@ -62,7 +62,7 @@ export default async function HostingStatusWidget({
         <p className="text-sm text-muted-foreground py-2 text-center">
           No sites yet.{' '}
           <Link href="/portal/hosting" className="text-primary hover:underline">
-            Set up hosting
+            Configurar hospedagem
           </Link>
         </p>
       ) : (
@@ -125,7 +125,7 @@ export default async function HostingStatusWidget({
           className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
         >
           <span className="material-icons text-sm">dns</span>
-          View hosting details
+          Ver detalhes da hospedagem
         </Link>
       </div>
     </div>

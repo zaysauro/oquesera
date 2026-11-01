@@ -362,19 +362,19 @@ describe('getClientWebsiteByDomain', () => {
     expect(res).toBeNull();
   });
 
-  it('falls back to subdomain match on simplerdevelopment.com', async () => {
-    seedSite({ id: 3, domain: 'sd-testing.simplerdevelopment.com', subdomain: 'sd-testing', active: true });
+  it('falls back to subdomain match on kumo.localhost', async () => {
+    seedSite({ id: 3, domain: 'sd-testing.kumo.localhost', subdomain: 'sd-testing', active: true });
     // But ensure the primary-domain lookup misses by giving the row a non-matching domain.
     state.clientWebsites.length = 0;
     seedSite({ id: 3, domain: 'unrelated.com', subdomain: 'sd-testing', active: true });
     const { getClientWebsiteByDomain } = await importModule();
-    const res = await getClientWebsiteByDomain('sd-testing.simplerdevelopment.com');
+    const res = await getClientWebsiteByDomain('sd-testing.kumo.localhost');
     expect(res).toMatchObject({ id: 3, subdomain: 'sd-testing' });
   });
 
   it('returns null when subdomain branch matches the regex but no row exists', async () => {
     const { getClientWebsiteByDomain } = await importModule();
-    const res = await getClientWebsiteByDomain('missing.simplerdevelopment.com');
+    const res = await getClientWebsiteByDomain('missing.kumo.localhost');
     expect(res).toBeNull();
   });
 

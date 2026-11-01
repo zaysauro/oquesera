@@ -35,7 +35,7 @@ export default async function InvoicesWidget({
         </span>
       </div>
       {recent.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-2 text-center">No invoices yet.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhuma fatura ainda.</p>
       ) : (
         <ul className="space-y-2">
           {recent.map((inv) => (

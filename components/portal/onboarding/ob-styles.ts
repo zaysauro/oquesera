@@ -28,7 +28,7 @@ export const obPrimaryBtn =
   'group inline-flex items-center justify-center gap-2 rounded-xl bg-foreground px-5 py-3 text-[14.5px] font-bold text-background transition hover:-translate-y-px hover:shadow-lg hover:shadow-foreground/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0';
 export const obGhostBtn =
   'inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground transition hover:border-foreground/25 hover:shadow-sm disabled:opacity-50';
-/** Quiet text link — the "Skip this" / inline-skip affordance. */
+/** Quiet text link — the "Pular" / inline-skip affordance. */
 export const obQuietLink =
   'text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground';
 

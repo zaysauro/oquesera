@@ -355,7 +355,7 @@ export default function PublishingCalendar(_props: PublishingCalendarProps) {
     filteredEntries.filter((e) => isSameDay(new Date(e.date), day));
 
   const days = view === 'month' ? getDaysInMonthView(currentDate) : getDaysInWeekView(currentDate);
-  const weekDayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   // Distinct channels + stages, derived from the loaded entries, for the
   // filter dropdowns. Always include 'all' as the first option.

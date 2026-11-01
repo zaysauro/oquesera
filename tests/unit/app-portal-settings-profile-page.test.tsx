@@ -45,7 +45,7 @@ async function flush() {
 const baseProfile = {
   name: 'Jane Doe',
   email: 'jane@example.com',
-  company: 'Acme Inc.',
+  company: 'Minha Empresa Ltda',
   phone: '+1 (555) 000-1234',
   website: 'https://acmeinc.com',
   address: '123 Main St',
@@ -109,7 +109,7 @@ describe('ProfileSettingsPage', () => {
   it('renders the Account Information section heading after load', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.getByText('Account Information')).toBeTruthy();
+    expect(screen.getByText('Informações da conta')).toBeTruthy();
   });
 
   it('renders the Company Information section heading after load', async () => {
@@ -139,7 +139,7 @@ describe('ProfileSettingsPage', () => {
     await flush();
     const companyInput = document.querySelector('input[name="company"]') as HTMLInputElement;
     expect(companyInput).toBeTruthy();
-    expect(companyInput.value).toBe('Acme Inc.');
+    expect(companyInput.value).toBe('Minha Empresa Ltda');
   });
 
   it('populates phone field with fetched profile data', async () => {
@@ -181,7 +181,7 @@ describe('ProfileSettingsPage', () => {
   it('renders the Save Changes button', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.getByText('Save Changes')).toBeTruthy();
+    expect(screen.getByText('Salvar alterações')).toBeTruthy();
   });
 
   // ── handleChange: clearing the message on field change ────────────────────
@@ -268,7 +268,7 @@ describe('ProfileSettingsPage', () => {
       fireEvent.submit(document.querySelector('form')!);
     });
     await flush();
-    expect(screen.getByText('Something went wrong. Please try again.')).toBeTruthy();
+    expect(screen.getByText('Algo deu errado. Tente novamente.')).toBeTruthy();
   });
 
   it('shows success icon (check_circle) for success message', async () => {
@@ -324,11 +324,11 @@ describe('ProfileSettingsPage', () => {
     act(() => {
       fireEvent.submit(document.querySelector('form')!);
     });
-    // While pending, button should be disabled and show "Saving…"
+    // While pending, button should be disabled and show "Salvando…"
     await waitFor(() => {
-      expect(screen.getByText('Saving…')).toBeTruthy();
+      expect(screen.getByText('Salvando…')).toBeTruthy();
     });
-    const saveBtn = screen.getByText('Saving…').closest('button');
+    const saveBtn = screen.getByText('Salvando…').closest('button');
     expect(saveBtn?.disabled).toBe(true);
 
     // Resolve to finish
@@ -341,15 +341,15 @@ describe('ProfileSettingsPage', () => {
   it('renders the Change Password section heading', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.getByText('Change Password')).toBeTruthy();
+    expect(screen.getByText('Alterar senha')).toBeTruthy();
   });
 
   it('renders Current Password, New Password, Confirm New Password fields', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.getByText('Current Password')).toBeTruthy();
-    expect(screen.getByText('New Password')).toBeTruthy();
-    expect(screen.getByText('Confirm New Password')).toBeTruthy();
+    expect(screen.getByText('Senha atual')).toBeTruthy();
+    expect(screen.getByText('Nova senha')).toBeTruthy();
+    expect(screen.getByText('Confirmar nova senha')).toBeTruthy();
   });
 
   it('toggles password visibility with Show/Hide button', async () => {
@@ -527,13 +527,13 @@ describe('ProfileSettingsPage', () => {
 
     await act(async () => { fireEvent.submit(pwForm); });
     await flush();
-    expect(screen.getByText('Something went wrong. Please try again.')).toBeTruthy();
+    expect(screen.getByText('Algo deu errado. Tente novamente.')).toBeTruthy();
   });
 
   it('renders the Update Password button', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.getByText('Update Password')).toBeTruthy();
+    expect(screen.getByText('Atualizar senha')).toBeTruthy();
   });
 
   // ── PortalSubdomainSection: hidden when no subdomain websites ─────────────
@@ -541,7 +541,7 @@ describe('ProfileSettingsPage', () => {
   it('does not render Portal Subdomain section when no websites have subdomains', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.queryByText('Portal Subdomain')).toBeNull();
+    expect(screen.queryByText('Subdomínio do painel')).toBeNull();
   });
 
   it('renders Portal Subdomain section when websites with subdomains exist', async () => {
@@ -561,7 +561,7 @@ describe('ProfileSettingsPage', () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
     await waitFor(() => {
-      expect(screen.getByText('Portal Subdomain')).toBeTruthy();
+      expect(screen.getByText('Subdomínio do painel')).toBeTruthy();
     });
   });
 
@@ -579,7 +579,7 @@ describe('ProfileSettingsPage', () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
     await waitFor(() => {
-      expect(screen.getByText(/mysite\.simplerdevelopment\.com\/portal/)).toBeTruthy();
+      expect(screen.getByText(/mysite\.kumo\.localhost\/portal/)).toBeTruthy();
     });
   });
 
@@ -631,7 +631,7 @@ describe('ProfileSettingsPage', () => {
     await waitFor(() => { expect(screen.getByText('My Site')).toBeTruthy(); });
     await act(async () => { fireEvent.click(screen.getByText('My Site')); });
     await flush();
-    expect(screen.getByText(/Portal subdomain set to mysite\.simplerdevelopment\.com/)).toBeTruthy();
+    expect(screen.getByText(/Portal subdomain set to mysite\.kumo\.localhost/)).toBeTruthy();
   });
 
   it('shows error when POST /api/portal/default-website fails', async () => {
@@ -683,7 +683,7 @@ describe('ProfileSettingsPage', () => {
   it('does not render Default Portal section when user has only one portal', async () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    expect(screen.queryByText('Default Portal')).toBeNull();
+    expect(screen.queryByText('Empresa padrão')).toBeNull();
   });
 
   it('renders Default Portal section when user has multiple portals', async () => {
@@ -703,7 +703,7 @@ describe('ProfileSettingsPage', () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
     await waitFor(() => {
-      expect(screen.getByText('Default Portal')).toBeTruthy();
+      expect(screen.getByText('Empresa padrão')).toBeTruthy();
     });
   });
 
@@ -851,8 +851,8 @@ describe('ProfileSettingsPage', () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
     await waitFor(() => {
-      expect(screen.getByText(/acme\.simplerdevelopment\.com/)).toBeTruthy();
-      expect(screen.getByText(/beta\.simplerdevelopment\.com/)).toBeTruthy();
+      expect(screen.getByText(/acme\.kumo\.localhost/)).toBeTruthy();
+      expect(screen.getByText(/beta\.kumo\.localhost/)).toBeTruthy();
     });
   });
 
@@ -873,8 +873,8 @@ describe('ProfileSettingsPage', () => {
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
     await waitFor(() => { expect(screen.getByText('Beta Corp')).toBeTruthy(); });
-    // Beta has null subdomain — no beta.simplerdevelopment.com text
-    expect(screen.queryByText(/beta\.simplerdevelopment\.com/)).toBeNull();
+    // Beta has null subdomain — no beta.kumo.localhost text
+    expect(screen.queryByText(/beta\.kumo\.localhost/)).toBeNull();
   });
 
   it('renders the first letter of company name as avatar in Default Portal section', async () => {
@@ -893,7 +893,7 @@ describe('ProfileSettingsPage', () => {
     });
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    await waitFor(() => { expect(screen.getByText('Default Portal')).toBeTruthy(); });
+    await waitFor(() => { expect(screen.getByText('Empresa padrão')).toBeTruthy(); });
     const { container } = render(<React.Fragment />); // just use document
     const bodyText = document.body.textContent ?? '';
     expect(bodyText).toContain('A'); // Acme -> A
@@ -916,7 +916,7 @@ describe('ProfileSettingsPage', () => {
     });
     await act(async () => { render(<ProfileSettingsPage />); });
     await flush();
-    await waitFor(() => { expect(screen.getByText('Default Portal')).toBeTruthy(); });
+    await waitFor(() => { expect(screen.getByText('Empresa padrão')).toBeTruthy(); });
     // company='' -> fallback 'U'
     expect(document.body.textContent).toContain('U');
   });

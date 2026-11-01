@@ -29,7 +29,7 @@ const EMPTY_FORM: DealFormState = {
  * Orchestrates four extracted modules:
  *   - useDeals       (hook)        — pipelines + deals + contacts + companies state
  *   - DealFilters    (component)   — pipeline picker, status buttons, custom-field filters
- *   - NewDealModal   (component)   — inline "New Deal" form
+ *   - NewDealModal   (component)   — inline "Nova oportunidade" form
  *   - DealKanban     (component)   — drag-and-drop board
  *   - DealDetailDrawer (component) — slide-over with Details / Artifacts / Comments tabs
  *
@@ -99,14 +99,14 @@ function CrmDealsContent() {
     return (
       <div className={`${pCard} p-12 text-center`}>
         <span className="material-icons text-4xl text-muted-foreground mb-3 block">view_column</span>
-        <p className="text-muted-foreground mb-2">No pipelines set up yet.</p>
-        <p className="text-sm text-muted-foreground mb-4">Create a pipeline in CRM Settings to get started.</p>
+        <p className="text-muted-foreground mb-2">Nenhum funil configurado.</p>
+        <p className="text-sm text-muted-foreground mb-4">Crie um funil nas Configurações do CRM para começar.</p>
         <a
           href="/portal/crm/settings"
           className={pBtnPrimary}
         >
           <span className="material-icons text-base">settings</span>
-          Go to Settings
+          Ir para Configurações
         </a>
       </div>
     );
@@ -116,8 +116,8 @@ function CrmDealsContent() {
     <div className="space-y-6">
       <PortalPageHeader
         eyebrow="CRM"
-        title="Deals"
-        subtitle="Manage your sales pipeline"
+        title="Oportunidades"
+        subtitle="Gerencie seu funil de vendas"
       />
       <DealFilters
         pipelines={pipelines}

@@ -540,7 +540,7 @@ describe('POST /api/email/inbound — request validation', () => {
       makeReq({
         secret: 'wrong',
         from: 'a@b.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -555,7 +555,7 @@ describe('POST /api/email/inbound — request validation', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: '',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -573,7 +573,7 @@ describe('POST /api/email/inbound — request validation', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain@simplerdevelopment.com',
+        to: 'brain@kumo.localhost',
         subject: 's',
         body: '',
         attachments: [{ key: 'x', filename: 'f', contentType: 'application/pdf', size: 1 }],
@@ -583,7 +583,7 @@ describe('POST /api/email/inbound — request validation', () => {
     expect(await res.json()).toEqual({ status: 'rejected', reason: 'token required' });
   });
 
-  it('rejects with 400 when destination address is not @simplerdevelopment.com', async () => {
+  it('rejects with 400 when destination address is not @kumo.localhost', async () => {
     const POST = await importHandler();
     const res = await POST(
       makeReq({
@@ -625,7 +625,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain@simplerdevelopment.com',
+        to: 'brain@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -640,7 +640,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+unknown@simplerdevelopment.com',
+        to: 'brain+unknown@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -662,7 +662,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -684,7 +684,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'Sender <sender@example.com>',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: 'Meeting notes',
         body: 'transcript text',
         messageId: '<msg-1@gmail.example>',
@@ -723,7 +723,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: '',
         body: 'b',
       }),
@@ -744,7 +744,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -766,7 +766,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -793,7 +793,7 @@ describe('POST /api/email/inbound — brain ingestion', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'brain+tok@simplerdevelopment.com',
+        to: 'brain+tok@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -829,7 +829,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'a@b.com',
-        to: 'unknown@simplerdevelopment.com',
+        to: 'unknown@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -847,7 +847,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'stranger@elsewhere.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -865,7 +865,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 'hello',
         body: 'b',
         messageId: '<m1@x>',
@@ -888,7 +888,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 'hello',
         body: 'b',
       }),
@@ -904,7 +904,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 'hello',
         body: 'b',
       }),
@@ -928,7 +928,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 'hello',
         body: 'b',
       }),
@@ -960,7 +960,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'Owner Name <Owner@Acme.com>', // tests case-insensitive match + <addr> stripping
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 'My subject',
         body: 'Please help',
         messageId: '<msg-1@x>',
@@ -1006,7 +1006,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: '',
         body: 'hi',
       }),
@@ -1027,7 +1027,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme+tag@simplerdevelopment.com',
+        to: 'acme+tag@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -1045,7 +1045,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -1064,7 +1064,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'owner@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),
@@ -1089,7 +1089,7 @@ describe('POST /api/email/inbound — chat path', () => {
       makeReq({
         secret: INBOUND_SECRET,
         from: 'member@acme.com',
-        to: 'acme@simplerdevelopment.com',
+        to: 'acme@kumo.localhost',
         subject: 's',
         body: 'b',
       }),

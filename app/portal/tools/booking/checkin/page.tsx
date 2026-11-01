@@ -72,7 +72,7 @@ export default function BookingCheckinPage() {
         setError(data.message);
       }
     } catch {
-      setError('Failed to process check-in');
+      setError('Não foi possível fazer o check-in');
     } finally {
       setChecking(false);
     }
@@ -87,11 +87,11 @@ export default function BookingCheckinPage() {
       <PortalPageHeader
         eyebrow="Booking"
         title="Check-in"
-        subtitle="Scan or enter a booking code"
+        subtitle="Leia ou digite o código do agendamento"
         actions={
           <Link href="/portal/tools/booking" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <span className="material-icons text-lg">arrow_back</span>
-            Back
+            Voltar
           </Link>
         }
       />
@@ -105,14 +105,14 @@ export default function BookingCheckinPage() {
               type="text"
               value={code}
               onChange={e => setCode(e.target.value)}
-              placeholder="Enter check-in code (e.g. BK-A3F9)"
+              placeholder="Digite o código (ex.: BK-A3F9)"
               className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-xl text-foreground text-lg font-mono placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               autoFocus
             />
           </div>
           <button type="submit" disabled={!code.trim() || checking}
             className={pBtnPrimary}>
-            {checking ? 'Checking...' : 'Check In'}
+            {checking ? 'Verificando...' : 'Fazer check-in'}
           </button>
         </form>
 
@@ -143,15 +143,15 @@ export default function BookingCheckinPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-card border border-border rounded-2xl p-4 text-center">
             <p className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">{summary.checkedIn}/{summary.total}</p>
-            <p className="text-xs text-muted-foreground">Checked In</p>
+            <p className="text-xs text-muted-foreground">Check-in feito</p>
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 text-center">
             <p className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">{summary.pending}</p>
-            <p className="text-xs text-muted-foreground">Pending</p>
+            <p className="text-xs text-muted-foreground">Pendentes</p>
           </div>
           <div className="bg-card border border-border rounded-2xl p-4 text-center">
             <p className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">{summary.totalGuests}</p>
-            <p className="text-xs text-muted-foreground">Total Guests</p>
+            <p className="text-xs text-muted-foreground">Total de clientes</p>
           </div>
         </div>
       )}
@@ -168,7 +168,7 @@ export default function BookingCheckinPage() {
         ) : bookings.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground text-sm">
             <span className="material-icons text-3xl block mb-2">event_available</span>
-            No bookings today
+            Nenhum agendamento hoje
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -192,13 +192,13 @@ export default function BookingCheckinPage() {
                   <span className="text-xs font-mono bg-background border border-border rounded px-2 py-1">{b.checkinCode}</span>
                 )}
                 {b.isCheckedIn ? (
-                  <span className="text-xs text-green-600 font-medium">Checked in</span>
+                  <span className="text-xs text-green-600 font-medium">Check-in feito</span>
                 ) : (
                   <button
                     onClick={() => { setCode(b.checkinCode || String(b.id)); }}
                     className="text-xs text-primary hover:underline"
                   >
-                    Check in
+                    Fazer check-in
                   </button>
                 )}
               </div>

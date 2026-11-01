@@ -104,12 +104,12 @@ export default function GetStartedChecklist() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="material-icons text-primary text-xl">rocket_launch</span>
-          <h2 className="font-semibold text-foreground text-base">Get started</h2>
+          <h2 className="font-semibold text-foreground text-base">Primeiros passos</h2>
         </div>
         <button
           type="button"
           onClick={handleDismiss}
-          aria-label="Dismiss checklist"
+          aria-label="Ocultar lista"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
           <span className="material-icons text-base">close</span>
@@ -182,7 +182,7 @@ export default function GetStartedChecklist() {
                           className="shrink-0 text-xs text-primary hover:text-primary/80 font-medium whitespace-nowrap"
                           aria-label={`Open ${action.label}`}
                         >
-                          Open
+                          Abrir
                           <span className="material-icons text-sm align-middle ml-0.5">arrow_forward</span>
                         </a>
                       )}

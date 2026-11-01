@@ -322,7 +322,7 @@ describe('PUT /api/portal/cms/websites/[siteId]', () => {
     isSubdomainAvailableMock.mockResolvedValueOnce(true);
     changeSubdomainMock.mockResolvedValueOnce(undefined);
     writeReturnQueue.push([
-      { id: 1, name: 'Site', subdomain: 'bar', vercelDomain: 'bar.simplerdevelopment.com' },
+      { id: 1, name: 'Site', subdomain: 'bar', vercelDomain: 'bar.kumo.localhost' },
     ]);
 
     const res = await websitesSiteIdRoute.PUT(
@@ -344,7 +344,7 @@ describe('PUT /api/portal/cms/websites/[siteId]', () => {
     expect(sets.name).toBe('New Name');
     expect(sets.description).toBeNull();
     expect(sets.subdomain).toBe('bar');
-    expect(sets.vercelDomain).toBe('bar.simplerdevelopment.com');
+    expect(sets.vercelDomain).toBe('bar.kumo.localhost');
     expect(sets.publicAccess).toBe(true);
   });
 
@@ -363,8 +363,8 @@ describe('PUT /api/portal/cms/websites/[siteId]', () => {
       { params: Promise.resolve({ siteId: '1' }) },
     );
     expect(res.status).toBe(200);
-    expect(addDomainMock).toHaveBeenCalledWith('vp-xyz', 'newsub.simplerdevelopment.com');
-    expect(getDomainConfigMock).toHaveBeenCalledWith('newsub.simplerdevelopment.com');
+    expect(addDomainMock).toHaveBeenCalledWith('vp-xyz', 'newsub.kumo.localhost');
+    expect(getDomainConfigMock).toHaveBeenCalledWith('newsub.kumo.localhost');
     expect(createCnameRecordMock).toHaveBeenCalledWith('newsub', 'target.vercel-dns.com');
   });
 

@@ -36,7 +36,7 @@ export default async function AgencyStatusWidget({
 
   const checkItems = [
     {
-      label: 'Custom domain',
+      label: 'Domínio próprio',
       icon: 'dns',
       done: hasDomain && isVerified,
       detail: hasDomain
@@ -49,7 +49,7 @@ export default async function AgencyStatusWidget({
         : { text: 'Not set', color: 'bg-muted text-muted-foreground' },
     },
     {
-      label: 'Agency branding',
+      label: 'Marca da agência',
       icon: 'palette',
       done: hasBranding,
       detail: agency?.agencyName ?? null,
@@ -58,7 +58,7 @@ export default async function AgencyStatusWidget({
         : { text: 'Not set', color: 'bg-muted text-muted-foreground' },
     },
     {
-      label: 'White-label mode',
+      label: 'Modo marca própria',
       icon: 'campaign',
       done: !!agency?.whiteLabelEnabled,
       detail: null,
@@ -115,7 +115,7 @@ export default async function AgencyStatusWidget({
           className="text-xs text-primary hover:underline flex items-center gap-1"
         >
           <span className="material-icons text-sm">arrow_forward</span>
-          Manage agency settings
+          Gerenciar configurações da agência
         </Link>
       </div>
     </div>

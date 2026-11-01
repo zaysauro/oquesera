@@ -431,13 +431,13 @@ describe('POST /api/portal/websites/[siteId]/google/analytics', () => {
         currencyCode: 'USD',
       }),
     });
-    // domain resolution prefers subdomain.simplerdevelopment.com when site.domain is null
+    // domain resolution prefers subdomain.kumo.localhost when site.domain is null
     expect(adminDataStreamsCreate).toHaveBeenCalledWith({
       parent: 'properties/999',
       requestBody: expect.objectContaining({
         type: 'WEB_DATA_STREAM',
-        displayName: 'mysite.simplerdevelopment.com',
-        webStreamData: { defaultUri: 'https://mysite.simplerdevelopment.com' },
+        displayName: 'mysite.kumo.localhost',
+        webStreamData: { defaultUri: 'https://mysite.kumo.localhost' },
       }),
     });
 

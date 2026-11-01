@@ -55,7 +55,7 @@ export function CardChecklist({
                       ? 'bg-primary border-primary text-primary-foreground'
                       : 'border-border bg-background hover:border-primary'
                   } ${!canEdit ? 'cursor-default opacity-80' : ''}`}
-                  aria-label={item.completed ? 'Mark incomplete' : 'Mark complete'}
+                  aria-label={item.completed ? 'Marcar como pendente' : 'Marcar como concluída'}
                 >
                   {item.completed && <span className="material-icons text-xs">check</span>}
                 </button>
@@ -68,7 +68,7 @@ export function CardChecklist({
                   <button
                     onClick={() => removeChecklistItem(item.id)}
                     className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
-                    aria-label="Delete item"
+                    aria-label="Excluir item"
                   >
                     <span className="material-icons text-sm">close</span>
                   </button>
@@ -87,7 +87,7 @@ export function CardChecklist({
             onKeyDown={e => {
               if (e.key === 'Enter') addChecklist();
             }}
-            placeholder="Add an item…"
+            placeholder="Adicionar item…"
             maxLength={500}
             className="flex-1 px-2 py-1.5 rounded border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -96,7 +96,7 @@ export function CardChecklist({
             disabled={!newChecklistText.trim()}
             className="px-3 py-1.5 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 disabled:opacity-50"
           >
-            Add
+            Adicionar
           </button>
         </div>
       )}

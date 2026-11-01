@@ -57,7 +57,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Assignees
+          Responsáveis
         </label>
         <div className="space-y-1.5">
           {assignees.map(a => (
@@ -78,7 +78,7 @@ export function CardSidebar({
             </div>
           ))}
           {assignees.length === 0 && (
-            <p className="text-xs text-muted-foreground italic">No one assigned</p>
+            <p className="text-xs text-muted-foreground italic">Ninguém atribuído</p>
           )}
           {canEdit && (
             <div className="relative">
@@ -107,7 +107,7 @@ export function CardSidebar({
                     </button>
                   ))}
                   {assigneeCandidates.length === 0 && (
-                    <p className="text-xs text-muted-foreground italic p-3">No one left to add</p>
+                    <p className="text-xs text-muted-foreground italic p-3">Não há mais ninguém para adicionar</p>
                   )}
                 </div>
               )}
@@ -118,7 +118,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Type
+          Tipo
         </label>
         {canEdit ? (
           <select
@@ -141,7 +141,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Story points
+          Pontos
         </label>
         {canEdit ? (
           <div className="flex flex-wrap gap-1">
@@ -164,7 +164,7 @@ export function CardSidebar({
               onClick={() => saveField('storyPoints', null)}
               disabled={savingField === 'storyPoints' || card.storyPoints == null}
               className="min-w-[28px] h-7 px-1.5 rounded text-xs font-medium border border-border bg-background text-muted-foreground hover:text-destructive hover:border-destructive disabled:opacity-30 disabled:cursor-not-allowed"
-              aria-label="Clear points"
+              aria-label="Limpar pontos"
             >
               —
             </button>
@@ -178,7 +178,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Workflow state
+          Estado do fluxo
         </label>
         {canEdit ? (
           <select
@@ -198,7 +198,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Priority
+          Prioridade
         </label>
         {canEdit ? (
           <select
@@ -207,10 +207,10 @@ export function CardSidebar({
             disabled={savingField === 'priority'}
             className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="urgent">Urgent</option>
+            <option value="low">Baixa</option>
+            <option value="medium">Média</option>
+            <option value="high">Alta</option>
+            <option value="urgent">Urgente</option>
           </select>
         ) : (
           <span
@@ -223,7 +223,7 @@ export function CardSidebar({
 
       <div>
         <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-          Due Date
+          Prazo
         </label>
         {canEdit ? (
           <input
@@ -248,20 +248,20 @@ export function CardSidebar({
         <div className="pt-4 border-t border-border">
           {confirmDelete ? (
             <div className="space-y-2">
-              <p className="text-xs text-destructive font-medium">Delete this card?</p>
+              <p className="text-xs text-destructive font-medium">Excluir este cartão?</p>
               <div className="flex gap-2">
                 <button
                   onClick={removeCard}
                   disabled={deleting}
                   className="flex-1 px-2 py-1.5 bg-destructive text-destructive-foreground rounded text-xs font-medium hover:bg-destructive/90 disabled:opacity-50"
                 >
-                  {deleting ? 'Deleting…' : 'Delete'}
+                  {deleting ? 'Excluindo…' : 'Delete'}
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
                   className="flex-1 px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground"
                 >
-                  Cancel
+                  Cancelar
                 </button>
               </div>
             </div>
@@ -270,7 +270,7 @@ export function CardSidebar({
               onClick={() => setConfirmDelete(true)}
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive transition-colors w-full"
             >
-              <span className="material-icons text-base">delete_outline</span>Delete card
+              <span className="material-icons text-base">delete_outline</span>Excluir cartão
             </button>
           )}
         </div>

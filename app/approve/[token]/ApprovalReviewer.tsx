@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState } from 'react';
 import { BlockRenderer } from '@/components/blocks/render/BlockRenderer';
 import { PostPreview } from './PostPreview';
@@ -498,7 +499,7 @@ function PreviewBody({ preview }: { preview: ApprovalEntityPreview }) {
             <div>
               <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">Price</div>
               <div className="text-gray-900">
-                {preview.priceLabel ?? (preview.price > 0 ? `$${(preview.price / 100).toFixed(2)}` : 'Free')}
+                {preview.priceLabel ?? (preview.price > 0 ? formatMoney(preview.price) : 'Free')}
               </div>
             </div>
             <div>

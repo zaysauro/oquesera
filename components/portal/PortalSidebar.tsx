@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, type MouseEvent } from 'react';
@@ -15,7 +16,7 @@ import { getDomainByKey } from '@/lib/billing/domain-catalog';
 type Theme = 'light' | 'dark' | 'system';
 const themeOrder: Theme[] = ['system', 'light', 'dark'];
 const themeIcon: Record<Theme, string> = { light: 'light_mode', dark: 'dark_mode', system: 'brightness_auto' };
-const themeLabel: Record<Theme, string> = { light: 'Light', dark: 'Dark', system: 'System' };
+const themeLabel: Record<Theme, string> = { light: 'Light', dark: 'Dark', system: 'Sistema' };
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
@@ -346,7 +347,7 @@ export default function PortalSidebar({
     if (isLocked) {
       const billingHref = `/portal/settings/billing/plans${item.requiredDomain ? `?highlight=${item.requiredDomain}` : ''}`;
       const lockDomain = item.requiredDomain ? getDomainByKey(item.requiredDomain) : undefined;
-      const priceLabel = lockDomain ? `$${Math.round(lockDomain.monthlyPriceCents / 100)}` : null;
+      const priceLabel = lockDomain ? formatMoney(lockDomain.monthlyPriceCents, { fractionDigits: 0 }) : null;
       return (
         <Link
           href={billingHref}
@@ -461,7 +462,7 @@ export default function PortalSidebar({
             onClick={onCloseMobile}
             className="lg:hidden p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
             title="Close"
-            aria-label="Close navigation"
+            aria-label="Fechar navegação"
           >
             <span className="material-icons text-lg">close</span>
           </button>
@@ -493,7 +494,7 @@ export default function PortalSidebar({
             className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-[13.5px] text-muted-foreground hover:bg-accent hover:text-foreground transition-colors group-data-[collapsed=true]/sb:lg:justify-center group-data-[collapsed=true]/sb:lg:px-0"
           >
             <span className="material-icons text-xl shrink-0">logout</span>
-            <span className="group-data-[collapsed=true]/sb:lg:hidden">Sign Out</span>
+            <span className="group-data-[collapsed=true]/sb:lg:hidden">Sair</span>
           </button>
         </div>
       </aside>
@@ -545,7 +546,7 @@ export default function PortalSidebar({
               className="flex items-center justify-center gap-1 w-full rounded-md bg-primary text-primary-foreground text-sm font-medium py-2 hover:bg-primary/90 transition-colors"
               style={agencyActiveStyle}
             >
-              Add to plan
+              Adicionar ao plano
               <span className="material-icons text-sm">arrow_forward</span>
             </Link>
           </div>

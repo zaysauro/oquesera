@@ -7,10 +7,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('@/config/site', () => ({
   siteConfig: {
-    name: 'SimplerDevelopment',
+    name: 'Kumo One',
     description: 'Design, Dev, and Automation Agency',
-    url: 'https://simplerdevelopment.com',
-    ogImage: 'https://simplerdevelopment.com/og.jpg',
+    url: 'https://kumo.localhost',
+    ogImage: 'https://kumo.localhost/og.jpg',
     links: {
       twitter: 'https://twitter.com/sd',
       github: 'https://github.com/sd',
@@ -163,13 +163,13 @@ describe('lib/utils/seo', () => {
   it('generateSEO returns metadata with defaults', async () => {
     const { generateSEO } = await import('@/lib/utils/seo');
     const meta = generateSEO({});
-    expect(meta.title).toEqual({ absolute: 'SimplerDevelopment' });
+    expect(meta.title).toEqual({ absolute: 'Kumo One' });
     expect(meta.description).toBe('Design, Dev, and Automation Agency');
-    expect(meta.alternates?.canonical).toBe('https://simplerdevelopment.com');
+    expect(meta.alternates?.canonical).toBe('https://kumo.localhost');
     expect(meta.openGraph).toMatchObject({
       type: 'website',
-      url: 'https://simplerdevelopment.com',
-      siteName: 'SimplerDevelopment',
+      url: 'https://kumo.localhost',
+      siteName: 'Kumo One',
     });
     expect(meta.twitter).toMatchObject({
       card: 'summary_large_image',
@@ -180,9 +180,9 @@ describe('lib/utils/seo', () => {
   it('generateSEO composes title with site name', async () => {
     const { generateSEO } = await import('@/lib/utils/seo');
     const meta = generateSEO({ title: 'About', description: 'About us', path: '/about' });
-    expect(meta.title).toEqual({ absolute: 'About | SimplerDevelopment' });
+    expect(meta.title).toEqual({ absolute: 'About | Kumo One' });
     expect(meta.description).toBe('About us');
-    expect(meta.alternates?.canonical).toBe('https://simplerdevelopment.com/about');
+    expect(meta.alternates?.canonical).toBe('https://kumo.localhost/about');
   });
 
   it('generateSEO uses provided image', async () => {
@@ -199,7 +199,7 @@ describe('lib/utils/seo', () => {
     const { generateSEO } = await import('@/lib/utils/seo');
     const meta = generateSEO({ title: 'Y' });
     const og = meta.openGraph as { images?: Array<{ url: string }> };
-    expect(og.images?.[0].url).toBe('https://simplerdevelopment.com/og.jpg');
+    expect(og.images?.[0].url).toBe('https://kumo.localhost/og.jpg');
   });
 
   it('generateSEO handles article type with publishedTime/authors/tags', async () => {
@@ -250,7 +250,7 @@ describe('lib/utils/seo', () => {
       author: { '@type': 'Person', name: 'A' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': 'U' },
     });
-    expect((schema.publisher as Record<string, unknown>).name).toBe('SimplerDevelopment');
+    expect((schema.publisher as Record<string, unknown>).name).toBe('Kumo One');
   });
 
   it('generateArticleSchema falls back modifiedTime to publishedTime', async () => {
@@ -272,9 +272,9 @@ describe('lib/utils/seo', () => {
     expect(schema).toMatchObject({
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'SimplerDevelopment',
-      url: 'https://simplerdevelopment.com',
-      logo: 'https://simplerdevelopment.com/logo.png',
+      name: 'Kumo One',
+      url: 'https://kumo.localhost',
+      logo: 'https://kumo.localhost/logo.png',
     });
     expect(schema.sameAs).toEqual([
       'https://twitter.com/sd',
@@ -294,9 +294,9 @@ describe('lib/utils/structured-data', () => {
     expect(schema).toEqual({
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'SimplerDevelopment',
-      url: 'https://simplerdevelopment.com',
-      logo: 'https://simplerdevelopment.com/logo.png',
+      name: 'Kumo One',
+      url: 'https://kumo.localhost',
+      logo: 'https://kumo.localhost/logo.png',
       description: 'Design, Dev, and Automation Agency',
       sameAs: [
         'https://twitter.com/sd',
@@ -316,10 +316,10 @@ describe('lib/utils/structured-data', () => {
     expect(schema).toEqual({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'SimplerDevelopment',
-      url: 'https://simplerdevelopment.com',
+      name: 'Kumo One',
+      url: 'https://kumo.localhost',
       description: 'Design, Dev, and Automation Agency',
-      publisher: { '@type': 'Organization', name: 'SimplerDevelopment' },
+      publisher: { '@type': 'Organization', name: 'Kumo One' },
     });
   });
 
@@ -335,7 +335,7 @@ describe('lib/utils/structured-data', () => {
       dateModified: '2026-01-01',
     });
     expect(schema.image).toBeUndefined();
-    expect(schema.author.name).toBe('SimplerDevelopment');
+    expect(schema.author.name).toBe('Kumo One');
   });
 
   it('generateArticleSchema accepts image and modifiedAt', async () => {
@@ -359,7 +359,7 @@ describe('lib/utils/structured-data', () => {
       '@type': 'Service',
       name: 'Consulting',
       description: 'Top-tier consulting',
-      provider: { '@type': 'Organization', name: 'SimplerDevelopment' },
+      provider: { '@type': 'Organization', name: 'Kumo One' },
     });
     expect(schema.serviceType).toBeUndefined();
   });

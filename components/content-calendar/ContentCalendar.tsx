@@ -575,7 +575,7 @@ export default function ContentCalendar({ websiteId, basePath, siteId }: Content
     filteredPosts.filter((p) => isSameDay(new Date(p.date), day));
 
   const days = view === 'month' ? getDaysInMonthView(currentDate) : getDaysInWeekView(currentDate);
-  const weekDayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   const totalPosts = posts.length;
   const publishedCount = posts.filter((p) => p.status === 'published').length;

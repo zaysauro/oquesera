@@ -1,7 +1,7 @@
 /**
  * Page-level header for the booking-page editor.
  *
- * Owns: back link, title + slug, Preview link, Save Changes button.
+ * Owns: back link, title + slug, Preview link, Salvar alterações button.
  * The save button has three states (idle / saving / saved) — the parent
  * passes those flags so this stays presentational.
  */
@@ -27,7 +27,7 @@ export function BookingHeader({ title, slug, publicUrl, saving, saved, onSave }:
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3"
         >
           <span className="material-icons text-lg">arrow_back</span>
-          Back to Booking Pages
+          Voltar para páginas de agendamento
         </Link>
         <h1 className="text-2xl font-bold text-foreground">{title}</h1>
         <p className="text-muted-foreground mt-1 text-sm">/book/{slug}</p>
@@ -40,7 +40,7 @@ export function BookingHeader({ title, slug, publicUrl, saving, saved, onSave }:
           className="inline-flex items-center gap-2 px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground hover:bg-muted transition-colors"
         >
           <span className="material-icons text-lg">open_in_new</span>
-          Preview
+          Pré-visualizar
         </a>
         <button
           onClick={onSave}
@@ -55,12 +55,12 @@ export function BookingHeader({ title, slug, publicUrl, saving, saved, onSave }:
           ) : saved ? (
             <>
               <span className="material-icons text-lg">check</span>
-              Saved
+              Salvo
             </>
           ) : (
             <>
               <span className="material-icons text-lg">save</span>
-              Save Changes
+              Salvar alterações
             </>
           )}
         </button>

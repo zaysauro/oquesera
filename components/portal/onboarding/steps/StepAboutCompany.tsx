@@ -6,8 +6,9 @@ import { COMPANY_SIZES } from '@/lib/onboarding/types';
 import { obLabel, obPill, obPillSel, obSelect, obInput, obPrimaryBtn } from '../ob-styles';
 
 const INDUSTRY_OPTIONS = [
-  'Agency / Consulting', 'Coaching', 'E-commerce', 'Education', 'Healthcare',
-  'Real Estate', 'SaaS / Tech', 'Services', 'Non-profit', 'Other',
+  'Restaurante / Alimentação', 'Barbearia / Salão de beleza', 'Escritório / Serviços profissionais',
+  'Imobiliária', 'Prestação de serviços', 'Comércio / Varejo', 'Saúde', 'Educação',
+  'Agência / Consultoria', 'Tecnologia', 'Organização sem fins lucrativos', 'Outro',
 ];
 
 export function StepAboutCompany({ state, setAnswers, next }: StepProps) {
@@ -24,7 +25,7 @@ export function StepAboutCompany({ state, setAnswers, next }: StepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <label className={obLabel}>How big is your team?</label>
+        <label className={obLabel}>Qual o tamanho da sua equipe?</label>
         <div className="flex flex-wrap gap-2">
           {COMPANY_SIZES.map((opt) => {
             const active = size === opt.id;
@@ -44,20 +45,20 @@ export function StepAboutCompany({ state, setAnswers, next }: StepProps) {
       </div>
 
       <div>
-        <label className={obLabel}>Industry (optional)</label>
+        <label className={obLabel}>Segmento (opcional)</label>
         <select
           value={industry}
           onChange={(e) => { setIndustry(e.target.value); setAnswers({ industry: e.target.value }); }}
           data-testid="onboarding-industry"
           className={obSelect}
         >
-          <option value="">Pick one…</option>
+          <option value="">Escolha…</option>
           {INDUSTRY_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
         </select>
       </div>
 
       <div>
-        <label className={obLabel}>Website (optional)</label>
+        <label className={obLabel}>Site (opcional)</label>
         <input
           type="url"
           value={website}
@@ -76,7 +77,7 @@ export function StepAboutCompany({ state, setAnswers, next }: StepProps) {
           data-testid="onboarding-company-next"
           className={obPrimaryBtn}
         >
-          Continue
+          Continuar
           <span className="material-icons text-base">arrow_forward</span>
         </button>
       </div>

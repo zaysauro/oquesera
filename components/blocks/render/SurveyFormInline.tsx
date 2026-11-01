@@ -33,7 +33,7 @@ export function SurveyFormInline({
   const [submitted, setSubmitted] = useState(false);
   const [thankYou, setThankYou] = useState({ title: '', message: '' });
   // PDF-01: stash the certificate context after submit so the thank-you
-  // screen can render a "Download Certificate" button. `null` while the
+  // screen can render a "Baixar certificado" button. `null` while the
   // survey is opt-out or before submit completes.
   const [certificate, setCertificate] = useState<{ responseId: number } | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -65,7 +65,7 @@ export function SurveyFormInline({
         const surveyJson = await surveyRes.json();
         if (cancelled) return;
         if (!surveyJson.success) {
-          setError(surveyJson.message || 'Survey not available');
+          setError(surveyJson.message || 'Formulário indisponível');
           setLoading(false);
           return;
         }
@@ -114,7 +114,7 @@ export function SurveyFormInline({
         setLoading(false);
       } catch {
         if (!cancelled) {
-          setError('Failed to load survey');
+          setError('Não foi possível carregar o formulário');
           setLoading(false);
         }
       }
@@ -212,7 +212,7 @@ export function SurveyFormInline({
         });
         const json = await res.json();
         if (!res.ok || !json?.success) {
-          const msg = json?.message || `Upload failed (HTTP ${res.status})`;
+          const msg = json?.message || `Falha no envio (HTTP ${res.status})`;
           setFileFieldState((prev) => ({
             ...prev,
             [fieldId]: { uploading: false, error: msg },
@@ -237,7 +237,7 @@ export function SurveyFormInline({
           ...prev,
           [fieldId]: {
             uploading: false,
-            error: err instanceof Error ? err.message : 'Upload failed',
+            error: err instanceof Error ? err.message : 'Falha no envio',
           },
         }));
       }
@@ -260,13 +260,13 @@ export function SurveyFormInline({
           // already sits right next to the box — echoing it back as a banner is
           // redundant. Use a short, clear prompt instead.
           return field.type === 'checkbox'
-            ? 'Please check the box to agree before continuing.'
+            ? 'Marque a caixa de concordância para continuar.'
             : `${field.label} is required`;
         }
       }
     }
     if (pageIndex === 0 && survey?.requireEmail && !email?.trim()) {
-      return 'Email is required';
+      return 'O e-mail é obrigatório';
     }
     return null;
   }
@@ -290,7 +290,7 @@ export function SurveyFormInline({
 
   function handleNext() {
     if (hasInflightUpload) {
-      setError('Please wait for file uploads to finish');
+      setError('Aguarde o envio dos arquivos terminar');
       return;
     }
     const err = validateCurrentPage();
@@ -319,7 +319,7 @@ export function SurveyFormInline({
     // See pageEnteredAtRef — swallow the double-click-Next ghost submit.
     if (Date.now() - pageEnteredAtRef.current < 500) return;
     if (hasInflightUpload) {
-      setError('Please wait for file uploads to finish');
+      setError('Aguarde o envio dos arquivos terminar');
       return;
     }
     const err = validateCurrentPage();
@@ -350,7 +350,7 @@ export function SurveyFormInline({
     const data = await res.json();
     setSubmitting(false);
 
-    if (!data.success) { setError(data.message || 'Failed to submit'); return; }
+    if (!data.success) { setError(data.message || 'Não foi possível enviar'); return; }
 
     // Mint a fresh session id for any subsequent submissions on this browser.
     clearPartialSessionId(slug);
@@ -361,7 +361,7 @@ export function SurveyFormInline({
     }
 
     setThankYou({
-      title: data.data.thankYouTitle || 'Thank you!',
+      title: data.data.thankYouTitle || 'Obrigado!',
       message: data.data.thankYouMessage || '',
     });
     // PDF-01: only offer the certificate when the survey has it enabled
@@ -416,7 +416,7 @@ export function SurveyFormInline({
   const hideCardChrome = so?.hideCardChrome === true;
   const hideQuestionNumbers = so?.hideQuestionNumbers === true;
   const formAccentBarColor = so?.formAccentBarColor;
-  const submitLabel = so?.submitLabel || 'Submit';
+  const submitLabel = so?.submitLabel || 'Enviar';
   // Per-survey dark opt-in: off = force-light (blocks the class-driven dark:
   // variant + pins tokens, even under a dark <html> on the app-host /s/
   // route); on = force-dark for the utilities + dark for the tokens.
@@ -556,7 +556,7 @@ export function SurveyFormInline({
               style={{ backgroundColor: btnBg, color: btnText, ...(btnRadius ? { borderRadius: btnRadius } : {}) }}
             >
               <span className="material-icons text-lg">download</span>
-              Download Certificate
+              Baixar certificado
             </a>
           )}
         </div>
@@ -630,7 +630,7 @@ export function SurveyFormInline({
               <div className="space-y-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                 <div>
                   <label htmlFor={`survey-email-${formInstanceId}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={labelStyle}>
-                    Your Email <span className="text-red-500">*</span>
+                    Seu e-mail <span className="text-red-500">*</span>
                   </label>
                   <input
                     id={`survey-email-${formInstanceId}`}
@@ -638,19 +638,19 @@ export function SurveyFormInline({
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
+                    placeholder="voce@exemplo.com.br"
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
                     style={inputStyle}
                   />
                 </div>
                 <div>
-                  <label htmlFor={`survey-name-${formInstanceId}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={labelStyle}>Your Name</label>
+                  <label htmlFor={`survey-name-${formInstanceId}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" style={labelStyle}>Seu nome</label>
                   <input
                     id={`survey-name-${formInstanceId}`}
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="John Doe"
+                    placeholder="Maria Silva"
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
                     style={inputStyle}
                   />
@@ -721,7 +721,7 @@ export function SurveyFormInline({
                   className="flex items-center gap-1 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                  Back
+                  Voltar
                 </button>
               ) : <div />}
 
@@ -733,7 +733,7 @@ export function SurveyFormInline({
                   className="flex items-center gap-1 px-6 py-2.5 rounded-lg font-bold text-[19px] transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: btnBg, color: btnText, ...(btnRadius ? { borderRadius: btnRadius } : {}) }}
                 >
-                  {hasInflightUpload ? 'Uploading…' : 'Next'}
+                  {hasInflightUpload ? 'Enviando…' : 'Next'}
                   {!hasInflightUpload && (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   )}
@@ -745,7 +745,7 @@ export function SurveyFormInline({
                   className="px-6 py-2.5 rounded-lg font-bold text-[19px] transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: btnBg, color: btnText, ...(btnRadius ? { borderRadius: btnRadius } : {}) }}
                 >
-                  {submitting ? 'Submitting...' : hasInflightUpload ? 'Uploading…' : submitLabel}
+                  {submitting ? 'Submitting...' : hasInflightUpload ? 'Enviando…' : submitLabel}
                 </button>
               )}
             </div>

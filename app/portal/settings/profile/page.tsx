@@ -45,7 +45,7 @@ export default function ProfileSettingsPage() {
       const data = await res.json();
       setMessage({ type: data.success ? 'success' : 'error', text: data.message });
     } catch {
-      setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+      setMessage({ type: 'error', text: 'Algo deu errado. Tente novamente.' });
     } finally {
       setSaving(false);
     }
@@ -64,11 +64,11 @@ export default function ProfileSettingsPage() {
       <form method="post" onSubmit={handleSubmit} className="space-y-6">
         {/* Account info */}
         <div className={`${pCard} p-6 space-y-5`}>
-          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Account Information</h2>
+          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Informações da conta</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label htmlFor="profile-full-name" className="text-sm font-medium text-foreground">Full Name</label>
+              <label htmlFor="profile-full-name" className="text-sm font-medium text-foreground">Nome completo</label>
               <input
                 id="profile-full-name"
                 name="name"
@@ -79,7 +79,7 @@ export default function ProfileSettingsPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="profile-email" className="text-sm font-medium text-foreground">Email</label>
+              <label htmlFor="profile-email" className="text-sm font-medium text-foreground">E-mail</label>
               <input
                 id="profile-email"
                 name="email"
@@ -99,17 +99,17 @@ export default function ProfileSettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Company Name</label>
+              <label className="text-sm font-medium text-foreground">Nome da empresa</label>
               <input
                 name="company"
                 value={form.company}
                 onChange={handleChange}
-                placeholder="Acme Inc."
+                placeholder="Minha Empresa Ltda"
                 className={pInput}
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Phone</label>
+              <label className="text-sm font-medium text-foreground">Telefone</label>
               <input
                 name="phone"
                 value={form.phone}
@@ -121,7 +121,7 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Website</label>
+            <label className="text-sm font-medium text-foreground">Site</label>
             <input
               name="website"
               value={form.website}
@@ -132,13 +132,13 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Address</label>
+            <label className="text-sm font-medium text-foreground">Endereço</label>
             <textarea
               name="address"
               value={form.address}
               onChange={handleChange}
               rows={2}
-              placeholder="123 Main St, Springfield, IL 62701"
+              placeholder="Rua Exemplo, 123 — São Paulo/SP"
               className={`${pInput} resize-none`}
             />
           </div>
@@ -164,7 +164,7 @@ export default function ProfileSettingsPage() {
             className={pBtnPrimary}
           >
             {saving && <span className="material-icons text-base animate-spin">refresh</span>}
-            {saving ? 'Saving…' : 'Save Changes'}
+            {saving ? 'Salvando…' : 'Salvar alterações'}
           </button>
         </div>
       </form>
@@ -214,7 +214,7 @@ function ChangePasswordSection() {
         setMessage({ type: 'error', text: data.error || 'Something went wrong.' });
       }
     } catch {
-      setMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+      setMessage({ type: 'error', text: 'Algo deu errado. Tente novamente.' });
     } finally {
       setSaving(false);
     }
@@ -224,7 +224,7 @@ function ChangePasswordSection() {
     <form method="post" onSubmit={handleSubmit} className="space-y-6">
       <div className={`${pCard} p-6 space-y-5`}>
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Change Password</h2>
+          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Alterar senha</h2>
           <button
             type="button"
             onClick={() => setShowPasswords(!showPasswords)}
@@ -236,7 +236,7 @@ function ChangePasswordSection() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-foreground">Current Password</label>
+          <label className="text-sm font-medium text-foreground">Senha atual</label>
           <input
             type={showPasswords ? 'text' : 'password'}
             value={currentPassword}
@@ -249,7 +249,7 @@ function ChangePasswordSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">New Password</label>
+            <label className="text-sm font-medium text-foreground">Nova senha</label>
             <input
               type={showPasswords ? 'text' : 'password'}
               value={newPassword}
@@ -257,12 +257,12 @@ function ChangePasswordSection() {
               required
               minLength={8}
               autoComplete="new-password"
-              placeholder="At least 8 characters"
+              placeholder="Pelo menos 8 caracteres"
               className={pInput}
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Confirm New Password</label>
+            <label className="text-sm font-medium text-foreground">Confirmar nova senha</label>
             <input
               type={showPasswords ? 'text' : 'password'}
               value={confirmPassword}
@@ -270,7 +270,7 @@ function ChangePasswordSection() {
               required
               minLength={8}
               autoComplete="new-password"
-              placeholder="Confirm password"
+              placeholder="Confirmar senha"
               className={pInput}
             />
           </div>
@@ -297,7 +297,7 @@ function ChangePasswordSection() {
           className={pBtnPrimary}
         >
           {saving && <span className="material-icons text-base animate-spin">refresh</span>}
-          {saving ? 'Updating…' : 'Update Password'}
+          {saving ? 'Atualizando…' : 'Atualizar senha'}
         </button>
       </div>
     </form>
@@ -356,11 +356,11 @@ function PortalSubdomainSection() {
     <div className="space-y-6">
       <div className={`${pCard} p-6 space-y-5`}>
         <div>
-          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Portal Subdomain</h2>
+          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Subdomínio do painel</h2>
           <p className="text-sm text-muted-foreground mt-1">
             Choose which website determines your portal URL.
             {activeSubdomain && (
-              <> Your portal is at <strong>{activeSubdomain}.{PLATFORM_ROOT_DOMAIN}/portal</strong></>
+              <> Seu painel está em <strong>{activeSubdomain}.{PLATFORM_ROOT_DOMAIN}/portal</strong></>
             )}
           </p>
         </div>
@@ -460,8 +460,8 @@ function DefaultPortalSection() {
     <div className="space-y-6">
       <div className={`${pCard} p-6 space-y-5`}>
         <div>
-          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Default Portal</h2>
-          <p className="text-sm text-muted-foreground mt-1">Choose which portal you sign in to by default.</p>
+          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Empresa padrão</h2>
+          <p className="text-sm text-muted-foreground mt-1">Escolha em qual empresa você entra por padrão.</p>
         </div>
 
         <div className="space-y-2">

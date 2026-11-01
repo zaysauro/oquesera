@@ -11,7 +11,7 @@ import { useAgencyChrome } from './AgencyChromeProvider';
 // stays dependency-free.
 const SEGMENT_LABELS: Record<string, string> = {
   portal: 'Home',
-  dashboard: 'Dashboard',
+  dashboard: 'Painel',
   brain: 'Company Brain',
   crm: 'CRM',
   email: 'Email',
@@ -20,7 +20,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   websites: 'Websites',
   tickets: 'Support',
   inbox: 'Live Chat',
-  invoices: 'Billing',
+  invoices: 'Cobrança',
   services: 'Services',
   hosting: 'Hosting',
   agency: 'Agency',
@@ -29,9 +29,9 @@ const SEGMENT_LABELS: Record<string, string> = {
   'pitch-decks': 'Pitch Decks',
   'org-chart': 'Org Chart',
   ab: 'A/B',
-  media: 'Media',
+  media: 'Mídia',
   experiments: 'A/B Experiments',
-  branding: 'Branding',
+  branding: 'Marca',
   tools: 'Tools',
   projects: 'Projects',
 };
@@ -44,7 +44,7 @@ function buildCrumb(pathname: string): string[] {
   const segs = pathname.split('/').filter(Boolean);
   // Drop the leading "portal"; ignore bare numeric id segments (siteId etc.).
   const rest = segs.slice(1).filter((s) => !/^\d+$/.test(s));
-  if (rest.length === 0) return ['Dashboard'];
+  if (rest.length === 0) return ['Painel'];
   // Keep it to the last two meaningful segments so the bar never wraps.
   return rest.slice(-2).map((s) => SEGMENT_LABELS[s] ?? titleCase(s));
 }
@@ -74,7 +74,7 @@ export default function PortalTopbar({ collapsed, onToggleCollapse, onOpenMobile
         onClick={onOpenMobile}
         className="lg:hidden w-8 h-8 grid place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
         title="Menu"
-        aria-label="Open navigation"
+        aria-label="Abrir navegação"
       >
         <span className="material-icons text-xl">menu</span>
       </button>
@@ -83,8 +83,8 @@ export default function PortalTopbar({ collapsed, onToggleCollapse, onOpenMobile
       <button
         onClick={onToggleCollapse}
         className="hidden lg:grid w-8 h-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        aria-label="Toggle sidebar"
+        title={collapsed ? 'Expandir menu' : 'Recolher menu'}
+        aria-label="Alternar menu lateral"
       >
         <span className="material-icons text-xl">{collapsed ? 'menu_open' : 'menu'}</span>
       </button>
@@ -106,10 +106,10 @@ export default function PortalTopbar({ collapsed, onToggleCollapse, onOpenMobile
       <button
         onClick={() => window.dispatchEvent(new CustomEvent('portal:open-cmdk'))}
         className="ml-auto flex items-center gap-2 h-9 px-3 rounded-xl border border-border bg-[var(--portal-surface-2)] text-muted-foreground text-[13px] hover:border-[var(--portal-border-strong)] transition-colors min-w-0 sm:min-w-[240px]"
-        title="Search (⌘K)"
+        title="Buscar (⌘K)"
       >
         <span className="material-icons text-[17px]">search</span>
-        <span className="hidden sm:inline">Jump to anything…</span>
+        <span className="hidden sm:inline">Ir para…</span>
         <kbd className="hidden sm:inline ml-auto font-mono text-[10.5px] px-1.5 py-0.5 rounded border border-border bg-card text-muted-foreground">
           ⌘K
         </kbd>
@@ -121,8 +121,8 @@ export default function PortalTopbar({ collapsed, onToggleCollapse, onOpenMobile
           href="/portal/settings/profile"
           className="w-8 h-8 rounded-full grid place-items-center text-white text-xs font-semibold shrink-0"
           style={{ background: 'linear-gradient(135deg,#2563eb,#10b981)' }}
-          title="Account"
-          aria-label="Account"
+          title="Conta"
+          aria-label="Conta"
         >
           <span className="material-icons text-[18px]">person</span>
         </Link>

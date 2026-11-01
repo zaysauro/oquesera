@@ -183,7 +183,7 @@ function pmTypeIcon(kind: string): string {
 }
 
 function pmGroupLabel(kind: string): string {
-  return kind === 'billing.usage_alert' ? 'Billing' : 'Projects & Tasks';
+  return kind === 'billing.usage_alert' ? 'Cobrança' : 'Projetos e tarefas';
 }
 
 function normalizePm(row: PmRow): UnifiedNotif {
@@ -678,7 +678,7 @@ export default function NotificationBell() {
         <div className="absolute right-0 top-full mt-2 w-96 max-w-[calc(100vw-2rem)] bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-foreground">Notifications</span>
+              <span className="text-sm font-semibold text-foreground">Notificações</span>
               <button
                 type="button"
                 onClick={() => setFilterUnread((prev) => !prev)}
@@ -689,7 +689,7 @@ export default function NotificationBell() {
                 }`}
                 aria-pressed={filterUnread}
               >
-                {filterUnread ? 'Showing unread' : 'Show unread'}
+                {filterUnread ? 'Exibindo não lidas' : 'Mostrar não lidas'}
               </button>
             </div>
             {unreadCount > 0 && (
@@ -698,7 +698,7 @@ export default function NotificationBell() {
                 disabled={loading}
                 className="text-xs text-primary hover:underline disabled:opacity-50"
               >
-                Mark all read
+                Marcar todas como lidas
               </button>
             )}
           </div>
@@ -709,7 +709,7 @@ export default function NotificationBell() {
                 <span aria-hidden="true" className="material-icons text-[14px] leading-none">
                   desktop_windows
                 </span>
-                Desktop notifications
+                Notificações na área de trabalho
               </span>
               <button
                 type="button"
@@ -719,8 +719,8 @@ export default function NotificationBell() {
                 disabled={desktop.blocked && !desktop.enabled}
                 title={
                   desktop.blocked && !desktop.enabled
-                    ? 'Notifications are blocked for this site in your browser settings.'
-                    : 'Mentions and assignments will pop up on your desktop.'
+                    ? 'As notificações estão bloqueadas para este site nas configurações do navegador.'
+                    : 'Menções e atribuições aparecerão na sua área de trabalho.'
                 }
                 className={`text-[11px] px-2 py-0.5 rounded-full border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   desktop.enabled
@@ -741,7 +741,7 @@ export default function NotificationBell() {
                 <span className="material-icons text-3xl text-muted-foreground/40 mb-2 block">
                   notifications_none
                 </span>
-                {filterUnread ? 'No unread notifications' : 'No notifications yet'}
+                {filterUnread ? 'Nenhuma notificação não lida' : 'Nenhuma notificação ainda'}
               </div>
             ) : (
               groups.map((group) => (
@@ -785,7 +785,7 @@ export default function NotificationBell() {
                           {n.url && (
                             <span className="text-[11px] text-primary inline-flex items-center gap-0.5">
                               <span className="material-icons text-[12px] leading-none">arrow_outward</span>
-                              Open
+                              Aberta
                             </span>
                           )}
                           {!n.read && (
@@ -796,7 +796,7 @@ export default function NotificationBell() {
                               aria-label={`Mark notification "${n.title}" as read`}
                             >
                               <span className="material-icons text-[12px] leading-none">done</span>
-                              Mark read
+                              Marcar como lida
                             </button>
                           )}
                         </div>

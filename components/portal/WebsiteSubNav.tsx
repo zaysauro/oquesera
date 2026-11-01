@@ -28,17 +28,17 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { path: '',                label: 'Dashboard',     icon: 'dashboard' },
-  { path: 'entries',         label: 'Entries',       icon: 'article', matches: ['posts'] },
-  { path: 'content-types',   label: 'Content Types', icon: 'description' },
-  { path: 'taxonomy',        label: 'Taxonomy',      icon: 'account_tree', matches: ['categories', 'tags'] },
-  { path: 'navigation',      label: 'Navigation',    icon: 'menu' },
-  { path: 'branding',        label: 'Branding',      icon: 'palette' },
-  { path: 'code',            label: 'Code',          icon: 'code' },
+  { path: '',                label: 'Painel',     icon: 'dashboard' },
+  { path: 'entries',         label: 'Entradas',       icon: 'article', matches: ['posts'] },
+  { path: 'content-types',   label: 'Tipos de conteúdo', icon: 'description' },
+  { path: 'taxonomy',        label: 'Categorias',      icon: 'account_tree', matches: ['categories', 'tags'] },
+  { path: 'navigation',      label: 'Navegação',    icon: 'menu' },
+  { path: 'branding',        label: 'Marca',      icon: 'palette' },
+  { path: 'code',            label: 'Código',          icon: 'code' },
   { path: 'calendar',        label: 'Calendar',      icon: 'calendar_month' },
   { path: 'automations',     label: 'Automations',   icon: 'bolt' },
   { path: 'email',           label: 'Email',         icon: 'mail' },
-  { path: 'store',           label: 'Store',         icon: 'shopping_cart' },
+  { path: 'store',           label: 'Loja',         icon: 'shopping_cart' },
   { path: 'settings',        label: 'Settings',      icon: 'settings' },
 ];
 
@@ -98,7 +98,7 @@ export function WebsiteSubNav({ site }: WebsiteSubNavProps) {
           <Link
             href="/portal/websites"
             className="flex items-center justify-center w-8 h-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-            title="All websites"
+            title="Todos os sites"
           >
             <span className="material-icons text-base">arrow_back</span>
           </Link>
@@ -121,7 +121,7 @@ export function WebsiteSubNav({ site }: WebsiteSubNavProps) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-border hover:bg-accent transition-colors"
             >
               <span className="material-icons text-sm">open_in_new</span>
-              View site
+              Ver site
             </a>
           )}
           <Link
@@ -129,7 +129,7 @@ export function WebsiteSubNav({ site }: WebsiteSubNavProps) {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             <span className="material-icons text-sm">add</span>
-            New Entry
+            Nova entrada
           </Link>
         </div>
       </div>

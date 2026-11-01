@@ -403,16 +403,16 @@ describe('AISettingsPage', () => {
     expect(input.value).toBe('mycompany');
   });
 
-  it('shows the @simplerdevelopment.com suffix', async () => {
+  it('shows the @kumo.localhost suffix', async () => {
     await act(async () => { render(<AISettingsPage />); });
     await flush();
-    expect(document.body.textContent).toContain('@simplerdevelopment.com');
+    expect(document.body.textContent).toContain('@kumo.localhost');
   });
 
   it('renders active email address when emailPrefix is set', async () => {
     await act(async () => { render(<AISettingsPage />); });
     await flush();
-    expect(document.body.textContent).toContain('mycompany@simplerdevelopment.com');
+    expect(document.body.textContent).toContain('mycompany@kumo.localhost');
   });
 
   it('does not show active email line when emailPrefix is empty', async () => {

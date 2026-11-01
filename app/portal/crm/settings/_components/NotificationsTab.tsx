@@ -40,9 +40,9 @@ export default function NotificationsTab() {
   return (
     <div className="bg-card border border-border rounded-xl p-6 space-y-6">
       <div>
-        <h3 className="font-semibold text-foreground text-lg">Notification Preferences</h3>
+        <h3 className="font-semibold text-foreground text-lg">Preferências de notificação</h3>
         <p className="text-sm text-muted-foreground mt-1">
-          Control how you receive CRM notifications — instantly, as a daily digest, or not at all.
+          Defina como receber notificações do CRM — na hora, em resumo diário ou nunca.
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export default function NotificationsTab() {
                           : 'bg-background text-muted-foreground border-border hover:border-primary hover:text-primary'
                       }`}
                     >
-                      {opt === 'instant' ? 'Instant' : opt === 'digest_daily' ? 'Daily Digest' : 'Off'}
+                      {opt === 'instant' ? 'Instant' : opt === 'digest_daily' ? 'Resumo diário' : 'Off'}
                     </button>
                   ))}
                 </div>

@@ -611,7 +611,7 @@ describe('POST /api/portal/cms/websites', () => {
     const json = await res.json();
     expect(json.success).toBe(true);
     expect(json.data.subdomain).toBe('mysite');
-    expect(json.data.vercelDomain).toBe('mysite.simplerdevelopment.com');
+    expect(json.data.vercelDomain).toBe('mysite.kumo.localhost');
     expect(json.data.domain).toBe('example.com');
     // Route now sets deploymentStatus='pending' on creation (deploy triggered async)
     expect(json.data.deploymentStatus).toBe('pending');
@@ -626,7 +626,7 @@ describe('POST /api/portal/cms/websites', () => {
     const json = await res.json();
     expect(generateUniqueSubdomainMock).toHaveBeenCalledWith('Acme Inc', 'Blog');
     expect(json.data.subdomain).toBe('acme-blog');
-    expect(json.data.vercelDomain).toBe('acme-blog.simplerdevelopment.com');
+    expect(json.data.vercelDomain).toBe('acme-blog.kumo.localhost');
     expect(json.data.domain).toBeNull();
     expect(json.data.description).toBeNull();
   });
@@ -818,7 +818,7 @@ describe('POST /api/portal/credits/purchase', () => {
     expect(arg.customer).toBe('cus_new_xyz');
     // Default site url when env is unset
     expect(arg.success_url).toBe(
-      'https://simplerdevelopment.com/portal/dashboard?credits=purchased',
+      'https://kumo.localhost/portal/dashboard?credits=purchased',
     );
   });
 

@@ -54,13 +54,13 @@ export default function EditBookingPage({ params }: { params: Promise<{ id: stri
     return (
       <div className="max-w-4xl mx-auto text-center py-20 space-y-4">
         <span className="material-icons text-5xl text-muted-foreground/50">error_outline</span>
-        <p className="text-muted-foreground">Booking page not found</p>
+        <p className="text-muted-foreground">Página de agendamento não encontrada</p>
         <Link
           href="/portal/tools/booking"
           className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
         >
           <span className="material-icons text-lg">arrow_back</span>
-          Back to Booking Pages
+          Voltar para páginas de agendamento
         </Link>
       </div>
     );
@@ -217,8 +217,8 @@ export default function EditBookingPage({ params }: { params: Promise<{ id: stri
         <ProductAutomationSettings
           productScope="booking"
           presets={BOOKING_AUTOMATION_PRESETS}
-          title="Booking Automations"
-          description="Toggle standard automations for this booking page"
+          title="Automações de agendamento"
+          description="Ative as automações padrão desta página"
         />
       )}
     </div>

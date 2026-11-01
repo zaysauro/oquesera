@@ -164,7 +164,7 @@ export default function CrmCompanyDetailPage() {
   }
 
   async function deleteCompany() {
-    if (!confirm('Are you sure you want to delete this company?')) return;
+    if (!confirm('Tem certeza de que deseja excluir esta empresa?')) return;
     await fetch(`/api/portal/crm/companies/${companyId}`, { method: 'DELETE' });
     router.push('/portal/crm/companies');
   }
@@ -210,9 +210,9 @@ export default function CrmCompanyDetailPage() {
     return (
       <div className="text-center py-20">
         <span className="material-icons text-4xl text-muted-foreground">business</span>
-        <p className="mt-2 text-muted-foreground">Company not found.</p>
+        <p className="mt-2 text-muted-foreground">Empresa não encontrada.</p>
         <Link href="/portal/crm/companies" className="text-primary text-sm hover:underline mt-2 inline-block">
-          Back to companies
+          Voltar para empresas
         </Link>
       </div>
     );
@@ -223,7 +223,7 @@ export default function CrmCompanyDetailPage() {
       {/* Back link */}
       <Link href="/portal/crm/companies" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-2">
         <span className="material-icons text-base">arrow_back</span>
-        Companies
+        Empresas
       </Link>
 
       {/* Logo + header */}
@@ -248,21 +248,21 @@ export default function CrmCompanyDetailPage() {
             <div className="flex gap-2">
               <button onClick={() => setIsEditModalOpen(true)} className={pBtnGhost}>
                 <span className="material-icons text-base">edit</span>
-                Edit
+                Editar
               </button>
               <button
                 onClick={deleteCompany}
                 className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10 transition-colors"
               >
                 <span className="material-icons text-base">delete</span>
-                Delete
+                Excluir
               </button>
             </div>
           }
         />
       </div>
 
-      {/* Edit modal (PUX-018) — sectioned into General / Details / Branding / Custom Fields tabs. */}
+      {/* Edit modal (PUX-018) — sectioned into General / Details / Branding / Campos personalizados tabs. */}
       {isEditModalOpen && (
         <CompanyEditModal
           companyId={company.id}
@@ -272,7 +272,7 @@ export default function CrmCompanyDetailPage() {
         />
       )}
 
-      {/* Tabs: Info / Contacts / Deals / Custom Fields */}
+      {/* Tabs: Info / Contacts / Deals / Campos personalizados */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="flex border-b border-border">
           <button
@@ -284,7 +284,7 @@ export default function CrmCompanyDetailPage() {
             }`}
           >
             <span className="material-icons text-base">info</span>
-            Info
+            Informações
           </button>
           <button
             onClick={() => setActiveTab('contacts')}
@@ -317,7 +317,7 @@ export default function CrmCompanyDetailPage() {
             }`}
           >
             <span className="material-icons text-base">tune</span>
-            Custom Fields
+            Campos personalizados
           </button>
         </div>
 
@@ -325,7 +325,7 @@ export default function CrmCompanyDetailPage() {
           {activeTab === 'info' && (
             <div className="space-y-6">
               <div>
-                <h2 className={pSectionTitle + ' mb-4'}>Company Information</h2>
+                <h2 className={pSectionTitle + ' mb-4'}>Informações da empresa</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="flex items-center gap-3">
                     <span className="material-icons text-base text-muted-foreground">phone</span>
@@ -338,7 +338,7 @@ export default function CrmCompanyDetailPage() {
                         {company.website}
                       </a>
                     ) : (
-                      <span className="text-sm text-foreground">No website</span>
+                      <span className="text-sm text-foreground">Sem site</span>
                     )}
                   </div>
                   <div className="flex items-center gap-3">
@@ -352,7 +352,7 @@ export default function CrmCompanyDetailPage() {
                 </div>
                 {company.notes && (
                   <div className="mt-4 pt-4 border-t border-border">
-                    <p className="text-xs font-medium text-muted-foreground mb-1">Notes</p>
+                    <p className="text-xs font-medium text-muted-foreground mb-1">Observações</p>
                     <p className="text-sm text-foreground whitespace-pre-wrap">{company.notes}</p>
                   </div>
                 )}
@@ -368,7 +368,7 @@ export default function CrmCompanyDetailPage() {
                 <div className="relative flex-1 min-w-[200px]">
                   <span className="material-icons text-base text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2">search</span>
                   <input
-                    placeholder="Search contacts..."
+                    placeholder="Buscar contatos..."
                     value={contactSearchInput}
                     onChange={e => setContactSearchInput(e.target.value)}
                     className={`${pInput} pl-9 pr-3`}
@@ -384,7 +384,7 @@ export default function CrmCompanyDetailPage() {
                   className={`${pBtnPrimary} shrink-0`}
                 >
                   <span className="material-icons text-base">{showContactForm ? 'close' : 'person_add'}</span>
-                  {showContactForm ? 'Cancel' : 'Add Contact'}
+                  {showContactForm ? 'Cancel' : 'Adicionar contato'}
                 </button>
               </div>
 
@@ -398,7 +398,7 @@ export default function CrmCompanyDetailPage() {
                   )}
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-1">First name *</label>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Nome *</label>
                       <input
                         required
                         value={newContact.firstName}
@@ -407,7 +407,7 @@ export default function CrmCompanyDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-1">Last name</label>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Sobrenome</label>
                       <input
                         value={newContact.lastName}
                         onChange={e => setNewContact(f => ({ ...f, lastName: e.target.value }))}
@@ -415,7 +415,7 @@ export default function CrmCompanyDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">E-mail</label>
                       <input
                         type="email"
                         value={newContact.email}
@@ -424,7 +424,7 @@ export default function CrmCompanyDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Telefone</label>
                       <input
                         value={newContact.phone}
                         onChange={e => setNewContact(f => ({ ...f, phone: e.target.value }))}
@@ -432,7 +432,7 @@ export default function CrmCompanyDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-muted-foreground mb-1">Title</label>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Título</label>
                       <input
                         value={newContact.title}
                         onChange={e => setNewContact(f => ({ ...f, title: e.target.value }))}
@@ -446,10 +446,10 @@ export default function CrmCompanyDetailPage() {
                         onChange={e => setNewContact(f => ({ ...f, status: e.target.value }))}
                         className={pSelect}
                       >
-                        <option value="active">Active</option>
+                        <option value="active">Ativo</option>
                         <option value="lead">Lead</option>
-                        <option value="customer">Customer</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="customer">Cliente</option>
+                        <option value="inactive">Inativo</option>
                       </select>
                     </div>
                   </div>
@@ -473,8 +473,8 @@ export default function CrmCompanyDetailPage() {
               ) : contacts.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-4 text-center">
                   {contactSearch || titleFilter.length > 0
-                    ? 'No contacts match your filters.'
-                    : 'No contacts at this company.'}
+                    ? 'Nenhum contato corresponde aos filtros.'
+                    : 'Nenhum contato nesta empresa.'}
                 </p>
               ) : (
                 <div className="divide-y divide-border">
@@ -549,7 +549,7 @@ export default function CrmCompanyDetailPage() {
               <div className="flex justify-end">
                 <button onClick={() => setShowDealForm(true)} className={pBtnPrimary}>
                   <span className="material-icons text-base">add</span>
-                  Add Deal
+                  Adicionar oportunidade
                 </button>
               </div>
 
@@ -562,7 +562,7 @@ export default function CrmCompanyDetailPage() {
               )}
 
               {deals.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-4 text-center">No deals with this company.</p>
+                <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma oportunidade com esta empresa.</p>
               ) : (
                 <div className="divide-y divide-border">
                   {deals.map(d => (

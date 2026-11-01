@@ -26,7 +26,7 @@ function CancelContent() {
 
   useEffect(() => {
     if (!token) {
-      setError('Invalid cancel link');
+      setError('Link de cancelamento inválido');
       setLoading(false);
       return;
     }
@@ -38,10 +38,10 @@ function CancelContent() {
           setBooking(data.data);
           if (data.data.status === 'cancelled') setCancelled(true);
         } else {
-          setError(data.message || 'Booking not found');
+          setError(data.message || 'Agendamento não encontrado');
         }
       })
-      .catch(() => setError('Failed to load booking'))
+      .catch(() => setError('Não foi possível carregar o agendamento'))
       .finally(() => setLoading(false));
   }, [token]);
 
@@ -57,10 +57,10 @@ function CancelContent() {
       if (data.success) {
         setCancelled(true);
       } else {
-        setError(data.message || 'Failed to cancel');
+        setError(data.message || 'Não foi possível cancelar');
       }
     } catch {
-      setError('Failed to cancel booking');
+      setError('Não foi possível cancelar o agendamento');
     } finally {
       setCancelling(false);
     }
@@ -69,7 +69,7 @@ function CancelContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-gray-500">Carregando...</p>
       </div>
     );
   }
@@ -79,7 +79,7 @@ function CancelContent() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="max-w-md text-center">
           <span className="material-icons text-4xl text-red-400 mb-4 block">error_outline</span>
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">Unable to Load Booking</h1>
+          <h1 className="text-xl font-semibold text-gray-900 mb-2">Não foi possível carregar o agendamento</h1>
           <p className="text-gray-500">{error}</p>
         </div>
       </div>
@@ -106,21 +106,21 @@ function CancelContent() {
         {cancelled ? (
           <>
             <span className="material-icons text-5xl text-green-500 mb-4 block">check_circle</span>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Booking Cancelled</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Agendamento cancelado</h1>
             <p className="text-gray-500 mb-6">
-              Your <strong>{booking.pageTitle}</strong> appointment has been cancelled.
+              Seu agendamento de <strong>{booking.pageTitle}</strong> foi cancelado.
             </p>
             <div className="bg-gray-50 rounded-lg p-4 text-left mb-6">
-              <p className="text-sm text-gray-500">Was scheduled for</p>
+              <p className="text-sm text-gray-500">Estava marcado para</p>
               <p className="text-gray-900 font-medium">{formatted}</p>
             </div>
           </>
         ) : (
           <>
             <span className="material-icons text-5xl text-yellow-500 mb-4 block">event_busy</span>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Cancel Booking?</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Cancelar agendamento?</h1>
             <p className="text-gray-500 mb-6">
-              Are you sure you want to cancel this appointment?
+              Tem certeza de que deseja cancelar este agendamento?
             </p>
             <div className="bg-gray-50 rounded-lg p-4 text-left mb-6">
               <p className="text-sm text-gray-500 mb-1">{booking.pageTitle}</p>
@@ -133,14 +133,14 @@ function CancelContent() {
                 onClick={() => window.history.back()}
                 className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
-                Keep Booking
+                Manter agendamento
               </button>
               <button
                 onClick={handleCancel}
                 disabled={cancelling}
                 className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
               >
-                {cancelling ? 'Cancelling...' : 'Yes, Cancel'}
+                {cancelling ? 'Cancelando...' : 'Sim, cancelar'}
               </button>
             </div>
           </>
@@ -152,7 +152,7 @@ function CancelContent() {
 
 export default function CancelPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50"><p className="text-gray-500">Loading...</p></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50"><p className="text-gray-500">Carregando...</p></div>}>
       <CancelContent />
     </Suspense>
   );

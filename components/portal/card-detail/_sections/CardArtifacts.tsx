@@ -61,7 +61,7 @@ export function CardArtifacts({
               onClick={() => setArtifactTypeFilter('')}
               className={`px-2 py-1 rounded text-xs font-medium transition-colors ${!artifactTypeFilter ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground hover:bg-accent/80'}`}
             >
-              All
+              Todas
             </button>
             {Object.entries(ARTIFACT_LABELS)
               .filter(([type]) => !AGENT_LINKED_ARTIFACT_TYPES.has(type))
@@ -102,7 +102,7 @@ export function CardArtifacts({
       )}
 
       {artifactsLoaded && artifacts.length === 0 && !showArtifactPicker && (
-        <p className="text-xs text-muted-foreground italic">No artifacts linked.</p>
+        <p className="text-xs text-muted-foreground italic">Nenhum item vinculado.</p>
       )}
 
       {artifacts.length > 0 && (

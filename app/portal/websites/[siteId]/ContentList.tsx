@@ -69,7 +69,7 @@ export default function ContentList({
       }
       startTransition(() => router.refresh());
     } catch {
-      alert('Network error while deleting');
+      alert('Erro de rede ao excluir');
     } finally {
       setDeleting(null);
     }
@@ -137,7 +137,7 @@ export default function ContentList({
           type="text"
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-          placeholder="Search pages..."
+          placeholder="Buscar páginas..."
           className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
         {search && (
@@ -159,7 +159,7 @@ export default function ContentList({
             }`}
           >
             <span className="material-icons text-base mr-1 align-middle">apps</span>
-            All
+            Todas
           </button>
           {contentTypes.map(type => (
             <button
@@ -194,7 +194,7 @@ export default function ContentList({
               className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               <span className="material-icons text-base">add</span>
-              Create Page
+              Criar página
             </Link>
           )}
         </div>
@@ -233,16 +233,16 @@ export default function ContentList({
                           : 'bg-gray-100 text-gray-600'
                       }`}>
                         <span className="material-icons text-xs">{post.published ? 'check_circle' : 'edit'}</span>
-                        {post.published ? 'Published' : 'Draft'}
+                        {post.published ? 'Publicado' : 'Draft'}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       {post.seoTitle && post.seoDescription ? (
-                        <span className="material-icons text-base text-green-600" title="Meta title & description set">check_circle</span>
+                        <span className="material-icons text-base text-green-600" title="Título e descrição de SEO definidos">check_circle</span>
                       ) : (
                         <span
                           className="material-icons text-base text-amber-500"
-                          title={post.seoTitle || post.seoDescription ? 'Incomplete SEO metadata' : 'No SEO metadata'}
+                          title={post.seoTitle || post.seoDescription ? 'SEO incompleto' : 'Sem SEO'}
                         >
                           warning
                         </span>
@@ -257,7 +257,7 @@ export default function ContentList({
                         onClick={() => handleDelete(post)}
                         disabled={deleting === post.id}
                         className="p-1 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 disabled:opacity-50 transition-opacity"
-                        title="Delete entry"
+                        title="Excluir entrada"
                         aria-label={`Delete ${post.title || 'entry'}`}
                       >
                         <span className="material-icons text-base">
@@ -279,7 +279,7 @@ export default function ContentList({
               </span>
               <span className="mx-1">&middot;</span>
               <label className="flex items-center gap-1">
-                Rows
+                Linhas
                 <select
                   value={pageSize}
                   onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
@@ -296,13 +296,13 @@ export default function ContentList({
                 disabled={safePage === 1}
                 onClick={() => setPage(1)}
                 icon="first_page"
-                label="First page"
+                label="Primeira página"
               />
               <PagerButton
                 disabled={safePage === 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 icon="chevron_left"
-                label="Previous page"
+                label="Página anterior"
               />
               <span className="text-xs text-muted-foreground px-2">
                 Page {safePage} of {totalPages}
@@ -311,13 +311,13 @@ export default function ContentList({
                 disabled={safePage === totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 icon="chevron_right"
-                label="Next page"
+                label="Próxima página"
               />
               <PagerButton
                 disabled={safePage === totalPages}
                 onClick={() => setPage(totalPages)}
                 icon="last_page"
-                label="Last page"
+                label="Última página"
               />
             </div>
           </div>

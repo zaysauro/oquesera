@@ -308,7 +308,7 @@ describe('provisionWebsite', () => {
       const p = provisionWebsite(1, 'acme', 'Acme Corp');
       await runAllTimers();
       await p;
-      expect(addDomainMock).toHaveBeenCalledWith('vercel-id-1', 'acme.simplerdevelopment.com');
+      expect(addDomainMock).toHaveBeenCalledWith('vercel-id-1', 'acme.kumo.localhost');
     });
 
     it('creates a Cloudflare CNAME when no existing record', async () => {
@@ -338,7 +338,7 @@ describe('provisionWebsite', () => {
       await p;
       const lastUpdate = updateCalls[updateCalls.length - 1];
       expect(lastUpdate.patch.deploymentStatus).toBe('active');
-      expect(lastUpdate.patch.vercelDomain).toBe('acme.simplerdevelopment.com');
+      expect(lastUpdate.patch.vercelDomain).toBe('acme.kumo.localhost');
     });
 
     it('resolves without a return value', async () => {
@@ -553,7 +553,7 @@ describe('provisionWebsite', () => {
       expect(envVars.find((e) => e.key === 'CMS_API_URL')?.value).toBe('https://cms.example.com');
     });
 
-    it('defaults CMS_API_URL to simplerdevelopment.com when not set', async () => {
+    it('defaults CMS_API_URL to kumo.localhost when not set', async () => {
       delete process.env.CMS_API_URL;
       setupHappyPath();
       const p = provisionWebsite(1, 'acme', 'Acme');
@@ -561,7 +561,7 @@ describe('provisionWebsite', () => {
       await p;
 
       const [, envVars] = setEnvVarsMock.mock.calls[0] as [string, Array<{ key: string; value: string }>];
-      expect(envVars.find((e) => e.key === 'CMS_API_URL')?.value).toBe('https://simplerdevelopment.com');
+      expect(envVars.find((e) => e.key === 'CMS_API_URL')?.value).toBe('https://kumo.localhost');
     });
   });
 });
@@ -585,12 +585,12 @@ describe('changeSubdomain', () => {
   describe('dedicated Vercel project path (vercelProjectId provided)', () => {
     it('adds new domain to Vercel', async () => {
       await changeSubdomain(1, 'old', 'new', 'v-proj-1');
-      expect(addDomainMock).toHaveBeenCalledWith('v-proj-1', 'new.simplerdevelopment.com');
+      expect(addDomainMock).toHaveBeenCalledWith('v-proj-1', 'new.kumo.localhost');
     });
 
     it('fetches DNS target for the new domain', async () => {
       await changeSubdomain(1, 'old', 'new', 'v-proj-1');
-      expect(getDomainConfigMock).toHaveBeenCalledWith('new.simplerdevelopment.com');
+      expect(getDomainConfigMock).toHaveBeenCalledWith('new.kumo.localhost');
     });
 
     it('creates a CNAME for the new subdomain', async () => {
@@ -600,7 +600,7 @@ describe('changeSubdomain', () => {
 
     it('removes old domain from Vercel', async () => {
       await changeSubdomain(1, 'old', 'new', 'v-proj-1');
-      expect(removeDomainMock).toHaveBeenCalledWith('v-proj-1', 'old.simplerdevelopment.com');
+      expect(removeDomainMock).toHaveBeenCalledWith('v-proj-1', 'old.kumo.localhost');
     });
 
     it('falls back to generic cname target when domainConfig.cnames is empty', async () => {
@@ -628,10 +628,10 @@ describe('changeSubdomain', () => {
       expect(createCnameRecordMock).toHaveBeenCalledWith('new', 'platform.example.com');
     });
 
-    it('falls back to simplerdevelopment.com when RAILWAY_PUBLIC_DOMAIN is not set', async () => {
+    it('falls back to kumo.localhost when RAILWAY_PUBLIC_DOMAIN is not set', async () => {
       delete process.env.RAILWAY_PUBLIC_DOMAIN;
       await changeSubdomain(1, 'old', 'new', null);
-      expect(createCnameRecordMock).toHaveBeenCalledWith('new', 'simplerdevelopment.com');
+      expect(createCnameRecordMock).toHaveBeenCalledWith('new', 'kumo.localhost');
     });
 
     it('does not call addDomain or removeDomain on Vercel', async () => {
@@ -670,7 +670,7 @@ describe('changeSubdomain', () => {
       await changeSubdomain(1, 'old', 'new', 'v-proj-1');
       const update = updateCalls[updateCalls.length - 1];
       expect(update.patch.subdomain).toBe('new');
-      expect(update.patch.vercelDomain).toBe('new.simplerdevelopment.com');
+      expect(update.patch.vercelDomain).toBe('new.kumo.localhost');
       expect(update.patch.updatedAt).toBeInstanceOf(Date);
     });
   });

@@ -362,7 +362,7 @@ describe('ApprovalReviewer', () => {
       subject: 'Welcome to us!',
       previewText: 'Check this out',
       fromName: 'Team SD',
-      fromEmail: 'hello@simplerdevelopment.com',
+      fromEmail: 'hello@kumo.localhost',
       htmlContent: '<p>Hello</p>',
       status: 'draft',
     };

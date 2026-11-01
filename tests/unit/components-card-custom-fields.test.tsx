@@ -5,8 +5,8 @@
  * Covers:
  *  - Returns null when loading (no initialFields)
  *  - Returns null when fields is empty
- *  - Renders "Custom fields" heading when fields present
- *  - Shows "Saving…" indicator while flush is in flight
+ *  - Renders "Campos personalizados" heading when fields present
+ *  - Shows "Salvando…" indicator while flush is in flight
  *  - text field: renders value, onChange, onBlur flush
  *  - number field: renders value, onChange (number), empty → null
  *  - date field: renders value, onChange
@@ -113,10 +113,10 @@ describe('CardCustomFields', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders the "Custom fields" heading when fields are provided', () => {
+  it('renders the "Campos personalizados" heading when fields are provided', () => {
     const fields = [makeField({ id: 1, kind: 'text', name: 'Title', value: 'hello' })];
     render(<CardCustomFields cardId={1} canEdit={true} initialFields={fields} />);
-    expect(screen.getByText('Custom fields')).toBeTruthy();
+    expect(screen.getByText('Campos personalizados')).toBeTruthy();
   });
 
   // -------------------------------------------------------------------------
@@ -524,7 +524,7 @@ describe('CardCustomFields', () => {
   // Saving indicator
   // -------------------------------------------------------------------------
 
-  it('shows "Saving…" while PUT is in flight', async () => {
+  it('shows "Salvando…" while PUT is in flight', async () => {
     let resolvePut: (v: unknown) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).fetch = vi.fn((url: string, init?: RequestInit) => {
@@ -544,7 +544,7 @@ describe('CardCustomFields', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText('Saving…')).toBeTruthy();
+      expect(screen.queryByText('Salvando…')).toBeTruthy();
     });
 
     // Resolve the PUT to clean up

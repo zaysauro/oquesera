@@ -74,13 +74,13 @@ export default async function LiveChatWidget({
       </div>
       {recent.length === 0 ? (
         <div className="py-2 text-center">
-          <p className="text-sm text-muted-foreground mb-2">No conversations yet.</p>
+          <p className="text-sm text-muted-foreground mb-2">Nenhuma conversa ainda.</p>
           <Link
             href="/portal/inbox"
             className="text-sm text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-base">chat</span>
-            View inbox
+            Ver caixa de entrada
           </Link>
         </div>
       ) : (

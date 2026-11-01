@@ -216,9 +216,9 @@ export function formatMetric(value: number | null, unit: string | null): string 
   if (unit === 'percent') return `${value}%`;
   if (unit === 'usd_cents') {
     const dollars = value / 100;
-    if (Math.abs(dollars) >= 1_000_000) return `$${(dollars / 1_000_000).toFixed(1)}M`;
-    if (Math.abs(dollars) >= 1_000) return `$${(dollars / 1_000).toFixed(1)}k`;
-    return `$${dollars.toFixed(0)}`;
+    if (Math.abs(dollars) >= 1_000_000) return `R$ ${(dollars / 1_000_000).toFixed(1)}M`;
+    if (Math.abs(dollars) >= 1_000) return `R$ ${(dollars / 1_000).toFixed(1)}k`;
+    return `R$ ${dollars.toFixed(0)}`;
   }
   if (unit === 'count') return value.toLocaleString();
   if (unit === 'boolean') return value > 0 ? 'Yes' : 'No';

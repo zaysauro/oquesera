@@ -152,10 +152,10 @@ describe('CrmSettingsPage — tab navigation', () => {
   it('renders all four tab labels', async () => {
     const { container } = renderPage();
     await waitForLoaded(container);
-    expect(container.textContent).toContain('Pipelines');
+    expect(container.textContent).toContain('Funis');
     expect(container.textContent).toContain('Tags');
-    expect(container.textContent).toContain('Custom Fields');
-    expect(container.textContent).toContain('Automations');
+    expect(container.textContent).toContain('Campos personalizados');
+    expect(container.textContent).toContain('Automações');
   });
 
   it('shows pipelines panel by default', async () => {
@@ -173,14 +173,14 @@ describe('CrmSettingsPage — tab navigation', () => {
     ) as HTMLButtonElement;
     expect(tagsBtn).toBeTruthy();
     fireEvent.click(tagsBtn);
-    expect(container.textContent).toContain('Manage tags for organizing contacts');
+    expect(container.textContent).toContain('Gerencie tags para organizar contatos');
   });
 
   it('switches to Custom Fields tab on click', async () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const cfBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Custom Fields'),
+      b.textContent?.includes('Campos personalizados'),
     ) as HTMLButtonElement;
     expect(cfBtn).toBeTruthy();
     fireEvent.click(cfBtn);
@@ -191,7 +191,7 @@ describe('CrmSettingsPage — tab navigation', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const autoBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Automations'),
+      b.textContent?.includes('Automações'),
     ) as HTMLButtonElement;
     expect(autoBtn).toBeTruthy();
     fireEvent.click(autoBtn);
@@ -285,7 +285,7 @@ describe('CrmSettingsPage — pipeline rename', () => {
     const editBtn = container.querySelector('button[title="Rename"]') as HTMLButtonElement;
     fireEvent.click(editBtn);
     const cancelBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.trim() === 'Cancel',
+      b.textContent?.trim() === 'Cancelar',
     ) as HTMLButtonElement;
     fireEvent.click(cancelBtn);
     await waitFor(() => {
@@ -312,7 +312,7 @@ describe('CrmSettingsPage — pipeline rename', () => {
     const input = container.querySelector('input') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Renamed Pipeline' } });
     const saveBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.trim() === 'Save',
+      b.textContent?.trim() === 'Salvar',
     ) as HTMLButtonElement;
     fireEvent.click(saveBtn);
     await waitFor(() => {
@@ -465,7 +465,7 @@ describe('CrmSettingsPage — create pipeline', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const input = container.querySelector(
-      'input[placeholder="New pipeline name..."]',
+      'input[placeholder="Nome do novo funil..."]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Marketing' } });
     const submitBtn = Array.from(container.querySelectorAll('button[type="submit"]')).find((b) =>
@@ -488,7 +488,7 @@ describe('CrmSettingsPage — create pipeline', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const input = container.querySelector(
-      'input[placeholder="New pipeline name..."]',
+      'input[placeholder="Nome do novo funil..."]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Marketing' } });
     const form = input.closest('form') as HTMLFormElement;
@@ -515,7 +515,7 @@ describe('CrmSettingsPage — create pipeline', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const input = container.querySelector(
-      'input[placeholder="New pipeline name..."]',
+      'input[placeholder="Nome do novo funil..."]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Marketing' } });
     const form = input.closest('form') as HTMLFormElement;
@@ -529,7 +529,7 @@ describe('CrmSettingsPage — create pipeline', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const input = container.querySelector(
-      'input[placeholder="New pipeline name..."]',
+      'input[placeholder="Nome do novo funil..."]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: '   ' } });
     const form = input.closest('form') as HTMLFormElement;
@@ -577,7 +577,7 @@ describe('CrmSettingsPage — stage management', () => {
     await waitForLoaded(container);
     await expandPipeline(container);
     const stageNameInput = container.querySelector(
-      'input[placeholder="e.g. Proposal"]',
+      'input[placeholder="ex.: Proposta"]',
     ) as HTMLInputElement;
     expect(stageNameInput).toBeTruthy();
   });
@@ -587,7 +587,7 @@ describe('CrmSettingsPage — stage management', () => {
     await waitForLoaded(container);
     await expandPipeline(container);
     const addBtn = Array.from(container.querySelectorAll('button[type="submit"]')).find((b) =>
-      b.textContent?.includes('Add'),
+      b.textContent?.includes('Adicionar'),
     ) as HTMLButtonElement;
     expect(addBtn.disabled).toBe(true);
   });
@@ -605,7 +605,7 @@ describe('CrmSettingsPage — stage management', () => {
     await waitForLoaded(container);
     await expandPipeline(container);
     const stageNameInput = container.querySelector(
-      'input[placeholder="e.g. Proposal"]',
+      'input[placeholder="ex.: Proposta"]',
     ) as HTMLInputElement;
     fireEvent.change(stageNameInput, { target: { value: 'Closed' } });
     const form = stageNameInput.closest('form') as HTMLFormElement;
@@ -631,7 +631,7 @@ describe('CrmSettingsPage — stage management', () => {
     await waitForLoaded(container);
     await expandPipeline(container);
     const stageNameInput = container.querySelector(
-      'input[placeholder="e.g. Proposal"]',
+      'input[placeholder="ex.: Proposta"]',
     ) as HTMLInputElement;
     fireEvent.change(stageNameInput, { target: { value: 'Closed Won' } });
     const form = stageNameInput.closest('form') as HTMLFormElement;
@@ -786,12 +786,12 @@ describe('CrmSettingsPage — tags tab', () => {
     fireEvent.click(tagsBtn);
   }
 
-  it('shows "No tags yet" when list is empty', async () => {
+  it('shows "Nenhuma tag ainda" when list is empty', async () => {
     setupEmpty();
     const { container } = renderPage();
     await waitForLoaded(container);
     await switchToTags(container);
-    expect(container.textContent).toContain('No tags yet');
+    expect(container.textContent).toContain('Nenhuma tag ainda');
   });
 
   it('renders tag name from API', async () => {
@@ -948,7 +948,7 @@ describe('CrmSettingsPage — tags tab', () => {
     ) as HTMLButtonElement;
     fireEvent.click(tagDeleteBtn);
     await waitFor(() => {
-      expect(container.textContent).toContain('No tags yet');
+      expect(container.textContent).toContain('Nenhuma tag ainda');
     });
   });
 
@@ -974,7 +974,7 @@ describe('CrmSettingsPage — custom fields tab', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const cfBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Custom Fields'),
+      b.textContent?.includes('Campos personalizados'),
     ) as HTMLButtonElement;
     fireEvent.click(cfBtn);
     expect(container.querySelector('[data-testid="crm-custom-fields-admin"]')).toBeTruthy();
@@ -988,20 +988,20 @@ describe('CrmSettingsPage — automations tab', () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const autoBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Automations'),
+      b.textContent?.includes('Automações'),
     ) as HTMLButtonElement;
     expect(autoBtn).toBeTruthy();
     fireEvent.click(autoBtn);
     const el = container.querySelector('[data-testid="product-automation-settings"]');
     expect(el).toBeTruthy();
-    expect(el?.textContent).toContain('CRM Automations');
+    expect(el?.textContent).toContain('Automações do CRM');
   });
 
   it('renders automation description text', async () => {
     const { container } = renderPage();
     await waitForLoaded(container);
     const autoBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Automations'),
+      b.textContent?.includes('Automações'),
     ) as HTMLButtonElement;
     expect(autoBtn).toBeTruthy();
     fireEvent.click(autoBtn);

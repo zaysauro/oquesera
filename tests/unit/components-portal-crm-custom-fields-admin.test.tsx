@@ -68,11 +68,11 @@ function mockLoadOk(fields: ReturnType<typeof makeField>[]) {
 // Wait for loading to finish (either field text or empty state)
 async function waitForLoaded() {
   await waitFor(() => {
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    expect(screen.queryByText('Carregando...')).not.toBeInTheDocument();
   });
 }
 
-// The field-type <select> in the create form. The "Category" <input list=...>
+// The field-type <select> in the create form. The "Categoria" <input list=...>
 // bound to a <datalist> also carries an implicit combobox role, so a bare
 // getByRole('combobox') is ambiguous — disambiguate by element tag.
 function getTypeSelect() {
@@ -94,7 +94,7 @@ describe('CrmCustomFieldsAdmin', () => {
 
       render(<CrmCustomFieldsAdmin />);
 
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      expect(screen.getByText('Carregando...')).toBeInTheDocument();
 
       await waitFor(() => {
         expect(screen.getByText('Revenue')).toBeInTheDocument();
@@ -117,9 +117,9 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
 
       // Tabs are rendered immediately (no async needed)
-      expect(screen.getByText('Contacts')).toBeInTheDocument();
-      expect(screen.getByText('Companies')).toBeInTheDocument();
-      expect(screen.getByText('Deals')).toBeInTheDocument();
+      expect(screen.getByText('Contatos')).toBeInTheDocument();
+      expect(screen.getByText('Empresas')).toBeInTheDocument();
+      expect(screen.getByText('Oportunidades')).toBeInTheDocument();
     });
 
     it('renders the create form', async () => {
@@ -127,8 +127,8 @@ describe('CrmCustomFieldsAdmin', () => {
 
       render(<CrmCustomFieldsAdmin />);
 
-      expect(screen.getByText('Add a field')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Add Field/i })).toBeInTheDocument();
+      expect(screen.getByText('Adicionar um campo')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Adicionar campo/i })).toBeInTheDocument();
     });
   });
 
@@ -145,7 +145,7 @@ describe('CrmCustomFieldsAdmin', () => {
       await waitForLoaded();
 
       await act(async () => {
-        fireEvent.click(screen.getByText('Companies'));
+        fireEvent.click(screen.getByText('Empresas'));
       });
 
       await waitFor(() => {
@@ -166,22 +166,22 @@ describe('CrmCustomFieldsAdmin', () => {
       await waitForLoaded();
 
       // Trigger a validation error
-      const nameInput = screen.getByPlaceholderText('Field name');
+      const nameInput = screen.getByPlaceholderText('Nome do campo');
       fireEvent.change(nameInput, { target: { value: 'Priority' } });
 
       const typeSelect = getTypeSelect();
       fireEvent.change(typeSelect, { target: { value: 'select' } });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/Select\/multi-select requires at least one option/i)).toBeInTheDocument();
+        expect(screen.getByText(/Seleção única\/múltipla exige pelo menos uma opção/i)).toBeInTheDocument();
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByText('Deals'));
+        fireEvent.click(screen.getByText('Oportunidades'));
       });
 
       await waitFor(() => {
@@ -220,7 +220,7 @@ describe('CrmCustomFieldsAdmin', () => {
         makeField({
           fieldType: 'select',
           fieldName: 'Priority',
-          options: ['Low', 'Medium', 'High'],
+          options: ['Baixa', 'Média', 'Alta'],
         }),
       ]);
 
@@ -260,12 +260,12 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
       await waitForLoaded();
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Website URL' },
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
@@ -283,7 +283,7 @@ describe('CrmCustomFieldsAdmin', () => {
 
       render(<CrmCustomFieldsAdmin />);
 
-      const addBtn = screen.getByRole('button', { name: /Add Field/i });
+      const addBtn = screen.getByRole('button', { name: /Adicionar campo/i });
       expect(addBtn).toBeDisabled();
     });
 
@@ -321,18 +321,18 @@ describe('CrmCustomFieldsAdmin', () => {
 
       render(<CrmCustomFieldsAdmin />);
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Status' },
       });
       fireEvent.change(getTypeSelect(), { target: { value: 'select' } });
       // Leave options blank
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       expect(
-        screen.getByText(/Select\/multi-select requires at least one option/i),
+        screen.getByText(/Seleção única\/múltipla exige pelo menos uma opção/i),
       ).toBeInTheDocument();
     });
 
@@ -352,7 +352,7 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
       await waitForLoaded();
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Status' },
       });
       fireEvent.change(getTypeSelect(), { target: { value: 'select' } });
@@ -361,7 +361,7 @@ describe('CrmCustomFieldsAdmin', () => {
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
@@ -379,12 +379,12 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
       await waitForLoaded();
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Email' },
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
@@ -402,12 +402,12 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
       await waitForLoaded();
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Notes' },
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
@@ -437,15 +437,15 @@ describe('CrmCustomFieldsAdmin', () => {
       render(<CrmCustomFieldsAdmin />);
       await waitForLoaded();
 
-      fireEvent.change(screen.getByPlaceholderText('Field name'), {
+      fireEvent.change(screen.getByPlaceholderText('Nome do campo'), {
         target: { value: 'Region' },
       });
-      fireEvent.change(screen.getByPlaceholderText('Category (optional)'), {
+      fireEvent.change(screen.getByPlaceholderText('Categoria (opcional)'), {
         target: { value: 'Location' },
       });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /Add Field/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Adicionar campo/i }));
       });
 
       await waitFor(() => {
@@ -471,8 +471,8 @@ describe('CrmCustomFieldsAdmin', () => {
       fireEvent.click(screen.getByTitle('Edit'));
 
       // Edit form shows Save/Cancel
-      expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Salvar' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Cancelar' })).toBeInTheDocument();
     });
 
     it('cancel button exits edit mode', async () => {
@@ -482,12 +482,12 @@ describe('CrmCustomFieldsAdmin', () => {
       await waitFor(() => screen.getByText('MyField2'));
 
       fireEvent.click(screen.getByTitle('Edit'));
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Cancelar' })).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
 
       await waitFor(() => {
-        expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Salvar' })).not.toBeInTheDocument();
       });
     });
 
@@ -507,11 +507,11 @@ describe('CrmCustomFieldsAdmin', () => {
 
       // The edit name input is the one inside the edit form (inside the field card)
       // Use getAllByPlaceholderText and pick the first (in-card edit input)
-      const nameInputs = screen.getAllByPlaceholderText('Field name');
+      const nameInputs = screen.getAllByPlaceholderText('Nome do campo');
       fireEvent.change(nameInputs[0], { target: { value: 'Territory' } });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
       });
 
       await waitFor(() => {
@@ -537,7 +537,7 @@ describe('CrmCustomFieldsAdmin', () => {
       fireEvent.click(screen.getByTitle('Edit'));
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
       });
 
       await waitFor(() => {
@@ -546,22 +546,22 @@ describe('CrmCustomFieldsAdmin', () => {
     });
 
     it('save edit validates options for select field type', async () => {
-      mockLoadOk([makeField({ id: 4, fieldName: 'SelectField', fieldType: 'select', options: ['Low'] })]);
+      mockLoadOk([makeField({ id: 4, fieldName: 'SelectField', fieldType: 'select', options: ['Baixa'] })]);
 
       render(<CrmCustomFieldsAdmin />);
       await waitFor(() => screen.getByText('SelectField'));
 
       fireEvent.click(screen.getByTitle('Edit'));
 
-      const optionsInput = screen.getByPlaceholderText('Options (comma-separated)');
+      const optionsInput = screen.getByPlaceholderText('Opções (separadas por vírgula)');
       fireEvent.change(optionsInput, { target: { value: '' } });
 
       await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
       });
 
       expect(
-        screen.getByText(/Select\/multi-select requires at least one option/i),
+        screen.getByText(/Seleção única\/múltipla exige pelo menos uma opção/i),
       ).toBeInTheDocument();
     });
 
@@ -573,7 +573,7 @@ describe('CrmCustomFieldsAdmin', () => {
 
       fireEvent.click(screen.getByTitle('Edit'));
 
-      expect(screen.getByPlaceholderText('Options (comma-separated)')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Opções (separadas por vírgula)')).toBeInTheDocument();
     });
 
     it('edit form does NOT show options input for text field type', async () => {
@@ -584,7 +584,7 @@ describe('CrmCustomFieldsAdmin', () => {
 
       fireEvent.click(screen.getByTitle('Edit'));
 
-      expect(screen.queryByPlaceholderText('Options (comma-separated)')).not.toBeInTheDocument();
+      expect(screen.queryByPlaceholderText('Opções (separadas por vírgula)')).not.toBeInTheDocument();
     });
 
     it('edit form pre-populates category', async () => {
@@ -595,7 +595,7 @@ describe('CrmCustomFieldsAdmin', () => {
 
       fireEvent.click(screen.getByTitle('Edit'));
 
-      const catInput = screen.getByPlaceholderText('Category (e.g. Tech, Location)');
+      const catInput = screen.getByPlaceholderText('Categoria (ex.: Técnica, Localização)');
       expect((catInput as HTMLInputElement).value).toBe('Location');
     });
 
@@ -639,7 +639,7 @@ describe('CrmCustomFieldsAdmin', () => {
       });
 
       expect(global.confirm).toHaveBeenCalledWith(
-        'Delete this field? All values stored against it will be removed.',
+        'Excluir este campo? Todos os valores salvos nele serão removidos.',
       );
       expect(mockFetch).toHaveBeenCalledWith(
         '/api/portal/crm/custom-fields/11',

@@ -45,7 +45,7 @@ describe('isKnownSiteHost', () => {
 
   it('accepts a platform subdomain that maps to an active site', async () => {
     state.selectQueue = [[], [], [{ id: 3 }]]; // direct + domains miss, subdomain hit
-    expect(await isKnownSiteHost('client.simplerdevelopment.com')).toBe(true);
+    expect(await isKnownSiteHost('client.kumo.localhost')).toBe(true);
   });
 
   it('rejects a valid-looking host that no tenant has claimed', async () => {

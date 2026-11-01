@@ -61,12 +61,12 @@ export default async function BookingPagesListPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <PortalPageHeader
         eyebrow="Booking"
-        title="Booking Pages"
-        subtitle="Create scheduling pages so clients can book time with you"
+        title="Páginas de agendamento"
+        subtitle="Crie páginas para seus clientes agendarem horários"
         actions={
           <Link href="/portal/tools/booking/new" className={pBtnPrimary}>
             <span className="material-icons text-lg">add</span>
-            New Booking Page
+            Nova página de agendamento
           </Link>
         }
       />
@@ -83,8 +83,8 @@ export default async function BookingPagesListPage() {
                 so this copy must not promise conflict checking until that lands. */}
             <p className="text-xs text-muted-foreground">
               {isCalendarConnected
-                ? 'Connected — new bookings sync to your calendar automatically'
-                : 'Connect to add new bookings to your calendar automatically'}
+                ? 'Conectado — novos agendamentos vão para o seu calendário automaticamente'
+                : 'Conecte para enviar novos agendamentos ao seu calendário'}
             </p>
           </div>
         </div>
@@ -92,14 +92,14 @@ export default async function BookingPagesListPage() {
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               <span className="material-icons text-sm">check_circle</span>
-              Connected
+              Conectado
             </span>
             <form action="/api/portal/tools/booking/google/disconnect" method="POST">
               <button
                 type="submit"
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
               >
-                Disconnect
+                Desconectar
               </button>
             </form>
           </div>
@@ -110,7 +110,7 @@ export default async function BookingPagesListPage() {
             className={pBtnGhost}
           >
             <span className="material-icons text-lg">link</span>
-            Connect
+            Conectar
           </a>
         )}
       </div>
@@ -123,8 +123,8 @@ export default async function BookingPagesListPage() {
             <p className="text-sm font-medium text-foreground">Zoom</p>
             <p className="text-xs text-muted-foreground">
               {isZoomConnected
-                ? 'Connected — Zoom meetings are auto-created for bookings'
-                : 'Connect to automatically create Zoom meetings for bookings'}
+                ? 'Conectado — reuniões Zoom são criadas automaticamente'
+                : 'Conecte para criar reuniões Zoom automaticamente'}
             </p>
           </div>
         </div>
@@ -132,14 +132,14 @@ export default async function BookingPagesListPage() {
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               <span className="material-icons text-sm">check_circle</span>
-              Connected
+              Conectado
             </span>
             <form action="/api/portal/tools/booking/zoom/disconnect" method="POST">
               <button
                 type="submit"
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
               >
-                Disconnect
+                Desconectar
               </button>
             </form>
           </div>
@@ -150,7 +150,7 @@ export default async function BookingPagesListPage() {
             className={pBtnGhost}
           >
             <span className="material-icons text-lg">link</span>
-            Connect
+            Conectar
           </a>
         )}
       </div>
@@ -158,11 +158,11 @@ export default async function BookingPagesListPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {[
-          { href: '/portal/tools/booking/calendar', icon: 'calendar_month', label: 'Calendar', desc: 'Combined view' },
-          { href: '/portal/tools/booking/analytics', icon: 'bar_chart', label: 'Analytics', desc: 'Revenue & insights' },
+          { href: '/portal/tools/booking/calendar', icon: 'calendar_month', label: 'Calendário', desc: 'Combined view' },
+          { href: '/portal/tools/booking/analytics', icon: 'bar_chart', label: 'Relatórios', desc: 'Revenue & insights' },
           { href: '/portal/tools/booking/checkin', icon: 'qr_code_scanner', label: 'Check-in', desc: 'Scan & manage' },
-          { href: '/portal/tools/booking/quotes', icon: 'request_quote', label: 'Quotes', desc: 'Custom pricing' },
-          { href: '/portal/tools/gift-certificates', icon: 'card_giftcard', label: 'Gift Certs', desc: 'Manage certificates' },
+          { href: '/portal/tools/booking/quotes', icon: 'request_quote', label: 'Orçamentos', desc: 'Custom pricing' },
+          { href: '/portal/tools/gift-certificates', icon: 'card_giftcard', label: 'Vales-presente', desc: 'Manage certificates' },
         ].map((action) => (
           <Link
             key={action.href}
@@ -176,21 +176,20 @@ export default async function BookingPagesListPage() {
         ))}
       </div>
 
-      {/* Booking Pages List */}
+      {/* Páginas de agendamento List */}
       {pages.length === 0 ? (
         <div className="bg-card border border-border rounded-2xl p-10 text-center space-y-4">
           <span className="material-icons text-5xl text-muted-foreground/50">calendar_month</span>
-          <h2 className="text-lg font-semibold text-foreground">No booking pages yet</h2>
+          <h2 className="text-lg font-semibold text-foreground">Nenhuma página de agendamento</h2>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            Create your first booking page to let clients schedule meetings with you.
-            Set your availability, duration, and custom questions.
+            Crie a primeira página para seus clientes agendarem. Defina disponibilidade, duração e perguntas.
           </p>
           <Link
             href="/portal/tools/booking/new"
             className={pBtnPrimary}
           >
             <span className="material-icons text-lg">add_circle</span>
-            Create Your First Booking Page
+            Criar a primeira página de agendamento
           </Link>
         </div>
       ) : (
@@ -227,7 +226,7 @@ export default async function BookingPagesListPage() {
                     </span>
                     {!page.active && (
                       <span className="text-xs text-muted-foreground text-right leading-tight max-w-[14rem]">
-                        New booking pages are reviewed before going live — usually within a few hours
+                        Novas páginas de agendamento são revisadas antes de ficarem públicas
                       </span>
                     )}
                   </div>
@@ -259,7 +258,7 @@ export default async function BookingPagesListPage() {
       <div className="bg-card border border-border rounded-2xl p-4 flex items-start gap-3">
         <span className="material-icons text-primary mt-0.5">tips_and_updates</span>
         <div className="text-sm text-muted-foreground">
-          <p className="font-medium text-foreground">Tips</p>
+          <p className="font-medium text-foreground">Dicas</p>
           <p>
             Connect Google Calendar to add new bookings to your calendar automatically. Your existing
             calendar events aren&apos;t checked for conflicts yet, so keep each booking page&apos;s available

@@ -169,14 +169,14 @@ describe('Card', () => {
 describe('Footer', () => {
   it('renders the site name as the brand heading', () => {
     render(<Footer />);
-    // siteConfig.name = "SimplerDevelopment"
+    // siteConfig.name = "Kumo One"
     expect(screen.getByRole('heading', { level: 3, name: /SimplerDevelopment/i })).toBeTruthy();
   });
 
   it('renders the platform and company column headings', () => {
     render(<Footer />);
     expect(screen.getByRole('heading', { level: 4, name: /Platform/i })).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 4, name: /Company/i })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 4, name: /Empresa/i })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 4, name: /Get in Touch/i })).toBeTruthy();
   });
 
@@ -214,7 +214,7 @@ describe('Footer', () => {
 
   it('shows the contact email', () => {
     const { container } = render(<Footer />);
-    expect(container.textContent).toContain('info@simplerdevelopment.com');
+    expect(container.textContent).toContain('info@kumo.localhost');
   });
 });
 

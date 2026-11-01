@@ -100,7 +100,7 @@ export default function DealKanban({
             >
               {stageDeals.length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6">
-                  {isOver ? 'Drop here' : 'No deals'}
+                  {isOver ? 'Solte aqui' : 'Nenhuma oportunidade'}
                 </p>
               )}
               {stageDeals.map((deal) => (

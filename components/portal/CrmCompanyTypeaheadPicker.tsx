@@ -51,7 +51,7 @@ export default function CrmCompanyTypeaheadPicker({
   value,
   selectedLabel,
   onChange,
-  placeholder = 'Search companies…',
+  placeholder = 'Buscar empresas…',
   disabled = false,
   className,
   noneLabel = 'None',
@@ -147,7 +147,7 @@ export default function CrmCompanyTypeaheadPicker({
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search companies…"
+              placeholder="Buscar empresas…"
               className="w-full px-3 py-1.5 bg-background border border-border rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
             />
           </div>
@@ -168,7 +168,7 @@ export default function CrmCompanyTypeaheadPicker({
             ) : loading ? (
               <p className="px-3 py-3 text-xs text-muted-foreground flex items-center gap-2">
                 <span className="material-icons animate-spin text-sm">refresh</span>
-                Searching…
+                Buscando…
               </p>
             ) : displayResults.length === 0 ? (
               <p className="px-3 py-3 text-xs text-muted-foreground">

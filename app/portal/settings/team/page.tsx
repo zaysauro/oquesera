@@ -22,9 +22,9 @@ interface InviteResult {
 }
 
 const ROLES = [
-  { value: 'admin', label: 'Admin', description: 'Can invite members, change roles, manage projects' },
-  { value: 'member', label: 'Member', description: 'Can view and collaborate on projects' },
-  { value: 'viewer', label: 'Viewer', description: 'Read-only access to projects and invoices' },
+  { value: 'admin', label: 'Administrador', description: 'Pode convidar membros, alterar papéis e gerenciar projetos' },
+  { value: 'member', label: 'Membro', description: 'Pode ver e colaborar em projetos' },
+  { value: 'viewer', label: 'Leitor', description: 'Acesso somente leitura a projetos e faturas' },
 ] as const;
 
 const roleBadgeClass: Record<string, string> = {
@@ -90,7 +90,7 @@ export default function SettingsTeamPage() {
   };
 
   const handleRemove = async (memberId: number) => {
-    if (!confirm('Remove this team member?')) return;
+    if (!confirm('Remover este membro?')) return;
     setRemovingId(memberId);
     try {
       const res = await fetch(`/api/portal/team/${memberId}`, { method: 'DELETE' });
@@ -129,12 +129,12 @@ export default function SettingsTeamPage() {
       {/* Members list */}
       <div className={`${pCard} overflow-hidden`}>
         <div className="px-6 py-4 border-b border-border">
-          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Team Members</h2>
+          <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Membros da equipe</h2>
           <p className="text-xs text-muted-foreground mt-0.5">{members.length} member{members.length !== 1 ? 's' : ''}</p>
         </div>
 
         {members.length === 0 ? (
-          <div className="px-6 py-10 text-center text-sm text-muted-foreground">No team members yet.</div>
+          <div className="px-6 py-10 text-center text-sm text-muted-foreground">Nenhum membro ainda.</div>
         ) : (
           <ul className="divide-y divide-border">
             {members.map(m => (
@@ -145,7 +145,7 @@ export default function SettingsTeamPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
                     {m.name}
-                    {m.isCurrentUser && <span className="ml-2 text-xs text-muted-foreground">(you)</span>}
+                    {m.isCurrentUser && <span className="ml-2 text-xs text-muted-foreground">(você)</span>}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">{m.email}</p>
                 </div>
@@ -198,14 +198,14 @@ export default function SettingsTeamPage() {
       {canManage && (
         <div className={`${pCard} p-6 space-y-4`}>
           <div>
-            <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Invite a Team Member</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">They will receive login credentials to access this portal.</p>
+            <h2 className="text-base font-display font-extrabold tracking-[-0.01em] text-foreground">Convidar um membro</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">A pessoa receberá um convite por e-mail para acessar o painel.</p>
           </div>
 
           <form onSubmit={handleInvite} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-foreground">Full Name</label>
+                <label className="text-sm font-medium text-foreground">Nome completo</label>
                 <input
                   value={inviteForm.name}
                   onChange={e => { setInviteForm(p => ({ ...p, name: e.target.value })); setInviteError(''); }}
@@ -215,7 +215,7 @@ export default function SettingsTeamPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-foreground">Email</label>
+                <label className="text-sm font-medium text-foreground">E-mail</label>
                 <input
                   type="email"
                   value={inviteForm.email}
@@ -226,7 +226,7 @@ export default function SettingsTeamPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label htmlFor="invite-role" className="text-sm font-medium text-foreground">Role</label>
+                <label htmlFor="invite-role" className="text-sm font-medium text-foreground">Papel</label>
                 <select
                   id="invite-role"
                   value={inviteForm.role}
@@ -250,7 +250,7 @@ export default function SettingsTeamPage() {
               >
                 {inviting && <span className="material-icons text-base animate-spin">refresh</span>}
                 <span className="material-icons text-base">person_add</span>
-                {inviting ? 'Adding...' : 'Add Member'}
+                {inviting ? 'Adicionando...' : 'Adicionar membro'}
               </button>
             </div>
           </form>
@@ -266,15 +266,15 @@ export default function SettingsTeamPage() {
               <p className="text-sm font-medium text-green-800 dark:text-green-300">{inviteResult.name} has been added.</p>
               {inviteResult.isNewUser && inviteResult.tempPassword && (
                 <div className="space-y-1">
-                  <p className="text-xs text-green-700 dark:text-green-400">Share these credentials (shown once):</p>
+                  <p className="text-xs text-green-700 dark:text-green-400">Compartilhe estas credenciais (exibidas uma única vez):</p>
                   <div className="bg-white dark:bg-black/20 border border-green-200 dark:border-green-700 rounded-lg p-3 space-y-1 font-mono text-xs text-green-900 dark:text-green-200">
-                    <p><span className="font-semibold">Email:</span> {inviteResult.email}</p>
-                    <p><span className="font-semibold">Password:</span> {inviteResult.tempPassword}</p>
+                    <p><span className="font-semibold">E-mail:</span> {inviteResult.email}</p>
+                    <p><span className="font-semibold">Senha:</span> {inviteResult.tempPassword}</p>
                   </div>
                 </div>
               )}
               {!inviteResult.isNewUser && (
-                <p className="text-xs text-green-700 dark:text-green-400">They can sign in with their existing credentials.</p>
+                <p className="text-xs text-green-700 dark:text-green-400">A pessoa pode entrar com as credenciais que já possui.</p>
               )}
             </div>
             <button onClick={() => setInviteResult(null)} className="text-green-600 hover:text-green-800"><span className="material-icons text-base">close</span></button>
@@ -285,7 +285,7 @@ export default function SettingsTeamPage() {
       {!canManage && (
         <div className={`${pCard} p-5 text-center`}>
           <span className="material-icons text-muted-foreground text-2xl mb-2">lock</span>
-          <p className="text-sm text-muted-foreground">Only owners and admins can manage team members.</p>
+          <p className="text-sm text-muted-foreground">Somente proprietários e administradores podem gerenciar a equipe.</p>
         </div>
       )}
     </div>

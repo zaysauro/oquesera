@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -34,7 +35,7 @@ export function StepPayment({
   const [checkoutCancelled] = useState(() => checkoutParam === 'cancelled');
   const [checkoutSuccess, setCheckoutSuccess] = useState(() => checkoutParam === 'success');
   // Escape hatch: the success screen is supposed to auto-advance in ~1.8s, but
-  // a slow persist left users staring at "Setting up your workspace…" for
+  // a slow persist left users staring at "Preparando seu espaço de trabalho…" for
   // minutes right after being charged (OBQA-015). Offer a manual Continue.
   const [showEscape, setShowEscape] = useState(false);
   useEffect(() => {
@@ -137,14 +138,14 @@ export function StepPayment({
 
       window.location.href = json.data.url;
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
+      setError(e instanceof Error ? e.message : 'Algo deu errado. Tente novamente.');
     } finally {
       setLaunching(false);
     }
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `${formatMoney(cents, { fractionDigits: 0 })}/mo`;
 
   if (checkoutSuccess) {
     return (
@@ -152,8 +153,8 @@ export function StepPayment({
         <div className="rounded-full bg-emerald-500/10 p-4">
           <span className="material-icons text-4xl text-emerald-600">check_circle</span>
         </div>
-        <h2 className="text-xl font-bold">Trial started!</h2>
-        <p className="text-sm text-muted-foreground">Setting up your workspace…</p>
+        <h2 className="text-xl font-bold">Período de teste iniciado!</h2>
+        <p className="text-sm text-muted-foreground">Preparando seu espaço de trabalho…</p>
         {showEscape && (
           <button
             type="button"
@@ -161,7 +162,7 @@ export function StepPayment({
             data-testid="onboarding-payment-escape"
             className={obPrimaryBtn}
           >
-            Continue
+            Continuar
             <span className="material-icons text-lg">arrow_forward</span>
           </button>
         )}
@@ -174,14 +175,14 @@ export function StepPayment({
       {checkoutCancelled && (
         <div className="rounded-2xl border border-amber-200/60 bg-amber-50/80 px-4 py-3 flex items-start gap-2 text-sm text-amber-800">
           <span className="material-icons text-base mt-0.5 shrink-0">info</span>
-          No charge made — pick up where you left off.
+          Nenhuma cobrança feita — continue de onde parou.
         </div>
       )}
 
       {/* Order summary */}
       <div className="rounded-2xl border border-border bg-card divide-y divide-border overflow-hidden">
         {lineItems.length === 0 ? (
-          <div className="px-4 py-4 text-sm text-muted-foreground">No modules selected.</div>
+          <div className="px-4 py-4 text-sm text-muted-foreground">Nenhum módulo selecionado.</div>
         ) : (
           lineItems.map((li) => (
             <div key={li.name} className="flex items-center gap-3 px-4 py-3.5">
@@ -214,8 +215,8 @@ export function StepPayment({
         <div className="rounded-2xl border border-emerald-200/70 bg-emerald-500/[0.07] px-4 py-3.5 flex items-start gap-2.5 text-sm text-foreground">
           <span className="material-icons text-base text-emerald-600 mt-0.5 shrink-0">card_giftcard</span>
           <div>
-            <span className="font-semibold">14-day free trial</span>
-            <span className="text-muted-foreground"> — $0 today, card required. Cancel any time before day 14.</span>
+            <span className="font-semibold">14 dias de teste</span>
+            <span className="text-muted-foreground"> — R$ 0 hoje, cartão obrigatório. Cancele antes do 14º dia para não ser cobrado.</span>
           </div>
         </div>
       ) : (
@@ -237,7 +238,7 @@ export function StepPayment({
       {verifyNotice && (
         <div className="rounded-2xl border border-amber-200/60 bg-amber-50/80 px-4 py-3 flex items-start gap-2 text-sm text-amber-800">
           <span className="material-icons text-base mt-0.5 shrink-0">mark_email_unread</span>
-          Verify your email first — check your inbox for a confirmation link.
+          Confirme seu e-mail primeiro — procure o link na sua caixa de entrada.
         </div>
       )}
 
@@ -262,8 +263,8 @@ export function StepPayment({
           <span className="material-icons text-lg">{stripeEnabled ? 'rocket_launch' : 'arrow_forward'}</span>
         )}
         {launching
-          ? stripeEnabled ? 'Redirecting…' : 'Activating…'
-          : stripeEnabled ? 'Start free trial' : 'Continue without payment'}
+          ? stripeEnabled ? 'Redirecionando…' : 'Ativando…'
+          : stripeEnabled ? 'Iniciar teste' : 'Continuar sem pagamento'}
       </button>
     </div>
   );

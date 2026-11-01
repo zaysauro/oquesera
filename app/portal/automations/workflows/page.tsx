@@ -87,16 +87,16 @@ export default function WorkflowsListPage() {
       <div className="flex items-start gap-3 px-4 py-3 rounded-lg border border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200">
         <span className="material-icons text-xl mt-0.5 shrink-0">science</span>
         <div className="text-sm">
-          <span className="font-semibold">Beta — workflows do not execute yet.</span>{' '}
+          <span className="font-semibold">Beta — os fluxos visuais ainda não são executados.</span>{' '}
           You can build and save workflow graphs, but activating a workflow has no runtime effect.
-          Use <strong>Automations</strong> (Rules) for live trigger-to-action rules today.
+          Use <strong>Automações</strong> (Regras) para automações que já executam hoje.
         </div>
       </div>
 
       <PortalPageHeader
         eyebrow="Automations"
         title="Workflows"
-        subtitle="Visual trigger to action automations. Build a graph, test it, then activate."
+        subtitle="Automações visuais de gatilho e ação. Monte o fluxo, teste e ative."
         actions={
           <>
             <button
@@ -105,7 +105,7 @@ export default function WorkflowsListPage() {
               className={pBtnGhost}
             >
               <span className="material-icons text-lg">auto_awesome</span>
-              New from template
+              Novo a partir de modelo
             </button>
             <button
               type="button"
@@ -114,7 +114,7 @@ export default function WorkflowsListPage() {
               className={pBtnPrimary}
             >
               <span className="material-icons text-lg">add</span>
-              New blank
+              Novo em branco
             </button>
           </>
         }
@@ -123,7 +123,7 @@ export default function WorkflowsListPage() {
       {showTemplatePicker && (
         <div className={`${pCard} p-5 space-y-3`}>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold text-foreground">Pick a template</h2>
+            <h2 className="text-sm font-semibold text-foreground">Escolha um modelo</h2>
             <button
               type="button"
               onClick={() => setShowTemplatePicker(false)}
@@ -147,14 +147,14 @@ export default function WorkflowsListPage() {
                     <div className="text-sm font-medium text-foreground truncate">{t.name}</div>
                     <div className="text-xs text-muted-foreground line-clamp-2 mt-1">{t.description}</div>
                     <div className="text-xs text-muted-foreground mt-2">
-                      Trigger: <code className="font-mono">{t.triggerKind}</code> · {t.nodeCount} nodes
+                      Gatilho: <code className="font-mono">{t.triggerKind}</code> · {t.nodeCount} nodes
                     </div>
                   </div>
                 </div>
               </button>
             ))}
             {templates.length === 0 && (
-              <div className="text-sm text-muted-foreground col-span-full">No templates available.</div>
+              <div className="text-sm text-muted-foreground col-span-full">Nenhum modelo disponível.</div>
             )}
           </div>
         </div>
@@ -163,15 +163,14 @@ export default function WorkflowsListPage() {
       {loading ? (
         <div className={`${pCard} p-10 text-center`}>
           <span className="material-icons text-3xl text-muted-foreground animate-spin">progress_activity</span>
-          <p className="text-sm text-muted-foreground mt-2">Loading workflows...</p>
+          <p className="text-sm text-muted-foreground mt-2">Carregando fluxos...</p>
         </div>
       ) : rows.length === 0 ? (
         <div className={`${pCard} p-10 text-center space-y-4`}>
           <span className="material-icons text-5xl text-muted-foreground/50">account_tree</span>
-          <h2 className="text-lg font-semibold text-foreground">No workflows yet</h2>
+          <h2 className="text-lg font-semibold text-foreground">Nenhum fluxo ainda</h2>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            Workflows let you chain triggers and actions visually. Start from a template, or
-            spin up a blank canvas and drag nodes onto it.
+            Fluxos encadeiam gatilhos e ações visualmente. Comece por um modelo ou por uma tela em branco.
           </p>
         </div>
       ) : (
@@ -180,10 +179,10 @@ export default function WorkflowsListPage() {
           <table className="w-full text-sm min-w-[640px]">
             <thead className="bg-muted/50">
               <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-3 font-medium">Name</th>
-                <th className="px-4 py-3 font-medium">Trigger</th>
+                <th className="px-4 py-3 font-medium">Nome</th>
+                <th className="px-4 py-3 font-medium">Gatilho</th>
                 <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium">Updated</th>
+                <th className="px-4 py-3 font-medium">Atualizado</th>
                 <th className="px-4 py-3 font-medium" aria-label="actions" />
               </tr>
             </thead>
@@ -221,7 +220,7 @@ export default function WorkflowsListPage() {
                       href={`/portal/automations/workflows/${w.id}`}
                       className="text-xs text-primary hover:underline inline-flex items-center gap-1"
                     >
-                      Open
+                      Aberta
                       <span className="material-icons text-sm">arrow_forward</span>
                     </Link>
                   </td>

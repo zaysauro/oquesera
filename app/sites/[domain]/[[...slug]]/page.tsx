@@ -100,7 +100,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (pageSlug === 'shop') {
     return {
       title: { absolute: `Shop — ${site.name}` },
-      description: `Browse products from ${site.name}`,
+      description: `Produtos de ${site.name}`,
     };
   }
 
@@ -180,7 +180,7 @@ export default async function ClientSitePage({ params, searchParams }: PageProps
         <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-auto bg-gray-50 px-6 py-12">
           <div className="flex w-full max-w-md flex-col items-center text-center">
             <h1 className="mb-2 text-2xl font-bold text-gray-900">{site.name}</h1>
-            <p className="mb-8 text-gray-500">This site is private.</p>
+            <p className="mb-8 text-gray-500">Este site é privado.</p>
             <AccessCodeForm variant="gate" />
           </div>
         </div>
@@ -203,7 +203,7 @@ export default async function ClientSitePage({ params, searchParams }: PageProps
       return (
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <h1 className="text-3xl font-bold mb-4">{site.name}</h1>
-          <p className="text-gray-500">This site is coming soon.</p>
+          <p className="text-gray-500">Este site estará disponível em breve.</p>
         </div>
       );
     }
@@ -300,7 +300,7 @@ export default async function ClientSitePage({ params, searchParams }: PageProps
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Blog</h1>
         {totalPosts === 0 ? (
-          <p className="text-gray-500">No posts yet.</p>
+          <p className="text-gray-500">Nenhuma publicação ainda.</p>
         ) : (
           <>
             <div className="space-y-8">
@@ -324,9 +324,9 @@ export default async function ClientSitePage({ params, searchParams }: PageProps
             </div>
 
             {totalPages > 1 && (
-              <nav aria-label="Blog pagination" className="mt-12 flex flex-wrap items-center justify-center gap-2 text-sm">
+              <nav aria-label="Paginação do blog" className="mt-12 flex flex-wrap items-center justify-center gap-2 text-sm">
                 {blogPage > 1 && (
-                  <Link href={pageHref(blogPage - 1)} rel="prev" className="rounded-md border border-gray-200 px-3 py-2 font-medium text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50">← Prev</Link>
+                  <Link href={pageHref(blogPage - 1)} rel="prev" className="rounded-md border border-gray-200 px-3 py-2 font-medium text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50">← Anterior</Link>
                 )}
                 {pageNumbers[0] > 1 && (
                   <>
@@ -353,7 +353,7 @@ export default async function ClientSitePage({ params, searchParams }: PageProps
                   </>
                 )}
                 {blogPage < totalPages && (
-                  <Link href={pageHref(blogPage + 1)} rel="next" className="rounded-md border border-gray-200 px-3 py-2 font-medium text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50">Next →</Link>
+                  <Link href={pageHref(blogPage + 1)} rel="next" className="rounded-md border border-gray-200 px-3 py-2 font-medium text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50">Próxima →</Link>
                 )}
               </nav>
             )}

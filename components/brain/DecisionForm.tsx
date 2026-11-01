@@ -596,7 +596,7 @@ function dealDisplayRow(raw: unknown): EntityPickerRow | null {
   if (typeof r.id !== 'number') return null;
   const sec: string[] = [];
   if (typeof r.companyName === 'string' && r.companyName.trim()) sec.push(r.companyName);
-  if (typeof r.value === 'number') sec.push(`$${r.value.toLocaleString()}`);
+  if (typeof r.value === 'number') sec.push(`R$ ${r.value.toLocaleString()}`);
   return {
     id: r.id,
     primary: typeof r.title === 'string' && r.title.trim() ? r.title : `Deal #${r.id}`,

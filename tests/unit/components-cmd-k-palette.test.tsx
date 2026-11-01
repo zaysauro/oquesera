@@ -162,15 +162,15 @@ describe('CmdKPalette', () => {
   it('shows quick-create actions on open', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    expect(screen.getByText('New knowledge note')).toBeInTheDocument();
-    expect(screen.getByText('New survey')).toBeInTheDocument();
-    expect(screen.getByText('New pitch deck')).toBeInTheDocument();
+    expect(screen.getByText('Nova nota de conhecimento')).toBeInTheDocument();
+    expect(screen.getByText('Nova pesquisa')).toBeInTheDocument();
+    expect(screen.getByText('Nova apresentação')).toBeInTheDocument();
   });
 
   it('shows a Quick access section on open with no query', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    expect(screen.getByText('Quick access')).toBeInTheDocument();
+    expect(screen.getByText('Acesso rápido')).toBeInTheDocument();
   });
 
   it('renders the Dashboard nav entry on first open', async () => {
@@ -209,7 +209,7 @@ describe('CmdKPalette', () => {
     await openPalette();
     await typeInInput('crm');
     expect(screen.getByText('Navigate')).toBeInTheDocument();
-    expect(screen.queryByText('Quick access')).toBeNull();
+    expect(screen.queryByText('Acesso rápido')).toBeNull();
   });
 
   it('filters nav targets by query token', async () => {
@@ -225,7 +225,7 @@ describe('CmdKPalette', () => {
     await openPalette();
     await typeInInput('zzzqqqxx_no_match_here_1234');
     await waitForDebounce();
-    expect(screen.getByText(/No matches/i)).toBeInTheDocument();
+    expect(screen.getByText(/Nenhum resultado/i)).toBeInTheDocument();
   });
 
   it('hides the empty hint once the user starts typing', async () => {
@@ -239,9 +239,9 @@ describe('CmdKPalette', () => {
     render(<CmdKPalette />);
     await openPalette();
     await typeInInput('survey');
-    expect(screen.getByText('New survey')).toBeInTheDocument();
+    expect(screen.getByText('Nova pesquisa')).toBeInTheDocument();
     // Unrelated creates should be filtered out
-    expect(screen.queryByText('New pitch deck')).toBeNull();
+    expect(screen.queryByText('Nova apresentação')).toBeNull();
   });
 
   // -------------------------------------------------------------------------
@@ -319,7 +319,7 @@ describe('CmdKPalette', () => {
   it('navigates when a create action is clicked', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const btn = screen.getByText('New survey').closest('button')!;
+    const btn = screen.getByText('Nova pesquisa').closest('button')!;
     await act(async () => {
       fireEvent.click(btn);
     });
@@ -343,7 +343,7 @@ describe('CmdKPalette', () => {
   it('updates selection on mouseenter over an item', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const surveyBtn = screen.getByText('New survey').closest('button')!;
+    const surveyBtn = screen.getByText('Nova pesquisa').closest('button')!;
     await act(async () => {
       fireEvent.mouseEnter(surveyBtn);
     });
@@ -517,7 +517,7 @@ describe('CmdKPalette', () => {
     await waitForDebounce();
     // Default Quick access section restored, no Search results section
     expect(screen.queryByText('Search results')).toBeNull();
-    expect(screen.getByText('Quick access')).toBeInTheDocument();
+    expect(screen.getByText('Acesso rápido')).toBeInTheDocument();
   });
 
   it('treats a failed fetch as empty hits without throwing', async () => {
@@ -632,7 +632,7 @@ describe('CmdKPalette', () => {
     await openPalette();
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
-    expect(dialog).toHaveAttribute('aria-label', 'Command palette');
+    expect(dialog).toHaveAttribute('aria-label', 'Paleta de comandos');
   });
 
   it('exposes Page label on nav rows', async () => {

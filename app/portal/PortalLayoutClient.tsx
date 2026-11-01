@@ -169,7 +169,7 @@ export default function PortalLayoutClient({ children, apps, entitlements }: Por
             onClick={() => setMobileOpen(true)}
             className="fixed top-3 left-3 z-50 w-9 h-9 grid place-items-center rounded-md bg-card border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             title="Menu"
-            aria-label="Open navigation"
+            aria-label="Abrir navegação"
           >
             <span className="material-icons text-xl">menu</span>
           </button>

@@ -22,7 +22,7 @@ interface NewDealModalProps {
 }
 
 /**
- * Inline "New Deal" form that renders below the filter bar. Owns its own
+ * Inline "Nova oportunidade" form that renders below the filter bar. Owns its own
  * form state and inline company/contact creation flows; submits through
  * `_lib/api.createDeal` and notifies the parent via `onCreated`.
  */
@@ -150,7 +150,7 @@ export default function NewDealModal({
 
   return (
     <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 space-y-4">
-      <h2 className="font-semibold text-foreground">New Deal</h2>
+      <h2 className="font-semibold text-foreground">Nova oportunidade</h2>
       {error && (
         <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2">
           <span className="material-icons text-base">error</span>
@@ -159,7 +159,7 @@ export default function NewDealModal({
       )}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Title *</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Título *</label>
           <input
             required
             value={form.title}
@@ -168,7 +168,7 @@ export default function NewDealModal({
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Value ($) *</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Valor (R$) *</label>
           <input
             required
             type="number"
@@ -182,7 +182,7 @@ export default function NewDealModal({
         </div>
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="text-xs font-medium text-muted-foreground">Company</label>
+            <label className="text-xs font-medium text-muted-foreground">Empresa</label>
             <button
               type="button"
               onClick={() => setShowNewCompany((v) => !v)}
@@ -196,7 +196,7 @@ export default function NewDealModal({
               <input
                 value={newCompanyName}
                 onChange={(e) => setNewCompanyName(e.target.value)}
-                placeholder="Company name"
+                placeholder="Nome da empresa"
                 className={inputClass}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -222,7 +222,7 @@ export default function NewDealModal({
                 setForm((f) => ({ ...f, companyId: opt ? String(opt.id) : '', contactId: '' }));
                 setCompanyLabel(opt ? opt.name : null);
               }}
-              placeholder="Select company…"
+              placeholder="Selecione a empresa…"
             />
           )}
         </div>
@@ -230,7 +230,7 @@ export default function NewDealModal({
           <div className="flex items-center justify-between mb-1">
             <label className="text-xs font-medium text-muted-foreground">
               Contact
-              {form.companyId && <span className="text-primary ml-1">(filtered)</span>}
+              {form.companyId && <span className="text-primary ml-1">(filtrado)</span>}
             </label>
             <button
               type="button"
@@ -252,13 +252,13 @@ export default function NewDealModal({
                 <input
                   value={newContactFirst}
                   onChange={(e) => setNewContactFirst(e.target.value)}
-                  placeholder="First name *"
+                  placeholder="Nome *"
                   className={inputClass}
                 />
                 <input
                   value={newContactLast}
                   onChange={(e) => setNewContactLast(e.target.value)}
-                  placeholder="Last name"
+                  placeholder="Sobrenome"
                   className={inputClass}
                 />
               </div>
@@ -298,15 +298,15 @@ export default function NewDealModal({
               options={contactOptions}
               value={contactOptions.find((o) => String(o.value) === form.contactId) ?? null}
               onChange={(v) => setForm((f) => ({ ...f, contactId: v ? String(v.value) : '' }))}
-              placeholder={form.companyId ? 'Select contact…' : 'Select a company first'}
-              noOptionsMessage={() => (form.companyId ? 'No contacts at this company' : 'Select a company first')}
+              placeholder={form.companyId ? 'Selecione o contato…' : 'Selecione uma empresa primeiro'}
+              noOptionsMessage={() => (form.companyId ? 'Nenhum contato nesta empresa' : 'Selecione uma empresa primeiro')}
               classNames={rsClassNames}
               classNamePrefix="rs"
             />
           )}
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Pipeline</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Funil</label>
           <select
             value={form.pipelineId}
             onChange={(e) => {
@@ -332,7 +332,7 @@ export default function NewDealModal({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Stage</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Etapa</label>
           <select
             value={form.stageId}
             onChange={(e) => setForm((f) => ({ ...f, stageId: e.target.value }))}
@@ -346,19 +346,19 @@ export default function NewDealModal({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Priority</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Prioridade</label>
           <select
             value={form.priority}
             onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
             className={inputClass}
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low">Baixa</option>
+            <option value="medium">Média</option>
+            <option value="high">Alta</option>
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Expected Close Date</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">Previsão de fechamento</label>
           <input
             type="date"
             value={form.expectedCloseDate}
@@ -369,7 +369,7 @@ export default function NewDealModal({
         <div className="sm:col-span-2 lg:col-span-3">
           <div className="flex items-center justify-between mb-1">
             <label className="text-xs font-medium text-muted-foreground">
-              Notes <span className="text-muted-foreground/60">(markdown)</span>
+              Observações <span className="text-muted-foreground/60">(markdown)</span>
             </label>
             <div className="flex gap-1 text-[11px]">
               <button
@@ -379,7 +379,7 @@ export default function NewDealModal({
                   !notesPreview ? 'bg-accent text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                Write
+                Escrever
               </button>
               <button
                 type="button"
@@ -388,7 +388,7 @@ export default function NewDealModal({
                   notesPreview ? 'bg-accent text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                Preview
+                Pré-visualizar
               </button>
             </div>
           </div>
@@ -397,7 +397,7 @@ export default function NewDealModal({
               {form.notes.trim() ? (
                 <MarkdownView>{form.notes}</MarkdownView>
               ) : (
-                <span className="text-muted-foreground italic">Nothing to preview.</span>
+                <span className="text-muted-foreground italic">Nada para pré-visualizar.</span>
               )}
             </div>
           ) : (
@@ -418,7 +418,7 @@ export default function NewDealModal({
           className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
         >
           {saving && <span className="material-icons animate-spin text-sm">refresh</span>}
-          Create Deal
+          Criar oportunidade
         </button>
       </div>
     </form>

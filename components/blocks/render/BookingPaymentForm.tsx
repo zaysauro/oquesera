@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState } from 'react';
 // '@stripe/stripe-js/pure' — the bare '@stripe/stripe-js' entry has a module
 // side-effect that injects the js.stripe.com <script> (~740KB) the moment the
@@ -46,7 +47,7 @@ function PaymentFormInner({ total, accent, btnBg, btnText, btnRadius, onSuccess,
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
-      setError(submitError.message || 'Payment failed');
+      setError(submitError.message || 'Falha no pagamento');
       setProcessing(false);
       return;
     }
@@ -60,8 +61,8 @@ function PaymentFormInner({ total, accent, btnBg, btnText, btnRadius, onSuccess,
     });
 
     if (confirmError) {
-      setError(confirmError.message || 'Payment failed');
-      onError(confirmError.message || 'Payment failed');
+      setError(confirmError.message || 'Falha no pagamento');
+      onError(confirmError.message || 'Falha no pagamento');
       setProcessing(false);
     } else {
       onSuccess();
@@ -92,16 +93,16 @@ function PaymentFormInner({ total, accent, btnBg, btnText, btnRadius, onSuccess,
         {processing ? (
           <span className="flex items-center justify-center gap-2">
             <span className="animate-spin rounded-full h-4 w-4 border-2 border-white/30" style={{ borderTopColor: '#ffffff' }} />
-            Processing...
+            Processando...
           </span>
         ) : (
-          `Pay $${(total / 100).toFixed(2)}`
+          `Pay ${formatMoney(total)}`
         )}
       </button>
 
       <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400">
         <span className="material-icons text-sm">lock</span>
-        Secured by Stripe
+        Pagamento processado pelo Stripe
       </div>
     </form>
   );

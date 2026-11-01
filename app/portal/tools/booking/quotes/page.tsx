@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PortalPageHeader } from '@/components/portal/PortalPageHeader';
@@ -19,7 +20,7 @@ interface Quote {
 }
 
 function formatCents(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 const STATUS_STYLES: Record<string, string> = {
@@ -50,16 +51,16 @@ export default function BookingQuotesPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <Link href="/portal/tools/booking" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <span className="material-icons text-lg">arrow_back</span>
-        Back
+        Voltar
       </Link>
       <PortalPageHeader
         eyebrow="Booking"
-        title="Custom Quotes"
-        subtitle="Create payment links for custom bookings"
+        title="Orçamentos personalizados"
+        subtitle="Crie links de pagamento para atendimentos personalizados"
         actions={
           <Link href="/portal/tools/booking/quotes/new" className={pBtnPrimary}>
             <span className="material-icons text-base">add</span>
-            New Quote
+            Novo orçamento
           </Link>
         }
       />
@@ -71,11 +72,11 @@ export default function BookingQuotesPage() {
       ) : quotes.length === 0 ? (
         <div className="bg-card border border-border rounded-2xl p-12 text-center">
           <span className="material-icons text-4xl text-muted-foreground mb-3 block">request_quote</span>
-          <h2 className="text-lg font-semibold text-foreground mb-1">No quotes yet</h2>
-          <p className="text-sm text-muted-foreground mb-4">Create a custom quote to send a payment link to a client</p>
+          <h2 className="text-lg font-semibold text-foreground mb-1">Nenhum orçamento ainda</h2>
+          <p className="text-sm text-muted-foreground mb-4">Crie um orçamento para enviar um link de pagamento ao cliente</p>
           <Link href="/portal/tools/booking/quotes/new" className={pBtnPrimary}>
             <span className="material-icons text-base">add</span>
-            Create First Quote
+            Criar o primeiro orçamento
           </Link>
         </div>
       ) : (
@@ -97,7 +98,7 @@ export default function BookingQuotesPage() {
                   {q.status}
                 </span>
                 <div className="flex items-center gap-1">
-                  <button onClick={() => copyLink(q.slug)} title="Copy payment link"
+                  <button onClick={() => copyLink(q.slug)} title="Copiar link de pagamento"
                     className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                     <span className="material-icons text-base">link</span>
                   </button>

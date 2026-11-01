@@ -21,7 +21,7 @@ export default function NewBookingPage() {
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState(30);
   const [timezone, setTimezone] = useState(
-    () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/New_York'
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo'
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -54,7 +54,7 @@ export default function NewBookingPage() {
 
       router.push(`/portal/tools/booking/${data.data.id}`);
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError('Algo deu errado. Tente novamente.');
       setLoading(false);
     }
   }
@@ -66,12 +66,12 @@ export default function NewBookingPage() {
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
       >
         <span className="material-icons text-lg">arrow_back</span>
-        Back to Booking Pages
+        Voltar para páginas de agendamento
       </Link>
       <PortalPageHeader
         eyebrow="Booking"
-        title="Create Booking Page"
-        subtitle="Set up a new scheduling page for clients to book time with you"
+        title="Criar página de agendamento"
+        subtitle="Configure uma página para seus clientes agendarem horários"
       />
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -84,12 +84,12 @@ export default function NewBookingPage() {
 
         <div className={`${pCardPad} space-y-4`}>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Title</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Título</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. 30-Minute Consultation"
+              placeholder="ex.: Corte de cabelo (30 min)"
               className={pInput}
               required
               disabled={loading}
@@ -98,13 +98,13 @@ export default function NewBookingPage() {
 
           <div>
             <label className="block text-sm font-medium text-foreground mb-1.5">
-              Description
+              Descrição
               <span className="font-normal text-muted-foreground ml-1">(optional)</span>
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description shown to people booking with you"
+              placeholder="Breve descrição exibida para quem vai agendar"
               rows={3}
               className={`${pInput} resize-none`}
               disabled={loading}
@@ -112,7 +112,7 @@ export default function NewBookingPage() {
           </div>
 
           <div>
-            <label htmlFor="booking-duration" className="block text-sm font-medium text-foreground mb-1.5">Duration</label>
+            <label htmlFor="booking-duration" className="block text-sm font-medium text-foreground mb-1.5">Duração</label>
             <select
               id="booking-duration"
               value={duration}
@@ -129,17 +129,17 @@ export default function NewBookingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Timezone</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Fuso horário</label>
             <input
               type="text"
               value={timezone}
               onChange={(e) => setTimezone(e.target.value)}
-              placeholder="America/New_York"
+              placeholder="America/Sao_Paulo"
               className={pInput}
               disabled={loading}
             />
             <p className="text-xs text-muted-foreground mt-1">
-              IANA timezone identifier (e.g. America/Chicago, Europe/London)
+              Fuso horário IANA (ex.: America/Sao_Paulo)
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function NewBookingPage() {
           ) : (
             <>
               <span className="material-icons text-lg">add_circle</span>
-              Create Booking Page
+              Criar página de agendamento
             </>
           )}
         </button>

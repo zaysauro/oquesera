@@ -273,7 +273,7 @@ export default function BrainCalendarPage() {
       {/* Month grid */}
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="grid grid-cols-7 border-b border-border">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+          {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((d) => (
             <div key={d} className="px-2 py-2 text-xs font-medium text-muted-foreground text-center">
               {d}
             </div>

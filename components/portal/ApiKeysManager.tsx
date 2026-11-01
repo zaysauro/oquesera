@@ -78,7 +78,7 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
           type="text"
           value={newKeyName}
           onChange={e => setNewKeyName(e.target.value)}
-          placeholder="Key name (e.g. Production)"
+          placeholder="Nome da chave (ex.: Produção)"
           className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm"
           onKeyDown={e => e.key === 'Enter' && createKey()}
         />
@@ -87,13 +87,13 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
           disabled={creating || !newKeyName.trim()}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
         >
-          {creating ? 'Creating...' : 'Create Key'}
+          {creating ? 'Creating...' : 'Criar chave'}
         </button>
       </div>
 
       {/* Scopes — none selected = full access */}
       <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-        <span>Scopes:</span>
+        <span>Escopos:</span>
         {(['content:read', 'store:read'] as const).map(s => (
           <label key={s} className="flex items-center gap-1.5 cursor-pointer">
             <input type="checkbox" checked={scopes.includes(s)} onChange={() => toggleScope(s)} />
@@ -120,14 +120,14 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
               {createdKey}
             </code>
             <button onClick={copyKey} className="px-3 py-2 bg-green-600 text-white rounded-lg text-xs font-medium hover:bg-green-700">
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'Copiado!' : 'Copy'}
             </button>
           </div>
           <button
             onClick={() => setCreatedKey(null)}
             className="text-xs text-green-600 dark:text-green-400 mt-2 hover:underline"
           >
-            Dismiss
+            Dispensar
           </button>
         </div>
       )}
@@ -138,7 +138,7 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
       ) : keys.length === 0 ? (
         <div className="text-center py-8">
           <span className="material-icons text-4xl text-muted-foreground/30">vpn_key</span>
-          <p className="text-sm text-muted-foreground mt-2">No API keys yet. Create one to get started with the SDK.</p>
+          <p className="text-sm text-muted-foreground mt-2">Nenhuma chave de API ainda. Crie uma para usar o SDK.</p>
         </div>
       ) : (
         <div className="border border-border rounded-xl overflow-hidden divide-y divide-border">
@@ -161,7 +161,7 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
                 onClick={() => revokeKey(key.id)}
                 className="text-xs text-red-500 hover:text-red-600 font-medium"
               >
-                Revoke
+                Revogar
               </button>
             </div>
           ))}
@@ -170,7 +170,7 @@ export default function ApiKeysManager({ siteId }: { siteId: number }) {
 
       {/* SDK usage hint */}
       <div className="p-4 bg-muted/50 rounded-xl">
-        <p className="text-xs font-medium text-foreground mb-2">Quick Start</p>
+        <p className="text-xs font-medium text-foreground mb-2">Início rápido</p>
         <pre className="text-xs text-muted-foreground font-mono overflow-x-auto">{`npm install @simplerdevelopment/sdk
 
 import { Kumo One } from '@simplerdevelopment/sdk';

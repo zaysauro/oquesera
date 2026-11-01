@@ -27,7 +27,7 @@ export function WebsitesSetupForm({ onCreated }: Props) {
 
   async function handleCreate() {
     if (!name.trim()) {
-      setError('Give your site a name.');
+      setError('Dê um nome ao site.');
       return;
     }
     setSaving(true);
@@ -45,7 +45,7 @@ export function WebsitesSetupForm({ onCreated }: Props) {
       }
       onCreated(data.data.id);
     } catch {
-      setError('Something went wrong — try again.');
+      setError('Algo deu errado — tente novamente.');
     } finally {
       setSaving(false);
     }
@@ -54,9 +54,9 @@ export function WebsitesSetupForm({ onCreated }: Props) {
   return (
     <div className="rounded-[13px] border border-primary/30 bg-primary/[0.04] px-[15px] py-[13px] space-y-3">
       <div>
-        <p className="text-[14px] font-semibold leading-snug">Name your first site</p>
+        <p className="text-[14px] font-semibold leading-snug">Dê nome ao seu primeiro site</p>
         <p className="text-[12.5px] text-muted-foreground mt-0.5">
-          Created right here — no need to leave setup. You can add a custom domain later.
+          Criado aqui mesmo, sem sair da configuração. Você pode adicionar um domínio próprio depois.
         </p>
       </div>
 
@@ -68,7 +68,7 @@ export function WebsitesSetupForm({ onCreated }: Props) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' && name.trim() && !saving) void handleCreate();
           }}
-          placeholder="Website name — e.g. Northwind Trading"
+          placeholder="Nome do site — ex.: Padaria Bom Dia"
           className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-primary"
           data-testid="ob-setup-site-name"
         />
@@ -79,7 +79,7 @@ export function WebsitesSetupForm({ onCreated }: Props) {
             onChange={(e) => setSubdomain(slugify(e.target.value, 63))}
             placeholder={effectiveSubdomain || 'subdomain'}
             className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label="Subdomain"
+            aria-label="Subdomínio"
           />
           <span className="text-[13px] text-muted-foreground whitespace-nowrap">.{PLATFORM_ROOT_DOMAIN}</span>
         </div>
@@ -104,7 +104,7 @@ export function WebsitesSetupForm({ onCreated }: Props) {
         ) : (
           <span className="material-icons text-[18px]">add_circle</span>
         )}
-        {saving ? 'Creating…' : 'Create site'}
+        {saving ? 'Criando…' : 'Criar site'}
       </button>
     </div>
   );

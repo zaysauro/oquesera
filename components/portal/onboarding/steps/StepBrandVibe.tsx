@@ -17,12 +17,12 @@ import type { TabId } from '@/app/portal/branding/profiles/[profileId]/_lib/type
 const MAX_TONES = 3;
 
 const TABS: Array<{ id: TabId; label: string; icon: string }> = [
-  { id: 'logos', label: 'Logos', icon: 'image' },
-  { id: 'colors', label: 'Colors', icon: 'palette' },
-  { id: 'typography', label: 'Typography', icon: 'text_fields' },
-  { id: 'buttons', label: 'Buttons', icon: 'smart_button' },
-  { id: 'style', label: 'Style', icon: 'tune' },
-  { id: 'messaging', label: 'Messaging', icon: 'chat' },
+  { id: 'logos', label: 'Logotipos', icon: 'image' },
+  { id: 'colors', label: 'Cores', icon: 'palette' },
+  { id: 'typography', label: 'Tipografia', icon: 'text_fields' },
+  { id: 'buttons', label: 'Botões', icon: 'smart_button' },
+  { id: 'style', label: 'Estilo', icon: 'tune' },
+  { id: 'messaging', label: 'Mensagens', icon: 'chat' },
 ];
 
 export function StepBrandVibe({ state, setAnswers, next }: StepProps) {
@@ -77,7 +77,7 @@ export function StepBrandVibe({ state, setAnswers, next }: StepProps) {
     <div className="space-y-7">
       <div>
         <label className={obLabel}>
-          Tone <span className="font-normal text-muted-foreground">— up to {MAX_TONES}</span>
+          Tom de voz <span className="font-normal text-muted-foreground">— up to {MAX_TONES}</span>
         </label>
         <div className="flex flex-wrap gap-2">
           {BRAND_TONES.map((t) => {
@@ -115,7 +115,7 @@ export function StepBrandVibe({ state, setAnswers, next }: StepProps) {
             data-testid="onboarding-brand-next"
             className={obPrimaryBtn}
           >
-            Continue
+            Continuar
             <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
           </button>
         </div>
@@ -225,7 +225,7 @@ function InlineBrandEditor({
           data-testid="onboarding-brand-next"
           className={obPrimaryBtn}
         >
-          {saving ? 'Saving…' : 'Continue'}
+          {saving ? 'Salvando…' : 'Continuar'}
           <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
         </button>
       </div>

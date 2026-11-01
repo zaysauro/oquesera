@@ -263,15 +263,15 @@ describe('lib/visual-editor/protocol', () => {
       expect(isValidOrigin('http://127.0.0.1:3000')).toBe(true);
     });
 
-    it('allows the apex simplerdevelopment.com', async () => {
+    it('allows the apex kumo.localhost', async () => {
       const { isValidOrigin } = await import('@/lib/visual-editor/protocol');
-      expect(isValidOrigin('https://simplerdevelopment.com')).toBe(true);
+      expect(isValidOrigin('https://kumo.localhost')).toBe(true);
     });
 
-    it('allows subdomains of .simplerdevelopment.com', async () => {
+    it('allows subdomains of .kumo.localhost', async () => {
       const { isValidOrigin } = await import('@/lib/visual-editor/protocol');
-      expect(isValidOrigin('https://app.simplerdevelopment.com')).toBe(true);
-      expect(isValidOrigin('https://portal.simplerdevelopment.com')).toBe(true);
+      expect(isValidOrigin('https://app.kumo.localhost')).toBe(true);
+      expect(isValidOrigin('https://portal.kumo.localhost')).toBe(true);
     });
 
     it('allows .up.railway.app subdomains', async () => {
@@ -283,7 +283,7 @@ describe('lib/visual-editor/protocol', () => {
       const { isValidOrigin } = await import('@/lib/visual-editor/protocol');
       expect(isValidOrigin('https://evil.com')).toBe(false);
       expect(isValidOrigin('https://simplerdevelopment.net')).toBe(false); // wrong TLD
-      expect(isValidOrigin('https://notsimplerdevelopment.com')).toBe(false); // not a subdomain
+      expect(isValidOrigin('https://notkumo.localhost')).toBe(false); // not a subdomain
     });
 
     it('returns false for malformed URLs', async () => {

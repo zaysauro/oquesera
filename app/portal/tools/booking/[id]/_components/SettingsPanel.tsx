@@ -111,7 +111,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
     <div className="bg-card border border-border rounded-xl p-5 space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-foreground mb-1.5">Title</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Título</label>
           <input
             type="text"
             value={title}
@@ -121,18 +121,18 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div className="sm:col-span-2">
-          <label className="block text-sm font-medium text-foreground mb-1.5">Description</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Descrição</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary resize-none"
-            placeholder="Describe what this meeting is about"
+            placeholder="Descreva o atendimento"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Duration</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Duração</label>
           <select
             value={duration}
             onChange={(e) => setDuration(Number(e.target.value))}
@@ -147,7 +147,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Buffer Before (min)</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Intervalo antes (min)</label>
           <input
             type="number"
             min={0}
@@ -158,7 +158,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Buffer After (min)</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Intervalo depois (min)</label>
           <input
             type="number"
             min={0}
@@ -169,7 +169,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Max Advance (days)</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Antecedência máxima (dias)</label>
           <input
             type="number"
             min={1}
@@ -180,7 +180,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Min Notice (min)</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Antecedência mínima (min)</label>
           <input
             type="number"
             min={0}
@@ -191,7 +191,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Timezone</label>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Fuso horário</label>
           <input
             type="text"
             value={timezone}
@@ -201,7 +201,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
 
         <div className="flex items-center gap-3">
-          <label id="booking-active-label" className="text-sm font-medium text-foreground">Active</label>
+          <label id="booking-active-label" className="text-sm font-medium text-foreground">Ativo</label>
           <button
             type="button"
             onClick={() => setActive(!active)}
@@ -221,14 +221,14 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
       </div>
 
-      {/* Video Conferencing */}
+      {/* Videoconferência */}
       <div className="border-t border-border pt-5">
         <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
           <span className="material-icons text-lg">videocam</span>
-          Video Conferencing
+          Videoconferência
         </h3>
         <p className="text-xs text-muted-foreground mb-3">
-          Automatically generate a video call link for each booking. The link will be included in confirmation emails.
+          Gere automaticamente um link de videochamada para cada agendamento. O link vai no e-mail de confirmação.
         </p>
         <div className="grid grid-cols-3 gap-3">
           {CONFERENCE_OPTIONS.map((opt) => (
@@ -256,19 +256,19 @@ export function SettingsPanel(props: SettingsPanelProps) {
         </div>
       </div>
 
-      {/* Block Thumbnail */}
+      {/* Miniatura do bloco */}
       <div className="border-t border-border pt-5">
         <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
           <span className="material-icons text-lg">image</span>
-          Block Thumbnail
+          Miniatura do bloco
         </h3>
         <p className="text-xs text-muted-foreground mb-3">
-          This image is used as the preview thumbnail when this booking page appears on your website.
+          Imagem usada como miniatura quando esta página aparece no seu site.
         </p>
         <MediaPicker
           value={thumbnail}
           onChange={(url) => setThumbnail(url)}
-          label="Select Thumbnail"
+          label="Selecionar miniatura"
           apiEndpoint="/api/portal/media"
         />
       </div>
@@ -280,13 +280,13 @@ export function SettingsPanel(props: SettingsPanelProps) {
           Payments &amp; Waivers
         </h3>
         <p className="text-xs text-muted-foreground mb-4">
-          Charge for bookings, require a deposit, collect e-signatures, and accept gift certificates or discount codes.
+          Cobre pelos agendamentos, exija sinal, colete assinaturas e aceite vales-presente ou cupons.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Price</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Preço</label>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">$</span>
               <input
@@ -299,20 +299,20 @@ export function SettingsPanel(props: SettingsPanelProps) {
                 className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Leave blank for free bookings</p>
+            <p className="text-xs text-muted-foreground mt-1">Deixe em branco para agendamentos gratuitos</p>
           </div>
 
           {/* Price label */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Price Label</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Rótulo do preço</label>
             <input
               type="text"
               value={priceLabel}
               onChange={(e) => setPriceLabel(e.target.value)}
-              placeholder="e.g. Per session"
+              placeholder="ex.: Por sessão"
               className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
             />
-            <p className="text-xs text-muted-foreground mt-1">Short label shown next to the price</p>
+            <p className="text-xs text-muted-foreground mt-1">Texto curto exibido ao lado do preço</p>
           </div>
         </div>
 
@@ -322,7 +322,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
             [
               {
                 id: 'gift-certificates',
-                label: 'Accept gift certificates',
+                label: 'Aceitar vales-presente',
                 desc: 'Allow customers to redeem gift certificates at checkout',
                 value: enableGiftCertificates,
                 set: setEnableGiftCertificates,
@@ -330,7 +330,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
               },
               {
                 id: 'discount-codes',
-                label: 'Accept discount codes',
+                label: 'Aceitar cupons de desconto',
                 desc: 'Allow customers to enter promo/discount codes',
                 value: enableDiscountCodes,
                 set: setEnableDiscountCodes,
@@ -338,7 +338,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
               },
               {
                 id: 'add-ons',
-                label: 'Enable add-ons',
+                label: 'Ativar adicionais',
                 desc: 'Let customers purchase optional add-ons with their booking',
                 value: enableAddOns,
                 set: setEnableAddOns,
@@ -380,8 +380,8 @@ export function SettingsPanel(props: SettingsPanelProps) {
             <div className="flex items-start gap-2">
               <span className="material-icons text-lg text-muted-foreground mt-0.5">draw</span>
               <div>
-                <p id="require-waiver-label" className="text-sm font-medium text-foreground">Require waiver / e-signature</p>
-                <p className="text-xs text-muted-foreground">Customers must sign before their booking is confirmed</p>
+                <p id="require-waiver-label" className="text-sm font-medium text-foreground">Exigir termo / assinatura</p>
+                <p className="text-xs text-muted-foreground">O cliente precisa assinar antes da confirmação</p>
               </div>
             </div>
             <button
@@ -405,19 +405,19 @@ export function SettingsPanel(props: SettingsPanelProps) {
           {enableWaivers && (
             <div className="space-y-3 pt-2 border-t border-border">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">Waiver Text</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Texto do termo</label>
                 <textarea
                   value={waiverContent}
                   onChange={(e) => setWaiverContent(e.target.value)}
                   rows={5}
-                  placeholder="Enter the waiver / liability text that customers must agree to..."
+                  placeholder="Digite o termo de responsabilidade que o cliente deve aceitar..."
                   className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary resize-none text-sm"
                 />
               </div>
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p id="block-booking-until-signed-label" className="text-sm font-medium text-foreground">Block booking until signed</p>
-                  <p className="text-xs text-muted-foreground">Prevent confirmation until the waiver is e-signed</p>
+                  <p id="block-booking-until-signed-label" className="text-sm font-medium text-foreground">Bloquear o agendamento até a assinatura</p>
+                  <p className="text-xs text-muted-foreground">Impede a confirmação até o termo ser assinado</p>
                 </div>
                 <button
                   type="button"
@@ -443,21 +443,21 @@ export function SettingsPanel(props: SettingsPanelProps) {
 
       {/* Danger zone */}
       <div className="border-t border-border pt-5">
-        <h3 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Danger Zone</h3>
+        <h3 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Zona de risco</h3>
         {deleteConfirm ? (
           <div className="flex items-center gap-3">
-            <p className="text-sm text-muted-foreground">Are you sure? This cannot be undone.</p>
+            <p className="text-sm text-muted-foreground">Tem certeza? Não é possível desfazer.</p>
             <button
               onClick={onDelete}
               className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
             >
-              Yes, delete
+              Sim, excluir
             </button>
             <button
               onClick={() => setDeleteConfirm(false)}
               className="px-3 py-1.5 bg-background border border-border rounded-lg text-sm text-foreground hover:bg-muted transition-colors"
             >
-              Cancel
+              Cancelar
             </button>
           </div>
         ) : (
@@ -466,7 +466,7 @@ export function SettingsPanel(props: SettingsPanelProps) {
             className="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
           >
             <span className="material-icons text-lg">delete</span>
-            Delete Booking Page
+            Excluir página de agendamento
           </button>
         )}
       </div>

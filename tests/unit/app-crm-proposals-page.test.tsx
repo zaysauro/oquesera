@@ -250,7 +250,7 @@ import ProposalsPage from '@/app/portal/crm/proposals/page';
 async function renderPage() {
   const result = render(<ProposalsPage />);
   await waitFor(() => {
-    expect(result.container.textContent).not.toContain('Loading proposals...');
+    expect(result.container.textContent).not.toContain('Carregando propostas...');
   });
   return result;
 }
@@ -271,7 +271,7 @@ describe('ProposalsPage', () => {
 
     it('renders the header subtitle', async () => {
       await renderPage();
-      expect(screen.getByText('Send proposals to clients')).toBeTruthy();
+      expect(screen.getByText('Envie propostas aos clientes')).toBeTruthy();
     });
 
     it('handles fetch error in fetchProposals gracefully', async () => {
@@ -283,9 +283,9 @@ describe('ProposalsPage', () => {
       });
       render(<ProposalsPage />);
       await waitFor(() => {
-        expect(screen.queryByText('Loading proposals...')).toBeNull();
+        expect(screen.queryByText('Carregando propostas...')).toBeNull();
       });
-      expect(screen.getByText(/No proposals yet/)).toBeTruthy();
+      expect(screen.getByText(/Nenhuma proposta ainda/)).toBeTruthy();
     });
 
     it('falls back to data.data array when data.contacts is missing', async () => {
@@ -300,8 +300,8 @@ describe('ProposalsPage', () => {
       });
       await renderPage();
       // Open new proposal form to verify contacts are populated
-      fireEvent.click(screen.getByText('New Proposal'));
-      const contactSelect = screen.getByText('Select contact...').closest('select')!;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const contactSelect = screen.getByText('Selecione o contato...').closest('select')!;
       expect(contactSelect.querySelectorAll('option').length).toBeGreaterThan(1);
     });
 
@@ -316,7 +316,7 @@ describe('ProposalsPage', () => {
       });
       const result = render(<ProposalsPage />);
       await waitFor(() => {
-        expect(result.container.textContent).toContain('No proposals yet');
+        expect(result.container.textContent).toContain('Nenhuma proposta ainda');
       });
     });
   });
@@ -325,10 +325,10 @@ describe('ProposalsPage', () => {
     it('renders stat counters', async () => {
       const { container } = await renderPage();
       expect(container.textContent).toContain('Total');
-      // "Sent" appears as a stat label and as a status; assert via container
-      expect(container.textContent).toContain('Sent');
-      expect(container.textContent).toContain('Accepted');
-      expect(container.textContent).toContain('Declined');
+      // "Enviados" appears as a stat label and as a status; assert via container
+      expect(container.textContent).toContain('Enviados');
+      expect(container.textContent).toContain('Aceita');
+      expect(container.textContent).toContain('Recusada');
     });
 
     it('shows correct sent / accepted / declined counts', async () => {
@@ -390,7 +390,7 @@ describe('ProposalsPage', () => {
       });
       const result = render(<ProposalsPage />);
       await waitFor(() => {
-        expect(result.container.textContent).toContain('No proposals yet');
+        expect(result.container.textContent).toContain('Nenhuma proposta ainda');
       });
     });
   });
@@ -447,11 +447,11 @@ describe('ProposalsPage', () => {
   describe('new proposal form', () => {
     it('toggles new proposal form open and closed', async () => {
       const { container } = await renderPage();
-      // Find the "New Proposal" header button (it has add icon)
+      // Find the "Nova proposta" header button (it has add icon)
       const headerBtn = Array.from(container.querySelectorAll('button')).find(b =>
-        b.textContent?.includes('New Proposal'));
+        b.textContent?.includes('Nova proposta'));
       fireEvent.click(headerBtn!);
-      expect(screen.getByText('Title *')).toBeTruthy();
+      expect(screen.getByText('Título *')).toBeTruthy();
       // Header button now reads "Cancel" with a close icon
       const cancelHeaderBtn = Array.from(container.querySelectorAll('button')).find(b => {
         const t = b.textContent || '';
@@ -459,23 +459,23 @@ describe('ProposalsPage', () => {
       });
       expect(cancelHeaderBtn).toBeTruthy();
       fireEvent.click(cancelHeaderBtn!);
-      expect(screen.queryByText('Title *')).toBeNull();
+      expect(screen.queryByText('Título *')).toBeNull();
     });
 
     it('closing via inline Cancel button hides the form', async () => {
       await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
+      fireEvent.click(screen.getByText('Nova proposta'));
       // Click the inline Cancel inside the form (type=button)
       const cancelButtons = screen.getAllByText('Cancel');
       const inlineCancel = cancelButtons.find(b => (b as HTMLButtonElement).type === 'button');
       fireEvent.click(inlineCancel!);
-      expect(screen.queryByText('Title *')).toBeNull();
+      expect(screen.queryByText('Título *')).toBeNull();
     });
 
     it('populates contact / company / deal / template dropdowns', async () => {
       const { container } = await renderPage();
       const headerBtn = Array.from(container.querySelectorAll('button')).find(b =>
-        b.textContent?.includes('New Proposal'));
+        b.textContent?.includes('Nova proposta'));
       fireEvent.click(headerBtn!);
       // Contact options — pre-loaded synchronously
       expect(container.textContent).toContain('Jane Doe');
@@ -490,16 +490,16 @@ describe('ProposalsPage', () => {
 
     it('updates form fields on input change', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'My New Prop' } });
       expect(titleInput.value).toBe('My New Prop');
     });
 
     it('submits form successfully and navigates', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'New Prop' } });
       const form = container.querySelector('form')!;
       fireEvent.submit(form);
@@ -513,8 +513,8 @@ describe('ProposalsPage', () => {
       // @ts-ignore
       global.fetch = fetchSpy;
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'X' } });
       // Wait for the company mock's async fetch to populate option '100' before selecting
       await waitFor(() => {
@@ -546,8 +546,8 @@ describe('ProposalsPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'X' } });
       fireEvent.submit(container.querySelector('form')!);
       await waitFor(() => {
@@ -563,8 +563,8 @@ describe('ProposalsPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      fireEvent.click(screen.getByText('Nova proposta'));
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'X' } });
       fireEvent.submit(container.querySelector('form')!);
       await waitFor(() => {
@@ -577,11 +577,11 @@ describe('ProposalsPage', () => {
       // @ts-ignore
       global.fetch = fetchSpy;
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
+      fireEvent.click(screen.getByText('Nova proposta'));
       const selects = container.querySelectorAll('select');
       // 4th select = template
       fireEvent.change(selects[3], { target: { value: '5000' } });
-      const titleInput = container.querySelector('input[placeholder="Proposal title"]') as HTMLInputElement;
+      const titleInput = container.querySelector('input[placeholder="Título da proposta"]') as HTMLInputElement;
       fireEvent.change(titleInput, { target: { value: 'WithTpl' } });
       fireEvent.submit(container.querySelector('form')!);
       await waitFor(() => {
@@ -597,7 +597,7 @@ describe('ProposalsPage', () => {
 
     it('selecting empty template id clears template state', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
+      fireEvent.click(screen.getByText('Nova proposta'));
       const selects = container.querySelectorAll('select');
       // pick a template, then unset it
       fireEvent.change(selects[3], { target: { value: '5000' } });
@@ -608,7 +608,7 @@ describe('ProposalsPage', () => {
 
     it('selecting a template with null sections/lineItems/fees defaults to empty arrays', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('New Proposal'));
+      fireEvent.click(screen.getByText('Nova proposta'));
       const selects = container.querySelectorAll('select');
       fireEvent.change(selects[3], { target: { value: '5001' } });
       // No exception thrown is the assertion
@@ -621,7 +621,7 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      expect(screen.getByText('Send Proposal')).toBeTruthy();
+      expect(screen.getByText('Enviar proposta')).toBeTruthy();
     });
 
     it('shows contact name + email in confirmation', async () => {
@@ -647,7 +647,7 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      expect(container.textContent).toContain('Send Proposal');
+      expect(container.textContent).toContain('Enviar proposta');
     });
 
     it('cancel button on confirm step closes dialog', async () => {
@@ -656,16 +656,16 @@ describe('ProposalsPage', () => {
       fireEvent.click(sendButtons[0]);
       const cancel = screen.getAllByText('Cancel').find(el => (el as HTMLButtonElement).tagName === 'BUTTON');
       fireEvent.click(cancel!);
-      expect(screen.queryByText('Send Proposal')).toBeNull();
+      expect(screen.queryByText('Enviar proposta')).toBeNull();
     });
 
     it('Send Now triggers send flow and shows shareable URL', async () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      fireEvent.click(screen.getByText('Send Now'));
+      fireEvent.click(screen.getByText('Enviar agora'));
       await waitFor(() => {
-        expect(screen.getByText('Proposal Sent')).toBeTruthy();
+        expect(screen.getByText('Proposta enviada')).toBeTruthy();
       });
       const urlInput = container.querySelector('input[readonly]') as HTMLInputElement;
       expect(urlInput.value).toContain('/p/abc');
@@ -675,9 +675,9 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      fireEvent.click(screen.getByText('Send Now'));
-      await waitFor(() => screen.getByText('Proposal Sent'));
-      const copyBtn = container.querySelector('button[title="Copy link"]')!;
+      fireEvent.click(screen.getByText('Enviar agora'));
+      await waitFor(() => screen.getByText('Proposta enviada'));
+      const copyBtn = container.querySelector('button[title="Copiar link"]')!;
       fireEvent.click(copyBtn);
       expect((navigator.clipboard.writeText as any).mock.calls.length).toBeGreaterThan(0);
     });
@@ -686,10 +686,10 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      fireEvent.click(screen.getByText('Send Now'));
-      await waitFor(() => screen.getByText('Proposal Sent'));
-      fireEvent.click(screen.getByText('Done'));
-      expect(screen.queryByText('Proposal Sent')).toBeNull();
+      fireEvent.click(screen.getByText('Enviar agora'));
+      await waitFor(() => screen.getByText('Proposta enviada'));
+      fireEvent.click(screen.getByText('Concluído'));
+      expect(screen.queryByText('Proposta enviada')).toBeNull();
     });
 
     it('send failure closes the dialog', async () => {
@@ -702,9 +702,9 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      fireEvent.click(screen.getByText('Send Now'));
+      fireEvent.click(screen.getByText('Enviar agora'));
       await waitFor(() => {
-        expect(screen.queryByText('Send Proposal')).toBeNull();
+        expect(screen.queryByText('Enviar proposta')).toBeNull();
       });
     });
   });
@@ -718,7 +718,7 @@ describe('ProposalsPage', () => {
       render(<ProposalsPage />);
       // initial fetches happen
       await act(async () => { await Promise.resolve(); });
-      const searchInput = document.querySelector('input[placeholder="Search proposals by title..."]') as HTMLInputElement;
+      const searchInput = document.querySelector('input[placeholder="Buscar propostas pelo título..."]') as HTMLInputElement;
       fireEvent.change(searchInput, { target: { value: 'foo' } });
       await act(async () => {
         vi.advanceTimersByTime(350);

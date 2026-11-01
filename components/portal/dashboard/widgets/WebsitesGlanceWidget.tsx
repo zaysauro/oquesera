@@ -23,16 +23,16 @@ export default async function WebsitesGlanceWidget({
       <div>
         <div className="mb-3">
           <span className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">0</span>
-          <span className="ml-2 text-sm text-muted-foreground">active websites</span>
+          <span className="ml-2 text-sm text-muted-foreground">sites ativos</span>
         </div>
-        <p className="text-sm text-muted-foreground py-2 text-center">No websites yet.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhum site ainda.</p>
         <div className="mt-3 text-center">
           <Link
             href="/portal/websites"
             className="text-xs text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-sm">add_circle_outline</span>
-            Create your first website
+            Crie seu primeiro site
           </Link>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default async function WebsitesGlanceWidget({
       </div>
 
       {recentDrafts.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-2 text-center">No draft posts.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhum rascunho.</p>
       ) : (
         <ul className="space-y-2">
           {recentDrafts.map((p) => (
@@ -113,7 +113,7 @@ export default async function WebsitesGlanceWidget({
           className="text-xs text-primary hover:underline inline-flex items-center gap-1"
         >
           <span className="material-icons text-sm">web</span>
-          Manage websites
+          Gerenciar sites
         </Link>
       </div>
     </div>

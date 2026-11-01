@@ -42,7 +42,7 @@ export default async function AutomationsWidget({
         <p className="text-sm text-muted-foreground py-2 text-center">
           No automations yet.{' '}
           <Link href="/portal/brain/automations" className="text-primary hover:underline">
-            Create one
+            Criar
           </Link>
         </p>
       ) : (
@@ -75,7 +75,7 @@ export default async function AutomationsWidget({
           className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
         >
           <span className="material-icons text-sm">bolt</span>
-          Manage automations
+          Gerenciar automações
         </Link>
       </div>
     </div>

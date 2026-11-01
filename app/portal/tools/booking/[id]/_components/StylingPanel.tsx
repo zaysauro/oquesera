@@ -42,15 +42,15 @@ export function StylingPanel({
   return (
     <div className="bg-card border border-border rounded-xl p-6 space-y-6">
       <div>
-        <h3 className="text-base font-semibold text-foreground mb-1">Appearance</h3>
+        <h3 className="text-base font-semibold text-foreground mb-1">Aparência</h3>
         <p className="text-sm text-muted-foreground">
-          Customize how your booking page looks. These settings override the branding profile when set.
+          Personalize a aparência da página. Estas opções substituem o perfil de marca.
         </p>
       </div>
 
-      {/* Branding Profile */}
+      {/* Perfil de marca */}
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1.5">Branding Profile</label>
+        <label className="block text-sm font-medium text-foreground mb-1.5">Perfil de marca</label>
         <select
           value={brandingProfileId || ''}
           onChange={(e) => {
@@ -65,7 +65,7 @@ export function StylingPanel({
           }}
           className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
-          <option value="">None (use overrides below)</option>
+          <option value="">Nenhum (usar opções abaixo)</option>
           {brandingProfiles.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
@@ -79,7 +79,7 @@ export function StylingPanel({
             <>
               {' '}
               <a href="/portal/branding" className="text-primary hover:underline">
-                Create a branding profile
+                Criar um perfil de marca
               </a>{' '}
               first.
             </>
@@ -91,7 +91,7 @@ export function StylingPanel({
       <div>
         <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
           <span className="material-icons text-base text-muted-foreground">color_lens</span>
-          Colors
+          Cores
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {COLOR_KEYS.map(({ key, label, ...rest }) => {
@@ -125,18 +125,18 @@ export function StylingPanel({
       <div>
         <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
           <span className="material-icons text-base text-muted-foreground">text_fields</span>
-          Fonts
+          Fontes
         </h4>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Heading Font</label>
+            <label className="block text-xs text-muted-foreground mb-1">Fonte dos títulos</label>
             <GoogleFontPicker
               value={(styling.headingFont as string) || ''}
               onChange={(font) => setStyling((prev) => ({ ...prev, headingFont: font }))}
             />
           </div>
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Body Font</label>
+            <label className="block text-xs text-muted-foreground mb-1">Fonte do texto</label>
             <GoogleFontPicker
               value={(styling.bodyFont as string) || ''}
               onChange={(font) => setStyling((prev) => ({ ...prev, bodyFont: font }))}
@@ -149,11 +149,11 @@ export function StylingPanel({
       <div>
         <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
           <span className="material-icons text-base text-muted-foreground">smart_button</span>
-          Buttons
+          Botões
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Button Background</label>
+            <label className="block text-xs text-muted-foreground mb-1">Fundo do botão</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -171,7 +171,7 @@ export function StylingPanel({
             </div>
           </div>
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Button Text</label>
+            <label className="block text-xs text-muted-foreground mb-1">Texto do botão</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -193,7 +193,7 @@ export function StylingPanel({
             </div>
           </div>
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Border Radius</label>
+            <label className="block text-xs text-muted-foreground mb-1">Arredondamento</label>
             <select
               value={(styling.buttonBorderRadius as string) || ''}
               onChange={(e) =>
@@ -201,12 +201,12 @@ export function StylingPanel({
               }
               className="w-full px-2 py-1 text-xs bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
-              <option value="">Default</option>
-              <option value="0px">Square (0px)</option>
-              <option value="4px">Slight (4px)</option>
-              <option value="8px">Rounded (8px)</option>
-              <option value="12px">More Rounded (12px)</option>
-              <option value="9999px">Pill (full)</option>
+              <option value="">Padrão</option>
+              <option value="0px">Reto (0px)</option>
+              <option value="4px">Leve (4px)</option>
+              <option value="8px">Arredondado (8px)</option>
+              <option value="12px">Mais arredondado (12px)</option>
+              <option value="9999px">Pílula</option>
             </select>
           </div>
         </div>
@@ -220,18 +220,18 @@ export function StylingPanel({
         </h4>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-muted-foreground mb-1">Card Border Radius</label>
+            <label className="block text-xs text-muted-foreground mb-1">Arredondamento do cartão</label>
             <select
               value={(styling.borderRadius as string) || ''}
               onChange={(e) => setStyling((prev) => ({ ...prev, borderRadius: e.target.value }))}
               className="w-full px-2 py-1 text-xs bg-background border border-border rounded text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
-              <option value="">Default (8px)</option>
-              <option value="0px">Square (0px)</option>
-              <option value="4px">Slight (4px)</option>
-              <option value="12px">Rounded (12px)</option>
-              <option value="16px">More Rounded (16px)</option>
-              <option value="24px">Very Rounded (24px)</option>
+              <option value="">Padrão (8px)</option>
+              <option value="0px">Reto (0px)</option>
+              <option value="4px">Leve (4px)</option>
+              <option value="12px">Arredondado (12px)</option>
+              <option value="16px">Mais arredondado (16px)</option>
+              <option value="24px">Muito arredondado (24px)</option>
             </select>
           </div>
         </div>
@@ -243,7 +243,7 @@ export function StylingPanel({
               onChange={(e) => setStyling((prev) => ({ ...prev, hideTitle: e.target.checked }))}
               className="rounded border-border accent-primary"
             />
-            <span className="text-sm text-foreground">Hide title on public page</span>
+            <span className="text-sm text-foreground">Ocultar título na página pública</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -252,14 +252,14 @@ export function StylingPanel({
               onChange={(e) => setStyling((prev) => ({ ...prev, hideLogo: e.target.checked }))}
               className="rounded border-border accent-primary"
             />
-            <span className="text-sm text-foreground">Hide logo</span>
+            <span className="text-sm text-foreground">Ocultar logotipo</span>
           </label>
         </div>
       </div>
 
       {/* Preview swatch */}
       <div>
-        <h4 className="text-sm font-semibold text-foreground mb-3">Preview</h4>
+        <h4 className="text-sm font-semibold text-foreground mb-3">Pré-visualizar</h4>
         <div
           className="rounded-xl border p-6 flex items-center justify-center gap-4"
           style={{
@@ -279,7 +279,7 @@ export function StylingPanel({
                 fontSize: '1.1rem',
               }}
             >
-              Book a Meeting
+              Agendar horário
             </p>
             <button
               className="px-5 py-2 text-sm font-medium transition-opacity"
@@ -293,7 +293,7 @@ export function StylingPanel({
                 borderRadius: (styling.buttonBorderRadius as string) || '8px',
               }}
             >
-              Confirm Booking
+              Confirmar agendamento
             </button>
           </div>
         </div>

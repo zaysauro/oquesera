@@ -193,7 +193,7 @@ describe('WorkflowEditorPage', () => {
     it('shows loading spinner while fetch is in flight', () => {
       setFetchHandler(() => new Promise(() => {})); // never resolves
       const { container } = render(<WorkflowEditorPage />);
-      expect(container.textContent).toContain('Loading workflow...');
+      expect(container.textContent).toContain('Carregando fluxo...');
     });
 
     it('loading state includes the animated spinner icon', () => {
@@ -213,7 +213,7 @@ describe('WorkflowEditorPage', () => {
       });
       const { container } = render(<WorkflowEditorPage />);
       await waitFor(() => {
-        expect(container.textContent).toContain('Workflow not found.');
+        expect(container.textContent).toContain('Fluxo não encontrado.');
       });
     });
 
@@ -266,9 +266,9 @@ describe('WorkflowEditorPage', () => {
 
     it('renders all three status options', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Draft');
-      expect(container.textContent).toContain('Active');
-      expect(container.textContent).toContain('Paused');
+      expect(container.textContent).toContain('Rascunho');
+      expect(container.textContent).toContain('Ativo');
+      expect(container.textContent).toContain('Pausado');
     });
 
     it('renders the trigger kind label', async () => {
@@ -296,27 +296,27 @@ describe('WorkflowEditorPage', () => {
   describe('palette sidebar', () => {
     it('renders the Triggers palette section heading', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Triggers');
+      expect(container.textContent).toContain('Gatilhos');
     });
 
     it('renders the Actions palette section heading', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Actions');
+      expect(container.textContent).toContain('Ações');
     });
 
     it('renders the Logic palette section heading', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Logic');
+      expect(container.textContent).toContain('Lógica');
     });
 
     it('renders Contact created trigger in the palette', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Contact created');
+      expect(container.textContent).toContain('Contato criado');
     });
 
     it('renders Send email action in the palette', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Send email');
+      expect(container.textContent).toContain('Enviar e-mail');
     });
 
     it('renders Condition entry in the palette', async () => {
@@ -326,9 +326,9 @@ describe('WorkflowEditorPage', () => {
 
     it('clicking a palette button does not throw', async () => {
       const { container } = await renderPage();
-      // Find the "Contact created" button in the triggers palette.
+      // Find the "Contato criado" button in the triggers palette.
       const paletteBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Contact created')
+        b => b.textContent?.includes('Contato criado')
       ) as HTMLButtonElement;
       expect(paletteBtn).toBeTruthy();
       expect(() => fireEvent.click(paletteBtn)).not.toThrow();
@@ -339,7 +339,7 @@ describe('WorkflowEditorPage', () => {
       // addNode runs without error by checking it doesn't crash.
       const { container } = await renderPage();
       const sendEmailBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Send email')
+        b => b.textContent?.includes('Enviar e-mail')
       ) as HTMLButtonElement;
       fireEvent.click(sendEmailBtn);
       // No error thrown; canvas stub is still in the DOM
@@ -359,7 +359,7 @@ describe('WorkflowEditorPage', () => {
   describe('recent runs panel', () => {
     it('renders the Recent runs heading', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Recent runs');
+      expect(container.textContent).toContain('Execuções recentes');
     });
 
     it('renders run IDs for loaded runs', async () => {
@@ -578,7 +578,7 @@ describe('WorkflowEditorPage', () => {
     it('renders the Test run button', async () => {
       const { container } = await renderPage();
       const testBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Test run')
+        b => b.textContent?.includes('Testar')
       );
       expect(testBtn).toBeTruthy();
     });
@@ -591,7 +591,7 @@ describe('WorkflowEditorPage', () => {
       global.fetch = fetchSpy;
       const { container } = await renderPage();
       const testBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Test run')
+        b => b.textContent?.includes('Testar')
       ) as HTMLButtonElement;
       fireEvent.click(testBtn);
       await waitFor(() => {
@@ -627,11 +627,11 @@ describe('WorkflowEditorPage', () => {
         expect(inp?.value).toBe('Onboarding sequence');
       });
       const testBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Test run')
+        b => b.textContent?.includes('Testar')
       ) as HTMLButtonElement;
       fireEvent.click(testBtn);
       await waitFor(() => {
-        expect(container.textContent).toContain('Running...');
+        expect(container.textContent).toContain('Executando...');
       });
     });
 
@@ -660,7 +660,7 @@ describe('WorkflowEditorPage', () => {
         expect(inp?.value).toBe('Onboarding sequence');
       });
       const testBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Test run')
+        b => b.textContent?.includes('Testar')
       ) as HTMLButtonElement;
       fireEvent.click(testBtn);
       await waitFor(() => {
@@ -673,7 +673,7 @@ describe('WorkflowEditorPage', () => {
     it('renders the Delete button', async () => {
       const { container } = await renderPage();
       const deleteBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Delete')
+        b => b.textContent?.includes('Excluir')
       );
       expect(deleteBtn).toBeTruthy();
     });
@@ -681,7 +681,7 @@ describe('WorkflowEditorPage', () => {
     it('clicking Delete calls window.confirm', async () => {
       const { container } = await renderPage();
       const deleteBtn = Array.from(container.querySelectorAll('button')).find(
-        b => b.textContent?.includes('Delete')
+        b => b.textContent?.includes('Excluir')
       ) as HTMLButtonElement;
       fireEvent.click(deleteBtn);
       await flush();
@@ -697,7 +697,7 @@ describe('WorkflowEditorPage', () => {
       const { container } = await renderPage();
       fireEvent.click(
         Array.from(container.querySelectorAll('button')).find(
-          b => b.textContent?.includes('Delete')
+          b => b.textContent?.includes('Excluir')
         )!
       );
       await waitFor(() => {
@@ -712,7 +712,7 @@ describe('WorkflowEditorPage', () => {
       const { container } = await renderPage();
       fireEvent.click(
         Array.from(container.querySelectorAll('button')).find(
-          b => b.textContent?.includes('Delete')
+          b => b.textContent?.includes('Excluir')
         )!
       );
       await waitFor(() => {
@@ -730,7 +730,7 @@ describe('WorkflowEditorPage', () => {
       const { container } = await renderPage();
       fireEvent.click(
         Array.from(container.querySelectorAll('button')).find(
-          b => b.textContent?.includes('Delete')
+          b => b.textContent?.includes('Excluir')
         )!
       );
       await flush();

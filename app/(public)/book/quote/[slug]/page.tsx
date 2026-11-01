@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState, useEffect } from 'react';
 import { BookingPaymentForm } from '@/components/blocks/render/BookingPaymentForm';
 
@@ -18,7 +19,7 @@ interface QuoteData {
 }
 
 function formatCents(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 export default function QuotePaymentPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -41,7 +42,7 @@ export default function QuotePaymentPage({ params }: { params: Promise<{ slug: s
             setError(data.message || 'Quote not found');
           }
         })
-        .catch(() => setError('Failed to load quote'))
+        .catch(() => setError('Não foi possível carregar o orçamento'))
         .finally(() => setLoading(false));
     });
   }, [params]);
@@ -62,7 +63,7 @@ export default function QuotePaymentPage({ params }: { params: Promise<{ slug: s
         setError(data.message || 'Failed to initiate payment');
       }
     } catch {
-      setError('Something went wrong');
+      setError('Algo deu errado');
     } finally {
       setPaying(false);
     }
@@ -81,7 +82,7 @@ export default function QuotePaymentPage({ params }: { params: Promise<{ slug: s
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="text-center p-8">
           <span className="material-icons text-4xl text-gray-400 mb-3 block">error_outline</span>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Quote Not Found</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Orçamento não encontrado</h1>
           <p className="text-gray-500">{error}</p>
         </div>
       </div>
@@ -112,8 +113,8 @@ export default function QuotePaymentPage({ params }: { params: Promise<{ slug: s
             <div className="w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mx-auto mb-4">
               <span className="material-icons text-3xl text-green-600">check_circle</span>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">Payment Complete</h2>
-            <p className="text-gray-500 text-sm">Thank you! A confirmation has been sent to your email.</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">Pagamento concluído</h2>
+            <p className="text-gray-500 text-sm">Obrigado! Enviamos uma confirmação para o seu e-mail.</p>
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 space-y-5">
@@ -179,7 +180,7 @@ export default function QuotePaymentPage({ params }: { params: Promise<{ slug: s
 
             <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400">
               <span className="material-icons text-sm">lock</span>
-              Secured by Stripe
+              Pagamento processado pelo Stripe
             </div>
           </div>
         )}

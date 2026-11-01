@@ -62,7 +62,7 @@ export default function WidgetShell({
             'w-6 h-6 flex items-center justify-center rounded',
             isCustomizing ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
           ].join(' ')}
-          aria-label="Drag to reorder"
+          aria-label="Arraste para reordenar"
           {...dragHandleAttributes}
           {...dragHandleListeners}
         >
@@ -95,7 +95,7 @@ export default function WidgetShell({
               type="button"
               onClick={() => onToggleCollapse(id)}
               className="w-[26px] h-[26px] rounded flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-              aria-label={collapsed ? 'Expand widget' : 'Collapse widget'}
+              aria-label={collapsed ? 'Expandir widget' : 'Recolher widget'}
             >
               <span className="material-icons text-[17px] leading-none">
                 {collapsed ? 'expand_more' : 'expand_less'}

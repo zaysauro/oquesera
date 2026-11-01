@@ -24,7 +24,7 @@ interface Recurrence {
 
 interface Column { id: number; name: string }
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
 function describeSchedule(r: Recurrence): string {
   const time = `${r.hourUtc.toString().padStart(2, '0')}:00 UTC`;

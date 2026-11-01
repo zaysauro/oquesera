@@ -57,13 +57,13 @@ function makeStepStub(name: string) {
         React.createElement(
           'button',
           { 'data-testid': `stub-next-${name}`, onClick: () => next() },
-          'Next',
+          'Próximo',
         ),
       back &&
         React.createElement(
           'button',
           { 'data-testid': `stub-back-${name}`, onClick: () => back() },
-          'Back',
+          'Voltar',
         ),
       finish &&
         React.createElement(
@@ -192,43 +192,43 @@ describe('OnboardingWizard', () => {
   it('shows correct title for welcome step', () => {
     global.fetch = makeFetchMock('welcome');
     render(<OnboardingWizard initialState={makeState('welcome')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Welcome');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Boas-vindas');
   });
 
   it('shows correct title for about-you step', () => {
     global.fetch = makeFetchMock('about-you');
     render(<OnboardingWizard initialState={makeState('about-you')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('About you');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Sobre você');
   });
 
   it('shows correct title for about-company step', () => {
     global.fetch = makeFetchMock('about-company');
     render(<OnboardingWizard initialState={makeState('about-company')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('About your company');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Sobre a sua empresa');
   });
 
   it('shows correct title for brand-vibe step', () => {
     global.fetch = makeFetchMock('brand-vibe');
     render(<OnboardingWizard initialState={makeState('brand-vibe')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Your brand vibe');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Identidade da marca');
   });
 
   it('shows correct title for mission step', () => {
     global.fetch = makeFetchMock('mission');
     render(<OnboardingWizard initialState={makeState('mission')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('What do you do?');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('O que a sua empresa faz?');
   });
 
   it('shows correct title for features step', () => {
     global.fetch = makeFetchMock('features');
     render(<OnboardingWizard initialState={makeState('features')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('What brings you here?');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('O que você procura?');
   });
 
   it('shows correct title for power-up step', () => {
     global.fetch = makeFetchMock('power-up');
     render(<OnboardingWizard initialState={makeState('power-up')} />);
-    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Power up with Claude');
+    expect(screen.getByTestId('onboarding-step-title').textContent).toBe('Conecte um assistente de IA');
   });
 
   it("shows correct title for done step", () => {
@@ -691,7 +691,7 @@ describe('StepModuleSetup (real component, OBQA-028 wizard tiers)', () => {
     await waitFor(() => expect(screen.getByTestId('ob-setup-site-name')).toBeTruthy());
     expect(screen.queryByText('Also activated')).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: /Next module/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Próximo módulo/ }));
 
     // Store never gets its own walk segment — it's grouped onto the summary screen.
     await waitFor(() => expect(screen.getByText('Also activated')).toBeTruthy());
@@ -707,7 +707,7 @@ describe('StepModuleSetup (real component, OBQA-028 wizard tiers)', () => {
 
     await waitFor(() => expect(screen.getByText('Surveys enabled')).toBeTruthy());
     expect(
-      screen.getByText('Create your first survey whenever you need it — Surveys is in your sidebar.'),
+      screen.getByText('Crie sua primeira pesquisa quando precisar — Pesquisas está no menu lateral.'),
     ).toBeTruthy();
     // No pending action rows — check the rows' unique description copy rather
     // than their label, since the segment *header* title also happens to read
@@ -783,21 +783,21 @@ describe('StepModuleSetup (real component, OBQA-028 wizard tiers)', () => {
     expect(screen.queryByTestId('ob-setup-brain-note-title')).toBeNull();
   });
 
-  it('last screen button reads "Continue"', async () => {
+  it('last screen button reads "Continuar"', async () => {
     global.fetch = makeModuleSetupFetchMock() as unknown as typeof fetch;
 
     // Single walk-tier module — the only segment is also the last one.
     const singleState = makeState('module-setup', { selectedModules: ['websites'] });
     const { unmount } = render(<RealStepModuleSetup {...makeStepProps({ state: singleState })} />);
-    await waitFor(() => expect(screen.getByRole('button', { name: /Continue/ })).toBeTruthy());
+    await waitFor(() => expect(screen.getByRole('button', { name: /Continuar/ })).toBeTruthy());
     unmount();
 
     // Multi-module case: the grouped summary screen is the terminal segment too.
     const groupedState = makeState('module-setup', { selectedModules: ['websites', 'store'] });
     render(<RealStepModuleSetup {...makeStepProps({ state: groupedState })} />);
-    await waitFor(() => expect(screen.getByRole('button', { name: /Next module/ })).toBeTruthy());
-    fireEvent.click(screen.getByRole('button', { name: /Next module/ }));
+    await waitFor(() => expect(screen.getByRole('button', { name: /Próximo módulo/ })).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', { name: /Próximo módulo/ }));
     await waitFor(() => expect(screen.getByText('Also activated')).toBeTruthy());
-    expect(screen.getByRole('button', { name: /Continue/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Continuar/ })).toBeTruthy();
   });
 });

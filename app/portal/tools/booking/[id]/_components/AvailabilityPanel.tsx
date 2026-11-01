@@ -27,7 +27,7 @@ export function AvailabilityPanel({ availability, setAvailability }: Availabilit
     <div className="bg-card border border-border rounded-xl p-5 space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <span className="material-icons text-primary">schedule</span>
-        <h2 className="text-sm font-medium text-foreground">Weekly Availability</h2>
+        <h2 className="text-sm font-medium text-foreground">Disponibilidade semanal</h2>
       </div>
       <div className="space-y-3">
         {DAY_ORDER.map((day) => {
@@ -79,7 +79,7 @@ export function AvailabilityPanel({ availability, setAvailability }: Availabilit
                   />
                 </div>
               ) : (
-                <span className="text-sm text-muted-foreground">Unavailable</span>
+                <span className="text-sm text-muted-foreground">Indisponível</span>
               )}
             </div>
           );

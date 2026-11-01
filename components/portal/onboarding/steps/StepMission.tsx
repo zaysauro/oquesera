@@ -5,9 +5,9 @@ import type { StepProps } from './types';
 import { obLabel, obHint, obTextarea, obPrimaryBtn } from '../ob-styles';
 
 const EXAMPLES = [
-  'We help small landlords manage tenants without spreadsheets.',
-  'Boutique design studio for indie SaaS launches.',
-  'AI-powered tutoring for high school students learning to code.',
+  'Barbearia no centro da cidade com atendimento por hora marcada.',
+  'Escritório de contabilidade para pequenas empresas e MEIs.',
+  'Restaurante de comida caseira com almoço executivo e delivery.',
 ];
 
 export function StepMission({ state, setAnswers, next }: StepProps) {
@@ -17,13 +17,13 @@ export function StepMission({ state, setAnswers, next }: StepProps) {
     <div className="space-y-5">
       <div>
         <label className={obLabel}>
-          In one sentence — what does your company actually do?
+          Em uma frase — o que a sua empresa faz?
         </label>
         <textarea
           value={mission}
           onChange={(e) => { setMission(e.target.value); setAnswers({ mission: e.target.value }); }}
           rows={3}
-          placeholder="Try to keep it under 25 words…"
+          placeholder="Procure usar menos de 25 palavras…"
           maxLength={500}
           data-testid="onboarding-mission"
           className={obTextarea}
@@ -33,7 +33,7 @@ export function StepMission({ state, setAnswers, next }: StepProps) {
 
       <div>
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-3">
-          Need a nudge? Try one of these:
+          Precisa de uma ideia? Experimente:
         </p>
         <ul className="flex flex-col gap-2">
           {EXAMPLES.map((ex) => (
@@ -53,7 +53,7 @@ export function StepMission({ state, setAnswers, next }: StepProps) {
       <div className="flex items-center justify-between pt-1">
         <p className={obHint}>
           <span className="material-icons" style={{ fontSize: 15 }}>lightbulb</span>
-          You can refine this anytime from your dashboard.
+          Você pode ajustar isso a qualquer momento no painel.
         </p>
         <button
           type="button"
@@ -61,7 +61,7 @@ export function StepMission({ state, setAnswers, next }: StepProps) {
           data-testid="onboarding-mission-next"
           className={obPrimaryBtn}
         >
-          {mission.trim() ? 'Continue' : 'Skip this'}
+          {mission.trim() ? 'Continuar' : 'Pular'}
           <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
         </button>
       </div>

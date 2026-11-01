@@ -23,10 +23,10 @@ export default async function StoreOverviewWidget({
       <div>
         <div className="mb-3">
           <span className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">—</span>
-          <span className="ml-2 text-sm text-muted-foreground">no active stores</span>
+          <span className="ml-2 text-sm text-muted-foreground">nenhuma loja ativa</span>
         </div>
         <p className="text-sm text-muted-foreground py-2 text-center">
-          No websites set up yet.
+          Nenhum site configurado.
         </p>
       </div>
     );
@@ -75,7 +75,7 @@ export default async function StoreOverviewWidget({
       </div>
 
       {recentOrders.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-2 text-center">No orders yet.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhum pedido ainda.</p>
       ) : (
         <ul className="space-y-2">
           {recentOrders.map((o) => (
@@ -111,7 +111,7 @@ export default async function StoreOverviewWidget({
             className="text-xs text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-sm">shopping_bag</span>
-            View all orders
+            Ver todos os pedidos
           </Link>
         </div>
       )}
@@ -123,7 +123,7 @@ export default async function StoreOverviewWidget({
             className="text-xs text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-sm">add_circle_outline</span>
-            Add your first product
+            Adicione o primeiro produto
           </Link>
         </div>
       )}

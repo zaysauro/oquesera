@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { APP_LOCALE } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -132,19 +133,19 @@ export function StepUpsell({ next }: StepProps) {
   }
 
   function handleAddBundle() {
-    if (!window.confirm('Switch to Kumo Complete? This will replace your individual modules with the bundle subscription.')) return;
+    if (!window.confirm('Mudar para o Kumo Completo? Seus módulos individuais serão substituídos pela assinatura do pacote.')) return;
     setBundleState('loading');
     void addModule(BUNDLE_SLUG, '__bundle__', setBundleState);
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `${formatMoney(cents, { fractionDigits: 0 })}/mo`;
 
   if (!mounted) {
     return (
       <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
         <span className="material-icons animate-spin mr-2 text-base">refresh</span>
-        Loading recommendations…
+        Carregando recomendações…
       </div>
     );
   }
@@ -178,14 +179,14 @@ export function StepUpsell({ next }: StepProps) {
                   {st === 'added' ? (
                     <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-emerald-600">
                       <span className="material-icons text-base text-emerald-600">check_circle</span>
-                      Added
+                      Adicionado
                     </span>
                   ) : st === 'checkout' ? (
                     <Link
                       href="/portal/settings/billing/plans"
                       className="text-xs text-primary underline hover:text-primary/80 font-medium"
                     >
-                      Set up billing
+                      Configurar cobrança
                       <span className="material-icons text-sm align-middle ml-0.5">arrow_forward</span>
                     </Link>
                   ) : (
@@ -216,9 +217,9 @@ export function StepUpsell({ next }: StepProps) {
           <span className="material-icons text-foreground shrink-0">star</span>
           <p className="flex-1 text-[13.5px] text-foreground">
             {bundleUpgradeCents > 0 ? (
-              <>You&apos;re <strong>{formatPrice(bundleUpgradeCents)}/mo</strong> away from everything</>
+              <>You&apos;re <strong>{formatPrice(bundleUpgradeCents)}/mo</strong> de ter tudo</>
             ) : (
-              <>Unlock everything for the same price</>
+              <>Libere tudo pelo mesmo preço</>
             )}
             {' '}—{' '}
             <button
@@ -227,7 +228,7 @@ export function StepUpsell({ next }: StepProps) {
               disabled={bundleState === 'loading' || bundleState === 'added'}
               className="underline text-primary hover:text-primary/80 font-medium disabled:opacity-50"
             >
-              Switch to Complete
+              Mudar para o Completo
             </button>
           </p>
           {bundleState === 'loading' && (
@@ -241,11 +242,11 @@ export function StepUpsell({ next }: StepProps) {
               href="/portal/settings/billing/plans"
               className="text-xs text-primary underline hover:text-primary/80 font-medium whitespace-nowrap"
             >
-              Set up billing
+              Configurar cobrança
             </Link>
           )}
           {bundleState === 'error' && (
-            <span className="text-xs text-destructive">Error — try again</span>
+            <span className="text-xs text-destructive">Erro — tente novamente</span>
           )}
         </div>
       )}
@@ -256,7 +257,7 @@ export function StepUpsell({ next }: StepProps) {
           onClick={() => next()}
           className={obPrimaryBtn}
         >
-          Continue
+          Continuar
           <span className="material-icons text-base">arrow_forward</span>
         </button>
       </div>

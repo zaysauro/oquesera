@@ -22,7 +22,7 @@ export default async function EditorialPipelineWidget({
     return (
       <div>
         <p className="text-sm text-muted-foreground py-2 text-center">
-          Publishing board not set up yet.
+          Quadro de publicação não configurado.
         </p>
         <div className="mt-3 text-center">
           <Link
@@ -30,7 +30,7 @@ export default async function EditorialPipelineWidget({
             className="text-xs text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-sm">add_circle_outline</span>
-            Set up Publishing
+            Configurar publicação
           </Link>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default async function EditorialPipelineWidget({
   if (!projectRow[0]) {
     return (
       <p className="text-sm text-muted-foreground py-4 text-center">
-        Publishing board unavailable.
+        Quadro de publicação indisponível.
       </p>
     );
   }
@@ -106,7 +106,7 @@ export default async function EditorialPipelineWidget({
       )}
 
       {scheduledCards.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-2 text-center">No upcoming scheduled items.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhum item agendado.</p>
       ) : (
         <ul className="space-y-2">
           {scheduledCards.map((card) => (
@@ -138,7 +138,7 @@ export default async function EditorialPipelineWidget({
           className="text-xs text-primary hover:underline inline-flex items-center gap-1"
         >
           <span className="material-icons text-sm">dashboard</span>
-          Open Publishing board
+          Abrir quadro de publicação
         </Link>
       </div>
     </div>

@@ -30,7 +30,7 @@ export function CardDescription({
   return (
     <div>
       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-        Description
+        Descrição
       </h3>
       {editingDesc ? (
         <div>
@@ -48,15 +48,15 @@ export function CardDescription({
               disabled={savingField === 'description'}
               className="px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:bg-primary/90 disabled:opacity-50"
             >
-              {savingField === 'description' ? 'Saving…' : 'Save'}
+              {savingField === 'description' ? 'Salvando…' : 'Save'}
             </button>
             <button
               onClick={() => setEditingDesc(false)}
               className="px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
-              Cancel
+              Cancelar
             </button>
-            <span className="ml-auto text-xs text-muted-foreground">Markdown supported</span>
+            <span className="ml-auto text-xs text-muted-foreground">Aceita Markdown</span>
           </div>
         </div>
       ) : (
@@ -73,7 +73,7 @@ export function CardDescription({
             <MarkdownView>{card.description}</MarkdownView>
           ) : (
             <span className="text-muted-foreground italic">
-              {canEdit ? 'Add a description…' : 'No description'}
+              {canEdit ? 'Adicione uma descrição…' : 'Sem descrição'}
             </span>
           )}
         </div>

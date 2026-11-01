@@ -24,7 +24,7 @@ export default async function BrainReviewQueueWidget({
         <p className="text-sm text-muted-foreground py-2 text-center">
           Nothing waiting for review.{' '}
           <Link href="/portal/brain/communications/new" className="text-primary hover:underline">
-            Add a note
+            Adicionar nota
           </Link>
         </p>
       ) : (
@@ -64,7 +64,7 @@ export default async function BrainReviewQueueWidget({
             className="text-xs text-primary hover:underline flex items-center gap-1"
           >
             <span className="material-icons text-sm">arrow_forward</span>
-            View all pending reviews
+            Ver revisões pendentes
           </Link>
         </div>
       )}

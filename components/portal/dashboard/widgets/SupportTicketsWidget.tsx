@@ -32,7 +32,7 @@ export default async function SupportTicketsWidget({
         <span className="ml-2 text-sm text-muted-foreground">open ticket{openCount !== 1 ? 's' : ''}</span>
       </div>
       {recent.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-2 text-center">No tickets yet.</p>
+        <p className="text-sm text-muted-foreground py-2 text-center">Nenhum chamado ainda.</p>
       ) : (
         <ul className="space-y-2">
           {recent.map((t) => (

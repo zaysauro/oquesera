@@ -3,7 +3,7 @@ import { pluginTenantCookieOptions } from '@/lib/plugins/tenant-cookie';
 
 // QAD-043: the plugin handoff cookie must SET across environments, not just the
 // production apex. Prod behavior must stay byte-identical to the old hard-coded
-// values (secure:true, domain:'.simplerdevelopment.com').
+// values (secure:true, domain:'.kumo.localhost').
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -20,7 +20,7 @@ describe('pluginTenantCookieOptions', () => {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      domain: '.simplerdevelopment.com',
+      domain: '.kumo.localhost',
       path: '/',
       maxAge: 600,
     });

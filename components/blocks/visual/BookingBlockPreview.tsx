@@ -74,7 +74,7 @@ export function BookingBlockPreview({ block, isSelected, onChange }: BookingBloc
             </div>
             {/* Mini calendar grid */}
             <div className="grid grid-cols-7 gap-1 text-center text-xs mb-4">
-              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+              {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
                 <div key={i} className="text-muted-foreground font-medium py-1">{d}</div>
               ))}
               {Array.from({ length: 30 }, (_, i) => (

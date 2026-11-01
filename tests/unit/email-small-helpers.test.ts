@@ -233,14 +233,14 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
 
     const inst = resendInstances[0];
     const sendCall = inst.emails.send.mock.calls[0][0];
-    expect(sendCall.from).toBe('Simpler Development <sender@example.test>');
+    expect(sendCall.from).toBe('Kumo One <sender@example.test>');
     expect(sendCall.to).toBe('new@example.test');
     expect(sendCall.subject).toBe('Alice invited you to Acme Co');
     expect(sendCall.html).toContain('Newbie');
     expect(sendCall.html).toContain('Acme Co');
     expect(sendCall.html).toContain('Alice');
-    // role 'member' → 'Team Member' label
-    expect(sendCall.html).toContain('Team Member');
+    // role 'member' → 'Membro da equipe' label
+    expect(sendCall.html).toContain('Membro da equipe');
     // gets indefinite article 'a' for consonant-starting label
     expect(sendCall.html).toMatch(/as a\s+<strong>Team Member<\/strong>/);
     // invite URL includes token + base
@@ -265,7 +265,7 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
     expect(html).toMatch(/as an\s+<strong>Owner<\/strong>/);
   });
 
-  it('renders an "Admin" role label with the article "an"', async () => {
+  it('renders an "Administrador" role label with the article "an"', async () => {
     process.env.RESEND_API_KEY = 're_test_invite3';
     const { sendInviteEmail } = await import('@/lib/email/invite-email');
     await sendInviteEmail({
@@ -295,7 +295,7 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
     expect(html).toMatch(/as a\s+<strong>Viewer<\/strong>/);
   });
 
-  it('falls back to "Team Member" for an unknown role', async () => {
+  it('falls back to "Membro da equipe" for an unknown role', async () => {
     process.env.RESEND_API_KEY = 're_test_invite5';
     const { sendInviteEmail } = await import('@/lib/email/invite-email');
     await sendInviteEmail({
@@ -307,7 +307,7 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
       inviteToken: 'tok',
     });
     const html = resendInstances[0].emails.send.mock.calls[0][0].html as string;
-    expect(html).toContain('Team Member');
+    expect(html).toContain('Membro da equipe');
   });
 
   it('falls back to default BASE_URL + FROM_EMAIL when env is unset', async () => {
@@ -324,8 +324,8 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
       inviteToken: 'tok_default',
     });
     const call = resendInstances[0].emails.send.mock.calls[0][0];
-    expect(call.from).toBe('Simpler Development <portal@simplerdevelopment.com>');
-    expect(call.html).toContain('https://simplerdevelopment.com/portal/invite/tok_default');
+    expect(call.from).toBe('Kumo One <portal@kumo.localhost>');
+    expect(call.html).toContain('https://kumo.localhost/portal/invite/tok_default');
   });
 });
 

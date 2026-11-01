@@ -14,7 +14,7 @@ interface CrmAddDealModalProps {
 }
 
 /**
- * Shared "Add Deal" modal used from a company or contact detail page's Deals
+ * Shared "Adicionar oportunidade" modal used from a company or contact detail page's Deals
  * tab (CRM79-008). The parent owns the open/close boolean and only mounts
  * this while open; it does not call onClose itself on success — the parent
  * decides what "created" means (close + refetch its own deals list).
@@ -68,7 +68,7 @@ export default function CrmAddDealModal({ companyId, contactId, onClose, onCreat
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4" onClick={onClose}>
       <form onSubmit={createDeal} onClick={e => e.stopPropagation()} className={`${pCard} my-8 w-full max-w-2xl p-6 space-y-4`}>
-        <div className="flex items-center justify-between"><h3 className="font-semibold text-foreground">New Deal</h3><button type="button" onClick={onClose} aria-label="Close" className="text-muted-foreground hover:text-foreground"><span className="material-icons text-base">close</span></button></div>
+        <div className="flex items-center justify-between"><h3 className="font-semibold text-foreground">Nova oportunidade</h3><button type="button" onClick={onClose} aria-label="Close" className="text-muted-foreground hover:text-foreground"><span className="material-icons text-base">close</span></button></div>
         {error && (
           <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
             <span className="material-icons text-base">error</span>
@@ -76,24 +76,24 @@ export default function CrmAddDealModal({ companyId, contactId, onClose, onCreat
           </div>
         )}
         {pipelines.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-2">No pipelines available. Create one in the Deals section first.</p>
+          <p className="text-sm text-muted-foreground py-2">Nenhum funil disponível. Crie um na seção Oportunidades.</p>
         ) : (
           <>
             <div className="grid sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Title *</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Título *</label>
                 <input required value={newDeal.title} onChange={e => setNewDeal(f => ({ ...f, title: e.target.value }))} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Value (USD)</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Valor (R$)</label>
                 <input type="number" min={0} step="0.01" value={newDeal.value} onChange={e => setNewDeal(f => ({ ...f, value: e.target.value }))} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Expected close</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Previsão de fechamento</label>
                 <input type="date" value={newDeal.expectedCloseDate} onChange={e => setNewDeal(f => ({ ...f, expectedCloseDate: e.target.value }))} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Pipeline</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Funil</label>
                 <select
                   value={newDeal.pipelineId}
                   onChange={e => {
@@ -107,21 +107,21 @@ export default function CrmAddDealModal({ companyId, contactId, onClose, onCreat
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Stage</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Etapa</label>
                 <select value={newDeal.stageId} onChange={e => setNewDeal(f => ({ ...f, stageId: e.target.value }))} className={pSelect}>
                   {dealStages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Priority</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Prioridade</label>
                 <select value={newDeal.priority} onChange={e => setNewDeal(f => ({ ...f, priority: e.target.value }))} className={pSelect}>
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="low">Baixa</option>
+                  <option value="medium">Média</option>
+                  <option value="high">Alta</option>
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Notes</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Observações</label>
                 <textarea
                   value={newDeal.notes}
                   onChange={e => setNewDeal(f => ({ ...f, notes: e.target.value }))}
@@ -133,7 +133,7 @@ export default function CrmAddDealModal({ companyId, contactId, onClose, onCreat
             <div className="flex justify-end">
               <button type="submit" disabled={saving || !newDeal.pipelineId || !newDeal.stageId} className={pBtnPrimary}>
                 {saving && <span className="material-icons animate-spin text-sm">refresh</span>}
-                Create Deal
+                Criar oportunidade
               </button>
             </div>
           </>

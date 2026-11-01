@@ -297,7 +297,7 @@ describe('SidebarCreditBadge', () => {
 
     const link = container.querySelector('a');
     expect(link?.getAttribute('href')).toBe('/portal/settings/ai');
-    expect(link?.textContent).toContain('AI Credits');
+    expect(link?.textContent).toContain('Créditos de IA');
     expect(link?.textContent).toContain('12K');
     // Material icon, not emoji
     const icon = container.querySelector('.material-icons');
@@ -443,7 +443,7 @@ describe('ServicePaywall', () => {
     const { container } = render(<ServicePaywall {...baseProps} />);
     const link = container.querySelector('a[href="/portal/services"]');
     expect(link).toBeTruthy();
-    expect(link?.textContent).toContain('View all services');
+    expect(link?.textContent).toContain('Ver todos os serviços');
   });
 
   it('calls the checkout endpoint and redirects on successful subscription', async () => {
@@ -473,7 +473,7 @@ describe('ServicePaywall', () => {
 
     try {
       render(<ServicePaywall {...baseProps} />);
-      const btn = screen.getByText('Subscribe Now');
+      const btn = screen.getByText('Assinar agora');
       await act(async () => {
         fireEvent.click(btn);
         await Promise.resolve();
@@ -499,7 +499,7 @@ describe('ServicePaywall', () => {
     mockFetchOnce({ success: false, data: {} });
 
     render(<ServicePaywall {...baseProps} />);
-    const btn = screen.getByText('Subscribe Now');
+    const btn = screen.getByText('Assinar agora');
     await act(async () => {
       fireEvent.click(btn);
       await Promise.resolve();
@@ -508,7 +508,7 @@ describe('ServicePaywall', () => {
 
     // button is back to enabled state (loading flag flipped off in finally)
     await waitFor(() => {
-      expect(screen.getByText('Subscribe Now')).toBeTruthy();
+      expect(screen.getByText('Assinar agora')).toBeTruthy();
     });
   });
 });
@@ -670,7 +670,7 @@ describe('ProvisioningStatus', () => {
     await flushMicrotasks();
     expect(container.textContent).toContain('Deploy your website');
     expect(container.textContent).toContain(
-      'acme.simplerdevelopment.com subdomain',
+      'acme.kumo.localhost subdomain',
     );
     expect(container.textContent).toContain('Deploy Now');
   });
@@ -793,7 +793,7 @@ describe('ProvisioningStatus', () => {
       data: {
         deploymentStatus: 'active',
         subdomain: 'live',
-        fullDomain: 'live.simplerdevelopment.com',
+        fullDomain: 'live.kumo.localhost',
         githubRepoName: 'live-repo',
         githubRepoUrl: 'https://github.com/x/live-repo',
         vercelProjectId: 'prj_x',
@@ -810,7 +810,7 @@ describe('ProvisioningStatus', () => {
     expect(container.textContent).toContain('Infrastructure');
     expect(container.textContent).toContain('Active');
     // domain
-    expect(container.textContent).toContain('live.simplerdevelopment.com');
+    expect(container.textContent).toContain('live.kumo.localhost');
     const links = Array.from(container.querySelectorAll('a'));
     expect(
       links.some((a) => a.getAttribute('href') === 'https://github.com/x/live-repo'),
@@ -828,7 +828,7 @@ describe('ProvisioningStatus', () => {
       data: {
         deploymentStatus: 'active',
         subdomain: 'managed',
-        fullDomain: 'managed.simplerdevelopment.com',
+        fullDomain: 'managed.kumo.localhost',
         githubRepoName: null,
         githubRepoUrl: null,
         vercelProjectId: null,
@@ -844,7 +844,7 @@ describe('ProvisioningStatus', () => {
 
     expect(container.textContent).toContain('Managed');
     expect(container.textContent).toContain(
-      'Hosted on simplerdevelopment.com',
+      'Hosted on kumo.localhost',
     );
   });
 });

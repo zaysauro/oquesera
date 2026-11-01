@@ -246,7 +246,7 @@ export function SiteFooter({
             color: fMuted,
           }}
         >
-          <div>© {new Date().getFullYear()} {siteName}. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} {siteName}. Todos os direitos reservados.</div>
           {legalLinks && legalLinks.length > 0 && (
             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
               {legalLinks.map(l => (

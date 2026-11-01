@@ -61,7 +61,7 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
 
   const requestClose = useCallback(() => {
     const customFieldsDirty = customFieldsRef.current?.isDirty?.() ?? false;
-    if ((dirty || customFieldsDirty) && !window.confirm('Discard unsaved changes?')) return;
+    if ((dirty || customFieldsDirty) && !window.confirm('Descartar alterações não salvas?')) return;
     onClose();
   }, [dirty, onClose]);
 
@@ -174,7 +174,7 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
         <form onSubmit={saveEdit}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-border">
             <h2 id={titleId} className="font-display text-[17px] font-extrabold tracking-[-0.02em] text-foreground">
-              Edit Contact
+              Editar contato
             </h2>
             <button type="button" onClick={requestClose} aria-label="Close" className="text-muted-foreground hover:text-foreground">
               <span className="material-icons text-base">close</span>
@@ -188,7 +188,7 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
             </div>
           )}
 
-          <div role="tablist" aria-label="Contact edit sections" onKeyDown={onTabListKeyDown} className="flex border-b border-border px-2">
+          <div role="tablist" aria-label="Seções de edição do contato" onKeyDown={onTabListKeyDown} className="flex border-b border-border px-2">
             {CONTACT_EDIT_TABS.map(tab => (
               <button
                 key={tab.id}
@@ -221,19 +221,19 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
               className="grid sm:grid-cols-2 gap-4"
             >
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">First Name</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Nome</label>
                 <input required value={editForm.firstName} onChange={e => setField('firstName', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Last Name</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Sobrenome</label>
                 <input required value={editForm.lastName} onChange={e => setField('lastName', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Title</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Título</label>
                 <input value={editForm.title} onChange={e => setField('title', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Company</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Empresa</label>
                 <CrmCompanyTypeaheadPicker
                   value={editForm.companyId}
                   selectedLabel={companyLabel}
@@ -241,7 +241,7 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
                     setField('companyId', opt ? String(opt.id) : '');
                     setCompanyLabel(opt ? opt.name : null);
                   }}
-                  placeholder="Select company…"
+                  placeholder="Selecione a empresa…"
                 />
               </div>
               <div>
@@ -265,15 +265,15 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
               className="grid sm:grid-cols-2 gap-4"
             >
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">E-mail</label>
                 <input type="email" value={editForm.email} onChange={e => setField('email', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Telefone</label>
                 <input value={editForm.phone} onChange={e => setField('phone', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">LinkedIn URL</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">URL do LinkedIn</label>
                 <input
                   type="url"
                   value={editForm.linkedinUrl}
@@ -283,16 +283,16 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Source</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Origem</label>
                 <select value={editForm.source} onChange={e => setField('source', e.target.value)} className={pSelect}>
-                  <option value="">None</option>
+                  <option value="">Nenhum</option>
                   {CONTACT_SOURCE_OPTIONS.map(s => (
                     <option key={s} value={s}>{s.replace('-', ' ')}</option>
                   ))}
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Address</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Endereço</label>
                 <input value={editForm.address} onChange={e => setField('address', e.target.value)} className={pInput} />
               </div>
             </div>
@@ -309,7 +309,7 @@ export default function ContactEditModal({ contactId, contact, onClose, onSaved 
 
           <div className="flex gap-2 justify-end px-6 py-4 border-t border-border">
             <button type="button" onClick={requestClose} className={pBtnGhost}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={saving} className={pBtnPrimary}>
               {saving && <span className="material-icons animate-spin text-sm">refresh</span>}

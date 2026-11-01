@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PortalPageHeader } from '@/components/portal/PortalPageHeader';
@@ -19,7 +20,7 @@ interface AnalyticsData {
 }
 
 function formatCents(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 export default function BookingAnalyticsPage() {
@@ -47,12 +48,12 @@ export default function BookingAnalyticsPage() {
     <div className="max-w-5xl mx-auto space-y-6">
       <PortalPageHeader
         eyebrow="Booking"
-        title="Booking Analytics"
-        subtitle="Revenue and booking insights"
+        title="Relatórios de agendamentos"
+        subtitle="Receita e indicadores de agendamentos"
         actions={
           <Link href="/portal/tools/booking" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <span className="material-icons text-lg">arrow_back</span>
-            Back to Bookings
+            Voltar para agendamentos
           </Link>
         }
       />
@@ -60,10 +61,10 @@ export default function BookingAnalyticsPage() {
       {/* Date range filter */}
       <div className={`flex items-center gap-3 flex-wrap ${pCardPad}`}>
         <span className="material-icons text-muted-foreground">date_range</span>
-        <input type="date" aria-label="Analytics range start date" value={startDate} onChange={e => setStartDate(e.target.value)}
+        <input type="date" aria-label="Início do período" value={startDate} onChange={e => setStartDate(e.target.value)}
           className="rounded-xl border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary focus:ring-4 focus:ring-primary/15" />
         <span className="text-muted-foreground">to</span>
-        <input type="date" aria-label="Analytics range end date" value={endDate} onChange={e => setEndDate(e.target.value)}
+        <input type="date" aria-label="Fim do período" value={endDate} onChange={e => setEndDate(e.target.value)}
           className="rounded-xl border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary focus:ring-4 focus:ring-primary/15" />
       </div>
 
@@ -72,16 +73,16 @@ export default function BookingAnalyticsPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-2 border-muted-foreground/20 border-t-primary" />
         </div>
       ) : !data ? (
-        <div className="text-center py-20 text-muted-foreground">Failed to load analytics</div>
+        <div className="text-center py-20 text-muted-foreground">Não foi possível carregar os relatórios</div>
       ) : (
         <>
           {/* Summary cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Total Revenue', value: formatCents(data.totalRevenue), icon: 'payments' },
+              { label: 'Receita total', value: formatCents(data.totalRevenue), icon: 'payments' },
               { label: 'Bookings', value: String(data.bookingCount), icon: 'calendar_month' },
-              { label: 'Total Guests', value: String(data.totalGuests), icon: 'groups' },
-              { label: 'Avg. Value', value: formatCents(data.averageBookingValue), icon: 'trending_up' },
+              { label: 'Total de clientes', value: String(data.totalGuests), icon: 'groups' },
+              { label: 'Ticket médio', value: formatCents(data.averageBookingValue), icon: 'trending_up' },
             ].map(card => (
               <div key={card.label} className="bg-card border border-border rounded-2xl p-4">
                 <div className="flex items-center gap-2 text-muted-foreground mb-1">
@@ -96,19 +97,19 @@ export default function BookingAnalyticsPage() {
           {/* Revenue breakdown */}
           {data.addOnRevenue > 0 && (
             <div className="bg-card border border-border rounded-2xl p-4">
-              <h3 className={pSectionTitle + " mb-3"}>Revenue Breakdown</h3>
+              <h3 className={pSectionTitle + " mb-3"}>Composição da receita</h3>
               <div className="flex gap-6 flex-wrap">
                 <div>
-                  <p className="text-xs text-muted-foreground">Booking Revenue</p>
+                  <p className="text-xs text-muted-foreground">Receita de agendamentos</p>
                   <p className="text-lg font-semibold">{formatCents(data.bookingRevenue)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Add-on Revenue</p>
+                  <p className="text-xs text-muted-foreground">Receita de adicionais</p>
                   <p className="text-lg font-semibold">{formatCents(data.addOnRevenue)}</p>
                 </div>
                 {data.cancelledCount > 0 && (
                   <div>
-                    <p className="text-xs text-muted-foreground">Cancelled</p>
+                    <p className="text-xs text-muted-foreground">Cancelados</p>
                     <p className="text-lg font-semibold text-red-500">{data.cancelledCount}</p>
                   </div>
                 )}
@@ -119,7 +120,7 @@ export default function BookingAnalyticsPage() {
           {/* Revenue by day chart */}
           {data.byDay.length > 0 && (
             <div className="bg-card border border-border rounded-2xl p-4">
-              <h3 className={pSectionTitle + " mb-3"}>Daily Revenue</h3>
+              <h3 className={pSectionTitle + " mb-3"}>Receita diária</h3>
               <div className="flex items-end gap-1 h-40">
                 {data.byDay.map(day => (
                   <div key={day.date} className="flex-1 flex flex-col items-center gap-1" title={`${day.date}: ${formatCents(day.revenue)} (${day.bookings} bookings)`}>
@@ -139,7 +140,7 @@ export default function BookingAnalyticsPage() {
           {/* Revenue by booking page */}
           {data.byPage.length > 0 && (
             <div className="bg-card border border-border rounded-2xl p-4">
-              <h3 className={pSectionTitle + " mb-3"}>By Booking Page</h3>
+              <h3 className={pSectionTitle + " mb-3"}>Por página de agendamento</h3>
               <div className="space-y-2">
                 {data.byPage.map(page => (
                   <div key={page.pageId} className="flex items-center justify-between py-2 border-b border-border last:border-0">
@@ -157,7 +158,7 @@ export default function BookingAnalyticsPage() {
           {/* Top add-ons */}
           {data.topAddOns.length > 0 && (
             <div className="bg-card border border-border rounded-2xl p-4">
-              <h3 className={pSectionTitle + " mb-3"}>Top Add-ons</h3>
+              <h3 className={pSectionTitle + " mb-3"}>Adicionais mais vendidos</h3>
               <div className="space-y-2">
                 {data.topAddOns.map(addOn => (
                   <div key={addOn.name} className="flex items-center justify-between py-2 border-b border-border last:border-0">

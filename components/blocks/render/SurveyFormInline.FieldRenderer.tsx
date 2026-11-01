@@ -149,7 +149,7 @@ export function renderField(
           className={inputCls}
           style={ringStyle}
         >
-          <option value="">Select...</option>
+          <option value="">Selecione...</option>
           {field.options.map((rawOpt, i) => {
             const { value, label } = normalizeOption(rawOpt);
             return <option key={value || `opt-${i}`} value={value}>{label}</option>;
@@ -182,7 +182,7 @@ export function renderField(
 
     case 'checkbox':
       // Empty `options` is a single-boolean consent checkbox — the field label
-      // is the prompt ("I agree to..."), no per-option label needed. We store
+      // is the prompt ("Eu concordo to..."), no per-option label needed. We store
       // the answer as a plain boolean so scoring / required-validation /
       // `respondentEmail` extraction can read it the same way as `toggle`.
       // Multi-option `options` is the original behavior (one checkbox per
@@ -202,7 +202,7 @@ export function renderField(
               className="w-4 h-4 rounded"
               style={{ accentColor: color }}
             />
-            <span className={optionLabelCls} style={optionLabelStyle}>I agree</span>
+            <span className={optionLabelCls} style={optionLabelStyle}>Eu concordo</span>
           </label>
         );
       }
@@ -305,8 +305,8 @@ export function renderField(
               well under 4.5:1 for 12px (text-xs) helper text (a11y fix,
               2026-08-18; see SurveyFormInline.tsx for the full contrast note). */}
           <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-            <span>Not at all likely</span>
-            <span>Extremely likely</span>
+            <span>Nada provável</span>
+            <span>Extremamente provável</span>
           </div>
         </div>
       );
@@ -353,7 +353,7 @@ export function renderField(
               {uploading ? 'hourglass_top' : 'attach_file'}
             </span>
             <span className="text-sm text-gray-700 dark:text-gray-300">
-              {uploading ? 'Uploading…' : uploaded ? 'Replace file' : 'Choose file'}
+              {uploading ? 'Enviando…' : uploaded ? 'Substituir arquivo' : 'Escolher arquivo'}
             </span>
             <input
               type="file"

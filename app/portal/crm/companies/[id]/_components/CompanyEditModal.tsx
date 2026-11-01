@@ -53,7 +53,7 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
 
   const requestClose = useCallback(() => {
     const customFieldsDirty = customFieldsRef.current?.isDirty?.() ?? false;
-    if ((dirty || customFieldsDirty) && !window.confirm('Discard unsaved changes?')) return;
+    if ((dirty || customFieldsDirty) && !window.confirm('Descartar alterações não salvas?')) return;
     onClose();
   }, [dirty, onClose]);
 
@@ -178,7 +178,7 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
         <form onSubmit={saveEdit}>
           <div className="flex items-center justify-between px-6 py-4 border-b border-border">
             <h2 id={titleId} className="font-display text-[17px] font-extrabold tracking-[-0.02em] text-foreground">
-              Edit Company
+              Editar empresa
             </h2>
             <button type="button" onClick={requestClose} aria-label="Close" className="text-muted-foreground hover:text-foreground">
               <span className="material-icons text-base">close</span>
@@ -192,7 +192,7 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
             </div>
           )}
 
-          <div role="tablist" aria-label="Company edit sections" onKeyDown={onTabListKeyDown} className="flex border-b border-border px-2">
+          <div role="tablist" aria-label="Seções de edição da empresa" onKeyDown={onTabListKeyDown} className="flex border-b border-border px-2">
             {COMPANY_EDIT_TABS.map(tab => (
               <button
                 key={tab.id}
@@ -225,21 +225,21 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
               className="grid sm:grid-cols-2 gap-4"
             >
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Name *</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Nome *</label>
                 <input required value={editForm.name} onChange={e => setField('name', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Domain</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Domínio</label>
                 <input value={editForm.domain} onChange={e => setField('domain', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Industry</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Segmento</label>
                 <input value={editForm.industry} onChange={e => setField('industry', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Size</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Porte</label>
                 <select value={editForm.size} onChange={e => setField('size', e.target.value)} className={pSelect}>
-                  <option value="">Select size</option>
+                  <option value="">Selecione o porte</option>
                   {COMPANY_SIZE_OPTIONS.map(s => (
                     <option key={s} value={s}>{s}</option>
                   ))}
@@ -255,20 +255,20 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
               className="grid sm:grid-cols-2 gap-4"
             >
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Telefone</label>
                 <input value={editForm.phone} onChange={e => setField('phone', e.target.value)} className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Website</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Site</label>
                 <input value={editForm.website} onChange={e => setField('website', e.target.value)} className={pInput} />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Address</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Endereço</label>
                 <textarea
                   value={editForm.address}
                   onChange={e => setField('address', e.target.value)}
                   rows={2}
-                  placeholder="123 Main St, City, State"
+                  placeholder="Rua Exemplo, 123 — Cidade/UF"
                   className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 resize-y"
                 />
                 <div className="mt-3 grid grid-cols-2 gap-3">
@@ -299,10 +299,10 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
                     />
                   </div>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">Auto-derived from address on save if left blank.</p>
+                <p className="mt-1 text-xs text-muted-foreground">Preenchido automaticamente a partir do endereço, se ficar em branco.</p>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Notes</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Observações</label>
                 <textarea
                   value={editForm.notes}
                   onChange={e => setField('notes', e.target.value)}
@@ -333,7 +333,7 @@ export default function CompanyEditModal({ companyId, company, onClose, onSaved 
 
           <div className="flex gap-2 justify-end px-6 py-4 border-t border-border">
             <button type="button" onClick={requestClose} className={pBtnGhost}>
-              Cancel
+              Cancelar
             </button>
             <button type="submit" disabled={saving} className={pBtnPrimary}>
               {saving && <span className="material-icons animate-spin text-sm">refresh</span>}

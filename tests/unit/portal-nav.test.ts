@@ -16,7 +16,7 @@ const APP_FIXTURE: UserAppNavMeta = {
   icon: 'science',
   manifestStale: false,
   navItems: [
-    { label: 'Dashboard', href: '/', icon: 'dashboard' },
+    { label: 'Painel', href: '/', icon: 'dashboard' },
     { label: 'Research briefs', href: '/briefs', icon: 'biotech', keywords: ['research'] },
     { label: 'Schedules', href: '/schedules', icon: 'schedule' },
   ],
@@ -184,7 +184,7 @@ describe('pruneByFlags', () => {
         label: 'Marketing',
         icon: 'campaign',
         children: [
-          { href: '/portal/email', label: 'Email', icon: 'email' },
+          { href: '/portal/email', label: 'E-mail', icon: 'email' },
           {
             href: '/portal/beta-child',
             label: 'Beta Child',

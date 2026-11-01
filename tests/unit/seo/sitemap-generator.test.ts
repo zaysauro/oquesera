@@ -7,7 +7,7 @@
  * requires four conditions. The sitemap therefore advertised ~154 URLs that
  * 404 — 77% of it — and, worse, rows with a non-null websiteId belong to a
  * CLIENT's website, so other tenants' slugs were being published on
- * simplerdevelopment.com.
+ * kumo.localhost.
  *
  * These assert on the WHERE clause rather than on output rows, because the
  * leak is defined by which predicates are present. A test that only checked

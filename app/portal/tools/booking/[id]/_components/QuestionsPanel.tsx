@@ -61,14 +61,14 @@ export function QuestionsPanel({ questions, setQuestions }: QuestionsPanelProps)
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className="material-icons text-primary">quiz</span>
-          <h2 className="text-sm font-medium text-foreground">Custom Questions</h2>
+          <h2 className="text-sm font-medium text-foreground">Perguntas personalizadas</h2>
         </div>
         <button
           onClick={addQuestion}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
         >
           <span className="material-icons text-lg">add</span>
-          Add Question
+          Adicionar pergunta
         </button>
       </div>
 
@@ -76,7 +76,7 @@ export function QuestionsPanel({ questions, setQuestions }: QuestionsPanelProps)
         <div className="text-center py-8 text-muted-foreground">
           <span className="material-icons text-3xl mb-2 block">quiz</span>
           <p className="text-sm">
-            No custom questions yet. Guests will only be asked for name, email, and phone.
+            Nenhuma pergunta personalizada. Os clientes informarão apenas nome, e-mail e telefone.
           </p>
         </div>
       ) : (
@@ -95,30 +95,30 @@ export function QuestionsPanel({ questions, setQuestions }: QuestionsPanelProps)
                 </button>
               </div>
               <div>
-                <label className="block text-xs text-muted-foreground mb-1">Label</label>
+                <label className="block text-xs text-muted-foreground mb-1">Rótulo</label>
                 <input
                   type="text"
                   value={q.label}
                   onChange={(e) => updateQuestion(q.id, 'label', e.target.value)}
-                  placeholder="e.g. What would you like to discuss?"
+                  placeholder="ex.: Qual serviço você deseja?"
                   className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs text-muted-foreground mb-1">Type</label>
+                  <label className="block text-xs text-muted-foreground mb-1">Tipo</label>
                   <select
                     value={q.type}
                     onChange={(e) => updateQuestion(q.id, 'type', e.target.value)}
                     className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
-                    <option value="text">Short Text</option>
-                    <option value="textarea">Long Text</option>
-                    <option value="select">Select</option>
+                    <option value="text">Texto curto</option>
+                    <option value="textarea">Texto longo</option>
+                    <option value="select">Seleção</option>
                   </select>
                 </div>
                 <div className="flex items-center gap-2 pt-4">
-                  <label className="text-xs text-muted-foreground">Required</label>
+                  <label className="text-xs text-muted-foreground">Obrigatório</label>
                   <button
                     type="button"
                     onClick={() => updateQuestion(q.id, 'required', !q.required)}
@@ -136,7 +136,7 @@ export function QuestionsPanel({ questions, setQuestions }: QuestionsPanelProps)
               </div>
               {q.type === 'select' && (
                 <div>
-                  <label className="block text-xs text-muted-foreground mb-1">Options</label>
+                  <label className="block text-xs text-muted-foreground mb-1">Opções</label>
                   <div className="space-y-2">
                     {(q.options || []).map((opt, optIdx) => (
                       <div key={optIdx} className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export function QuestionsPanel({ questions, setQuestions }: QuestionsPanelProps)
                       className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                     >
                       <span className="material-icons text-sm">add</span>
-                      Add option
+                      Adicionar opção
                     </button>
                   </div>
                 </div>

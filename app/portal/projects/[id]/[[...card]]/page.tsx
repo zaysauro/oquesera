@@ -30,7 +30,7 @@ import { KanbanBoard, PlanningTab, AgentFlowTab, FlowExecutionsTab, PathVizTab }
 // ships down to the client. These are pure React (useEffect + fetch), so they
 // can SSR fine and we just want the chunk split.
 const ProjectReportsTab = dynamic(() => import('@/components/portal/ProjectReportsTab'), {
-  loading: () => <div className="p-8 text-sm text-muted-foreground">Loading reports…</div>,
+  loading: () => <div className="p-8 text-sm text-muted-foreground">Carregando relatórios…</div>,
 });
 
 export default async function ProjectKanbanPage({ params, searchParams }: { params: Promise<{ id: string; card?: string[] }>; searchParams: Promise<{ tab?: string }> }) {
@@ -48,7 +48,7 @@ export default async function ProjectKanbanPage({ params, searchParams }: { para
   })();
   const activeTab = tab === 'files' ? 'files'
     // Old ?tab=artifacts links (Files and Artifacts are now one consolidated
-    // "Files & Artifacts" tab — PUX-012) alias to the same 'files' tab so
+    // "Arquivos e itens" tab — PUX-012) alias to the same 'files' tab so
     // bookmarked/shared artifact links don't 404.
     : tab === 'artifacts' ? 'files'
     // Old ?tab=backlog / ?tab=sprints / ?tab=roadmap links (and the new
@@ -309,10 +309,10 @@ export default async function ProjectKanbanPage({ params, searchParams }: { para
       <div>
         <Link href="/portal/projects" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3">
           <span className="material-icons text-sm">arrow_back</span>
-          Projects
+          Projetos
         </Link>
         <PortalPageHeader
-          eyebrow="Projects"
+          eyebrow="Projetos"
           title={project.name}
           subtitle={
             (project.description || canEdit) ? (
@@ -346,15 +346,15 @@ export default async function ProjectKanbanPage({ params, searchParams }: { para
       {/* Tabs */}
       <div className="flex gap-1 border-b border-border overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         {([
-          { key: 'board',    href: `/portal/projects/${projectId}`,                 label: 'Board',    icon: 'view_kanban' },
-          { key: 'planning', href: `/portal/projects/${projectId}?tab=planning`,    label: 'Planning', icon: 'event_note' },
-          { key: 'reports',  href: `/portal/projects/${projectId}?tab=reports`,     label: 'Reports',  icon: 'analytics' },
-          { key: 'files',    href: `/portal/projects/${projectId}?tab=files`,       label: 'Files & Artifacts', icon: 'folder' },
-          { key: 'flow',     href: `/portal/projects/${projectId}?tab=flow`,        label: 'Workflow Designer', icon: 'account_tree' },
-          { key: 'runs',     href: `/portal/projects/${projectId}?tab=runs`,        label: 'Executions', icon: 'history' },
-          { key: 'visualizations', href: `/portal/projects/${projectId}?tab=visualizations`, label: 'Visualizations', icon: 'device_hub' },
-          { key: 'members',  href: `/portal/projects/${projectId}?tab=members`,     label: 'Members',  icon: 'group' },
-          { key: 'settings', href: `/portal/projects/${projectId}?tab=settings`,    label: 'Settings', icon: 'settings' },
+          { key: 'board',    href: `/portal/projects/${projectId}`,                 label: 'Quadro',    icon: 'view_kanban' },
+          { key: 'planning', href: `/portal/projects/${projectId}?tab=planning`,    label: 'Planejamento', icon: 'event_note' },
+          { key: 'reports',  href: `/portal/projects/${projectId}?tab=reports`,     label: 'Relatórios',  icon: 'analytics' },
+          { key: 'files',    href: `/portal/projects/${projectId}?tab=files`,       label: 'Arquivos e itens', icon: 'folder' },
+          { key: 'flow',     href: `/portal/projects/${projectId}?tab=flow`,        label: 'Editor de fluxo', icon: 'account_tree' },
+          { key: 'runs',     href: `/portal/projects/${projectId}?tab=runs`,        label: 'Execuções', icon: 'history' },
+          { key: 'visualizations', href: `/portal/projects/${projectId}?tab=visualizations`, label: 'Visualizações', icon: 'device_hub' },
+          { key: 'members',  href: `/portal/projects/${projectId}?tab=members`,     label: 'Membros',  icon: 'group' },
+          { key: 'settings', href: `/portal/projects/${projectId}?tab=settings`,    label: 'Configurações', icon: 'settings' },
         ] as const).map(t => (
           <Link key={t.key} href={t.href}
             aria-label={t.label}
@@ -389,9 +389,9 @@ export default async function ProjectKanbanPage({ params, searchParams }: { para
       ) : columnsWithCards.length === 0 ? (
         <div className="bg-card border border-border rounded-2xl p-12 text-center">
           <span className="material-icons text-5xl text-muted-foreground">view_kanban</span>
-          <h3 className="mt-4 font-semibold text-foreground">Board not set up yet</h3>
+          <h3 className="mt-4 font-semibold text-foreground">Quadro ainda não configurado</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            {canEdit ? 'Create the default columns to start adding cards.' : 'Your team will set up the project board shortly.'}
+            {canEdit ? 'Crie as colunas padrão para começar a adicionar cartões.' : 'Sua equipe vai configurar o quadro em breve.'}
           </p>
           {canEdit && <SetUpBoardButton projectId={projectId} />}
         </div>

@@ -729,7 +729,7 @@ describe('POST /api/portal/forgot-password', () => {
     expect(resendSendMock).toHaveBeenCalledTimes(1);
     const sendArgs = resendSendMock.mock.calls[0][0] as { to: string; html: string };
     expect(sendArgs.to).toBe('alice@example.com');
-    expect(sendArgs.html).toMatch(/Reset your password/);
+    expect(sendArgs.html).toMatch(/Redefina sua senha/);
   });
 
   it('still returns success when the email provider returns an error object', async () => {

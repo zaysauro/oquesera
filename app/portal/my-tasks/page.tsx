@@ -269,7 +269,7 @@ function MyTasksPageInner() {
     <div className="max-w-5xl mx-auto space-y-6">
       <PortalPageHeader
         eyebrow="My work"
-        title="My Tasks"
+        title="Minhas tarefas"
         subtitle={<>{total} task{total !== 1 ? 's' : ''} assigned to you{overdueCount > 0 && <span className="text-destructive"> · {overdueCount} overdue</span>}</>}
         actions={
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -279,15 +279,15 @@ function MyTasksPageInner() {
               onChange={toggleOpenOnly}
               className="rounded border-border"
             />
-            Hide completed
+            Ocultar concluídas
           </label>
         }
       />
 
       {/* Filter chips */}
-      <div className="bg-card border border-border rounded-2xl p-3 space-y-3" aria-label="Task filters">
+      <div className="bg-card border border-border rounded-2xl p-3 space-y-3" aria-label="Filtros de tarefas">
         <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Source">
-          <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Source</span>
+          <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Origem</span>
           {(['all', 'kanban', 'brain'] as const).map((s) => (
             <button
               key={s}
@@ -307,7 +307,7 @@ function MyTasksPageInner() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Priority">
-          <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Priority</span>
+          <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Prioridade</span>
           {VALID_PRIORITIES.map((p) => {
             const active = filters.priorities.includes(p);
             return (
@@ -337,13 +337,13 @@ function MyTasksPageInner() {
             }`}
           >
             <span className="material-icons text-xs">schedule</span>
-            Overdue
+            Atrasadas
           </button>
         </div>
 
         {filters.source !== 'brain' && projectsAvailable.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Project">
-            <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Project</span>
+            <span className="text-xs uppercase tracking-wide text-muted-foreground mr-1">Projeto</span>
             {projectsAvailable.map((p) => {
               const active = filters.projectIds.includes(p.id);
               return (
@@ -374,7 +374,7 @@ function MyTasksPageInner() {
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
           >
             <span className="material-icons text-xs">close</span>
-            Clear filters
+            Limpar filtros
           </button>
         )}
       </div>
@@ -386,11 +386,11 @@ function MyTasksPageInner() {
       ) : groups.length === 0 ? (
         <div className="bg-card border border-border rounded-2xl p-12 text-center">
           <span className="material-icons text-5xl text-muted-foreground">task_alt</span>
-          <h3 className="mt-4 font-display font-extrabold tracking-[-0.01em] text-foreground">Nothing assigned</h3>
+          <h3 className="mt-4 font-display font-extrabold tracking-[-0.01em] text-foreground">Nada atribuído</h3>
           <p className="mt-2 text-sm text-muted-foreground">
             {hasActiveFilters
               ? 'No tasks match your filters.'
-              : filters.openOnly ? 'You have no open tasks. Great job!' : 'Nothing assigned in projects or Brain.'}
+              : filters.openOnly ? 'Você não tem tarefas abertas. Ótimo trabalho!' : 'Nada atribuído em projetos ou no Cérebro.'}
           </p>
         </div>
       ) : (
@@ -404,8 +404,8 @@ function MyTasksPageInner() {
                   <div className="min-w-0 flex items-center gap-2">
                     <span
                       className="material-icons text-base text-muted-foreground shrink-0"
-                      title={p.source === 'brain' ? 'Brain task' : 'Project board'}
-                      aria-label={p.source === 'brain' ? 'Brain task group' : 'Project group'}
+                      title={p.source === 'brain' ? 'Tarefa do Cérebro' : 'Quadro do projeto'}
+                      aria-label={p.source === 'brain' ? 'Grupo de tarefas do Cérebro' : 'Grupo do projeto'}
                     >
                       {sourceIcon(p.source)}
                     </span>
@@ -430,12 +430,12 @@ function MyTasksPageInner() {
                           type="button"
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); void completeCard(c); }}
                           disabled={!canComplete || isCompleting}
-                          aria-label={c.columnIsDone ? 'Completed' : 'Mark complete'}
+                          aria-label={c.columnIsDone ? 'Completed' : 'Marcar como concluída'}
                           aria-pressed={c.columnIsDone}
                           title={
                             c.columnIsDone ? 'Completed'
                               : !canComplete ? 'No "done" column on this project — open the board to complete'
-                              : 'Mark complete'
+                              : 'Marcar como concluída'
                           }
                           className={`shrink-0 inline-flex items-center justify-center w-5 h-5 rounded border transition-colors ${
                             c.columnIsDone
@@ -459,8 +459,8 @@ function MyTasksPageInner() {
                         >
                           <span
                             className="material-icons text-sm text-muted-foreground shrink-0"
-                            title={c.source === 'brain' ? 'Brain task' : 'Project card'}
-                            aria-label={c.source === 'brain' ? 'Brain task' : 'Project card'}
+                            title={c.source === 'brain' ? 'Tarefa do Cérebro' : 'Cartão do projeto'}
+                            aria-label={c.source === 'brain' ? 'Tarefa do Cérebro' : 'Cartão do projeto'}
                           >
                             {sourceIcon(c.source)}
                           </span>
@@ -523,7 +523,7 @@ function MyTasksPageInner() {
                 <span className={`material-icons text-base ${loadingMore ? 'animate-spin' : ''}`}>
                   {loadingMore ? 'refresh' : 'expand_more'}
                 </span>
-                {loadingMore ? 'Loading…' : 'Load more'}
+                {loadingMore ? 'Loading…' : 'Carregar mais'}
               </button>
             </div>
           )}

@@ -103,7 +103,7 @@ describe('ContentList', () => {
     );
     expect(screen.getByText('No pages yet')).toBeTruthy();
     expect(screen.getByText(/Create your first page/)).toBeTruthy();
-    expect(screen.getByRole('link', { name: /Create Page/ })).toBeTruthy();
+    expect(screen.getByRole('link', { name: /Criar página/ })).toBeTruthy();
   });
 
   it('shows "No <type> content yet" when activeType set and no posts', () => {
@@ -166,7 +166,7 @@ describe('ContentList', () => {
         activeType={null}
       />,
     );
-    expect(screen.getByText('Published')).toBeTruthy();
+    expect(screen.getByText('Publicado')).toBeTruthy();
   });
 
   it('shows Draft badge for unpublished posts', () => {
@@ -205,7 +205,7 @@ describe('ContentList', () => {
         activeType={null}
       />,
     );
-    expect(screen.getByRole('button', { name: /All/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Todas/ })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Pages/ })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Blog/ })).toBeTruthy();
   });
@@ -214,7 +214,7 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={[makePost()]} contentTypes={[]} activeType={null} />,
     );
-    expect(screen.queryByRole('button', { name: /All/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Todas/ })).toBeNull();
   });
 
   it('clicking a content type tab pushes correct URL', () => {
@@ -232,7 +232,7 @@ describe('ContentList', () => {
     );
   });
 
-  it('clicking "All" tab pushes pathname without type param', () => {
+  it('clicking "Todas" tab pushes pathname without type param', () => {
     render(
       <ContentList
         siteId={1}
@@ -241,7 +241,7 @@ describe('ContentList', () => {
         activeType="blog"
       />,
     );
-    fireEvent.click(screen.getByRole('button', { name: /All/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Todas/ }));
     expect(mockRouterPush).toHaveBeenCalledWith('/portal/websites/1/posts');
   });
 
@@ -255,7 +255,7 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    const searchInput = screen.getByPlaceholderText('Search pages...');
+    const searchInput = screen.getByPlaceholderText('Buscar páginas...');
     fireEvent.change(searchInput, { target: { value: 'contact' } });
     expect(screen.getByText('Contact Us')).toBeTruthy();
     expect(screen.queryByText('About Page')).toBeNull();
@@ -269,7 +269,7 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    fireEvent.change(screen.getByPlaceholderText('Search pages...'), {
+    fireEvent.change(screen.getByPlaceholderText('Buscar páginas...'), {
       target: { value: 'contact-us' },
     });
     expect(screen.getByText('Contact')).toBeTruthy();
@@ -285,13 +285,13 @@ describe('ContentList', () => {
         activeType={null}
       />,
     );
-    fireEvent.change(screen.getByPlaceholderText('Search pages...'), {
+    fireEvent.change(screen.getByPlaceholderText('Buscar páginas...'), {
       target: { value: 'zzz-no-match' },
     });
     expect(screen.getByText('No results found')).toBeTruthy();
     expect(screen.getByText(/No pages matching "zzz-no-match"/)).toBeTruthy();
     // Create Page link should NOT appear in no-results state
-    expect(screen.queryByRole('link', { name: /Create Page/ })).toBeNull();
+    expect(screen.queryByRole('link', { name: /Criar página/ })).toBeNull();
   });
 
   it('clear button appears when search is non-empty and clears on click', () => {
@@ -303,7 +303,7 @@ describe('ContentList', () => {
         activeType={null}
       />,
     );
-    const input = screen.getByPlaceholderText('Search pages...');
+    const input = screen.getByPlaceholderText('Buscar páginas...');
     fireEvent.change(input, { target: { value: 'hello' } });
     // The clear button has accessible name "close" (from icon text content)
     const allButtons = screen.getAllByRole('button');
@@ -408,7 +408,7 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    const nextBtn = screen.getByRole('button', { name: /Next page/ });
+    const nextBtn = screen.getByRole('button', { name: /Próxima página/ });
     fireEvent.click(nextBtn);
     expect(screen.getByText(/Page 2 of 2/)).toBeTruthy();
   });
@@ -420,8 +420,8 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    fireEvent.click(screen.getByRole('button', { name: /Next page/ }));
-    fireEvent.click(screen.getByRole('button', { name: /Previous page/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Próxima página/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Página anterior/ }));
     expect(screen.getByText(/Page 1 of 2/)).toBeTruthy();
   });
 
@@ -432,9 +432,9 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    fireEvent.click(screen.getByRole('button', { name: /Last page/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Última página/ }));
     expect(screen.getByText(/Page 3 of 3/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /First page/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Primeira página/ }));
     expect(screen.getByText(/Page 1 of 3/)).toBeTruthy();
   });
 
@@ -445,8 +445,8 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    expect(screen.getByRole('button', { name: /First page/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Previous page/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Primeira página/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Página anterior/ })).toBeDisabled();
   });
 
   it('next/last page buttons are disabled on last page', () => {
@@ -456,9 +456,9 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    fireEvent.click(screen.getByRole('button', { name: /Last page/ }));
-    expect(screen.getByRole('button', { name: /Next page/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Last page/ })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /Última página/ }));
+    expect(screen.getByRole('button', { name: /Próxima página/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Última página/ })).toBeDisabled();
   });
 
   it('shows correct row count range', () => {
@@ -564,7 +564,7 @@ describe('ContentList', () => {
       fireEvent.click(screen.getByRole('button', { name: /Delete My Page/ }));
     });
     await waitFor(() =>
-      expect(mockAlert).toHaveBeenCalledWith('Network error while deleting'),
+      expect(mockAlert).toHaveBeenCalledWith('Erro de rede ao excluir'),
     );
   });
 
@@ -632,9 +632,9 @@ describe('ContentList', () => {
     render(
       <ContentList siteId={1} posts={posts} contentTypes={[]} activeType={null} />,
     );
-    fireEvent.click(screen.getByRole('button', { name: /Next page/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Próxima página/ }));
     expect(screen.getByText(/Page 2 of 2/)).toBeTruthy();
-    fireEvent.change(screen.getByPlaceholderText('Search pages...'), {
+    fireEvent.change(screen.getByPlaceholderText('Buscar páginas...'), {
       target: { value: 'Post 1' },
     });
     expect(screen.getByText(/Page 1 of/)).toBeTruthy();

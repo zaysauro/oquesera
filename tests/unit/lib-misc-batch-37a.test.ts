@@ -451,16 +451,16 @@ describe('lib/portal-nav', () => {
     it('returns the consolidated top-level groups without a per-site branch when site is null', () => {
       const items = portalNav.buildPortalNavItems(null, null);
       const labels = items.map((i) => i.label);
-      expect(labels).toContain('Dashboard');
+      expect(labels).toContain('Painel');
       expect(labels).toContain('Company Brain');
-      expect(labels).toContain('Projects');
+      expect(labels).toContain('Projetos');
       expect(labels).toContain('CRM');
       expect(labels).toContain('Marketing');
       expect(labels).toContain('Websites');
       expect(labels).toContain('Settings');
       // Email now lives inside the Marketing group, not at the top level.
       const marketing = items.find((i) => i.label === 'Marketing');
-      expect(marketing?.children?.some((c) => c.label === 'Email')).toBe(true);
+      expect(marketing?.children?.some((c) => c.label === 'E-mail')).toBe(true);
       // No per-site branch inside Websites when there's no active site.
       const websites = items.find((i) => i.label === 'Websites');
       expect(websites?.children?.some((c) => c.href.startsWith('/portal/websites/'))).toBe(false);
@@ -472,8 +472,8 @@ describe('lib/portal-nav', () => {
       const siteNode = websites?.children?.find((c) => c.href === '/portal/websites/site-7');
       expect(siteNode).toBeDefined();
       expect(siteNode?.label).toBe('Acme Co');
-      expect(siteNode?.children?.some((c) => c.label === 'Content')).toBe(true);
-      expect(siteNode?.children?.some((c) => c.label === 'Store')).toBe(true);
+      expect(siteNode?.children?.some((c) => c.label === 'Conteúdo')).toBe(true);
+      expect(siteNode?.children?.some((c) => c.label === 'Loja')).toBe(true);
       expect(siteNode?.children?.some((c) => c.label === 'Website Settings')).toBe(true);
     });
 
@@ -488,7 +488,7 @@ describe('lib/portal-nav', () => {
       const items = portalNav.buildPortalNavItems('s', 'S');
       const websites = items.find((i) => i.label === 'Websites');
       const siteNode = websites?.children?.find((c) => c.href === '/portal/websites/s');
-      const store = siteNode?.children?.find((c) => c.label === 'Store');
+      const store = siteNode?.children?.find((c) => c.label === 'Loja');
       const storeChildrenLabels = store?.children?.map((c) => c.label) ?? [];
       expect(storeChildrenLabels).toEqual(
         expect.arrayContaining(['Products', 'Orders', 'Categories', 'Discounts', 'Shipping']),
@@ -550,7 +550,7 @@ describe('lib/portal-nav', () => {
         (t) => t.href === '/portal/websites/s9/store/products',
       )?.breadcrumb;
       expect(productsBreadcrumb).toContain('Demo');
-      expect(productsBreadcrumb).toContain('Store');
+      expect(productsBreadcrumb).toContain('Loja');
     });
 
     it('returns empty array on empty input', () => {

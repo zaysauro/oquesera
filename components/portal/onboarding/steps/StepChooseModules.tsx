@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { APP_LOCALE, EMAIL_DOMAIN } from '@/config/brand';
 import { useEffect, useState } from 'react';
 import type { StepProps } from './types';
@@ -163,14 +164,14 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
   }
 
   const formatPrice = (cents: number) =>
-    `$${(cents / 100).toLocaleString(APP_LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+    `${formatMoney(cents, { fractionDigits: 0 })}/mo`;
 
   return (
     <div className="space-y-5">
       {loading ? (
         <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
           <span className="material-icons animate-spin mr-2 text-base">refresh</span>
-          Loading modules…
+          Carregando módulos…
         </div>
       ) : (
         <>
@@ -204,7 +205,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
                     {discountPercent}% volume discount unlocked
                   </span>
                 ) : (
-                  <span>Bundle modules to save — the more you add, the bigger the discount.</span>
+                  <span>Combine módulos para economizar — quanto mais você adiciona, maior o desconto.</span>
                 )}
                 {upcoming && (
                   <>
@@ -233,7 +234,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
             aria-pressed={isBundle}
           >
             <span className="inline-block font-mono text-[10px] font-semibold uppercase tracking-[0.12em] bg-foreground text-background px-2 py-0.5 rounded-[5px] mb-2">
-              Best value
+              Melhor custo-benefício
             </span>
             <div className="flex items-start gap-3">
               <span className={isBundle ? obChipOn : obChip}>
@@ -257,7 +258,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
 
           <div className="relative flex items-center gap-3">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">or pick individually</span>
+            <span className="text-xs text-muted-foreground">ou escolha individualmente</span>
             <div className="flex-1 h-px bg-border" />
           </div>
 
@@ -271,7 +272,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
                   type="button"
                   onClick={() => toggle(mod.key)}
                   disabled={!mod.purchasable}
-                  title={mod.purchasable ? undefined : 'Not available for self-serve checkout yet — contact us'}
+                  title={mod.purchasable ? undefined : 'Ainda não disponível para contratação on-line — fale conosco'}
                   className={[
                     'w-full text-left rounded-2xl border p-4 transition-all disabled:opacity-40 disabled:cursor-not-allowed',
                     checked
@@ -293,7 +294,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
                       {!mod.purchasable && (
                         <p className="text-[11.5px] text-amber-600 dark:text-amber-500 mt-1 flex items-center gap-1">
                           <span className="material-icons text-xs">info</span>
-                          Not available for self-serve checkout yet — contact us
+                          Ainda não disponível para contratação on-line — fale conosco
                         </p>
                       )}
                     </div>
@@ -315,8 +316,8 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
               <span className="material-icons text-xl text-primary mt-0.5">vpn_key</span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1">
-                  <span className="font-medium text-sm">Bring your own AI key (BYOK)</span>
-                  <span className="text-xs font-medium text-primary whitespace-nowrap">Contact sales →</span>
+                  <span className="font-medium text-sm">Use sua própria chave de IA (BYOK)</span>
+                  <span className="text-xs font-medium text-primary whitespace-nowrap">Falar com vendas →</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Spend AI tokens at cost on your own provider key, plus white-label &amp; governance. Custom pricing — email us to set it up.
@@ -330,13 +331,13 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
             <div className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-4 flex items-center gap-3">
               <span className="material-icons text-primary">star</span>
               <p className="flex-1 text-sm text-foreground">
-                Get <strong>everything</strong> for {formatPrice(bundlePriceCents)} —{' '}
+                Contratar <strong>everything</strong> for {formatPrice(bundlePriceCents)} —{' '}
                 <button
                   type="button"
                   onClick={switchToBundle}
                   className="underline text-primary hover:text-primary/80 font-medium"
                 >
-                  switch to Kumo Complete
+                  mude para o Kumo Completo
                 </button>
               </p>
             </div>
@@ -349,7 +350,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
         <div className={obFootbar}>
           <div className="min-w-0">
             {selected.size === 0 ? (
-              <p className="text-sm text-muted-foreground">No modules selected</p>
+              <p className="text-sm text-muted-foreground">Nenhum módulo selecionado</p>
             ) : isBundle ? (
               <p className="text-sm font-medium">
                 {BUNDLE.name} — {formatPrice(bundlePriceCents)}
@@ -374,7 +375,7 @@ export function StepChooseModules({ state, setAnswers, persist, next }: StepProp
             )}
             {selected.size > 0 && (
               <span className="block text-xs mt-0.5 text-muted-foreground/70">
-                after your 14-day free trial
+                após os 14 dias de teste
               </span>
             )}
             <span className="block text-xs mt-1 text-muted-foreground">

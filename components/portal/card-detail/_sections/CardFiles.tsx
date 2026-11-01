@@ -64,7 +64,7 @@ export function CardFiles({
         <span className="material-icons text-base">
           {uploadingFile ? 'refresh' : 'attach_file'}
         </span>
-        {uploadingFile ? 'Uploading…' : 'Attach file or drop here'}
+        {uploadingFile ? 'Enviando…' : 'Anexe um arquivo ou solte aqui'}
         <input
           type="file"
           className="hidden"

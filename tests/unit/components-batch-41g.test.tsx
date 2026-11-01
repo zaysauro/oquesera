@@ -180,7 +180,7 @@ describe('Card', () => {
 describe('Footer', () => {
   it('renders the site name in the brand header', () => {
     render(<Footer />);
-    // siteConfig.name is 'SimplerDevelopment' — appears at least twice (brand + copyright)
+    // siteConfig.name is 'Kumo One' — appears at least twice (brand + copyright)
     const matches = screen.getAllByText(/SimplerDevelopment/);
     expect(matches.length).toBeGreaterThanOrEqual(2);
   });
@@ -193,7 +193,7 @@ describe('Footer', () => {
 
   it('renders the contact email', () => {
     const { container } = render(<Footer />);
-    expect(container.textContent).toContain('info@simplerdevelopment.com');
+    expect(container.textContent).toContain('info@kumo.localhost');
   });
 
   it('renders platform feature links to /solutions/*', () => {

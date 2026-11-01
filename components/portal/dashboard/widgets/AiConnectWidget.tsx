@@ -60,7 +60,7 @@ export default async function AiConnectWidget({
                 : 'text-muted-foreground'
             }`}
           >
-            {isConnected ? 'Connected' : 'Not connected'}
+            {isConnected ? 'Connected' : 'Não conectado'}
           </span>
         </div>
         {isConnected && (
@@ -106,7 +106,7 @@ export default async function AiConnectWidget({
       ) : (
         <div className="py-2 space-y-3">
           <p className="text-sm text-muted-foreground">
-            Connect Claude, ChatGPT and other AI clients to your portal via the Brain MCP server.
+            Conecte Claude, ChatGPT e outros clientes de IA ao painel pelo servidor MCP.
           </p>
           <ul className="space-y-1.5">
             <li>
@@ -115,7 +115,7 @@ export default async function AiConnectWidget({
                 className="flex items-center gap-2 text-sm text-primary hover:underline"
               >
                 <span className="material-icons text-base">power</span>
-                Connect Claude Desktop
+                Conectar Claude Desktop
               </Link>
             </li>
             <li>
@@ -124,7 +124,7 @@ export default async function AiConnectWidget({
                 className="flex items-center gap-2 text-sm text-primary hover:underline"
               >
                 <span className="material-icons text-base">vpn_key</span>
-                Manage API keys
+                Gerenciar chaves de API
               </Link>
             </li>
             <li>
@@ -133,7 +133,7 @@ export default async function AiConnectWidget({
                 className="flex items-center gap-2 text-sm text-primary hover:underline"
               >
                 <span className="material-icons text-base">psychology</span>
-                Open Brain
+                Abrir Cérebro
               </Link>
             </li>
           </ul>
@@ -146,7 +146,7 @@ export default async function AiConnectWidget({
           className="text-xs text-primary hover:underline flex items-center gap-1"
         >
           <span className="material-icons text-sm">arrow_forward</span>
-          Manage AI connections
+          Gerenciar conexões de IA
         </Link>
       </div>
     </div>

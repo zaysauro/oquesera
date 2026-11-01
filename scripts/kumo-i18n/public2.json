@@ -1,0 +1,16 @@
+{
+"Payment failed": "Falha no pagamento",
+"Survey not available": "Formulário indisponível",
+"Please check the box to agree before continuing.": "Marque a caixa de concordância para continuar.",
+"Email is required": "O e-mail é obrigatório",
+"Failed to submit": "Não foi possível enviar",
+"Thank you!": "Obrigado!",
+"Failed to validate code": "Não foi possível validar o cupom",
+"Failed to validate certificate": "Não foi possível validar o vale-presente",
+"Failed to book. Please try again.": "Não foi possível agendar. Tente novamente.",
+"Algo deu errado. Please try again.": "Algo deu errado. Tente novamente.",
+"`Pay ${formatCents(pricing.total)}`": "`Pagar ${formatCents(pricing.total)}`",
+"Confirm Booking": "Confirmar agendamento",
+"Booking not found": "Agendamento não encontrado",
+"Failed to cancel": "Não foi possível cancelar"
+}

@@ -867,10 +867,10 @@ describe('POST /api/portal/crm/contracts/[id]/send', () => {
       );
       expect(res.status).toBe(200);
       const body = await res.json();
-      expect(body.data.contractUrl).toBe('https://simplerdevelopment.com/contract/CT');
+      expect(body.data.contractUrl).toBe('https://kumo.localhost/contract/CT');
       expect(resendSendMock).toHaveBeenCalledTimes(1);
       const args = resendSendMock.mock.calls[0][0];
-      expect(args.from).toBe('Simpler Development <noreply@simplerdevelopment.com>');
+      expect(args.from).toBe('Kumo One <noreply@kumo.localhost>');
       // No summary block expected since summary is empty string
       expect(args.html).not.toContain('<p style="margin:8px 0 0;color:#64748b;font-size:14px;">');
     } finally {

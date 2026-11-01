@@ -203,7 +203,7 @@ export function StepModuleSetup({ state, next }: StepProps) {
             </div>
           </div>
           <p className="text-[12.5px] text-muted-foreground px-1 pt-0.5">
-            Create your first survey whenever you need it — Surveys is in your sidebar.
+            Crie sua primeira pesquisa quando precisar — Pesquisas está no menu lateral.
           </p>
         </div>
       ) : (
@@ -261,14 +261,14 @@ export function StepModuleSetup({ state, next }: StepProps) {
           onClick={() => next({})}
           className={obGhostBtn}
         >
-          Skip module
+          Pular módulo
         </button>
         <button
           type="button"
           onClick={handleContinue}
           className={obPrimaryBtn}
         >
-          {currentSegmentIndex < totalSegments - 1 ? 'Next module' : 'Continue'}
+          {currentSegmentIndex < totalSegments - 1 ? 'Próximo módulo' : 'Continuar'}
           <span className="material-icons text-[18px]">arrow_forward</span>
         </button>
       </div>

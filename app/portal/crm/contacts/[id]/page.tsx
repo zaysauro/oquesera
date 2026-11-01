@@ -61,11 +61,11 @@ interface Deal {
 }
 
 const activityTypes = [
-  { value: 'call', label: 'Call', icon: 'phone' },
+  { value: 'call', label: 'Ligação', icon: 'phone' },
   { value: 'email', label: 'Email', icon: 'mail' },
-  { value: 'meeting', label: 'Meeting', icon: 'groups' },
-  { value: 'note', label: 'Note', icon: 'sticky_note_2' },
-  { value: 'task', label: 'Task', icon: 'task_alt' },
+  { value: 'meeting', label: 'Reunião', icon: 'groups' },
+  { value: 'note', label: 'Nota', icon: 'sticky_note_2' },
+  { value: 'task', label: 'Tarefa', icon: 'task_alt' },
 ];
 
 const activityIcons: Record<string, string> = {
@@ -167,7 +167,7 @@ export default function CrmContactDetailPage() {
   }
 
   async function deleteContact() {
-    if (!confirm('Are you sure you want to delete this contact?')) return;
+    if (!confirm('Tem certeza de que deseja excluir este contato?')) return;
     await fetch(`/api/portal/crm/contacts/${contactId}`, { method: 'DELETE' });
     router.push('/portal/crm/contacts');
   }
@@ -253,7 +253,7 @@ export default function CrmContactDetailPage() {
       fetchActivities();
       setTimeout(() => setEmailSuccess(''), 3000);
     } else {
-      setEmailError(d.message ?? 'Failed to send email.');
+      setEmailError(d.message ?? 'Não foi possível enviar email.');
     }
   }
 
@@ -269,9 +269,9 @@ export default function CrmContactDetailPage() {
     return (
       <div className="text-center py-20">
         <span className="material-icons text-4xl text-muted-foreground">person_off</span>
-        <p className="mt-2 text-muted-foreground">Contact not found.</p>
+        <p className="mt-2 text-muted-foreground">Contato não encontrado.</p>
         <Link href="/portal/crm/contacts" className="text-primary text-sm hover:underline mt-2 inline-block">
-          Back to contacts
+          Voltar para contatos
         </Link>
       </div>
     );
@@ -282,7 +282,7 @@ export default function CrmContactDetailPage() {
       {/* Back link */}
       <Link href="/portal/crm/contacts" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-1">
         <span className="material-icons text-base">arrow_back</span>
-        Contacts
+        Contatos
       </Link>
 
       {/* Page Header */}
@@ -326,25 +326,25 @@ export default function CrmContactDetailPage() {
             {contact.email && (
               <button onClick={() => setShowEmailForm(true)} className={pBtnPrimary}>
                 <span className="material-icons text-base">mail</span>
-                Send Email
+                Enviar e-mail
               </button>
             )}
             <button onClick={() => setIsEditModalOpen(true)} className={pBtnGhost}>
               <span className="material-icons text-base">edit</span>
-              Edit
+              Editar
             </button>
             <button
               onClick={deleteContact}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold text-destructive transition hover:border-destructive/40 hover:shadow-sm"
             >
               <span className="material-icons text-base">delete</span>
-              Delete
+              Excluir
             </button>
           </div>
         }
       />
 
-      {/* Edit modal (PUX-025) — sectioned into General / Details / Custom Fields tabs. */}
+      {/* Edit modal (PUX-025) — sectioned into General / Details / Campos personalizados tabs. */}
       {isEditModalOpen && (
         <ContactEditModal
           contactId={contact.id}
@@ -372,7 +372,7 @@ export default function CrmContactDetailPage() {
         )}
       </div>
 
-      {/* Tabs: General / Deals / Custom Fields */}
+      {/* Tabs: General / Deals / Campos personalizados */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="flex border-b border-border">
           <button
@@ -384,7 +384,7 @@ export default function CrmContactDetailPage() {
             }`}
           >
             <span className="material-icons text-base">person</span>
-            General
+            Geral
           </button>
           <button
             onClick={() => setActiveTab('deals')}
@@ -406,7 +406,7 @@ export default function CrmContactDetailPage() {
             }`}
           >
             <span className="material-icons text-base">tune</span>
-            Custom Fields
+            Campos personalizados
           </button>
         </div>
 
@@ -421,11 +421,11 @@ export default function CrmContactDetailPage() {
         </div>
       )}
 
-      {/* Send Email Form */}
+      {/* Enviar e-mail Form */}
       {showEmailForm && (
         <form onSubmit={sendEmail} className={`${pCard} p-6 space-y-4`}>
           <div className="flex items-center justify-between">
-            <h2 className={pSectionTitle}>Send Email to {contact.email}</h2>
+            <h2 className={pSectionTitle}>Enviar e-mail to {contact.email}</h2>
             <button type="button" onClick={() => setShowEmailForm(false)} className="text-muted-foreground hover:text-foreground">
               <span className="material-icons text-base">close</span>
             </button>
@@ -437,7 +437,7 @@ export default function CrmContactDetailPage() {
             </div>
           )}
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Subject</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Assunto</label>
             <input
               required
               value={emailForm.subject}
@@ -446,7 +446,7 @@ export default function CrmContactDetailPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Body</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Mensagem</label>
             <textarea
               required
               value={emailForm.body}
@@ -461,7 +461,7 @@ export default function CrmContactDetailPage() {
               onClick={() => setShowEmailForm(false)}
               className={pBtnGhost}
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
@@ -470,7 +470,7 @@ export default function CrmContactDetailPage() {
             >
               {emailSending && <span className="material-icons animate-spin text-sm">refresh</span>}
               <span className="material-icons text-sm">send</span>
-              Send Email
+              Enviar e-mail
             </button>
           </div>
         </form>
@@ -481,7 +481,7 @@ export default function CrmContactDetailPage() {
         <div className="space-y-6">
           {/* Contact Info */}
           <div className={`${pCard} p-6 space-y-4`}>
-            <h2 className={pSectionTitle}>Contact Information</h2>
+            <h2 className={pSectionTitle}>Informações de contato</h2>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="material-icons text-base text-muted-foreground">mail</span>
@@ -498,7 +498,7 @@ export default function CrmContactDetailPage() {
                     {contact.linkedinUrl.replace(/^https?:\/\/(www\.)?/i, '')}
                   </a>
                 ) : (
-                  <span className="text-sm text-foreground">No LinkedIn</span>
+                  <span className="text-sm text-foreground">Sem LinkedIn</span>
                 )}
               </div>
               <div className="flex items-center gap-3">
@@ -521,7 +521,7 @@ export default function CrmContactDetailPage() {
             <h2 className={pSectionTitle}>Tags</h2>
             <div className="flex flex-wrap gap-2">
               {(contact.tags ?? []).length === 0 && (
-                <p className="text-sm text-muted-foreground">No tags yet.</p>
+                <p className="text-sm text-muted-foreground">Nenhuma tag ainda.</p>
               )}
               {(contact.tags ?? []).map(tag => (
                 <span
@@ -540,7 +540,7 @@ export default function CrmContactDetailPage() {
               <input
                 value={newTag}
                 onChange={e => setNewTag(e.target.value)}
-                placeholder="Add tag..."
+                placeholder="Adicionar tag..."
                 onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 className={`${pInput} py-1.5`}
               />
@@ -549,7 +549,7 @@ export default function CrmContactDetailPage() {
                 disabled={!newTag.trim()}
                 className={`${pBtnPrimary} py-1.5 px-3`}
               >
-                Add
+                Adicionar
               </button>
             </div>
           </div>
@@ -557,9 +557,9 @@ export default function CrmContactDetailPage() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Log Activity Form */}
+          {/* Registrar atividade Form */}
           <div className={`${pCard} p-6 space-y-4`}>
-            <h2 className={pSectionTitle}>Log Activity</h2>
+            <h2 className={pSectionTitle}>Registrar atividade</h2>
             <form onSubmit={logActivity} className="space-y-3">
               <div className="flex gap-2">
                 {activityTypes.map(t => (
@@ -582,13 +582,13 @@ export default function CrmContactDetailPage() {
                 required
                 value={activityForm.title}
                 onChange={e => setActivityForm(f => ({ ...f, title: e.target.value }))}
-                placeholder="Activity title..."
+                placeholder="Título da atividade..."
                 className={pInput}
               />
               <textarea
                 value={activityForm.description}
                 onChange={e => setActivityForm(f => ({ ...f, description: e.target.value }))}
-                placeholder="Description (optional)..."
+                placeholder="Descrição (opcional)..."
                 rows={2}
                 className={`${pInput} resize-none`}
               />
@@ -598,16 +598,16 @@ export default function CrmContactDetailPage() {
                 className={pBtnPrimary}
               >
                 {activitySaving && <span className="material-icons animate-spin text-sm">refresh</span>}
-                Log Activity
+                Registrar atividade
               </button>
             </form>
           </div>
 
-          {/* Activity Timeline */}
+          {/* Linha do tempo */}
           <div className={`${pCard} p-6 space-y-4`}>
-            <h2 className={pSectionTitle}>Activity Timeline</h2>
+            <h2 className={pSectionTitle}>Linha do tempo</h2>
             {activities.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No activities logged yet.</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma atividade registrada.</p>
             ) : (
               <div className="space-y-1">
                 {activities.map((a, i) => (
@@ -642,17 +642,17 @@ export default function CrmContactDetailPage() {
         {activeTab === 'deals' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className={pSectionTitle}>Deals</h2>
+              <h2 className={pSectionTitle}>Oportunidades</h2>
               <div className="flex items-center gap-3">
-                <Link href="/portal/crm/deals" className="text-xs text-primary hover:underline">View pipeline</Link>
-                <button onClick={() => setShowDealForm(true)} className={pBtnPrimary}><span className="material-icons text-base">add</span>Add Deal</button>
+                <Link href="/portal/crm/deals" className="text-xs text-primary hover:underline">Ver funil</Link>
+                <button onClick={() => setShowDealForm(true)} className={pBtnPrimary}><span className="material-icons text-base">add</span>Adicionar oportunidade</button>
               </div>
             </div>
             {showDealForm && (
               <CrmAddDealModal contactId={Number(contactId)} companyId={contact.companyId ?? undefined} onClose={() => setShowDealForm(false)} onCreated={() => { setShowDealForm(false); fetchContact(); }} />
             )}
             {deals.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No deals associated with this contact.</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma oportunidade associada a este contato.</p>
             ) : (
               <div className="divide-y divide-border">
                 {deals.map(d => (

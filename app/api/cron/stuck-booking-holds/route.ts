@@ -1,3 +1,4 @@
+import { formatMoney } from '@/lib/utils/money';
 import { NextResponse } from 'next/server';
 import { withCronHealth } from '@/lib/cron-health';
 import { isAuthorizedCron } from '@/lib/cron-auth';
@@ -139,7 +140,7 @@ async function _GET(req: Request) {
       bodyLines.push(`Scheduled for: ${new Date(c.startTime).toISOString()}`);
     }
     if (typeof c.total === 'number' && c.total > 0) {
-      bodyLines.push(`Total: $${(c.total / 100).toFixed(2)}`);
+      bodyLines.push(`Total: ${formatMoney(c.total)}`);
     }
     bodyLines.push(`Payment status: ${c.paymentStatus} (no paidAt)`);
     if (c.stripePaymentIntentId) {

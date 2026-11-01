@@ -499,7 +499,7 @@ describe('POST /api/storefront/[siteId]/auth — forgot-password', () => {
     expect(res.status).toBe(200);
     const call = mocks.sendTransactionalEmail.mock.calls[0][0];
     expect(call.variables.resetUrl).toBe(
-      'https://shop.simplerdevelopment.com/store/reset-password?token=reset-tok',
+      'https://shop.kumo.localhost/store/reset-password?token=reset-tok',
     );
     expect(call.variables.fullName).toBe('a@b.com');
   });
@@ -542,7 +542,7 @@ describe('POST /api/storefront/[siteId]/auth — forgot-password', () => {
       expect(res.status).toBe(200);
       const call = mocks.sendTransactionalEmail.mock.calls[0][0];
       expect(call.variables.resetUrl).toBe(
-        'https://simplerdevelopment.com/store/reset-password?token=reset-tok',
+        'https://kumo.localhost/store/reset-password?token=reset-tok',
       );
     } finally {
       if (original !== undefined) process.env.NEXTAUTH_URL = original;

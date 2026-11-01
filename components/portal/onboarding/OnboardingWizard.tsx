@@ -33,18 +33,18 @@ const STEP_META: Record<
   OnboardingStep,
   { title: string; subtitle: string; rail: string; icon: string; eyebrow: string }
 > = {
-  welcome: { title: 'Welcome', subtitle: 'Two minutes to a personalized setup.', rail: 'Welcome', icon: 'waving_hand', eyebrow: 'Welcome' },
-  'about-you': { title: 'About you', subtitle: 'Just the basics — you can change anything later.', rail: 'About you', icon: 'person', eyebrow: 'About you' },
-  'about-company': { title: 'About your company', subtitle: 'Tells us how to size things for you.', rail: 'Your company', icon: 'business', eyebrow: 'About you' },
-  'choose-modules': { title: 'Pick your tools', subtitle: 'Only pay for what you need — add more any time.', rail: 'Choose plan', icon: 'widgets', eyebrow: 'Your plan' },
-  payment: { title: 'Start your free trial', subtitle: '14 days free, cancel any time.', rail: 'Payment', icon: 'credit_card', eyebrow: 'Your plan' },
-  'module-setup': { title: 'Get started', subtitle: 'A few quick first steps for each module you unlocked.', rail: 'Quick setup', icon: 'checklist', eyebrow: 'Quick setup' },
-  'brand-vibe': { title: 'Your brand vibe', subtitle: 'We use this to draft content that sounds like you.', rail: 'Brand vibe', icon: 'palette', eyebrow: 'Your brand' },
-  mission: { title: 'What do you do?', subtitle: 'One sentence — your AI assistant will lean on this.', rail: 'Your mission', icon: 'flag', eyebrow: 'Your brand' },
-  features: { title: 'What brings you here?', subtitle: "Pick what you want to explore first — we'll tailor your setup around it.", rail: 'Your goals', icon: 'interests', eyebrow: 'Your goals' },
-  upsell: { title: 'Supercharge your plan', subtitle: 'Modules other teams like yours add first.', rail: 'Add-ons', icon: 'auto_awesome', eyebrow: 'Add-ons' },
-  'power-up': { title: 'Power up with Claude', subtitle: 'Optional, but the magic happens when you wire this up.', rail: 'Power up', icon: 'bolt', eyebrow: 'Power up' },
-  done: { title: "You're all set!", subtitle: 'Welcome to Kumo One.', rail: 'Done', icon: 'celebration', eyebrow: 'All set' },
+  welcome: { title: 'Boas-vindas', subtitle: 'Dois minutos para personalizar sua conta.', rail: 'Boas-vindas', icon: 'waving_hand', eyebrow: 'Boas-vindas' },
+  'about-you': { title: 'Sobre você', subtitle: 'Só o básico — você pode alterar tudo depois.', rail: 'Sobre você', icon: 'person', eyebrow: 'Sobre você' },
+  'about-company': { title: 'Sobre a sua empresa', subtitle: 'Ajuda a dimensionar a plataforma para você.', rail: 'Your company', icon: 'business', eyebrow: 'Sobre você' },
+  'choose-modules': { title: 'Escolha suas ferramentas', subtitle: 'Pague só pelo que usar — adicione mais quando quiser.', rail: 'Choose plan', icon: 'widgets', eyebrow: 'Your plan' },
+  payment: { title: 'Comece seu período de teste', subtitle: '14 dias de teste, cancele quando quiser.', rail: 'Payment', icon: 'credit_card', eyebrow: 'Your plan' },
+  'module-setup': { title: 'Primeiros passos', subtitle: 'Alguns passos rápidos para cada módulo liberado.', rail: 'Quick setup', icon: 'checklist', eyebrow: 'Quick setup' },
+  'brand-vibe': { title: 'Identidade da marca', subtitle: 'Usamos isso para escrever conteúdos com a cara da sua empresa.', rail: 'Brand vibe', icon: 'palette', eyebrow: 'Your brand' },
+  mission: { title: 'O que a sua empresa faz?', subtitle: 'Uma frase — o assistente de IA vai usar isso como base.', rail: 'Your mission', icon: 'flag', eyebrow: 'Your brand' },
+  features: { title: 'O que você procura?', subtitle: "Pick what you want to explore first — we'll tailor your setup around it.", rail: 'Your goals', icon: 'interests', eyebrow: 'Your goals' },
+  upsell: { title: 'Turbine seu plano', subtitle: 'Módulos que empresas parecidas costumam adicionar primeiro.', rail: 'Add-ons', icon: 'auto_awesome', eyebrow: 'Add-ons' },
+  'power-up': { title: 'Conecte um assistente de IA', subtitle: 'Opcional: conecte um cliente MCP para operar a plataforma conversando.', rail: 'Power up', icon: 'bolt', eyebrow: 'Power up' },
+  done: { title: "You're all set!", subtitle: 'Boas-vindas ao Kumo One.', rail: 'Done', icon: 'celebration', eyebrow: 'Tudo pronto' },
 };
 
 function seedTimezone(s: OnboardingState): OnboardingState {
@@ -118,10 +118,10 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
         body: JSON.stringify({ step: opts.step, answers: opts.patch }),
       });
       const json = await res.json();
-      if (!json.success) throw new Error(json.message ?? 'Failed to save');
+      if (!json.success) throw new Error(json.message ?? 'Não foi possível salvar');
       setState(json.data as OnboardingState);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save');
+      setError(e instanceof Error ? e.message : 'Não foi possível salvar');
     } finally {
       setSaving(false);
     }
@@ -237,7 +237,7 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
 
           <div className="mb-4 mt-7 flex items-center gap-2.5 font-mono text-[10.5px] uppercase tracking-[0.2em] text-white/50">
             <span className="auth-dot inline-block h-[7px] w-[7px] rounded-full bg-yellow-400 shadow-[0_0_10px_#facc15]" />
-            Get set up
+            Configuração inicial
           </div>
 
           <ol className="min-h-0 flex-1 space-y-0.5 overflow-y-auto">
@@ -300,7 +300,7 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
           <div
             className="absolute inset-x-0 top-0 z-20 h-1 animate-pulse bg-primary"
             role="progressbar"
-            aria-label="Saving"
+            aria-label="Salvando"
             data-testid="onboarding-saving-indicator"
           />
         )}
@@ -329,7 +329,7 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
 
         {/* Once the plan is chosen (payment step onward), setup can't be skipped —
             billing must be completed (or explicitly bypassed on Stripe-less instances). */}
-        {/* reopenedAt gates visibility: fresh signups never see "Skip setup" — only
+        {/* reopenedAt gates visibility: fresh signups never see "Pular configuração" — only
             a session that came back through reopenOnboarding() gets it, matching the
             server-side check in completeOnboarding() (lib/onboarding/service.ts). */}
         {currentStep !== 'done' &&
@@ -341,7 +341,7 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
             data-testid="onboarding-skip-all"
             className="absolute right-5 top-4 z-10 whitespace-nowrap text-[12.5px] font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            Skip setup
+            Pular configuração
           </button>
         )}
 
@@ -392,7 +392,7 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
                 className={`${obQuietLink} inline-flex items-center gap-1.5`}
               >
                 <span className="material-icons text-base">arrow_back</span>
-                Back
+                Voltar
               </button>
             ) : <span />}
             {error && <span className="text-xs text-destructive" role="alert">{error}</span>}

@@ -1,3 +1,4 @@
+import { formatMoney } from '@/lib/utils/money';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -71,7 +72,7 @@ export async function POST(req: Request, { params }: Params) {
     await db.insert(orderStatusHistory).values({
       orderId: order.id,
       status: 'label_purchased',
-      note: `${result.carrier} ${result.service} for $${(result.labelCostCents / 100).toFixed(2)}`,
+      note: `${result.carrier} ${result.service} for ${formatMoney(result.labelCostCents)}`,
       changedBy: userId,
     });
 

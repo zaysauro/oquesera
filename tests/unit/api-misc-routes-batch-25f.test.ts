@@ -225,7 +225,7 @@ describe('POST /api/portal/sign-out', () => {
     expect(joined).toContain('authjs.callback-url=');
     expect(joined).toContain('sd-active-client=');
     // Wildcard domain set is production-only
-    expect(joined).not.toContain('Domain=.simplerdevelopment.com');
+    expect(joined).not.toContain('Domain=.kumo.localhost');
   });
 
   it('uses Secure prefix names and writes wildcard cookies in production', async () => {
@@ -239,7 +239,7 @@ describe('POST /api/portal/sign-out', () => {
     expect(joined).toContain('__Secure-authjs.session-token=');
     expect(joined).toContain('__Secure-authjs.csrf-token=');
     // wildcard-domain clears
-    expect(joined).toMatch(/Domain=\.?simplerdevelopment\.com/);
+    expect(joined).toMatch(/Domain=\.?kumo\.localhost/);
   });
 
   it('returns expired-cookie headers with epoch expiry', async () => {

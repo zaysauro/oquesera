@@ -201,14 +201,14 @@ describe('lib/cloudflare-dns', () => {
               {
                 id: 'r1',
                 type: 'CNAME',
-                name: 'acme-main.simplerdevelopment.com',
+                name: 'acme-main.kumo.localhost',
                 content: 'cname.vercel-dns.com',
                 extra: 'ignored',
               },
               {
                 id: 'r2',
                 type: 'CNAME',
-                name: 'acme-main.simplerdevelopment.com',
+                name: 'acme-main.kumo.localhost',
                 content: 'other.vercel-dns.com',
               },
             ],
@@ -222,20 +222,20 @@ describe('lib/cloudflare-dns', () => {
         {
           id: 'r1',
           type: 'CNAME',
-          name: 'acme-main.simplerdevelopment.com',
+          name: 'acme-main.kumo.localhost',
           content: 'cname.vercel-dns.com',
         },
         {
           id: 'r2',
           type: 'CNAME',
-          name: 'acme-main.simplerdevelopment.com',
+          name: 'acme-main.kumo.localhost',
           content: 'other.vercel-dns.com',
         },
       ]);
 
       const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
       expect(url).toBe(
-        `${CF_API}/zones/test-zone/dns_records?name=acme-main.simplerdevelopment.com&type=CNAME`,
+        `${CF_API}/zones/test-zone/dns_records?name=acme-main.kumo.localhost&type=CNAME`,
       );
       expect(init.method).toBeUndefined();
       expect(init.headers).toEqual({

@@ -219,7 +219,7 @@ export default function ProposalEditorPage() {
       setError(d.message ?? 'Failed to save');
       return;
     }
-    setSuccess('Saved');
+    setSuccess('Salvo');
     setTimeout(() => setSuccess(''), 2000);
   }
 
@@ -236,7 +236,7 @@ export default function ProposalEditorPage() {
     const d = await res.json();
     setSending(false);
     if (!d.success) {
-      setError(d.message ?? 'Failed to send');
+      setError(d.message ?? 'Não foi possível enviar');
       setShowSendDialog(false);
       return;
     }
@@ -253,7 +253,7 @@ export default function ProposalEditorPage() {
     router.push('/portal/crm/proposals');
   }
 
-  /* Save as Template */
+  /* Salvar como modelo */
   async function handleSaveTemplate(e: React.FormEvent) {
     e.preventDefault();
     setSavingTemplate(true);
@@ -275,7 +275,7 @@ export default function ProposalEditorPage() {
     if (d.success) {
       setShowTemplateDialog(false);
       setTemplateName('');
-      setSuccess('Template saved');
+      setSuccess('Modelo salvo');
       setTimeout(() => setSuccess(''), 2000);
     }
   }
@@ -348,7 +348,7 @@ export default function ProposalEditorPage() {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
         <span className="material-icons animate-spin mr-2">progress_activity</span>
-        Loading proposal...
+        Carregando proposta...
       </div>
     );
   }
@@ -359,7 +359,7 @@ export default function ProposalEditorPage() {
         <span className="material-icons text-4xl text-muted-foreground mb-2 block">error_outline</span>
         <p className="text-muted-foreground">{error || 'Proposal not found'}</p>
         <button onClick={() => router.push('/portal/crm/proposals')} className="mt-4 text-sm text-primary hover:underline">
-          Back to proposals
+          Voltar para propostas
         </button>
       </div>
     );
@@ -367,7 +367,7 @@ export default function ProposalEditorPage() {
 
   const sectionTypeLabel: Record<string, string> = {
     heading: 'Heading',
-    text: 'Text',
+    text: 'Texto',
     image: 'Image',
     divider: 'Divider',
     pricing: 'Pricing',
@@ -415,7 +415,7 @@ export default function ProposalEditorPage() {
       <PortalPageHeader
         eyebrow="CRM"
         title={title || 'Untitled Proposal'}
-        subtitle="Proposal editor"
+        subtitle="Editor de proposta"
         actions={
           <div className="flex items-center gap-2">
             <button
@@ -423,7 +423,7 @@ export default function ProposalEditorPage() {
               className={pBtnGhost}
             >
               <span className="material-icons text-sm">bookmark_add</span>
-              Save as Template
+              Salvar como modelo
             </button>
             <button
               onClick={() => setShowSendDialog(true)}
@@ -431,7 +431,7 @@ export default function ProposalEditorPage() {
               className={pBtnSoft}
             >
               <span className="material-icons text-sm">send</span>
-              Send
+              Enviar
             </button>
             <button
               onClick={handleSave}
@@ -439,7 +439,7 @@ export default function ProposalEditorPage() {
               className={pBtnPrimary}
             >
               <span className="material-icons text-sm">save</span>
-              {saving ? 'Saving...' : 'Save'}
+              {saving ? 'Salvando...' : 'Save'}
             </button>
             <button
               onClick={() => setShowDeleteDialog(true)}
@@ -455,24 +455,24 @@ export default function ProposalEditorPage() {
       <div className="grid lg:grid-cols-5 gap-4">
         {/* Left Panel - Editor (60%) */}
         <div className="lg:col-span-3 space-y-4">
-          {/* Title */}
+          {/* Título */}
           <div className="bg-card border border-border rounded-2xl p-5">
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
-              placeholder="Proposal Title"
+              placeholder="Título da proposta"
               className="w-full text-xl font-bold bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
           {/* Summary */}
           <div className="bg-card border border-border rounded-2xl p-5">
-            <label className="block text-xs font-medium text-muted-foreground mb-2">Summary</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-2">Resumo</label>
             <textarea
               value={summary}
               onChange={e => setSummary(e.target.value)}
               rows={3}
-              placeholder="Brief summary of this proposal..."
+              placeholder="Breve resumo desta proposta..."
               className={`${pInput} resize-none`}
             />
           </div>
@@ -485,14 +485,14 @@ export default function ProposalEditorPage() {
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <div>
-                <label htmlFor="proposal-contact" className="block text-xs font-medium text-muted-foreground mb-1">Contact</label>
+                <label htmlFor="proposal-contact" className="block text-xs font-medium text-muted-foreground mb-1">Contato</label>
                 <select id="proposal-contact" value={contactId} onChange={e => setContactId(e.target.value)} className={pSelect}>
-                  <option value="">None</option>
+                  <option value="">Nenhum</option>
                   {contacts.map(c => <option key={c.id} value={c.id}>{c.firstName} {c.lastName}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Company</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Empresa</label>
                 <CrmCompanyTypeaheadPicker
                   value={companyId}
                   selectedLabel={companyLabel}
@@ -500,51 +500,51 @@ export default function ProposalEditorPage() {
                     setCompanyId(opt ? String(opt.id) : '');
                     setCompanyLabel(opt ? opt.name : null);
                   }}
-                  placeholder="Select company…"
+                  placeholder="Selecione a empresa…"
                 />
               </div>
               <div>
-                <label htmlFor="proposal-deal" className="block text-xs font-medium text-muted-foreground mb-1">Deal</label>
+                <label htmlFor="proposal-deal" className="block text-xs font-medium text-muted-foreground mb-1">Oportunidade</label>
                 <select id="proposal-deal" value={dealId} onChange={e => setDealId(e.target.value)} className={pSelect}>
-                  <option value="">None</option>
+                  <option value="">Nenhum</option>
                   {deals.map(d => <option key={d.id} value={d.id}>{d.title}</option>)}
                 </select>
               </div>
               <div>
-                <label htmlFor="proposal-accent-color-hex" className="block text-xs font-medium text-muted-foreground mb-1">Accent Color</label>
+                <label htmlFor="proposal-accent-color-hex" className="block text-xs font-medium text-muted-foreground mb-1">Cor de destaque</label>
                 <div className="flex items-center gap-2">
-                  <input type="color" aria-label="Accent color picker" value={accentColor} onChange={e => setAccentColor(e.target.value)} className="w-8 h-8 rounded border border-border cursor-pointer" />
+                  <input type="color" aria-label="Seletor de cor de destaque" value={accentColor} onChange={e => setAccentColor(e.target.value)} className="w-8 h-8 rounded border border-border cursor-pointer" />
                   <input id="proposal-accent-color-hex" value={accentColor} onChange={e => setAccentColor(e.target.value)} className="flex-1 rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Logo URL</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">URL do logotipo</label>
                 <input value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://..." className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Cover Image URL</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">URL da imagem de capa</label>
                 <input value={coverImageUrl} onChange={e => setCoverImageUrl(e.target.value)} placeholder="https://..." className={pInput} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Valid Until</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Válida até</label>
                 <input type="date" value={validUntil} onChange={e => setValidUntil(e.target.value)} className={pInput} />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Footer Text</label>
-                <input value={footerText} onChange={e => setFooterText(e.target.value)} placeholder="Thank you for your consideration." className={pInput} />
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Texto do rodapé</label>
+                <input value={footerText} onChange={e => setFooterText(e.target.value)} placeholder="Agradecemos a atenção." className={pInput} />
               </div>
             </div>
           </div>
 
-          {/* Content Sections */}
+          {/* Seções de conteúdo */}
           <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
             <h2 className={`${pSectionTitle} flex items-center gap-2`}>
               <span className="material-icons text-base text-muted-foreground">view_list</span>
-              Content Sections
+              Seções de conteúdo
             </h2>
 
             {sections.length === 0 && (
-              <p className="text-sm text-muted-foreground py-4 text-center">No sections yet. Add sections below to build your proposal.</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma seção ainda. Adicione seções abaixo para montar a proposta.</p>
             )}
 
             {sections.map((section, idx) => (
@@ -571,7 +571,7 @@ export default function ProposalEditorPage() {
                   <input
                     value={section.content}
                     onChange={e => updateSection(section.id, e.target.value)}
-                    placeholder="Heading text..."
+                    placeholder="Texto do título..."
                     className={`${pInput} font-semibold`}
                   />
                 )}
@@ -580,7 +580,7 @@ export default function ProposalEditorPage() {
                     value={section.content}
                     onChange={e => updateSection(section.id, e.target.value)}
                     rows={4}
-                    placeholder="Enter text content (HTML supported)..."
+                    placeholder="Digite o conteúdo (aceita HTML)..."
                     className={`${pInput} resize-y`}
                   />
                 )}
@@ -589,11 +589,11 @@ export default function ProposalEditorPage() {
                     <input
                       value={section.content}
                       onChange={e => updateSection(section.id, e.target.value)}
-                      placeholder="Image URL..."
+                      placeholder="URL da imagem..."
                       className={pInput}
                     />
                     {section.content && (
-                      <img src={section.content} alt="Section image" className="max-h-40 rounded-lg border border-border object-contain" />
+                      <img src={section.content} alt="Imagem da seção" className="max-h-40 rounded-lg border border-border object-contain" />
                     )}
                   </div>
                 )}
@@ -601,19 +601,19 @@ export default function ProposalEditorPage() {
                   <hr className="border-border" />
                 )}
                 {section.type === 'pricing' && (
-                  <p className="text-xs text-muted-foreground">This section will render the line items and pricing table below.</p>
+                  <p className="text-xs text-muted-foreground">Esta seção exibirá os itens e a tabela de preços abaixo.</p>
                 )}
                 {section.type === 'terms' && (
                   <textarea
                     value={section.content}
                     onChange={e => updateSection(section.id, e.target.value)}
                     rows={4}
-                    placeholder="Terms and conditions..."
+                    placeholder="Termos e condições..."
                     className={`${pInput} resize-y`}
                   />
                 )}
                 {section.type === 'signature' && (
-                  <p className="text-xs text-muted-foreground">Signature field will appear here for the client to sign.</p>
+                  <p className="text-xs text-muted-foreground">O campo de assinatura aparecerá aqui para o cliente assinar.</p>
                 )}
               </div>
             ))}
@@ -633,11 +633,11 @@ export default function ProposalEditorPage() {
             </div>
           </div>
 
-          {/* Line Items */}
+          {/* Itens */}
           <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
             <h2 className={`${pSectionTitle} flex items-center gap-2`}>
               <span className="material-icons text-base text-muted-foreground">receipt_long</span>
-              Line Items
+              Itens
             </h2>
 
             {lineItems.length > 0 && (
@@ -645,12 +645,12 @@ export default function ProposalEditorPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-2 pr-2 font-medium text-muted-foreground text-xs">Description</th>
-                      <th className="text-left py-2 pr-2 font-medium text-muted-foreground text-xs">Details</th>
-                      <th className="text-right py-2 pr-2 font-medium text-muted-foreground text-xs w-16">Qty</th>
-                      <th className="text-right py-2 pr-2 font-medium text-muted-foreground text-xs w-28">Unit Price</th>
+                      <th className="text-left py-2 pr-2 font-medium text-muted-foreground text-xs">Descrição</th>
+                      <th className="text-left py-2 pr-2 font-medium text-muted-foreground text-xs">Detalhes</th>
+                      <th className="text-right py-2 pr-2 font-medium text-muted-foreground text-xs w-16">Qtd.</th>
+                      <th className="text-right py-2 pr-2 font-medium text-muted-foreground text-xs w-28">Preço unitário</th>
                       <th className="text-right py-2 pr-2 font-medium text-muted-foreground text-xs w-28">Total</th>
-                      <th className="text-center py-2 pr-2 font-medium text-muted-foreground text-xs w-16">Opt.</th>
+                      <th className="text-center py-2 pr-2 font-medium text-muted-foreground text-xs w-16">Opc.</th>
                       <th className="w-8"></th>
                     </tr>
                   </thead>
@@ -661,7 +661,7 @@ export default function ProposalEditorPage() {
                           <input
                             value={li.description}
                             onChange={e => updateLineItem(li.id, 'description', e.target.value)}
-                            placeholder="Item description"
+                            placeholder="Descrição do item"
                             className="w-full rounded-lg border border-border bg-card px-2.5 py-1.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                           />
                         </td>
@@ -717,7 +717,7 @@ export default function ProposalEditorPage() {
 
             <button onClick={addLineItem} className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors font-medium">
               <span className="material-icons text-sm">add</span>
-              Add Line Item
+              Adicionar item
             </button>
 
             {/* Totals */}
@@ -734,7 +734,7 @@ export default function ProposalEditorPage() {
                   </div>
                 ))}
                 <div className="flex justify-between text-sm font-bold pt-1 border-t border-border">
-                  <span className="text-foreground">Grand Total</span>
+                  <span className="text-foreground">Total geral</span>
                   <span className="text-foreground">{fmtCurrency(grandTotal)}</span>
                 </div>
               </div>
@@ -745,7 +745,7 @@ export default function ProposalEditorPage() {
           <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
             <h2 className={`${pSectionTitle} flex items-center gap-2`}>
               <span className="material-icons text-base text-muted-foreground">percent</span>
-              Fees
+              Taxas
             </h2>
 
             {fees.map(f => (
@@ -753,7 +753,7 @@ export default function ProposalEditorPage() {
                 <input
                   value={f.label}
                   onChange={e => updateFee(f.id, 'label', e.target.value)}
-                  placeholder="Fee label"
+                  placeholder="Nome da taxa"
                   className="flex-1 rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/50 focus:border-primary focus:ring-4 focus:ring-primary/15"
                 />
                 <select
@@ -761,8 +761,8 @@ export default function ProposalEditorPage() {
                   onChange={e => updateFee(f.id, 'type', e.target.value)}
                   className="appearance-none rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
                 >
-                  <option value="flat">Flat ($)</option>
-                  <option value="percent">Percent (%)</option>
+                  <option value="flat">Fixo (R$)</option>
+                  <option value="percent">Percentual (%)</option>
                 </select>
                 <input
                   type="number"
@@ -780,18 +780,18 @@ export default function ProposalEditorPage() {
 
             <button onClick={addFee} className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors font-medium">
               <span className="material-icons text-sm">add</span>
-              Add Fee
+              Adicionar taxa
             </button>
           </div>
         </div>
 
-        {/* Right Panel - Live Preview (40%) */}
+        {/* Right Panel - Pré-visualização (40%) */}
         <div className="lg:col-span-2">
           <div className="sticky top-4">
             <div className="bg-card border border-border rounded-2xl overflow-hidden">
               <div className="px-4 py-2 border-b border-border bg-accent/30 flex items-center gap-2">
                 <span className="material-icons text-sm text-muted-foreground">visibility</span>
-                <span className="text-xs font-medium text-muted-foreground">Live Preview</span>
+                <span className="text-xs font-medium text-muted-foreground">Pré-visualização</span>
               </div>
               <div className="p-4 max-h-[calc(100vh-12rem)] overflow-y-auto">
                 <div className="space-y-4">
@@ -805,7 +805,7 @@ export default function ProposalEditorPage() {
                     <img src={coverImageUrl} alt="Cover" className="w-full h-32 object-cover rounded-lg" />
                   )}
 
-                  {/* Title */}
+                  {/* Título */}
                   <h1 className="text-xl font-bold" style={{ color: accentColor }}>
                     {title || 'Untitled Proposal'}
                   </h1>
@@ -840,7 +840,7 @@ export default function ProposalEditorPage() {
                         </h2>
                       )}
                       {section.type === 'text' && (
-                        <div className="text-sm text-foreground prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(section.content || '<p class="text-muted-foreground italic">Text content...</p>') }} />
+                        <div className="text-sm text-foreground prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(section.content || '<p class="text-muted-foreground italic">Conteúdo do texto...</p>') }} />
                       )}
                       {section.type === 'image' && section.content && (
                         <img src={section.content} alt="Section" className="w-full rounded-lg" />
@@ -854,8 +854,8 @@ export default function ProposalEditorPage() {
                             <thead>
                               <tr className="bg-accent/30">
                                 <th className="text-left px-2 py-1.5 font-medium text-muted-foreground">Item</th>
-                                <th className="text-right px-2 py-1.5 font-medium text-muted-foreground">Qty</th>
-                                <th className="text-right px-2 py-1.5 font-medium text-muted-foreground">Price</th>
+                                <th className="text-right px-2 py-1.5 font-medium text-muted-foreground">Qtd.</th>
+                                <th className="text-right px-2 py-1.5 font-medium text-muted-foreground">Preço</th>
                                 <th className="text-right px-2 py-1.5 font-medium text-muted-foreground">Total</th>
                               </tr>
                             </thead>
@@ -865,7 +865,7 @@ export default function ProposalEditorPage() {
                                   <td className="px-2 py-1.5">
                                     <div className="font-medium text-foreground">{li.description || 'Item'}</div>
                                     {li.details && <div className="text-muted-foreground">{li.details}</div>}
-                                    {li.optional && <span className="text-xs text-yellow-600">(Optional)</span>}
+                                    {li.optional && <span className="text-xs text-yellow-600">(Opcional)</span>}
                                   </td>
                                   <td className="px-2 py-1.5 text-right text-muted-foreground">{li.quantity}</td>
                                   <td className="px-2 py-1.5 text-right text-muted-foreground">{fmtCurrency(li.unitPrice)}</td>
@@ -901,7 +901,7 @@ export default function ProposalEditorPage() {
                       {section.type === 'signature' && (
                         <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                           <span className="material-icons text-2xl text-muted-foreground">draw</span>
-                          <p className="text-xs text-muted-foreground mt-1">Signature area</p>
+                          <p className="text-xs text-muted-foreground mt-1">Área de assinatura</p>
                         </div>
                       )}
                     </div>
@@ -926,42 +926,42 @@ export default function ProposalEditorPage() {
               <>
                 <div className="flex items-center gap-2 text-green-600">
                   <span className="material-icons">check_circle</span>
-                  <h3 className="font-semibold text-foreground">Proposal Sent</h3>
+                  <h3 className="font-semibold text-foreground">Proposta enviada</h3>
                 </div>
-                <p className="text-sm text-muted-foreground">Share this link with your client:</p>
+                <p className="text-sm text-muted-foreground">Compartilhe este link com o cliente:</p>
                 <div className="flex items-center gap-2">
                   <input readOnly value={sendingUrl} className="flex-1 rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none" />
                   <button
                     onClick={() => { navigator.clipboard.writeText(sendingUrl); }}
                     className="p-2 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
-                    title="Copy link"
+                    title="Copiar link"
                   >
                     <span className="material-icons text-base">content_copy</span>
                   </button>
                 </div>
                 <div className="flex justify-end">
                   <button onClick={() => { setShowSendDialog(false); setSendingUrl(''); }} className={pBtnPrimary}>
-                    Done
+                    Concluído
                   </button>
                 </div>
               </>
             ) : (
               <>
-                <h3 className="font-semibold text-foreground">Send Proposal</h3>
+                <h3 className="font-semibold text-foreground">Enviar proposta</h3>
                 <p className="text-sm text-muted-foreground">
                   This will mark the proposal as &quot;Sent&quot; and generate a unique link for your client.
                   {selectedContact?.email && (
                     <span className="block mt-1">
-                      You can share the link with <strong>{selectedContact.firstName} {selectedContact.lastName}</strong> ({selectedContact.email}).
+                      Você pode compartilhar o link com <strong>{selectedContact.firstName} {selectedContact.lastName}</strong> ({selectedContact.email}).
                     </span>
                   )}
                 </p>
                 <div className="flex justify-end gap-2">
                   <button onClick={() => setShowSendDialog(false)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    Cancel
+                    Cancelar
                   </button>
                   <button onClick={handleSend} disabled={sending} className={`${pBtnPrimary} disabled:opacity-50`}>
-                    {sending ? 'Sending...' : 'Send Now'}
+                    {sending ? 'Enviando...' : 'Enviar agora'}
                   </button>
                 </div>
               </>
@@ -974,47 +974,47 @@ export default function ProposalEditorPage() {
       {showDeleteDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full space-y-4">
-            <h3 className="font-semibold text-foreground">Delete Proposal</h3>
+            <h3 className="font-semibold text-foreground">Excluir proposta</h3>
             <p className="text-sm text-muted-foreground">
               Are you sure you want to delete &quot;{title}&quot;? This action cannot be undone.
             </p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setShowDeleteDialog(false)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Cancel
+                Cancelar
               </button>
               <button onClick={handleDelete} disabled={deleting} className="inline-flex items-center justify-center gap-2 rounded-xl bg-destructive px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                {deleting ? 'Deleting...' : 'Delete'}
+                {deleting ? 'Excluindo...' : 'Delete'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Save as Template Dialog */}
+      {/* Salvar como modelo Dialog */}
       {showTemplateDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full space-y-4">
-            <h3 className="font-semibold text-foreground">Save as Template</h3>
+            <h3 className="font-semibold text-foreground">Salvar como modelo</h3>
             <p className="text-sm text-muted-foreground">
-              Save the current sections, line items, and fees as a reusable template.
+              Salve as seções, itens e taxas atuais como um modelo reutilizável.
             </p>
             <form onSubmit={handleSaveTemplate} className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">Template Name *</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Nome do modelo *</label>
                 <input
                   required
                   value={templateName}
                   onChange={e => setTemplateName(e.target.value)}
-                  placeholder="e.g. Standard Web Design Proposal"
+                  placeholder="ex.: Proposta padrão de serviços"
                   className={pInput}
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setShowTemplateDialog(false)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Cancel
+                  Cancelar
                 </button>
                 <button type="submit" disabled={savingTemplate} className={pBtnPrimary}>
-                  {savingTemplate ? 'Saving...' : 'Save Template'}
+                  {savingTemplate ? 'Salvando...' : 'Salvar modelo'}
                 </button>
               </div>
             </form>

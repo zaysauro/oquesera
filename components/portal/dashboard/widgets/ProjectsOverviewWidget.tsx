@@ -54,7 +54,7 @@ export default async function ProjectsOverviewWidget({
         <p className="text-sm text-muted-foreground py-2 text-center">
           No projects yet.{' '}
           <Link href="/portal/projects" className="text-primary hover:underline">
-            Create one
+            Criar
           </Link>
         </p>
       ) : (
@@ -84,7 +84,7 @@ export default async function ProjectsOverviewWidget({
           className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
         >
           <span className="material-icons text-sm">folder_open</span>
-          View all projects
+          Ver todos os projetos
         </Link>
       </div>
     </div>

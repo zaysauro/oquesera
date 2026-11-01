@@ -196,7 +196,7 @@ function MultiselectFilter({
             );
           })}
           {opts.length === 0 && (
-            <div className="px-2 py-2 text-xs text-muted-foreground">No options.</div>
+            <div className="px-2 py-2 text-xs text-muted-foreground">Nenhuma opção.</div>
           )}
         </div>
       )}

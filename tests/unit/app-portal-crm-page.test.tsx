@@ -154,7 +154,7 @@ function renderPage() {
 async function renderLoaded() {
   const result = renderPage();
   await waitFor(() => {
-    expect(result.container.textContent).toContain('CRM Dashboard');
+    expect(result.container.textContent).toContain('Painel do CRM');
   });
   return result;
 }
@@ -170,10 +170,10 @@ describe('CrmDashboardPage — loading state', () => {
     expect(spinner).toBeTruthy();
   });
 
-  it('does not render "CRM Dashboard" heading while loading', () => {
+  it('does not render "Painel do CRM" heading while loading', () => {
     fetchMock.mockImplementation(() => new Promise<FetchResp>(() => { /* never resolves */ }));
     const { container } = renderPage();
-    expect(container.textContent).not.toContain('CRM Dashboard');
+    expect(container.textContent).not.toContain('Painel do CRM');
   });
 });
 
@@ -183,26 +183,26 @@ describe('CrmDashboardPage — error state', () => {
   it('shows error message when dashboard fetch returns !ok', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/dashboard')) {
-        return makeRes({ message: 'Dashboard failed' }, { ok: false, status: 500 });
+        return makeRes({ message: 'Falha ao carregar o painel' }, { ok: false, status: 500 });
       }
       return makeRes(makeAnalyticsData());
     });
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('Dashboard failed');
+      expect(container.textContent).toContain('Falha ao carregar o painel');
     });
   });
 
   it('shows error message when analytics fetch returns !ok', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/analytics')) {
-        return makeRes({ message: 'Analytics failed' }, { ok: false, status: 500 });
+        return makeRes({ message: 'Falha ao carregar as métricas' }, { ok: false, status: 500 });
       }
       return makeRes(makeDashboardData());
     });
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('Analytics failed');
+      expect(container.textContent).toContain('Falha ao carregar as métricas');
     });
   });
 
@@ -233,7 +233,7 @@ describe('CrmDashboardPage — error state', () => {
     const { container } = renderPage();
     await waitFor(() => {
       const btn = Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent?.includes('Retry'),
+        (b) => b.textContent?.includes('Tentar novamente'),
       );
       expect(btn).toBeTruthy();
     });
@@ -249,12 +249,12 @@ describe('CrmDashboardPage — error state', () => {
     const { container } = renderPage();
     await waitFor(() => {
       const btn = Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent?.includes('Retry'),
+        (b) => b.textContent?.includes('Tentar novamente'),
       );
       expect(btn).toBeTruthy();
     });
     const retryBtn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent?.includes('Retry'),
+      (b) => b.textContent?.includes('Tentar novamente'),
     ) as HTMLButtonElement;
     // Click should not throw
     expect(() => fireEvent.click(retryBtn)).not.toThrow();
@@ -266,15 +266,15 @@ describe('CrmDashboardPage — error state', () => {
 // ─── Header + period selector ─────────────────────────────────────────────────
 
 describe('CrmDashboardPage — header and period selector', () => {
-  it('renders "CRM Dashboard" heading', async () => {
+  it('renders "Painel do CRM" heading', async () => {
     const { container } = await renderLoaded();
     const h1 = container.querySelector('h1');
-    expect(h1?.textContent).toContain('CRM Dashboard');
+    expect(h1?.textContent).toContain('Painel do CRM');
   });
 
-  it('renders subtitle "Sales performance and pipeline health"', async () => {
+  it('renders subtitle "Desempenho de vendas e saúde do funil"', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Sales performance and pipeline health');
+    expect(container.textContent).toContain('Desempenho de vendas e saúde do funil');
   });
 
   it('renders all four period buttons (30D, 90D, 12M, All)', async () => {
@@ -346,7 +346,7 @@ describe('CrmDashboardPage — header and period selector', () => {
 describe('CrmDashboardPage — metric cards', () => {
   it('renders Contacts metric card label', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Contacts');
+    expect(container.textContent).toContain('Contatos');
   });
 
   it('renders Contacts metric value (120)', async () => {
@@ -356,7 +356,7 @@ describe('CrmDashboardPage — metric cards', () => {
 
   it('renders Companies metric card label', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Companies');
+    expect(container.textContent).toContain('Empresas');
   });
 
   it('renders Companies metric value (35)', async () => {
@@ -366,7 +366,7 @@ describe('CrmDashboardPage — metric cards', () => {
 
   it('renders Win Rate metric card', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Win Rate');
+    expect(container.textContent).toContain('Taxa de conversão');
   });
 
   it('computes win rate correctly (won=10, lost=5 → 67%)', async () => {
@@ -387,7 +387,7 @@ describe('CrmDashboardPage — metric cards', () => {
 
   it('renders Open Pipeline metric card', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Open Pipeline');
+    expect(container.textContent).toContain('Funil em aberto');
   });
 
   it('renders MRR metric card', async () => {
@@ -402,7 +402,7 @@ describe('CrmDashboardPage — metric cards', () => {
 
   it('renders Avg Close metric card', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Avg Close');
+    expect(container.textContent).toContain('Prazo médio de fechamento');
   });
 
   it('renders avgDaysToClose with "d" suffix', async () => {
@@ -444,9 +444,9 @@ describe('CrmDashboardPage — metric cards', () => {
 // ─── Revenue Trend (LineChart) ────────────────────────────────────────────────
 
 describe('CrmDashboardPage — Revenue Trend section', () => {
-  it('renders "Revenue Trend" section heading', async () => {
+  it('renders "Evolução da receita" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Revenue Trend');
+    expect(container.textContent).toContain('Evolução da receita');
   });
 
   it('renders an SVG for the line chart when data is present', async () => {
@@ -455,7 +455,7 @@ describe('CrmDashboardPage — Revenue Trend section', () => {
     expect(svgs.length).toBeGreaterThan(0);
   });
 
-  it('renders "No revenue data yet" when revenueByMonth is empty', async () => {
+  it('renders "Ainda não há dados de receita" when revenueByMonth is empty', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/analytics')) {
         return makeRes(makeAnalyticsData({ revenueByMonth: [] }));
@@ -463,22 +463,22 @@ describe('CrmDashboardPage — Revenue Trend section', () => {
       return makeRes(makeDashboardData());
     });
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('No revenue data yet');
+    expect(container.textContent).toContain('Ainda não há dados de receita');
   });
 });
 
 // ─── Win/Loss section (DonutChart) ───────────────────────────────────────────
 
 describe('CrmDashboardPage — Win/Loss section', () => {
-  it('renders "Win / Loss" section heading', async () => {
+  it('renders "Ganhos / Perdas" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Win / Loss');
+    expect(container.textContent).toContain('Ganhos / Perdas');
   });
 
   it('renders Won, Lost, Open labels in donut chart legend', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Won');
-    expect(container.textContent).toContain('Lost');
+    expect(container.textContent).toContain('Ganha');
+    expect(container.textContent).toContain('Perdida');
     expect(container.textContent).toContain('Open');
   });
 
@@ -488,7 +488,7 @@ describe('CrmDashboardPage — Win/Loss section', () => {
     expect(container.textContent).toContain('23');
   });
 
-  it('renders "No deal data yet" when winLoss totals are 0', async () => {
+  it('renders "Ainda não há dados de oportunidades" when winLoss totals are 0', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/analytics')) {
         return makeRes(makeAnalyticsData({ winLoss: { won: 0, lost: 0, open: 0 } }));
@@ -496,16 +496,16 @@ describe('CrmDashboardPage — Win/Loss section', () => {
       return makeRes(makeDashboardData());
     });
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('No deal data yet');
+    expect(container.textContent).toContain('Ainda não há dados de oportunidades');
   });
 });
 
 // ─── Pipeline Funnel section ──────────────────────────────────────────────────
 
 describe('CrmDashboardPage — Pipeline Funnel section', () => {
-  it('renders "Pipeline Funnel" section heading', async () => {
+  it('renders "Funil de vendas" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Pipeline Funnel');
+    expect(container.textContent).toContain('Funil de vendas');
   });
 
   it('renders stage names from analytics data', async () => {
@@ -520,7 +520,7 @@ describe('CrmDashboardPage — Pipeline Funnel section', () => {
     expect(container.textContent).toContain('3 deals');
   });
 
-  it('renders "No pipeline data" when pipelineFunnel is empty', async () => {
+  it('renders "Sem dados de funil" when pipelineFunnel is empty', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/analytics')) {
         return makeRes(makeAnalyticsData({ pipelineFunnel: [] }));
@@ -528,16 +528,16 @@ describe('CrmDashboardPage — Pipeline Funnel section', () => {
       return makeRes(makeDashboardData());
     });
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('No pipeline data');
+    expect(container.textContent).toContain('Sem dados de funil');
   });
 });
 
 // ─── Recent Activity ──────────────────────────────────────────────────────────
 
 describe('CrmDashboardPage — Recent Activity section', () => {
-  it('renders "Recent Activity" section heading', async () => {
+  it('renders "Atividade recente" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Recent Activity');
+    expect(container.textContent).toContain('Atividade recente');
   });
 
   it('renders activity title from dashboard data', async () => {
@@ -551,7 +551,7 @@ describe('CrmDashboardPage — Recent Activity section', () => {
     expect(container.textContent).toContain('h ago');
   });
 
-  it('renders "No recent activity" when recentActivities is empty', async () => {
+  it('renders "Nenhuma atividade recente" when recentActivities is empty', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.includes('/api/portal/crm/dashboard')) {
         return makeRes({ data: { ...((makeDashboardData() as Record<string, unknown>).data as object), recentActivities: [] } });
@@ -559,7 +559,7 @@ describe('CrmDashboardPage — Recent Activity section', () => {
       return makeRes(makeAnalyticsData());
     });
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('No recent activity');
+    expect(container.textContent).toContain('Nenhuma atividade recente');
   });
 
   it('renders phone icon for "call" activity type', async () => {
@@ -654,46 +654,46 @@ describe('CrmDashboardPage — Recent Activity section', () => {
 // ─── Quick Actions ────────────────────────────────────────────────────────────
 
 describe('CrmDashboardPage — Quick Actions section', () => {
-  it('renders "Quick Actions" section heading', async () => {
+  it('renders "Ações rápidas" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Quick Actions');
+    expect(container.textContent).toContain('Ações rápidas');
   });
 
-  it('renders "Add Contact" quick action link', async () => {
+  it('renders "Adicionar contato" quick action link', async () => {
     const { container } = await renderLoaded();
     // Multiple links point to /portal/crm/contacts (metric card + quick action)
     const links = Array.from(container.querySelectorAll('a[href="/portal/crm/contacts"]'));
-    const addContactLink = links.find((l) => l.textContent?.includes('Add Contact'));
+    const addContactLink = links.find((l) => l.textContent?.includes('Adicionar contato'));
     expect(addContactLink).toBeTruthy();
   });
 
-  it('renders "Create Deal" quick action link', async () => {
+  it('renders "Criar oportunidade" quick action link', async () => {
     const { container } = await renderLoaded();
     const links = Array.from(container.querySelectorAll('a[href="/portal/crm/deals"]'));
-    const dealLink = links.find((l) => l.textContent?.includes('Create Deal'));
+    const dealLink = links.find((l) => l.textContent?.includes('Criar oportunidade'));
     expect(dealLink).toBeTruthy();
   });
 
-  it('renders "Add Company" quick action link', async () => {
+  it('renders "Adicionar empresa" quick action link', async () => {
     const { container } = await renderLoaded();
     const links = Array.from(container.querySelectorAll('a[href="/portal/crm/companies"]'));
-    const companyLink = links.find((l) => l.textContent?.includes('Add Company'));
+    const companyLink = links.find((l) => l.textContent?.includes('Adicionar empresa'));
     expect(companyLink).toBeTruthy();
   });
 
-  it('renders "New Proposal" quick action link', async () => {
+  it('renders "Nova proposta" quick action link', async () => {
     const { container } = await renderLoaded();
     const link = container.querySelector('a[href="/portal/crm/proposals"]');
-    expect(link?.textContent).toContain('New Proposal');
+    expect(link?.textContent).toContain('Nova proposta');
   });
 });
 
 // ─── Top Deals table ──────────────────────────────────────────────────────────
 
 describe('CrmDashboardPage — Top Deals table', () => {
-  it('renders "Top Open Deals" section heading', async () => {
+  it('renders "Principais oportunidades abertas" section heading', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Top Open Deals');
+    expect(container.textContent).toContain('Principais oportunidades abertas');
   });
 
   it('renders deal titles in the table', async () => {
@@ -708,10 +708,10 @@ describe('CrmDashboardPage — Top Deals table', () => {
     expect(container.textContent).toMatch(/\$3[,.]?000/);
   });
 
-  it('renders "View" links for each deal', async () => {
+  it('renders "Ver" links for each deal', async () => {
     const { container } = await renderLoaded();
     const viewLinks = Array.from(container.querySelectorAll('a')).filter(
-      (a) => a.textContent?.trim() === 'View',
+      (a) => a.textContent?.trim() === 'Ver',
     );
     expect(viewLinks.length).toBeGreaterThanOrEqual(2);
   });
@@ -746,13 +746,13 @@ describe('CrmDashboardPage — Top Deals table', () => {
       return makeRes(makeDashboardData());
     });
     const { container } = await renderLoaded();
-    expect(container.textContent).not.toContain('Top Open Deals');
+    expect(container.textContent).not.toContain('Principais oportunidades abertas');
   });
 
   it('renders table headers: Deal, Value', async () => {
     const { container } = await renderLoaded();
-    expect(container.textContent).toContain('Deal');
-    expect(container.textContent).toContain('Value');
+    expect(container.textContent).toContain('Oportunidade');
+    expect(container.textContent).toContain('Valor');
   });
 });
 
@@ -786,10 +786,10 @@ describe('CrmDashboardPage — null analytics handling', () => {
     const { container } = renderPage();
     // Should not throw; should render CRM Dashboard heading
     await waitFor(() => {
-      expect(container.textContent).toContain('CRM Dashboard');
+      expect(container.textContent).toContain('Painel do CRM');
     });
     // Charts wrapped in {analytics && ...} should be absent
-    expect(container.textContent).not.toContain('Revenue Trend');
+    expect(container.textContent).not.toContain('Evolução da receita');
   });
 
   it('handles null dashboard.data gracefully', async () => {
@@ -801,10 +801,10 @@ describe('CrmDashboardPage — null analytics handling', () => {
     });
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('CRM Dashboard');
+      expect(container.textContent).toContain('Painel do CRM');
     });
     // Metric cards show 0 for undefined totalContacts
-    expect(container.textContent).toContain('Contacts');
+    expect(container.textContent).toContain('Contatos');
   });
 });
 

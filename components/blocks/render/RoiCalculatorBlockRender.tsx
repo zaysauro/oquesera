@@ -13,9 +13,9 @@ interface RoiCalculatorBlockRenderProps {
 
 function formatCurrency(n: number): string {
   if (!isFinite(n)) return '$0';
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1)}M`;
-  if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
-  return `$${Math.round(n)}`;
+  if (n >= 1_000_000) return `R$ ${(n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1)}M`;
+  if (n >= 1_000) return `R$ ${Math.round(n / 1_000)}K`;
+  return `R$ ${Math.round(n)}`;
 }
 
 function formatNumber(n: number): string {

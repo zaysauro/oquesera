@@ -12,6 +12,7 @@
 //
 // Material Icons only — no emoji per repo convention.
 
+import { formatMoney } from '@/lib/utils/money';
 import { EMAIL_DOMAIN } from '@/config/brand';
 import { type ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -101,7 +102,7 @@ interface ModulesResponse {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(0)}`;
+  return formatMoney(cents, { fractionDigits: 0 });
 }
 
 function formatMeterLabel(meter: DomainMeter): string {
@@ -110,7 +111,7 @@ function formatMeterLabel(meter: DomainMeter): string {
     ? meter.unit
     : `${meter.overageUnitSize.toLocaleString()} ${meter.unit}`;
   const overageDollars = (meter.overageRateCents / 100).toFixed(2);
-  return `${included} ${meter.unit}/mo included, then $${overageDollars} per ${overageUnit}`;
+  return `${included} ${meter.unit}/mo included, then R$ ${overageDollars} per ${overageUnit}`;
 }
 
 // ── Module Card ───────────────────────────────────────────────────────────────
@@ -154,14 +155,14 @@ function ModuleCard({
     stateLabel = (
       <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
         <span className="material-icons text-sm">all_inclusive</span>
-        Included in bundle
+        Incluído no pacote
       </span>
     );
   } else if (isActive && mod.selfServe) {
     stateLabel = (
       <span className="inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">
         <span className="material-icons text-sm">check_circle</span>
-        Active
+        Ativo
       </span>
     );
     if (!isAgency) {
@@ -171,7 +172,7 @@ function ModuleCard({
           disabled={cancelling === mod.clientServiceId}
           className={`${pBtnGhost} w-full mt-3`}
         >
-          {cancelling === mod.clientServiceId ? 'Removing…' : 'Remove'}
+          {cancelling === mod.clientServiceId ? 'Removendo…' : 'Remove'}
         </button>
       );
     }
@@ -179,7 +180,7 @@ function ModuleCard({
     stateLabel = (
       <span className="inline-flex items-center gap-1 text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full font-medium">
         <span className="material-icons text-sm">manage_accounts</span>
-        Managed
+        Gerenciado
       </span>
     );
   } else if (!isAgency && mod.purchasable) {
@@ -189,17 +190,17 @@ function ModuleCard({
         disabled={subscribing === mod.slug}
         className={`${pBtnPrimary} w-full mt-3`}
       >
-        {subscribing === mod.slug ? 'Redirecting…' : 'Subscribe'}
+        {subscribing === mod.slug ? 'Redirecionando…' : 'Subscribe'}
       </button>
     );
   } else if (!isAgency && !mod.purchasable) {
     actionButton = (
       <p
         className="text-xs text-amber-600 dark:text-amber-500 mt-3 flex items-center gap-1"
-        title="Not available for self-serve checkout yet — contact us"
+        title="Ainda não disponível para contratação on-line — fale conosco"
       >
         <span className="material-icons text-sm">info</span>
-        Not available for self-serve checkout yet — contact us
+        Ainda não disponível para contratação on-line — fale conosco
       </p>
     );
   }
@@ -297,7 +298,7 @@ function BillingPlansInner() {
       .then((r) => r.json() as Promise<ModulesResponse>)
       .then((d) => {
         if (cancelled) return;
-        if (!d.success) { setError(d.message ?? 'Failed to load modules'); setLoading(false); return; }
+        if (!d.success) { setError(d.message ?? 'Falha ao carregar modules'); setLoading(false); return; }
         setData(d.data ?? null);
         setLoading(false);
       })
@@ -366,7 +367,7 @@ function BillingPlansInner() {
   }
 
   if (loading) {
-    return <div className="p-6 text-sm text-muted-foreground">Loading plans…</div>;
+    return <div className="p-6 text-sm text-muted-foreground">Carregando planos…</div>;
   }
 
   if (error) {
@@ -407,7 +408,7 @@ function BillingPlansInner() {
         </Link>
         <div>
           <h1 className="text-2xl font-display font-extrabold tracking-[-0.01em] text-foreground">Plans &amp; Modules</h1>
-          <p className="text-sm text-muted-foreground">Subscribe to individual modules or get everything at once.</p>
+          <p className="text-sm text-muted-foreground">Assine módulos individuais ou tudo de uma vez.</p>
         </div>
       </div>
 
@@ -415,13 +416,13 @@ function BillingPlansInner() {
       {statusParam === 'success' && (
         <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-4 py-3">
           <span className="material-icons text-base">check_circle</span>
-          Subscription active — welcome aboard!
+          Assinatura ativa — boas-vindas!
         </div>
       )}
       {statusParam === 'cancelled' && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted border border-border rounded-md px-4 py-3">
           <span className="material-icons text-base">info</span>
-          Checkout cancelled. No changes were made.
+          Pagamento cancelado. Nada foi alterado.
         </div>
       )}
       {actionError && (
@@ -436,9 +437,9 @@ function BillingPlansInner() {
         <div className="flex items-center gap-3 bg-primary/5 border border-primary/20 rounded-2xl px-5 py-4">
           <span className="material-icons text-2xl text-primary">verified</span>
           <div>
-            <p className="font-display font-extrabold tracking-[-0.01em] text-foreground">Everything is included in your managed plan</p>
+            <p className="font-display font-extrabold tracking-[-0.01em] text-foreground">Tudo está incluído no seu plano gerenciado</p>
             <p className="text-sm text-muted-foreground">
-              Your plan is managed by Kumo One. Contact us to make changes.
+              Seu plano é gerenciado pela equipe Kumo One. Fale conosco para alterá-lo.
             </p>
           </div>
         </div>
@@ -449,7 +450,7 @@ function BillingPlansInner() {
         <div className="rounded-2xl border border-border bg-muted/30 px-5 py-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="material-icons text-base text-primary">savings</span>
-            <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Volume pricing — pay only for what you use</h2>
+            <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Preço por volume — pague só pelo que usar</h2>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap text-xs">
             {VOLUME_TIERS.slice().reverse().map((t) => {
@@ -487,12 +488,12 @@ function BillingPlansInner() {
         </div>
       )}
 
-      {/* Team seats — only for self-serve accounts */}
+      {/* Usuários da equipe — only for self-serve accounts */}
       {!isAgency && !gatingBypassed && seats && (
         <div className="rounded-2xl border border-border bg-muted/30 px-5 py-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="material-icons text-base text-primary">groups</span>
-            <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Team seats</h2>
+            <h2 className="text-sm font-display font-extrabold tracking-[-0.01em] text-foreground">Usuários da equipe</h2>
           </div>
           <p className="text-sm text-foreground mb-1">
             {seats.count} seat{seats.count !== 1 ? 's' : ''} —{' '}
@@ -517,7 +518,7 @@ function BillingPlansInner() {
           <p className="text-xs text-muted-foreground mt-2">
             Each additional{' '}
             <Link href="/portal/settings/team" className="underline hover:text-foreground transition-colors">
-              team member
+              membro da equipe
             </Link>{' '}
             is billed your module total, capped at ${SEAT_PRICE_CAP_CENTS / 100}/seat, starting when they accept their invite.
           </p>
@@ -535,7 +536,7 @@ function BillingPlansInner() {
                 {bundleActive && (
                   <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
                     <span className="material-icons text-sm">check</span>
-                    Active
+                    Ativo
                   </span>
                 )}
                 {bundleSavings > 0 && !bundleActive && (
@@ -568,10 +569,10 @@ function BillingPlansInner() {
                     disabled={cancelling === bundle.clientServiceId}
                     className={pBtnGhost}
                   >
-                    {cancelling === bundle.clientServiceId ? 'Cancelling…' : 'Cancel at period end'}
+                    {cancelling === bundle.clientServiceId ? 'Cancelando…' : 'Cancelar ao fim do período'}
                   </button>
                 ) : (
-                  <span className="text-sm text-muted-foreground">Managed</span>
+                  <span className="text-sm text-muted-foreground">Gerenciado</span>
                 )
               ) : bundle.purchasable ? (
                 <button
@@ -579,15 +580,15 @@ function BillingPlansInner() {
                   disabled={subscribing === bundle.slug}
                   className={pBtnPrimary}
                 >
-                  {subscribing === bundle.slug ? 'Redirecting…' : 'Subscribe to everything'}
+                  {subscribing === bundle.slug ? 'Redirecionando…' : 'Assinar tudo'}
                 </button>
               ) : (
                 <p
                   className="text-xs text-amber-600 dark:text-amber-500 flex items-center gap-1"
-                  title="Not available for self-serve checkout yet — contact us"
+                  title="Ainda não disponível para contratação on-line — fale conosco"
                 >
                   <span className="material-icons text-sm">info</span>
-                  Not available for self-serve checkout yet — contact us
+                  Ainda não disponível para contratação on-line — fale conosco
                 </p>
               )
             )}
@@ -599,13 +600,13 @@ function BillingPlansInner() {
       {bundleActive && (
         <div className="flex items-center gap-2 text-sm text-primary bg-primary/5 border border-primary/20 rounded-md px-4 py-3">
           <span className="material-icons text-base">all_inclusive</span>
-          All modules are included in your bundle subscription.
+          Todos os módulos estão incluídos no seu pacote.
         </div>
       )}
 
       {/* Module grid */}
       <div>
-        <h2 className="text-lg font-display font-extrabold tracking-[-0.01em] text-foreground mb-4">Individual modules</h2>
+        <h2 className="text-lg font-display font-extrabold tracking-[-0.01em] text-foreground mb-4">Módulos individuais</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {modules.map((mod) => (
             <ModuleCard
@@ -632,8 +633,8 @@ function BillingPlansInner() {
           <span className="material-icons text-2xl text-primary">vpn_key</span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base font-semibold text-foreground">Bring your own AI key (BYOK)</h3>
-              <span className="text-xs font-medium text-primary">Contact sales →</span>
+              <h3 className="text-base font-semibold text-foreground">Use sua própria chave de IA (BYOK)</h3>
+              <span className="text-xs font-medium text-primary">Falar com vendas →</span>
             </div>
             <p className="text-sm text-muted-foreground mt-0.5">
               Spend AI tokens at cost on your own provider key, plus white-label &amp; governance. Custom pricing — email us to set it up.
@@ -652,7 +653,7 @@ function BillingPlansInner() {
 // useSearchParams() requires a Suspense boundary in App Router.
 export default function BillingPlansPage() {
   return (
-    <Suspense fallback={<div className="p-6 text-sm text-muted-foreground">Loading plans…</div>}>
+    <Suspense fallback={<div className="p-6 text-sm text-muted-foreground">Carregando planos…</div>}>
       <BillingPlansInner />
     </Suspense>
   );

@@ -9,13 +9,13 @@
  *   - dropdown open/close + click-outside
  *   - fetch on mount + polling + refetch on open, for BOTH feeds
  *   - one feed failing (reject / !ok) still renders the other feed's items
- *   - "Show unread" toggle passes unread=1 (PM) and unreadOnly=true (CRM)
+ *   - "Mostrar não lidas" toggle passes unread=1 (PM) and unreadOnly=true (CRM)
  *   - empty state when both feeds return nothing
- *   - grouping: PM non-billing -> "Projects & Tasks", billing.usage_alert -> "Billing",
+ *   - grouping: PM non-billing -> "Projetos e tarefas", billing.usage_alert -> "Cobrança",
  *     CRM by entityType/type
  *   - newest-first ordering across and within groups
- *   - "Mark all read" fires BOTH POST endpoints and zeroes the badge
- *   - per-item click / "Mark read" button dispatch to the correct endpoint per source
+ *   - "Marcar todas como lidas" fires BOTH POST endpoints and zeroes the badge
+ *   - per-item click / "Marcar como lida" button dispatch to the correct endpoint per source
  *   - keyboard navigation (Enter / Space) on items
  */
 
@@ -410,12 +410,12 @@ describe('NotificationBell — fetching', () => {
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
-    expect(container.textContent).toContain('No notifications yet');
+    expect(container.textContent).toContain('Nenhuma notificação ainda');
   });
 });
 
 // ---------------------------------------------------------------------------
-// "Show unread" filter — verifies per-feed query param translation
+// "Mostrar não lidas" filter — verifies per-feed query param translation
 // ---------------------------------------------------------------------------
 
 describe('NotificationBell — unread filter query params', () => {
@@ -435,7 +435,7 @@ describe('NotificationBell — unread filter query params', () => {
     });
 
     expect(filterBtn.getAttribute('aria-pressed')).toBe('true');
-    expect(container.textContent).toContain('Showing unread');
+    expect(container.textContent).toContain('Exibindo não lidas');
 
     const urls = fetchMock.mock.calls.map((c) => c[0]).filter((u): u is string => typeof u === 'string');
     expect(urls.some((u) => u.startsWith('/api/portal/notifications?') && u.includes('unread=1'))).toBe(true);
@@ -448,15 +448,15 @@ describe('NotificationBell — unread filter query params', () => {
 // ---------------------------------------------------------------------------
 
 describe('NotificationBell — empty state', () => {
-  it('shows "No notifications yet" when both feeds are empty and filter is off', async () => {
+  it('shows "Nenhuma notificação ainda" when both feeds are empty and filter is off', async () => {
     stubFetch();
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
-    expect(container.textContent).toContain('No notifications yet');
+    expect(container.textContent).toContain('Nenhuma notificação ainda');
   });
 
-  it('shows "No unread notifications" when filter is on and both feeds are empty', async () => {
+  it('shows "Nenhuma notificação não lida" when filter is on and both feeds are empty', async () => {
     stubFetch();
     const { container } = render(<NotificationBell />);
     await flush();
@@ -467,7 +467,7 @@ describe('NotificationBell — empty state', () => {
       await Promise.resolve();
       await Promise.resolve();
     });
-    expect(container.textContent).toContain('No unread notifications');
+    expect(container.textContent).toContain('Nenhuma notificação não lida');
   });
 });
 
@@ -476,15 +476,15 @@ describe('NotificationBell — empty state', () => {
 // ---------------------------------------------------------------------------
 
 describe('NotificationBell — grouping', () => {
-  it('groups a non-billing PM row under "Projects & Tasks"', async () => {
+  it('groups a non-billing PM row under "Projetos e tarefas"', async () => {
     stubFetch({ pm: { rows: [makePmRow({ kind: 'card.commented' })], unread: 1 } });
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
-    expect(container.textContent).toContain('Projects & Tasks');
+    expect(container.textContent).toContain('Projetos e tarefas');
   });
 
-  it('groups a billing.usage_alert PM row under "Billing"', async () => {
+  it('groups a billing.usage_alert PM row under "Cobrança"', async () => {
     stubFetch({
       pm: {
         rows: [makePmRow({ kind: 'billing.usage_alert', title: 'Usage limit approaching' })],
@@ -494,7 +494,7 @@ describe('NotificationBell — grouping', () => {
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
-    expect(container.textContent).toContain('Billing');
+    expect(container.textContent).toContain('Cobrança');
   });
 
   it('groups CRM deal entityType under "Deals"', async () => {
@@ -538,7 +538,7 @@ describe('NotificationBell — grouping', () => {
     await openDropdown(container);
     expect(container.textContent).toContain('PM Item');
     expect(container.textContent).toContain('CRM Item');
-    expect(container.textContent).toContain('Projects & Tasks');
+    expect(container.textContent).toContain('Projetos e tarefas');
     expect(container.textContent).toContain('Deals');
   });
 
@@ -606,24 +606,24 @@ describe('NotificationBell — grouping', () => {
 // ---------------------------------------------------------------------------
 
 describe('NotificationBell — markAllRead', () => {
-  it('shows "Mark all read" when the combined unread count is > 0', async () => {
+  it('shows "Marcar todas como lidas" when the combined unread count is > 0', async () => {
     stubFetch({ pm: { rows: [makePmRow()], unread: 1 } });
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
     const btn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark all read'),
+      b.textContent?.includes('Marcar todas como lidas'),
     );
     expect(btn).toBeTruthy();
   });
 
-  it('does not show "Mark all read" when both feeds have zero unread', async () => {
+  it('does not show "Marcar todas como lidas" when both feeds have zero unread', async () => {
     stubFetch({ pm: { rows: [makePmRow({ readAt: new Date().toISOString() })], unread: 0 } });
     const { container } = render(<NotificationBell />);
     await flush();
     await openDropdown(container);
     const btn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark all read'),
+      b.textContent?.includes('Marcar todas como lidas'),
     );
     expect(btn).toBeUndefined();
   });
@@ -642,7 +642,7 @@ describe('NotificationBell — markAllRead', () => {
     await openDropdown(container);
 
     const markAllBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark all read'),
+      b.textContent?.includes('Marcar todas como lidas'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(markAllBtn);
@@ -670,7 +670,7 @@ describe('NotificationBell — markAllRead', () => {
     await flush();
     await openDropdown(container);
     const markAllBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark all read'),
+      b.textContent?.includes('Marcar todas como lidas'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(markAllBtn);
@@ -929,11 +929,11 @@ describe('NotificationBell — keyboard navigation', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Per-item "Mark read" button
+// Per-item "Marcar como lida" button
 // ---------------------------------------------------------------------------
 
 describe('NotificationBell — per-item Mark read button', () => {
-  it('shows "Mark read" for unread items of both sources', async () => {
+  it('shows "Marcar como lida" for unread items of both sources', async () => {
     stubFetch({
       pm: { rows: [makePmRow({ readAt: null })], unread: 1 },
       crm: { rows: [makeCrmItem({ read: false })], unread: 1 },
@@ -942,12 +942,12 @@ describe('NotificationBell — per-item Mark read button', () => {
     await flush();
     await openDropdown(container);
     const markReadBtns = Array.from(container.querySelectorAll('button')).filter((b) =>
-      b.textContent?.includes('Mark read'),
+      b.textContent?.includes('Marcar como lida'),
     );
     expect(markReadBtns.length).toBe(2);
   });
 
-  it('does not show "Mark read" for an already-read item', async () => {
+  it('does not show "Marcar como lida" for an already-read item', async () => {
     stubFetch({
       pm: { rows: [makePmRow({ readAt: new Date().toISOString() })], unread: 0 },
     });
@@ -955,12 +955,12 @@ describe('NotificationBell — per-item Mark read button', () => {
     await flush();
     await openDropdown(container);
     const markReadBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark read'),
+      b.textContent?.includes('Marcar como lida'),
     );
     expect(markReadBtn).toBeUndefined();
   });
 
-  it('clicking "Mark read" on a PM item POSTs {id} without navigating', async () => {
+  it('clicking "Marcar como lida" on a PM item POSTs {id} without navigating', async () => {
     const onPmMarkRead = vi.fn(() => makeJsonResponse({ success: true }));
     stubFetch({
       pm: { rows: [makePmRow({ id: 70, cardId: 2, projectId: 2, readAt: null })], unread: 1 },
@@ -970,7 +970,7 @@ describe('NotificationBell — per-item Mark read button', () => {
     await flush();
     await openDropdown(container);
     const markReadBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark read'),
+      b.textContent?.includes('Marcar como lida'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(markReadBtn);
@@ -978,14 +978,14 @@ describe('NotificationBell — per-item Mark read button', () => {
     });
     expect(onPmMarkRead).toHaveBeenCalledWith({ id: 70 });
     expect(mockRouterPush).not.toHaveBeenCalled();
-    // Item should now show as read (no more "Mark read" button)
+    // Item should now show as read (no more "Marcar como lida" button)
     const after = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark read'),
+      b.textContent?.includes('Marcar como lida'),
     );
     expect(after).toBeUndefined();
   });
 
-  it('clicking "Mark read" on a CRM item PATCHes {read:true} without navigating', async () => {
+  it('clicking "Marcar como lida" on a CRM item PATCHes {read:true} without navigating', async () => {
     const onCrmPatch = vi.fn(() => makeJsonResponse({ success: true }));
     stubFetch({
       crm: { rows: [makeCrmItem({ id: 71, entityType: 'deal', entityId: 9, read: false })], unread: 1 },
@@ -995,7 +995,7 @@ describe('NotificationBell — per-item Mark read button', () => {
     await flush();
     await openDropdown(container);
     const markReadBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark read'),
+      b.textContent?.includes('Marcar como lida'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(markReadBtn);
@@ -1122,7 +1122,7 @@ describe('NotificationBell — staff sessions (PUX-090 guard split)', () => {
     await openDropdown(container);
 
     const markAllBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Mark all read'),
+      b.textContent?.includes('Marcar todas como lidas'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(markAllBtn);

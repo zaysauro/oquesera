@@ -376,7 +376,7 @@ describe('GET /api/portal/websites/[siteId]/status', () => {
     const body = await res.json();
     expect(body.success).toBe(true);
     expect(body.data.subdomain).toBe('acme');
-    expect(body.data.fullDomain).toBe('acme.simplerdevelopment.com');
+    expect(body.data.fullDomain).toBe('acme.kumo.localhost');
     expect(body.data.deploymentStatus).toBe('deployed');
   });
 

@@ -63,14 +63,14 @@ interface PaletteEntry {
 }
 
 const PALETTE: PaletteEntry[] = [
-  { type: 'trigger', icon: 'person_add', label: 'Contact created', defaultData: { kind: 'contact.created' } },
+  { type: 'trigger', icon: 'person_add', label: 'Contato criado', defaultData: { kind: 'contact.created' } },
   { type: 'trigger', icon: 'sync_alt', label: 'Deal stage changed', defaultData: { kind: 'deal.stage_changed' } },
   { type: 'trigger', icon: 'assignment_turned_in', label: 'Form submitted', defaultData: { kind: 'form.submitted' } },
-  { type: 'trigger', icon: 'webhook', label: 'Webhook received', defaultData: { kind: 'webhook.received', secret: 'change-me' } },
-  { type: 'trigger', icon: 'schedule', label: 'Schedule (cron)', defaultData: { kind: 'schedule', cron: '0 9 * * 1' } },
-  { type: 'action', icon: 'mail', label: 'Send email', defaultData: { kind: 'send_email', templateId: 0, to: 'contact' } },
-  { type: 'action', icon: 'task_alt', label: 'Create task', defaultData: { kind: 'create_task', title: 'Follow up' } },
-  { type: 'action', icon: 'playlist_add', label: 'Add to list', defaultData: { kind: 'add_to_list', listId: 0 } },
+  { type: 'trigger', icon: 'webhook', label: 'Webhook recebido', defaultData: { kind: 'webhook.received', secret: 'change-me' } },
+  { type: 'trigger', icon: 'schedule', label: 'Agendamento (cron)', defaultData: { kind: 'schedule', cron: '0 9 * * 1' } },
+  { type: 'action', icon: 'mail', label: 'Enviar e-mail', defaultData: { kind: 'send_email', templateId: 0, to: 'contact' } },
+  { type: 'action', icon: 'task_alt', label: 'Create task', defaultData: { kind: 'create_task', title: 'Retorno' } },
+  { type: 'action', icon: 'playlist_add', label: 'Adicionar à lista', defaultData: { kind: 'add_to_list', listId: 0 } },
   { type: 'action', icon: 'hourglass_empty', label: 'Wait', defaultData: { kind: 'wait', ms: 60_000 } },
   { type: 'action', icon: 'send', label: 'Webhook', defaultData: { kind: 'webhook', url: 'https://example.com', payload: {} } },
   { type: 'condition', icon: 'fork_right', label: 'Condition', defaultData: { kind: 'condition', expression: 'true' } },
@@ -78,14 +78,14 @@ const PALETTE: PaletteEntry[] = [
 
 function nodeLabel(data: WorkflowTriggerConfig | WorkflowAction): string {
   switch (data.kind) {
-    case 'contact.created': return 'Contact created';
+    case 'contact.created': return 'Contato criado';
     case 'deal.stage_changed': return 'Deal stage changed';
     case 'form.submitted': return 'Form submitted';
-    case 'webhook.received': return 'Webhook received';
+    case 'webhook.received': return 'Webhook recebido';
     case 'schedule': return `Schedule: ${data.cron}`;
-    case 'send_email': return `Send email (template ${data.templateId})`;
+    case 'send_email': return `Enviar e-mail (template ${data.templateId})`;
     case 'create_task': return `Create task: ${data.title}`;
-    case 'add_to_list': return `Add to list ${data.listId}`;
+    case 'add_to_list': return `Adicionar à lista ${data.listId}`;
     case 'wait': return `Wait ${Math.round(data.ms / 1000)}s`;
     case 'webhook': return `Webhook to ${truncate(data.url, 30)}`;
     case 'condition': return `If: ${truncate(data.expression, 30)}`;
@@ -258,7 +258,7 @@ export default function WorkflowEditorPage() {
 
   const handleDelete = useCallback(async () => {
     if (!wf) return;
-    if (!confirm('Delete this workflow? This cannot be undone.')) return;
+    if (!confirm('Excluir este fluxo? Não é possível desfazer.')) return;
     await fetch(`/api/portal/workflows/${wf.id}`, { method: 'DELETE' });
     router.push('/portal/automations/workflows');
   }, [wf, router]);
@@ -306,15 +306,15 @@ export default function WorkflowEditorPage() {
     return (
       <div className="max-w-6xl mx-auto p-6 text-sm text-muted-foreground">
         <span className="material-icons text-base align-middle animate-spin mr-2">progress_activity</span>
-        Loading workflow...
+        Carregando fluxo...
       </div>
     );
   }
   if (!wf) {
     return (
       <div className="max-w-6xl mx-auto p-6 text-sm text-muted-foreground">
-        Workflow not found.
-        <Link href="/portal/automations/workflows" className="text-primary ml-2 hover:underline">Back to list</Link>
+        Fluxo não encontrado.
+        <Link href="/portal/automations/workflows" className="text-primary ml-2 hover:underline">Voltar para a lista</Link>
       </div>
     );
   }
@@ -325,8 +325,8 @@ export default function WorkflowEditorPage() {
       <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200 text-xs">
         <span className="material-icons text-base shrink-0">science</span>
         <span>
-          <span className="font-semibold">Beta — workflows do not execute yet.</span>{' '}
-          Activating this workflow has no runtime effect. Use <strong>Automations</strong> (Rules) for live trigger-to-action rules today.
+          <span className="font-semibold">Beta — os fluxos visuais ainda não são executados.</span>{' '}
+          Activating this workflow has no runtime effect. Use <strong>Automações</strong> (Regras) para automações que já executam hoje.
         </span>
       </div>
 
@@ -336,21 +336,21 @@ export default function WorkflowEditorPage() {
           <span className="material-icons">arrow_back</span>
         </Link>
         <input
-          value={name} aria-label="Workflow name"
+          value={name} aria-label="Nome do fluxo"
           onChange={(e) => setName(e.target.value)}
           className="text-lg font-semibold bg-transparent border border-transparent hover:border-border focus:border-border rounded px-2 py-1 outline-none flex-1 min-w-[200px]"
         />
         <select
-          aria-label="Workflow status" value={status}
+          aria-label="Status do fluxo" value={status}
           onChange={(e) => setStatus(e.target.value as WorkflowStatus)}
           className="text-xs px-2 py-1 border border-border rounded bg-background"
         >
-          <option value="draft">Draft</option>
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
+          <option value="draft">Rascunho</option>
+          <option value="active">Ativo</option>
+          <option value="paused">Pausado</option>
         </select>
         <span className="text-xs text-muted-foreground">
-          Trigger: <code className="font-mono">{triggerKindLabel}</code>
+          Gatilho: <code className="font-mono">{triggerKindLabel}</code>
         </span>
         <button
           type="button"
@@ -359,7 +359,7 @@ export default function WorkflowEditorPage() {
           className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-border hover:bg-muted disabled:opacity-60"
         >
           <span className="material-icons text-sm">play_arrow</span>
-          {testing ? 'Running...' : 'Test run'}
+          {testing ? 'Executando...' : 'Testar'}
         </button>
         <button
           type="button"
@@ -376,7 +376,7 @@ export default function WorkflowEditorPage() {
           className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-border hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20"
         >
           <span className="material-icons text-sm">delete</span>
-          Delete
+          Excluir
         </button>
       </div>
 
@@ -384,19 +384,19 @@ export default function WorkflowEditorPage() {
       <div className="flex flex-1 gap-3 min-h-0">
         {/* Sidebar */}
         <div className="w-56 bg-card border border-border rounded-xl p-3 overflow-y-auto">
-          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Triggers</h3>
+          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Gatilhos</h3>
           <div className="space-y-1 mb-4">
             {PALETTE.filter((p) => p.type === 'trigger').map((p) => (
               <PaletteButton key={p.label} entry={p} onAdd={handleAdd} />
             ))}
           </div>
-          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Actions</h3>
+          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Ações</h3>
           <div className="space-y-1 mb-4">
             {PALETTE.filter((p) => p.type === 'action').map((p) => (
               <PaletteButton key={p.label} entry={p} onAdd={handleAdd} />
             ))}
           </div>
-          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Logic</h3>
+          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Lógica</h3>
           <div className="space-y-1">
             {PALETTE.filter((p) => p.type === 'condition').map((p) => (
               <PaletteButton key={p.label} entry={p} onAdd={handleAdd} />
@@ -423,9 +423,9 @@ export default function WorkflowEditorPage() {
 
         {/* Runs panel */}
         <div className="w-72 bg-card border border-border rounded-xl p-3 overflow-y-auto">
-          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Recent runs</h3>
+          <h3 className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Execuções recentes</h3>
           {runs.length === 0 ? (
-            <div className="text-xs text-muted-foreground">No runs yet. Click Test run to fire one.</div>
+            <div className="text-xs text-muted-foreground">Nenhuma execução ainda. Clique em Testar para executar.</div>
           ) : (
             <ul className="space-y-2">
               {runs.map((r) => (
@@ -464,7 +464,7 @@ export default function WorkflowEditorPage() {
                         className="inline-flex items-center gap-1 px-2 py-1 rounded border border-border hover:bg-muted disabled:opacity-60 text-xs"
                       >
                         <span className="material-icons text-sm">replay</span>
-                        {retrying ? 'Retrying…' : 'Retry'}
+                        {retrying ? 'Tentando novamente…' : 'Retry'}
                       </button>
                     </div>
                   )}
@@ -475,10 +475,10 @@ export default function WorkflowEditorPage() {
                       {stepsLoading ? (
                         <div className="flex items-center gap-1 text-muted-foreground py-1">
                           <span className="material-icons text-sm animate-spin">progress_activity</span>
-                          Loading steps…
+                          Carregando etapas…
                         </div>
                       ) : runSteps.length === 0 ? (
-                        <div className="text-muted-foreground py-1">No step records yet.</div>
+                        <div className="text-muted-foreground py-1">Nenhum registro de etapa.</div>
                       ) : (
                         <ul className="space-y-1.5">
                           {runSteps.map((s) => (
@@ -522,7 +522,7 @@ export default function WorkflowEditorPage() {
       {/* Footer hint */}
       <div className="text-xs text-muted-foreground">
         <span className="material-icons text-sm align-middle mr-1">info</span>
-        Click a palette entry to add it to the canvas. Drag nodes to rearrange. Drag from a node handle to connect.
+        Clique em um item da paleta para adicioná-lo. Arraste os nós para reorganizar e conecte-os pelas alças.
       </div>
     </div>
   );

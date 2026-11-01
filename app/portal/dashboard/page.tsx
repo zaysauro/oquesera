@@ -59,8 +59,8 @@ export default async function PortalDashboardPage() {
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
         <span className="material-icons text-5xl text-muted-foreground">person_off</span>
-        <h2 className="mt-4 text-xl font-semibold">No client profile found</h2>
-        <p className="mt-2 text-muted-foreground text-sm">Please contact us to set up your account.</p>
+        <h2 className="mt-4 text-xl font-semibold">Perfil da empresa não encontrado</h2>
+        <p className="mt-2 text-muted-foreground text-sm">Entre em contato com o suporte para configurar sua conta.</p>
       </div>
     );
   }
@@ -120,7 +120,7 @@ export default async function PortalDashboardPage() {
         actions={brainEnabled ? (
           <Link href="/portal/brain/settings" className={`${pBtnGhost} shrink-0`}>
             <span className="material-icons text-base">settings</span>
-            Brain Settings
+            Configurações do Cérebro
           </Link>
         ) : undefined}
       />

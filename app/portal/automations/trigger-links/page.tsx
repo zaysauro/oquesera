@@ -1,6 +1,6 @@
 'use client';
 
-// Trigger Links — portal management UI. Tabular list with inline create form
+// Links de gatilho — portal management UI. Tabular list with inline create form
 // and a slide-out detail panel showing recent clicks for the selected row.
 // All API calls go to /api/portal/trigger-links (auth + tenant scoping done
 // server-side); we just render and forward.
@@ -64,10 +64,10 @@ export default function PortalTriggerLinksPage() {
     try {
       const res = await fetch('/api/portal/trigger-links');
       const data = await res.json();
-      if (!data.success) throw new Error(data.error || 'Failed to load');
+      if (!data.success) throw new Error(data.error || 'Falha ao carregar');
       setLinks(data.data?.links ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load');
+      setError(err instanceof Error ? err.message : 'Falha ao carregar');
     } finally {
       setLoading(false);
     }
@@ -91,19 +91,19 @@ export default function PortalTriggerLinksPage() {
         }),
       });
       const data = await res.json();
-      if (!data.success) throw new Error(data.error || 'Create failed');
+      if (!data.success) throw new Error(data.error || 'Falha ao criar');
       setDestination('');
       setLabel('');
       await refresh();
     } catch (err) {
-      setCreateError(err instanceof Error ? err.message : 'Create failed');
+      setCreateError(err instanceof Error ? err.message : 'Falha ao criar');
     } finally {
       setCreating(false);
     }
   }
 
   async function handleDelete(id: number) {
-    if (!confirm('Delete this trigger link? Past click history will also be removed.')) return;
+    if (!confirm('Excluir este link? O histórico de cliques também será removido.')) return;
     const res = await fetch(`/api/portal/trigger-links/${id}`, { method: 'DELETE' });
     const data = await res.json();
     if (!data.success) {
@@ -141,21 +141,20 @@ export default function PortalTriggerLinksPage() {
     <div className="p-6 max-w-6xl mx-auto">
       <PortalPageHeader
         eyebrow="Automations"
-        title="Trigger Links"
+        title="Links de gatilho"
         subtitle={
           <>
             Tracked shortlinks. Each visit to{' '}
-            <code className="px-1 py-0.5 bg-muted rounded text-xs">/go/&lt;slug&gt;</code> is logged
-            and can be used as an automation trigger.
+            <code className="px-1 py-0.5 bg-muted rounded text-xs">/go/&lt;slug&gt;</code> é registrado e pode disparar uma automação.
           </>
         }
       />
 
       <section className={`mb-6 ${pCard} p-5`}>
-        <h2 className="text-sm font-medium text-foreground mb-3">Create a new link</h2>
+        <h2 className="text-sm font-medium text-foreground mb-3">Criar novo link</h2>
         <form onSubmit={handleCreate} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
           <div className="flex-1">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Destination URL</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">URL de destino</label>
             <input
               type="text"
               required
@@ -166,12 +165,12 @@ export default function PortalTriggerLinksPage() {
             />
           </div>
           <div className="flex-1">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Label (optional)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Nome (opcional)</label>
             <input
               type="text"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
-              placeholder="Spring promo"
+              placeholder="Promoção de primavera"
               className={pInput}
             />
           </div>
@@ -181,7 +180,7 @@ export default function PortalTriggerLinksPage() {
             className={pBtnPrimary}
           >
             <span className="material-icons text-base">add_link</span>
-            {creating ? 'Creating…' : 'Create link'}
+            {creating ? 'Criando…' : 'Criar link'}
           </button>
         </form>
         {createError && (
@@ -203,17 +202,17 @@ export default function PortalTriggerLinksPage() {
             <thead className="bg-muted/30 text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="text-left px-4 py-2 font-medium">Slug</th>
-                <th className="text-left px-4 py-2 font-medium">Destination</th>
-                <th className="text-right px-4 py-2 font-medium">Clicks</th>
-                <th className="text-left px-4 py-2 font-medium">Created</th>
-                <th className="text-right px-4 py-2 font-medium">Actions</th>
+                <th className="text-left px-4 py-2 font-medium">Destino</th>
+                <th className="text-right px-4 py-2 font-medium">Cliques</th>
+                <th className="text-left px-4 py-2 font-medium">Criado em</th>
+                <th className="text-right px-4 py-2 font-medium">Ações</th>
               </tr>
             </thead>
             <tbody>
               {links.length === 0 && (
                 <tr>
                   <td colSpan={5} className="text-center text-muted-foreground py-8">
-                    No trigger links yet. Create one above.
+                    Nenhum link de gatilho ainda. Crie um acima.
                   </td>
                 </tr>
               )}
@@ -240,7 +239,7 @@ export default function PortalTriggerLinksPage() {
                       type="button"
                       onClick={(e) => { e.stopPropagation(); copySlug(link.slug); }}
                       className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded"
-                      title="Copy /go URL"
+                      title="Copiar URL /go"
                     >
                       <span className="material-icons text-base">content_copy</span>
                     </button>
@@ -266,7 +265,7 @@ export default function PortalTriggerLinksPage() {
           <header className="flex flex-wrap items-center justify-between gap-2 mb-3">
             <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
               <span className="material-icons text-base">analytics</span>
-              Recent clicks
+              Cliques recentes
             </h2>
             <button
               type="button"
@@ -274,7 +273,7 @@ export default function PortalTriggerLinksPage() {
               className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
             >
               <span className="material-icons text-base">close</span>
-              Close
+              Fechar
             </button>
           </header>
           {detailLoading && <div className="text-sm text-muted-foreground">Loading…</div>}
@@ -284,13 +283,13 @@ export default function PortalTriggerLinksPage() {
                 {detail.clickCount} total click{detail.clickCount === 1 ? '' : 's'}.
               </div>
               {detail.recentClicks.length === 0 ? (
-                <div className="text-sm text-muted-foreground italic py-4">No clicks recorded yet.</div>
+                <div className="text-sm text-muted-foreground italic py-4">Nenhum clique registrado.</div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead className="text-muted-foreground">
                       <tr>
-                        <th className="text-left py-1 font-medium">When</th>
+                        <th className="text-left py-1 font-medium">Quando</th>
                         <th className="text-left py-1 font-medium">IP</th>
                         <th className="text-left py-1 font-medium">User-Agent</th>
                         <th className="text-left py-1 font-medium">Referer</th>

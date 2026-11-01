@@ -215,12 +215,12 @@ describe('DealDetailDrawer — initial render', () => {
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
     expect(container.textContent).toContain('Big Deal');
-    expect(container.textContent).toContain('Title');
-    expect(container.textContent).toContain('Value ($)');
-    expect(container.textContent).toContain('Priority');
+    expect(container.textContent).toContain('Título');
+    expect(container.textContent).toContain('Valor (R$)');
+    expect(container.textContent).toContain('Prioridade');
     expect(container.textContent).toContain('Status');
-    expect(container.textContent).toContain('Expected Close');
-    expect(container.textContent).toContain('Custom Fields');
+    expect(container.textContent).toContain('Previsão de fechamento');
+    expect(container.textContent).toContain('Campos personalizados');
   });
 
   it('initializes form fields from the deal prop', async () => {
@@ -280,7 +280,7 @@ describe('DealDetailDrawer — initial render', () => {
     // pass-through field on the payload but has no UI). Assert instead that a
     // null companyId/contactId renders cleanly, showing the "select a company
     // first" placeholder on the (now company-filtered) contact picker.
-    expect(container.textContent).toContain('Select a company first');
+    expect(container.textContent).toContain('Selecione uma empresa primeiro');
   });
 });
 
@@ -598,14 +598,14 @@ describe('DealDetailDrawer — inline company creation', () => {
     expect(toggleBtn).toBeTruthy();
     fireEvent.click(toggleBtn!);
     expect(
-      container.querySelector('input[placeholder="Company name"]'),
+      container.querySelector('input[placeholder="Nome da empresa"]'),
     ).toBeTruthy();
     const cancel = Array.from(container.querySelectorAll('button')).find(
       (b) => b.textContent === 'Cancel',
     );
     fireEvent.click(cancel!);
     expect(
-      container.querySelector('input[placeholder="Company name"]'),
+      container.querySelector('input[placeholder="Nome da empresa"]'),
     ).toBeNull();
   });
 
@@ -623,7 +623,7 @@ describe('DealDetailDrawer — inline company creation', () => {
       )!,
     );
     const input = container.querySelector(
-      'input[placeholder="Company name"]',
+      'input[placeholder="Nome da empresa"]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'BrandCo' } });
     const submitBtn = input.parentElement!.querySelector(
@@ -646,7 +646,7 @@ describe('DealDetailDrawer — inline company creation', () => {
       )!,
     );
     const input = container.querySelector(
-      'input[placeholder="Company name"]',
+      'input[placeholder="Nome da empresa"]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'EnterCo' } });
     await act(async () => {
@@ -664,7 +664,7 @@ describe('DealDetailDrawer — inline company creation', () => {
       )!,
     );
     const input = container.querySelector(
-      'input[placeholder="Company name"]',
+      'input[placeholder="Nome da empresa"]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: '   ' } });
     const submitBtn = input.parentElement!.querySelector(
@@ -687,7 +687,7 @@ describe('DealDetailDrawer — inline company creation', () => {
       )!,
     );
     const input = container.querySelector(
-      'input[placeholder="Company name"]',
+      'input[placeholder="Nome da empresa"]',
     ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Nope' } });
     const submitBtn = input.parentElement!.querySelector(
@@ -713,7 +713,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.click(toggleBtn!);
     const first = container.querySelector(
-      'input[placeholder="First name *"]',
+      'input[placeholder="Nome *"]',
     ) as HTMLInputElement;
     fireEvent.change(first, { target: { value: 'X' } });
     // Cancel
@@ -722,7 +722,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.click(cancelBtn!);
     expect(
-      container.querySelector('input[placeholder="First name *"]'),
+      container.querySelector('input[placeholder="Nome *"]'),
     ).toBeNull();
     // Re-open: should be empty
     fireEvent.click(
@@ -731,7 +731,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
       )!,
     );
     const reopened = container.querySelector(
-      'input[placeholder="First name *"]',
+      'input[placeholder="Nome *"]',
     ) as HTMLInputElement;
     expect(reopened.value).toBe('');
   });
@@ -756,13 +756,13 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.change(
       container.querySelector(
-        'input[placeholder="First name *"]',
+        'input[placeholder="Nome *"]',
       ) as HTMLInputElement,
       { target: { value: 'Eve' } },
     );
     fireEvent.change(
       container.querySelector(
-        'input[placeholder="Last name"]',
+        'input[placeholder="Sobrenome"]',
       ) as HTMLInputElement,
       { target: { value: 'Day' } },
     );
@@ -804,7 +804,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.change(
       container.querySelector(
-        'input[placeholder="First name *"]',
+        'input[placeholder="Nome *"]',
       ) as HTMLInputElement,
       { target: { value: 'Solo' } },
     );
@@ -836,7 +836,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.change(
       container.querySelector(
-        'input[placeholder="First name *"]',
+        'input[placeholder="Nome *"]',
       ) as HTMLInputElement,
       { target: { value: 'Press' } },
     );
@@ -875,7 +875,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     );
     fireEvent.change(
       container.querySelector(
-        'input[placeholder="First name *"]',
+        'input[placeholder="Nome *"]',
       ) as HTMLInputElement,
       { target: { value: 'Nope' } },
     );
@@ -917,7 +917,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
     switchToArtifacts(container);
-    expect(container.textContent).toContain('No artifacts linked yet');
+    expect(container.textContent).toContain('Nenhum item vinculado');
   });
 
   it('renders linked artifacts with type label and a working open link', async () => {
@@ -960,7 +960,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     await flush();
     switchToArtifacts(container);
     const linkBtn = Array.from(container.querySelectorAll('button')).find((b) =>
-      b.textContent?.includes('Link Artifact'),
+      b.textContent?.includes('Vincular item'),
     );
     fireEvent.click(linkBtn!);
     expect(container.textContent).toContain('Pickable');
@@ -981,7 +981,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     switchToArtifacts(container);
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find((b) =>
-        b.textContent?.includes('Link Artifact'),
+        b.textContent?.includes('Vincular item'),
       )!,
     );
     // Both should be visible initially
@@ -1004,7 +1004,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     switchToArtifacts(container);
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find((b) =>
-        b.textContent?.includes('Link Artifact'),
+        b.textContent?.includes('Vincular item'),
       )!,
     );
     const surveyChip = Array.from(container.querySelectorAll('button')).find(
@@ -1023,7 +1023,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     switchToArtifacts(container);
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find((b) =>
-        b.textContent?.includes('Link Artifact'),
+        b.textContent?.includes('Vincular item'),
       )!,
     );
     const optionBtn = Array.from(container.querySelectorAll('button')).find(
@@ -1120,7 +1120,7 @@ describe('DealDetailDrawer — artifacts tab', () => {
     ]);
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
-    expect(container.textContent).toContain('Pinned Artifacts');
+    expect(container.textContent).toContain('Itens fixados');
     expect(container.textContent).toContain('PinnedSite');
     expect(container.textContent).toContain('PinnedNoUrl');
   });
@@ -1143,7 +1143,7 @@ describe('DealDetailDrawer — comments tab', () => {
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
     switchToComments(container);
-    expect(container.textContent).toContain('No comments yet');
+    expect(container.textContent).toContain('Nenhum comentário ainda');
   });
 
   it('renders existing comments with author name and timestamps', async () => {
@@ -1378,7 +1378,7 @@ describe('DealDetailDrawer — comments tab', () => {
     await flush();
     switchToComments(container);
     const attachBtn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent?.includes('Attach'),
+      (b) => b.textContent?.includes('Anexar'),
     );
     const fileInput = container.querySelector(
       'input[type="file"]',
@@ -1477,7 +1477,7 @@ describe('DealDetailDrawer — comments tab', () => {
     expect(textarea.value).toContain('@[Bob](7)');
   });
 
-  it('shows "No matches" when mention query has no hits', async () => {
+  it('shows "Nenhum resultado" when mention query has no hits', async () => {
     apiMock.fetchMentionUsers.mockResolvedValue([{ id: 1, name: 'Alice' }]);
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
@@ -1489,7 +1489,7 @@ describe('DealDetailDrawer — comments tab', () => {
     (textarea as any).selectionStart = 5;
     fireEvent.change(textarea, { target: { value: '@zzzz' } });
     await waitFor(() => {
-      expect(container.textContent).toContain('No matches');
+      expect(container.textContent).toContain('Nenhum resultado');
     });
   });
 });
@@ -1507,12 +1507,12 @@ describe('DealDetailDrawer — tab switching', () => {
     );
     // Click Artifacts
     fireEvent.click(tabs[1]);
-    expect(container.textContent).toContain('Linked Artifacts');
+    expect(container.textContent).toContain('Itens vinculados');
     // Click Comments
     fireEvent.click(tabs[2]);
-    expect(container.textContent).toContain('No comments yet');
+    expect(container.textContent).toContain('Nenhum comentário ainda');
     // Back to Details
     fireEvent.click(tabs[0]);
-    expect(container.textContent).toContain('Custom Fields');
+    expect(container.textContent).toContain('Campos personalizados');
   });
 });

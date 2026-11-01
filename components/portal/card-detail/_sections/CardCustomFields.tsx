@@ -1,5 +1,5 @@
 /**
- * Custom fields — render and edit project_custom_fields values for a card.
+ * Campos personalizados — render and edit project_custom_fields values for a card.
  * Inputs vary by kind. Save is debounced to one PUT per blur/change cluster.
  */
 'use client';
@@ -69,8 +69,8 @@ export function CardCustomFields({ cardId, canEdit, initialFields }: { cardId: n
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Custom fields</h3>
-        {saving && <span className="text-[10px] text-muted-foreground">Saving…</span>}
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Campos personalizados</h3>
+        {saving && <span className="text-[10px] text-muted-foreground">Salvando…</span>}
       </div>
       <div className="space-y-2">
         {fields.map(f => (

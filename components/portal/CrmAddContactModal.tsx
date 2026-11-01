@@ -24,7 +24,7 @@ interface CrmAddContactModalProps {
 }
 
 /**
- * Add Contact modal for the CRM contacts list page (OBQA-026 items 1 + 2).
+ * Adicionar contato modal for the CRM contacts list page (OBQA-026 items 1 + 2).
  * Extracted out of app/portal/crm/contacts/page.tsx to keep that file under
  * the repo's file-size budget — same domain/job as CrmAddDealModal, split
  * into its own file only because this modal is exclusive to the contacts
@@ -116,7 +116,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
     onCreated();
   }
 
-  // POSTs to the same endpoint the companies page's "Add Company" flow uses
+  // POSTs to the same endpoint the companies page's "Adicionar empresa" flow uses
   // (app/portal/crm/companies/page.tsx handleSubmit) — only `name` is
   // required server-side, so the inline panel only asks for that.
   async function handleCreateCompany() {
@@ -153,7 +153,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
       >
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 id={titleId} className="font-semibold text-foreground">New Contact</h3>
+            <h3 id={titleId} className="font-semibold text-foreground">Novo contato</h3>
             <button type="button" onClick={onClose} aria-label="Close" className="text-muted-foreground hover:text-foreground">
               <span className="material-icons text-base">close</span>
             </button>
@@ -167,7 +167,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
           )}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">First Name *</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Nome *</label>
               <input
                 required
                 value={form.firstName}
@@ -176,7 +176,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Last Name *</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Sobrenome *</label>
               <input
                 required
                 value={form.lastName}
@@ -185,7 +185,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">E-mail</label>
               <input
                 type="email"
                 value={form.email}
@@ -194,7 +194,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Telefone</label>
               <input
                 value={form.phone}
                 onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
@@ -202,7 +202,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">LinkedIn URL</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">URL do LinkedIn</label>
               <input
                 type="url"
                 value={form.linkedinUrl}
@@ -212,7 +212,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Title</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Título</label>
               <input
                 value={form.title}
                 onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
@@ -220,7 +220,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Company</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Empresa</label>
               <CrmCompanyTypeaheadPicker
                 value={form.companyId}
                 selectedLabel={formCompanyLabel}
@@ -228,7 +228,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
                   setForm(f => ({ ...f, companyId: opt ? String(opt.id) : '' }));
                   setFormCompanyLabel(opt ? opt.name : null);
                 }}
-                placeholder="Select company…"
+                placeholder="Selecione a empresa…"
               />
               {!showCreateCompany ? (
                 <button
@@ -236,7 +236,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
                   onClick={() => { setShowCreateCompany(true); setCreateCompanyError(''); }}
                   className="mt-1.5 text-xs font-medium text-primary hover:underline"
                 >
-                  + Create new company…
+                  + Criar nova empresa…
                 </button>
               ) : (
                 <div className="mt-2 flex items-start gap-2">
@@ -251,7 +251,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
                           handleCreateCompany();
                         }
                       }}
-                      placeholder="New company name"
+                      placeholder="Nome da nova empresa"
                       className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/50 focus:border-primary focus:ring-4 focus:ring-primary/15"
                     />
                     {createCompanyError && (
@@ -270,7 +270,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
                   <button
                     type="button"
                     onClick={() => { setShowCreateCompany(false); setNewCompanyName(''); setCreateCompanyError(''); }}
-                    aria-label="Cancel create company"
+                    aria-label="Cancelar criação da empresa"
                     className="p-2 text-muted-foreground hover:text-foreground"
                   >
                     <span className="material-icons text-base">close</span>
@@ -279,13 +279,13 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               )}
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted-foreground mb-1">Source</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Origem</label>
               <select
                 value={form.source}
                 onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
                 className="w-full appearance-none rounded-xl border border-border bg-card px-3.5 py-2.5 pr-10 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
               >
-                <option value="">Select source</option>
+                <option value="">Selecione a origem</option>
                 {sourceOptions.map(s => (
                   <option key={s} value={s}>{s.replace('-', ' ')}</option>
                 ))}
@@ -299,9 +299,9 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
                 className="w-full appearance-none rounded-xl border border-border bg-card px-3.5 py-2.5 pr-10 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
               >
                 <option value="lead">Lead</option>
-                <option value="active">Active</option>
-                <option value="customer">Customer</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">Ativo</option>
+                <option value="customer">Cliente</option>
+                <option value="inactive">Inativo</option>
               </select>
             </div>
             <div className="sm:col-span-2 lg:col-span-1">

@@ -51,13 +51,13 @@ export default async function UpcomingBookingsWidget({
       </div>
       {upcoming.length === 0 ? (
         <div className="py-2 text-center">
-          <p className="text-sm text-muted-foreground mb-2">No upcoming bookings.</p>
+          <p className="text-sm text-muted-foreground mb-2">Nenhum agendamento futuro.</p>
           <Link
             href="/portal/tools/booking"
             className="text-sm text-primary hover:underline inline-flex items-center gap-1"
           >
             <span className="material-icons text-base">add_circle_outline</span>
-            Set up booking pages
+            Configurar páginas de agendamento
           </Link>
         </div>
       ) : (

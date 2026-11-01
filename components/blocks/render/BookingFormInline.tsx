@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useState, useEffect, useCallback } from 'react';
 import { BookingPaymentForm } from './BookingPaymentForm';
 
@@ -126,12 +127,12 @@ function formatDate(d: Date) {
 }
 
 function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatMoney(cents);
 }
 
 const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
 ];
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -157,7 +158,7 @@ export function BookingFormInline({
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
 
-  // Add-ons
+  // Adicionais
   const [addOns, setAddOns] = useState<AddOnItem[]>([]);
   const [selectedAddOns, setSelectedAddOns] = useState<Record<number, number>>({}); // addOnId → quantity
 
@@ -327,7 +328,7 @@ export function BookingFormInline({
       const data = await res.json();
       if (data.success) setDiscountResult(data.data);
       else setDiscountError(data.message);
-    } catch { setDiscountError('Failed to validate code'); }
+    } catch { setDiscountError('Não foi possível validar o cupom'); }
   }
 
   async function validateGiftCert() {
@@ -343,7 +344,7 @@ export function BookingFormInline({
       const data = await res.json();
       if (data.success) setGiftCertResult(data.data);
       else setGiftCertError(data.message);
-    } catch { setGiftCertError('Failed to validate certificate'); }
+    } catch { setGiftCertError('Não foi possível validar o vale-presente'); }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -387,10 +388,10 @@ export function BookingFormInline({
           setStep('confirmed');
         }
       } else {
-        setSubmitError(data.message || 'Failed to book. Please try again.');
+        setSubmitError(data.message || 'Não foi possível agendar. Tente novamente.');
       }
     } catch {
-      setSubmitError('Something went wrong. Please try again.');
+      setSubmitError('Algo deu errado. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
@@ -456,9 +457,9 @@ export function BookingFormInline({
           <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto">
             <span className="material-icons text-3xl text-gray-400">event_busy</span>
           </div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Page Not Found</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Página não encontrada</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            This booking page doesn&apos;t exist or is no longer active.
+            Esta página de agendamento não existe ou não está mais ativa.
           </p>
         </div>
       </div>
@@ -519,12 +520,12 @@ export function BookingFormInline({
   if (hasPricing) stepList.push('payment');
 
   const stepLabels: Record<Step, string> = {
-    date: 'Date',
-    time: 'Time',
-    addons: 'Extras',
-    info: 'Details',
-    payment: 'Pay',
-    confirmed: 'Done',
+    date: 'Data',
+    time: 'Horário',
+    addons: 'Adicionais',
+    info: 'Dados',
+    payment: 'Pagamento',
+    confirmed: 'Pronto',
   };
 
   const backButton = (targetStep: Step) => (
@@ -533,7 +534,7 @@ export function BookingFormInline({
       className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
     >
       <span className="material-icons text-lg">arrow_back</span>
-      Back
+      Voltar
     </button>
   );
 
@@ -612,7 +613,7 @@ export function BookingFormInline({
             {pageInfo?.allowStaffSelection && pageInfo.staffMembers && pageInfo.staffMembers.length > 0 && (
               <div className="mb-5">
                 <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3" style={textColor ? { color: textColor } : undefined}>
-                  Choose a staff member
+                  Escolha o profissional
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   <button
@@ -626,7 +627,7 @@ export function BookingFormInline({
                     style={selectedStaff === null ? { borderColor: btnBg, color: btnBg, backgroundColor: btnBg + '10' } : undefined}
                   >
                     <span className="material-icons text-lg mb-1 block" style={selectedStaff === null ? { color: btnBg } : { color: '#9ca3af' }}>groups</span>
-                    <p className="text-xs font-medium" style={textColor ? { color: textColor } : undefined}>Any available</p>
+                    <p className="text-xs font-medium" style={textColor ? { color: textColor } : undefined}>Qualquer disponível</p>
                   </button>
                   {pageInfo.staffMembers.map(staff => (
                     <button
@@ -648,7 +649,7 @@ export function BookingFormInline({
               </div>
             )}
 
-            <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-4" style={textColor ? { color: textColor } : undefined}>Select a date</h2>
+            <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-4" style={textColor ? { color: textColor } : undefined}>Escolha uma data</h2>
             <div className="flex items-center justify-between mb-4">
               <button onClick={prevMonth} disabled={!canGoPrev}
                 className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
@@ -663,7 +664,7 @@ export function BookingFormInline({
               </button>
             </div>
             <div className="grid grid-cols-7 mb-1">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+              {['Do', 'Se', 'Te', 'Qa', 'Qi', 'Sx', 'Sá'].map((d) => (
                 <div key={d} className="text-center text-xs font-medium text-gray-400 dark:text-gray-500 py-1" style={calDateColor ? { color: calDateColor, opacity: 0.65 } : undefined}>{d}</div>
               ))}
             </div>
@@ -700,7 +701,7 @@ export function BookingFormInline({
             {/* Group size selector */}
             {pageInfo.maxGuests && pageInfo.maxGuests > 1 && (
               <div className="mb-4 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Group size:</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Número de pessoas:</label>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setGroupSize(Math.max(1, groupSize - 1))} disabled={groupSize <= 1}
                     className="w-8 h-8 rounded-lg border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 disabled:opacity-30">
@@ -727,7 +728,7 @@ export function BookingFormInline({
             ) : slots.length === 0 ? (
               <div className="text-center py-12">
                 <span className="material-icons text-3xl text-gray-300 dark:text-gray-600 mb-2 block">event_busy</span>
-                <p className="text-sm text-gray-500 dark:text-gray-400">No available times on this day</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Não há horários disponíveis neste dia</p>
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-2 max-h-80 overflow-y-auto">
@@ -756,12 +757,12 @@ export function BookingFormInline({
           </div>
         )}
 
-        {/* Step: Add-ons */}
+        {/* Step: Adicionais */}
         {step === 'addons' && (
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-5" style={cardStyle}>
             <div className="flex items-center justify-between mb-4">
               {backButton('time')}
-              <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100">Add extras</h2>
+              <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100">Adicionais</h2>
             </div>
 
             <div className="space-y-3 mb-4">
@@ -813,7 +814,7 @@ export function BookingFormInline({
               className="w-full py-3 rounded-xl font-medium transition-all hover:shadow-md"
               style={{ backgroundColor: btnBg, color: btnText, ...(btnRadius ? { borderRadius: btnRadius } : {}) }}
             >
-              Continue
+              Continuar
             </button>
           </div>
         )}
@@ -843,25 +844,25 @@ export function BookingFormInline({
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome <span className="text-red-500">*</span></label>
                 <input type="text" required value={guestName} onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="Your full name"
+                  placeholder="Seu nome completo"
                   className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
                   style={{ '--tw-ring-color': accent + '50', ...inputFieldStyle } as React.CSSProperties}
                   disabled={submitting} />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">E-mail <span className="text-red-500">*</span></label>
                 <input type="email" required value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="voce@exemplo.com.br"
                   className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
                   style={{ '--tw-ring-color': accent + '50', ...inputFieldStyle } as React.CSSProperties}
                   disabled={submitting} />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone <span className="text-gray-400 font-normal">(optional)</span></label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone <span className="text-gray-400 font-normal">(opcional)</span></label>
                 <input type="tel" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)}
                   placeholder="(555) 123-4567"
                   className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent"
@@ -889,32 +890,32 @@ export function BookingFormInline({
                     <select required={q.required} value={answers[q.id] || ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                       className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:border-transparent"
                       style={{ '--tw-ring-color': accent + '50', ...inputFieldStyle } as React.CSSProperties} disabled={submitting}>
-                      <option value="">Select...</option>
+                      <option value="">Selecione...</option>
                       {(q.options || []).map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                   )}
                 </div>
               ))}
 
-              {/* Discount code */}
+              {/* Cupom de desconto */}
               {pageInfo.enableDiscountCodes && hasPricing && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Discount code</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cupom de desconto</label>
                   <div className="flex gap-2">
                     <input type="text" value={discountCode} onChange={(e) => setDiscountCode(e.target.value)}
-                      placeholder="Enter code" disabled={!!discountResult}
+                      placeholder="Digite o código" disabled={!!discountResult}
                       className="flex-1 px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent text-sm"
                       style={{ '--tw-ring-color': accent + '50', ...inputFieldStyle } as React.CSSProperties} />
                     {discountResult ? (
                       <button type="button" onClick={() => { setDiscountResult(null); setDiscountCode(''); }}
                         className="px-3 py-2 rounded-xl text-sm border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300">
-                        Clear
+                        Limpar
                       </button>
                     ) : (
                       <button type="button" onClick={validateDiscount} disabled={!discountCode.trim()}
                         className="px-4 py-2 rounded-xl text-sm font-medium text-white disabled:opacity-50"
                         style={{ backgroundColor: accent }}>
-                        Apply
+                        Aplicar
                       </button>
                     )}
                   </div>
@@ -928,10 +929,10 @@ export function BookingFormInline({
                 </div>
               )}
 
-              {/* Gift certificate */}
+              {/* Vale-presente */}
               {pageInfo.enableGiftCertificates && hasPricing && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gift certificate</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Vale-presente</label>
                   <div className="flex gap-2">
                     <input type="text" value={giftCertCode} onChange={(e) => setGiftCertCode(e.target.value)}
                       placeholder="CERT-XXXXXX" disabled={!!giftCertResult}
@@ -940,13 +941,13 @@ export function BookingFormInline({
                     {giftCertResult ? (
                       <button type="button" onClick={() => { setGiftCertResult(null); setGiftCertCode(''); }}
                         className="px-3 py-2 rounded-xl text-sm border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300">
-                        Clear
+                        Limpar
                       </button>
                     ) : (
                       <button type="button" onClick={validateGiftCert} disabled={!giftCertCode.trim()}
                         className="px-4 py-2 rounded-xl text-sm font-medium text-white disabled:opacity-50"
                         style={{ backgroundColor: accent }}>
-                        Apply
+                        Aplicar
                       </button>
                     )}
                   </div>
@@ -969,19 +970,19 @@ export function BookingFormInline({
                   </div>
                   {pricing.addOnTotal > 0 && (
                     <div className="flex justify-between text-gray-600 dark:text-gray-400">
-                      <span>Add-ons</span>
+                      <span>Adicionais</span>
                       <span>{formatCents(pricing.addOnTotal)}</span>
                     </div>
                   )}
                   {pricing.discount > 0 && (
                     <div className="flex justify-between" style={{ color: accent }}>
-                      <span>Discount</span>
+                      <span>Desconto</span>
                       <span>-{formatCents(pricing.discount)}</span>
                     </div>
                   )}
                   {pricing.giftCert > 0 && (
                     <div className="flex justify-between" style={{ color: accent }}>
-                      <span>Gift certificate</span>
+                      <span>Vale-presente</span>
                       <span>-{formatCents(pricing.giftCert)}</span>
                     </div>
                   )}
@@ -1000,10 +1001,10 @@ export function BookingFormInline({
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="animate-spin rounded-full h-4 w-4 border-2 border-white/30" style={{ borderTopColor: '#ffffff' }} />
-                    {pricing.total > 0 ? 'Processing...' : 'Booking...'}
+                    {pricing.total > 0 ? 'Processando...' : 'Agendando...'}
                   </span>
                 ) : (
-                  pricing.total > 0 ? `Pay ${formatCents(pricing.total)}` : 'Confirm Booking'
+                  pricing.total > 0 ? `Pagar ${formatCents(pricing.total)}` : 'Confirmar agendamento'
                 )}
               </button>
             </form>
@@ -1015,7 +1016,7 @@ export function BookingFormInline({
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-5" style={cardStyle}>
             <div className="text-center mb-4">
               <span className="material-icons text-3xl mb-2" style={{ color: accent }}>lock</span>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Complete Payment</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Concluir pagamento</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Total: <span className="font-semibold" style={{ color: accent }}>{formatCents(bookingResult.total || 0)}</span>
               </p>
@@ -1040,7 +1041,7 @@ export function BookingFormInline({
               style={{ backgroundColor: accent + '15' }}>
               <span className="material-icons text-3xl" style={{ color: accent }}>check_circle</span>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">Booking Confirmed</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">Agendamento confirmado</h2>
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
               A confirmation has been sent to {guestEmail}
             </p>
@@ -1075,7 +1076,7 @@ export function BookingFormInline({
                   <span className="material-icons text-gray-400 text-lg">videocam</span>
                   <a href={meetingLink} target="_blank" rel="noopener noreferrer"
                     className="text-sm font-medium hover:underline" style={{ color: accent }}>
-                    Join Video Call
+                    Entrar na videochamada
                   </a>
                 </div>
               )}
@@ -1083,7 +1084,7 @@ export function BookingFormInline({
                 <div className="flex items-center gap-3">
                   <span className="material-icons text-gray-400 text-lg">qr_code_2</span>
                   <span className="text-sm text-gray-900 dark:text-gray-100">
-                    Check-in code: <span className="font-mono font-bold">{bookingResult.checkinCode}</span>
+                    Código de check-in: <span className="font-mono font-bold">{bookingResult.checkinCode}</span>
                   </span>
                 </div>
               )}
@@ -1094,7 +1095,7 @@ export function BookingFormInline({
                 className="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-lg text-sm font-medium text-white transition-colors"
                 style={{ backgroundColor: accent }}>
                 <span className="material-icons text-lg">videocam</span>
-                Join Video Call
+                Entrar na videochamada
               </a>
             )}
           </div>

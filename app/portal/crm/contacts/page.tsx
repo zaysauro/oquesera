@@ -42,7 +42,7 @@ interface SavedView {
 }
 
 const statusOptions = [
-  { value: '', label: 'All Statuses' },
+  { value: '', label: 'Todos os status' },
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   { value: 'lead', label: 'Lead' },
@@ -92,7 +92,7 @@ export default function CrmContactsPage() {
   const [viewName, setViewName] = useState('');
   const [savingView, setSavingView] = useState(false);
 
-  // Add Contact modal open/closed. Form state, validation, submit, and the
+  // Adicionar contato modal open/closed. Form state, validation, submit, and the
   // inline company-create panel all live in CrmAddContactModal (OBQA-026).
   const [showForm, setShowForm] = useState(false);
 
@@ -230,7 +230,7 @@ export default function CrmContactsPage() {
       {/* Header */}
       <PortalPageHeader
         eyebrow="CRM"
-        title="Contacts"
+        title="Contatos"
         subtitle={loading ? '' : `${total} contact${total !== 1 ? 's' : ''}`}
         actions={
           <div className="flex items-center gap-2">
@@ -240,13 +240,13 @@ export default function CrmContactsPage() {
               className={pBtnPrimary}
             >
               <span className="material-icons text-base">{showForm ? 'close' : 'person_add'}</span>
-              {showForm ? 'Cancel' : 'Add Contact'}
+              {showForm ? 'Cancel' : 'Adicionar contato'}
             </button>
           </div>
         }
       />
 
-      {/* Add Contact modal (OBQA-026 item 1: was an inline appear/disappear panel) */}
+      {/* Adicionar contato modal (OBQA-026 item 1: was an inline appear/disappear panel) */}
       {showForm && (
         <CrmAddContactModal
           onClose={() => setShowForm(false)}
@@ -260,7 +260,7 @@ export default function CrmContactsPage() {
           <div className="flex items-center gap-2">
             <span className="material-icons text-base text-muted-foreground">bookmark</span>
             <select
-              aria-label="Saved view" value={selectedViewId ?? ''}
+              aria-label="Visão salva" value={selectedViewId ?? ''}
               onChange={e => {
                 const id = e.target.value ? Number(e.target.value) : null;
                 const view = savedViews.find(v => v.id === id) ?? null;
@@ -268,7 +268,7 @@ export default function CrmContactsPage() {
               }}
               className="rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
             >
-              <option value="">All Contacts</option>
+              <option value="">Todos os contatos</option>
               {savedViews.map(v => (
                 <option key={v.id} value={v.id}>{v.name}</option>
               ))}
@@ -277,7 +277,7 @@ export default function CrmContactsPage() {
               <button
                 onClick={() => handleDeleteView(selectedViewId)}
                 className="flex items-center p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded"
-                title="Delete saved view"
+                title="Excluir visão salva"
               >
                 <span className="material-icons text-base">delete</span>
               </button>
@@ -289,14 +289,14 @@ export default function CrmContactsPage() {
               className={pBtnGhost}
             >
               <span className="material-icons text-base">save</span>
-              Save View
+              Salvar visão
             </button>
           )}
           {showSaveViewForm && (
             <form onSubmit={handleSaveView} className="flex items-center gap-2">
               <input
                 autoFocus
-                placeholder="View name..."
+                placeholder="Nome da visão..."
                 value={viewName}
                 onChange={e => setViewName(e.target.value)}
                 className="rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/50 focus:border-primary focus:ring-4 focus:ring-primary/15 w-40"
@@ -323,14 +323,14 @@ export default function CrmContactsPage() {
           <div className="relative flex-1 min-w-[200px]">
             <span className="material-icons text-base text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2">search</span>
             <input
-              placeholder="Search contacts..."
+              placeholder="Buscar contatos..."
               value={searchInput}
               onChange={e => setSearchInput(e.target.value)}
               className="w-full pl-9 pr-3 rounded-xl border border-border bg-card py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/50 focus:border-primary focus:ring-4 focus:ring-primary/15"
             />
           </div>
           <select
-            aria-label="Filter by status" value={statusFilter}
+            aria-label="Filtrar por status" value={statusFilter}
             onChange={e => { setStatusFilter(e.target.value); setPage(1); }}
             className="appearance-none rounded-xl border border-border bg-card px-3.5 py-2.5 pr-10 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
           >
@@ -347,8 +347,8 @@ export default function CrmContactsPage() {
                 setCompanyFilterLabel(opt ? opt.name : null);
                 setPage(1);
               }}
-              placeholder="All Companies"
-              noneLabel="All Companies"
+              placeholder="Todas as empresas"
+              noneLabel="Todas as empresas"
             />
           </div>
           <PositionMultiSelect
@@ -373,12 +373,12 @@ export default function CrmContactsPage() {
         ) : contacts.length === 0 ? (
           <div className="p-12 text-center">
             <span className="material-icons text-4xl text-muted-foreground mb-3 block">person_off</span>
-            <p className="text-muted-foreground mb-4">No contacts found.</p>
+            <p className="text-muted-foreground mb-4">Nenhum contato encontrado.</p>
             <button
               onClick={() => setShowForm(true)}
               className={pBtnPrimary}
             >
-              Add First Contact
+              Adicionar o primeiro contato
             </button>
           </div>
         ) : (
@@ -386,13 +386,13 @@ export default function CrmContactsPage() {
             <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className="border-b border-border bg-muted/40">
-                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell">Email</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Phone</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Company</th>
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Nome</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell">E-mail</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Telefone</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Empresa</th>
                   <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Score</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden xl:table-cell">Last Contacted</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Pontuação</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden xl:table-cell">Último contato</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>

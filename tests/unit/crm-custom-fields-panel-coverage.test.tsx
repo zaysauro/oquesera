@@ -111,7 +111,7 @@ describe('CrmCustomFieldsPanel: loading state', () => {
   it('renders loading spinner while fetch is pending', () => {
     global.fetch = vi.fn(() => new Promise(() => {})) as unknown as typeof fetch;
     render(<CrmCustomFieldsPanel entityType="contact" entityId={1} />);
-    expect(screen.getByText(/Loading custom fields/)).toBeTruthy();
+    expect(screen.getByText(/Carregando campos personalizados/)).toBeTruthy();
   });
 });
 
@@ -126,7 +126,7 @@ describe('CrmCustomFieldsPanel: empty state', () => {
     await waitFor(() => {
       expect(screen.getByText(/No custom fields defined/)).toBeTruthy();
     });
-    expect(screen.getByText(/Add some in settings/)).toBeTruthy();
+    expect(screen.getByText(/Adicione nas configurações/)).toBeTruthy();
   });
 });
 
@@ -288,7 +288,7 @@ describe('CrmCustomFieldsPanel: edit mode inputs', () => {
     const editBtn = screen.getByRole('button', { name: /Edit/ });
     await act(async () => { fireEvent.click(editBtn); });
     // Wait for edit mode to activate
-    await waitFor(() => expect(screen.getByText(/Edit mode/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Modo edição/)).toBeTruthy());
     return result;
   }
 
@@ -434,14 +434,14 @@ describe('CrmCustomFieldsPanel: mode toggle', () => {
     render(<CrmCustomFieldsPanel entityType="contact" entityId={1} />);
     await waitFor(() => expect(screen.getByText('Name')).toBeTruthy());
     expect(screen.getByRole('button', { name: /Edit/ })).toBeTruthy();
-    expect(screen.getByText(/View mode/)).toBeTruthy();
+    expect(screen.getByText(/Modo visualização/)).toBeTruthy();
   });
 
   it('switches to edit mode when Edit is clicked', async () => {
     render(<CrmCustomFieldsPanel entityType="contact" entityId={1} />);
     await waitFor(() => expect(screen.getByText('Name')).toBeTruthy());
     fireEvent.click(screen.getByRole('button', { name: /Edit/ }));
-    expect(screen.getByText(/Edit mode/)).toBeTruthy();
+    expect(screen.getByText(/Modo edição/)).toBeTruthy();
     expect(screen.getByRole('button', { name: /View/ })).toBeTruthy();
   });
 
@@ -451,7 +451,7 @@ describe('CrmCustomFieldsPanel: mode toggle', () => {
     fireEvent.click(screen.getByRole('button', { name: /Edit/ }));
     // No changes → no confirm needed
     fireEvent.click(screen.getByRole('button', { name: /View/ }));
-    expect(screen.getByText(/View mode/)).toBeTruthy();
+    expect(screen.getByText(/Modo visualização/)).toBeTruthy();
   });
 
   it('prompts confirm when switching from edit with dirty state; accepts', async () => {
@@ -464,7 +464,7 @@ describe('CrmCustomFieldsPanel: mode toggle', () => {
     fireEvent.change(input, { target: { value: 'dirty' } });
     fireEvent.click(screen.getByRole('button', { name: /View/ }));
     expect(window.confirm).toHaveBeenCalled();
-    await waitFor(() => expect(screen.getByText(/View mode/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Modo visualização/)).toBeTruthy());
   });
 
   it('cancels discard when confirm returns false', async () => {
@@ -476,7 +476,7 @@ describe('CrmCustomFieldsPanel: mode toggle', () => {
     fireEvent.change(input, { target: { value: 'dirty' } });
     fireEvent.click(screen.getByRole('button', { name: /View/ }));
     // Still in edit mode
-    expect(screen.getByText(/Edit mode/)).toBeTruthy();
+    expect(screen.getByText(/Modo edição/)).toBeTruthy();
   });
 });
 
@@ -534,7 +534,7 @@ describe('CrmCustomFieldsPanel: save flow', () => {
     });
     await waitFor(() => expect(putCalled).toBe(true));
     // Should return to view mode
-    await waitFor(() => expect(screen.getByText(/View mode/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Modo visualização/)).toBeTruthy());
   });
 
   it('shows server error message when save fails', async () => {
@@ -723,8 +723,8 @@ describe('CrmCustomFieldsPanel: category tabs', () => {
   it('does NOT render tabs when all fields are in one category', async () => {
     global.fetch = makeFetchOk(
       [
-        makeFieldDef({ id: 1, fieldName: 'First', fieldType: 'text', category: 'General' }),
-        makeFieldDef({ id: 2, fieldName: 'Second', fieldType: 'text', category: 'General' }),
+        makeFieldDef({ id: 1, fieldName: 'First', fieldType: 'text', category: 'Geral' }),
+        makeFieldDef({ id: 2, fieldName: 'Second', fieldType: 'text', category: 'Geral' }),
       ],
       [],
     ) as unknown as typeof fetch;
@@ -771,7 +771,7 @@ describe('CrmCustomFieldsPanel: category tabs', () => {
     expect(screen.queryByText('Alpha')).toBeNull();
   });
 
-  it('falls back null category to "General"', async () => {
+  it('falls back null category to "Geral"', async () => {
     global.fetch = makeFetchOk(
       [
         makeFieldDef({ id: 1, fieldName: 'Foo', fieldType: 'text', category: null }),
@@ -780,7 +780,7 @@ describe('CrmCustomFieldsPanel: category tabs', () => {
       [],
     ) as unknown as typeof fetch;
     render(<CrmCustomFieldsPanel entityType="contact" entityId={1} />);
-    await waitFor(() => expect(screen.getByText('General')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('Geral')).toBeTruthy());
     expect(screen.getByText('Special')).toBeTruthy();
   });
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import { formatMoney } from '@/lib/utils/money';
 import { useEffect, useState } from 'react';
 
 interface CreditData {
@@ -89,7 +90,7 @@ export default function CreditPurchaseControls() {
             disabled={purchasing !== null}
             className="text-[11px] px-2.5 py-1 rounded-md border border-border hover:border-primary/50 hover:bg-primary/5 transition-colors disabled:opacity-50"
           >
-            {purchasing === pkg.id ? '...' : `+${formatTokens(pkg.tokens)} $${(pkg.price / 100).toFixed(0)}`}
+            {purchasing === pkg.id ? '...' : `+${formatTokens(pkg.tokens)} ${formatMoney(pkg.price, { fractionDigits: 0 })}`}
           </button>
         ))}
         <button

@@ -237,14 +237,14 @@ describe('Icon', () => {
 describe('Footer', () => {
   it('renders the site name in a heading', () => {
     render(<Footer />);
-    // siteConfig.name is "SimplerDevelopment"
+    // siteConfig.name is "Kumo One"
     expect(screen.getAllByText(/SimplerDevelopment/).length).toBeGreaterThan(0);
   });
 
   it('renders the four major section headings', () => {
     render(<Footer />);
     expect(screen.getByText('Platform')).toBeTruthy();
-    expect(screen.getByText('Company')).toBeTruthy();
+    expect(screen.getByText('Empresa')).toBeTruthy();
     expect(screen.getByText('Get in Touch')).toBeTruthy();
   });
 
@@ -266,7 +266,7 @@ describe('Footer', () => {
 
   it('renders the contact email', () => {
     render(<Footer />);
-    expect(screen.getByText('info@simplerdevelopment.com')).toBeTruthy();
+    expect(screen.getByText('info@kumo.localhost')).toBeTruthy();
   });
 
   it('links to /contact for the consultation CTA', () => {

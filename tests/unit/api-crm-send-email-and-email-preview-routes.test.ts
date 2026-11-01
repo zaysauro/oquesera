@@ -503,7 +503,7 @@ describe('POST /api/portal/crm/contacts/[id]/send-email', () => {
     expect(sendArgs.to).toBe('c@x.test');
     expect(sendArgs.subject).toBe('Hello');
     expect((sendArgs.from as string)).toContain('Acme Co');
-    expect((sendArgs.from as string)).toContain('noreply@simplerdevelopment.com');
+    expect((sendArgs.from as string)).toContain('noreply@kumo.localhost');
     expect(sendArgs.html).toContain('Some body content');
 
     // activity was logged + contact updated
@@ -558,12 +558,12 @@ describe('POST /api/portal/crm/contacts/[id]/send-email', () => {
     expect((sendArgs.from as string)).toContain('custom@from.test');
   });
 
-  it('falls back to "Simpler Development" when client.company is missing', async () => {
+  it('falls back to "Kumo One" when client.company is missing', async () => {
     H.getPortalClientMock.mockResolvedValueOnce({ id: 10 }); // no company
     state.contacts.push({ id: 1, clientId: 10, email: 'c@x.test' });
     await callSendEmail('1', { subject: 's', body: 'b' });
     const sendArgs = H.resendSendMock.mock.calls[0][0] as Record<string, unknown>;
-    expect((sendArgs.from as string).startsWith('Simpler Development <')).toBe(true);
+    expect((sendArgs.from as string).startsWith('Kumo One <')).toBe(true);
   });
 
   // -- Error paths ---------------------------------------------------------
@@ -800,7 +800,7 @@ describe('POST /api/portal/email/preview', () => {
     expect((args.html as string)).toContain('https://x/u?token=test-');
     expect((args.html as string)).not.toContain('{{UNSUBSCRIBE_URL}}');
     expect((args.from as string)).toContain('Block Builder Test');
-    expect((args.from as string)).toContain('noreply@simplerdevelopment.com');
+    expect((args.from as string)).toContain('noreply@kumo.localhost');
   });
 
   it('falls back to a default subject when subject is missing on test send', async () => {

@@ -35,7 +35,7 @@ export function CardLabels({
   return (
     <div>
       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-        Labels
+        Etiquetas
       </h3>
       <div className="flex flex-wrap items-center gap-1.5">
         {labels.map(l => (
@@ -57,7 +57,7 @@ export function CardLabels({
           </span>
         ))}
         {labels.length === 0 && (
-          <span className="text-xs text-muted-foreground italic">No labels</span>
+          <span className="text-xs text-muted-foreground italic">Sem etiquetas</span>
         )}
         {canEdit && (
           <div className="relative">
@@ -66,14 +66,14 @@ export function CardLabels({
               className="flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-dashed border-border text-muted-foreground hover:text-foreground hover:border-primary"
             >
               <span className="material-icons text-xs">{showLabelMenu ? 'close' : 'add'}</span>
-              {showLabelMenu ? 'Close' : 'Add label'}
+              {showLabelMenu ? 'Close' : 'Adicionar etiqueta'}
             </button>
             {showLabelMenu && (
               <div className="absolute top-full left-0 mt-1 z-20 bg-popover border border-border rounded-lg shadow-lg w-64 p-2 space-y-2">
                 <div className="max-h-48 overflow-y-auto space-y-0.5">
                   {projectLabels.length === 0 && (
                     <p className="text-xs text-muted-foreground italic p-2">
-                      No labels yet. Create one below.
+                      Nenhuma etiqueta. Crie uma abaixo.
                     </p>
                   )}
                   {projectLabels.map(l => {
@@ -105,7 +105,7 @@ export function CardLabels({
                     type="text"
                     value={newLabelName}
                     onChange={e => setNewLabelName(e.target.value)}
-                    placeholder="New label…"
+                    placeholder="Nova etiqueta…"
                     maxLength={50}
                     onKeyDown={e => {
                       if (e.key === 'Enter') createAndAttachLabel();
@@ -117,7 +117,7 @@ export function CardLabels({
                     disabled={!newLabelName.trim()}
                     className="px-2 py-1 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 disabled:opacity-50"
                   >
-                    Add
+                    Adicionar
                   </button>
                 </div>
               </div>

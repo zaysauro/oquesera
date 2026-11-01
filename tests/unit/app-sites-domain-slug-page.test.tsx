@@ -14,7 +14,7 @@
  *   - home page (no slug): homepage found → SiteBlockRenderer output
  *   - /shop slug → ShopPage
  *   - /shop/<product-slug> → ProductPage
- *   - /blog slug: no posts → "No posts yet"
+ *   - /blog slug: no posts → "Nenhuma publicação ainda"
  *   - /blog slug: with posts, single page → blog listing
  *   - /blog slug: pagination (multiple pages)
  *   - /blog/<post-slug>: post not found → notFound()
@@ -300,7 +300,7 @@ describe('/shop/<product> slug', () => {
 // ─── /blog (listing) ─────────────────────────────────────────────────────────
 
 describe('/blog listing', () => {
-  it('shows "No posts yet." when blog has no posts', async () => {
+  it('shows "Nenhuma publicação ainda." when blog has no posts', async () => {
     getClientBlogPostsMock.mockResolvedValue([]);
     const { container } = await renderPage('test.example.com', ['blog']);
     expect(container.textContent).toMatch(/no posts yet/i);
@@ -328,7 +328,7 @@ describe('/blog listing', () => {
     }));
     getClientBlogPostsMock.mockResolvedValue(posts);
     const { container } = await renderPage('test.example.com', ['blog']);
-    // Should see "Next →" since 14 posts → 2 pages and we're on page 1
+    // Should see "Próxima →" since 14 posts → 2 pages and we're on page 1
     expect(container.textContent).toMatch(/next/i);
   });
 

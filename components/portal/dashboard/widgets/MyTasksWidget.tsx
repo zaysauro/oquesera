@@ -23,12 +23,12 @@ export default async function MyTasksWidget({
       <div>
         <div className="mb-3">
           <span className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">0</span>
-          <span className="ml-2 text-sm text-muted-foreground">open tasks</span>
+          <span className="ml-2 text-sm text-muted-foreground">tarefas abertas</span>
         </div>
         <p className="text-sm text-muted-foreground py-2 text-center">
           No projects yet.{' '}
           <Link href="/portal/projects" className="text-primary hover:underline">
-            Create one
+            Criar
           </Link>
         </p>
       </div>
@@ -100,7 +100,7 @@ export default async function MyTasksWidget({
         <p className="text-sm text-muted-foreground py-2 text-center">
           No tasks due.{' '}
           <Link href="/portal/my-tasks" className="text-primary hover:underline">
-            View all tasks
+            Ver todas as tarefas
           </Link>
         </p>
       ) : (
@@ -141,7 +141,7 @@ export default async function MyTasksWidget({
           className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
         >
           <span className="material-icons text-sm">task_alt</span>
-          View all my tasks
+          Ver todas as minhas tarefas
         </Link>
       </div>
     </div>

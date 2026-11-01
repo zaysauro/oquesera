@@ -145,7 +145,7 @@ describe('CardArtifacts', () => {
   it('renders the empty-state copy when loaded with no artifacts and picker closed', () => {
     const { container, getByText } = render(<CardArtifacts {...baseProps} />);
     expect(container.textContent).toContain('Artifacts');
-    expect(getByText('No artifacts linked.')).toBeTruthy();
+    expect(getByText('Nenhum item vinculado.')).toBeTruthy();
     // canEdit=true should expose the open-picker button (currently shows "Link Artifact")
     expect(container.textContent).toContain('Link Artifact');
   });
@@ -159,7 +159,7 @@ describe('CardArtifacts', () => {
     const { container } = render(
       <CardArtifacts {...baseProps} artifactsLoaded={false} />,
     );
-    expect(container.textContent).not.toContain('No artifacts linked.');
+    expect(container.textContent).not.toContain('Nenhum item vinculado.');
   });
 
   it('opens the picker, lists All + per-type filter buttons, and toggles via callbacks', () => {
@@ -175,8 +175,8 @@ describe('CardArtifacts', () => {
       />,
     );
 
-    // Filter buttons rendered for every ARTIFACT_LABELS key plus "All".
-    expect(getByText('All')).toBeTruthy();
+    // Filter buttons rendered for every ARTIFACT_LABELS key plus "Todas".
+    expect(getByText('Todas')).toBeTruthy();
     // "Website" appears as a filter button AND as a row label suffix — both fine.
     expect(getAllByText('Website').length).toBeGreaterThanOrEqual(1);
     expect(getAllByText('Pitch Deck').length).toBeGreaterThanOrEqual(1);
@@ -353,8 +353,8 @@ describe('CardSidebar', () => {
 
   it('renders the empty-assignee fallback when no one is assigned', () => {
     const { container } = render(<CardSidebar {...baseProps} />);
-    expect(container.textContent).toContain('Assignees');
-    expect(container.textContent).toContain('No one assigned');
+    expect(container.textContent).toContain('Responsáveis');
+    expect(container.textContent).toContain('Ninguém atribuído');
   });
 
   it('renders an editable priority select that fires saveField on change', () => {
@@ -410,13 +410,13 @@ describe('CardSidebar', () => {
   it('opens the confirm-delete UI and propagates removeCard / cancel callbacks', () => {
     const { container, rerender, getByText } = render(<CardSidebar {...baseProps} />);
 
-    // Initial render shows "Delete card" trigger.
-    fireEvent.click(getByText(/Delete card/));
+    // Initial render shows "Excluir cartão" trigger.
+    fireEvent.click(getByText(/Excluir cartão/));
     expect(baseProps.setConfirmDelete).toHaveBeenCalledWith(true);
 
     // Switch into confirmDelete state and verify destructive copy + buttons.
     rerender(<CardSidebar {...baseProps} confirmDelete={true} />);
-    expect(container.textContent).toContain('Delete this card?');
+    expect(container.textContent).toContain('Excluir este cartão?');
     fireEvent.click(getByText('Delete'));
     expect(baseProps.removeCard).toHaveBeenCalledTimes(1);
     fireEvent.click(getByText('Cancel'));
@@ -427,13 +427,13 @@ describe('CardSidebar', () => {
     const { getByText } = render(
       <CardSidebar {...baseProps} confirmDelete={true} deleting={true} />,
     );
-    const btn = getByText(/Deleting/);
+    const btn = getByText(/Excluindo/);
     expect((btn as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('hides the delete control entirely when canEdit is false', () => {
     const { container } = render(<CardSidebar {...baseProps} canEdit={false} />);
-    expect(container.textContent).not.toContain('Delete card');
+    expect(container.textContent).not.toContain('Excluir cartão');
   });
 
   it('renders the assignee add-menu candidates filtered against existing assignees', () => {
@@ -468,7 +468,7 @@ describe('CardSidebar', () => {
     expect(removeBtns.length).toBeGreaterThan(0);
   });
 
-  it('shows the "No one left to add" empty state when every mention user is already assigned', () => {
+  it('shows the "Não há mais ninguém para adicionar" empty state when every mention user is already assigned', () => {
     const assignees: Assignee[] = [{ id: 1, name: 'Ada', email: 'ada@x' }];
     const mentionUsers: MentionUser[] = [{ id: 1, name: 'Ada' }];
     const { container } = render(
@@ -479,7 +479,7 @@ describe('CardSidebar', () => {
         showAssigneeMenu={true}
       />,
     );
-    expect(container.textContent).toContain('No one left to add');
+    expect(container.textContent).toContain('Não há mais ninguém para adicionar');
   });
 
   it('toggles the watch button copy based on the watching prop', () => {

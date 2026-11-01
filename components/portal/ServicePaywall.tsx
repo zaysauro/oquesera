@@ -84,7 +84,7 @@ export default function ServicePaywall({
           ) : (
             <>
               <span className="material-icons text-xl">lock_open</span>
-              Subscribe Now
+              Assinar agora
             </>
           )}
         </button>
@@ -95,7 +95,7 @@ export default function ServicePaywall({
           href="/portal/services"
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          View all services
+          Ver todos os serviços
         </Link>
       </div>
     </div>

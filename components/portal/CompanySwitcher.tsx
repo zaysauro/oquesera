@@ -162,7 +162,7 @@ function DropdownContent({
         <>
           <div className="px-3 pt-2 pb-1">
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">
-              Switch to
+              Alternar para
             </p>
           </div>
           <div className="max-h-48 overflow-y-auto pb-1">
@@ -194,7 +194,7 @@ function DropdownContent({
           className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
         >
           <span className="material-icons text-sm">group_add</span>
-          Invite people
+          Convidar pessoas
         </a>
       </div>
     </>

@@ -96,8 +96,8 @@ describe('isPlausibleDomain', () => {
   });
 
   it('rejects our own platform domain to prevent hijack', () => {
-    expect(isPlausibleDomain('simplerdevelopment.com')).toBe(false);
-    expect(isPlausibleDomain('foo.simplerdevelopment.com')).toBe(false);
+    expect(isPlausibleDomain('kumo.localhost')).toBe(false);
+    expect(isPlausibleDomain('foo.kumo.localhost')).toBe(false);
   });
 
   it('rejects labels that violate hostname rules', () => {

@@ -59,7 +59,7 @@ export default async function ProposalsEsignWidget({
       <div className="mb-3 flex gap-6">
         <div>
           <span className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">{sentCount}</span>
-          <p className="text-xs text-muted-foreground">awaiting signature</p>
+          <p className="text-xs text-muted-foreground">aguardando assinatura</p>
         </div>
         <div>
           <span className="font-display text-2xl font-extrabold tracking-[-0.02em] text-foreground">{acceptedCount}</span>
@@ -69,12 +69,12 @@ export default async function ProposalsEsignWidget({
 
       {recentProposals.length === 0 ? (
         <div className="py-2 text-center">
-          <p className="text-sm text-muted-foreground mb-2">No proposals yet.</p>
+          <p className="text-sm text-muted-foreground mb-2">Nenhuma proposta ainda.</p>
           <Link
             href="/portal/crm/proposals"
             className="text-xs text-primary hover:underline"
           >
-            Create your first proposal
+            Crie a primeira proposta
           </Link>
         </div>
       ) : (

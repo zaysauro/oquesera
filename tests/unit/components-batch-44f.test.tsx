@@ -85,7 +85,7 @@ describe('CardActivity', () => {
     expect(container.textContent).toContain('Activity');
     expect(container.textContent).not.toContain('(0)');
     // Collapsed branch: empty-state text should NOT appear.
-    expect(queryByText('No activity yet.')).toBeNull();
+    expect(queryByText('Nenhuma atividade ainda.')).toBeNull();
     // Chevron has no rotation class when collapsed.
     const chevron = container.querySelector('.material-icons');
     expect(chevron?.className).not.toContain('rotate-90');
@@ -112,7 +112,7 @@ describe('CardActivity', () => {
     const { container } = render(
       <CardActivity activities={[]} showActivity={true} setShowActivity={() => {}} />,
     );
-    expect(container.textContent).toContain('No activity yet.');
+    expect(container.textContent).toContain('Nenhuma atividade ainda.');
     // Chevron should now carry the rotate-90 class.
     const chevron = container.querySelector('.material-icons');
     expect(chevron?.className).toContain('rotate-90');
@@ -145,7 +145,7 @@ describe('CardActivity', () => {
     expect(container.textContent).toContain('Grace renamed to "New title"');
     expect(container.textContent).toContain('Linus added label "urgent"');
     // Empty-state copy must NOT appear when activities exist.
-    expect(container.textContent).not.toContain('No activity yet.');
+    expect(container.textContent).not.toContain('Nenhuma atividade ainda.');
   });
 
   it('invokes setShowActivity with a toggling updater function when the header button is clicked', () => {

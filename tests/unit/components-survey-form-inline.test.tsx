@@ -160,7 +160,7 @@ describe('SurveyFormInline — loading and error', () => {
       utils = render(<SurveyFormInline slug="test-slug" />);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Survey not available');
+    expect(utils!.container.textContent).toContain('Formulário indisponível');
   });
 
   it('shows error when fetch rejects', async () => {
@@ -172,7 +172,7 @@ describe('SurveyFormInline — loading and error', () => {
       utils = render(<SurveyFormInline slug="test-slug" />);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Failed to load survey');
+    expect(utils!.container.textContent).toContain('Não foi possível carregar o formulário');
   });
 });
 
@@ -236,8 +236,8 @@ describe('SurveyFormInline — initial render', () => {
   it('renders email + name when requireEmail is true', async () => {
     const { container } = await renderSurvey({ requireEmail: true });
     expect(container.querySelector('input[type="email"]')).toBeTruthy();
-    expect(container.textContent).toContain('Your Email');
-    expect(container.textContent).toContain('Your Name');
+    expect(container.textContent).toContain('Seu e-mail');
+    expect(container.textContent).toContain('Seu nome');
   });
 });
 
@@ -478,8 +478,8 @@ describe('SurveyFormInline — label association (a11y)', () => {
     const emailInput = container.querySelector('input[type="email"]') as HTMLInputElement;
     const nameInput = container.querySelector('input[type="text"]') as HTMLInputElement;
     const labels = Array.from(container.querySelectorAll('label'));
-    const emailLabel = labels.find(l => l.textContent?.includes('Your Email')) as HTMLLabelElement;
-    const nameLabel = labels.find(l => l.textContent?.includes('Your Name')) as HTMLLabelElement;
+    const emailLabel = labels.find(l => l.textContent?.includes('Seu e-mail')) as HTMLLabelElement;
+    const nameLabel = labels.find(l => l.textContent?.includes('Seu nome')) as HTMLLabelElement;
     expect(emailLabel.getAttribute('for')).toBe(emailInput.id);
     expect(nameLabel.getAttribute('for')).toBe(nameInput.id);
   });
@@ -648,7 +648,7 @@ describe('SurveyFormInline — validation', () => {
     await act(async () => {
       fireEvent.submit(form);
     });
-    expect(container.textContent).toContain('Email is required');
+    expect(container.textContent).toContain('O e-mail é obrigatório');
   });
 
   it('skips hidden (showIf failing) fields during validation', async () => {
@@ -804,7 +804,7 @@ describe('SurveyFormInline — submit', () => {
       fireEvent.submit(utils!.container.querySelector('form') as HTMLFormElement);
       await flushPromises();
     });
-    expect(utils!.container.textContent).toContain('Thank you!');
+    expect(utils!.container.textContent).toContain('Obrigado!');
   });
 });
 
@@ -865,7 +865,7 @@ describe('SurveyFormInline — multi-page', () => {
       fireEvent.click(nextBtn);
     });
     const backBtn = Array.from(container.querySelectorAll('button')).find(b =>
-      b.textContent?.includes('Back'),
+      b.textContent?.includes('Voltar'),
     );
     expect(backBtn).toBeTruthy();
   });
@@ -885,7 +885,7 @@ describe('SurveyFormInline — multi-page', () => {
       fireEvent.click(next);
     });
     const back = Array.from(container.querySelectorAll('button')).find(b =>
-      b.textContent?.includes('Back'),
+      b.textContent?.includes('Voltar'),
     ) as HTMLButtonElement;
     await act(async () => {
       fireEvent.click(back);
