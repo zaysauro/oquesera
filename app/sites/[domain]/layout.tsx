@@ -16,7 +16,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { eq } from 'drizzle-orm';
 import { db } from '@/lib/db';
-import { siteTracking } from '@/lib/db/schema';
+import { siteBranding, siteTracking } from '@/lib/db/schema';
 import { SiteNavClient } from './SiteNavClient';
 import { SiteFooter } from './SiteFooter';
 import { TrackingScripts, TrackingNoscriptBody } from '@/components/sites/TrackingScripts';
@@ -26,34 +26,33 @@ import { SiteRouteProgress } from '@/components/sites/SiteRouteProgress';
 import { siteBaseUrl } from '@/lib/sites/site-base-url';
 import { organizationSchema, webSiteSchema, jsonLd } from '@/lib/sites/structured-data';
 
-// Per-site footer contact overrides — keyed by subdomain. Hardcoded for now
-// because brandingProfile schema doesn't yet have contact fields. When the
-// branding schema gains those columns, drop this map and read from there.
-const SITE_CONTACT_OVERRIDES: Record<string, {
-  contactEmail?: string;
-  contactPhone?: string;
-  contactAddress?: string[];
-  legalLinks?: Array<{ label: string; href: string }>;
-  complianceNotes?: string[];
-  trustBadges?: Array<{ src: string; alt: string; href?: string; width?: number; height?: number }>;
-  theme?: { background?: string; text?: string; heading?: string; border?: string };
-}> = {
-  // ponytail: per-site contact data belongs in the branding profile, not
-  // platform source. This map is a deliberate, operator-approved exception
-  // pending those columns — NOT a pattern to copy. Every entry here is one
-  // client's data compiled into every tenant's bundle, which is how
-  // "Talk to a Slate Expert" ended up on six live Found Delivery pages
-  // (PUX-093). Adding contactPhone/contactEmail to brandingProfiles and
-  // deleting this map is tracked; until then, keep it to contact facts a
-  // footer must render and nothing else.
-  founddelivery: {
-    contactPhone: '(215) 948-2202',
-    contactEmail: 'founddeliveryco@gmail.com',
-  },
-};
-
-function getSiteContactInfo(subdomain: string | null) {
-  return (subdomain && SITE_CONTACT_OVERRIDES[subdomain]) || {};
+// Footer contact details come from the site's branding row (site_branding
+// contact_* columns, edited in the portal's site settings). The upstream
+// hard-coded per-subdomain map was removed: it compiled one tenant's data
+// into every tenant's bundle.
+async function getSiteContactInfo(websiteId: number) {
+  try {
+    const [row] = await db
+      .select({
+        email: siteBranding.contactEmail,
+        phone: siteBranding.contactPhone,
+        whatsapp: siteBranding.contactWhatsapp,
+        address: siteBranding.contactAddress,
+      })
+      .from(siteBranding)
+      .where(eq(siteBranding.websiteId, websiteId))
+      .limit(1);
+    if (!row) return {};
+    const phone = [row.phone, row.whatsapp ? `WhatsApp ${row.whatsapp}` : null].filter(Boolean).join(' · ');
+    return {
+      contactEmail: row.email || undefined,
+      contactPhone: phone || undefined,
+      contactAddress: row.address ? row.address.split('\n').map((l) => l.trim()).filter(Boolean) : undefined,
+    };
+  } catch (err) {
+    console.error('[sites/layout] contact info unavailable:', err);
+    return {};
+  }
 }
 
 // 1:1 with clientWebsites — null means the row hasn't been initialised yet.
@@ -383,7 +382,7 @@ export default async function ClientSiteLayout({ children, params }: LayoutProps
           headingFont={branding.headingFont || undefined}
           bodyFont={branding.bodyFont || undefined}
           basePath={basePath}
-          {...getSiteContactInfo(site.subdomain)}
+          {...(await getSiteContactInfo(site.id))}
         />
       </div>
     </>

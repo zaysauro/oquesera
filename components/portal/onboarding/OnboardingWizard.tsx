@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
+import { KumoLogo } from '@/components/kumo/KumoLogo';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { OnboardingAnswers, OnboardingState, OnboardingStep } from '@/lib/onboarding/types';
 import { ONBOARDING_STEPS } from '@/lib/onboarding/types';
@@ -225,19 +225,18 @@ export default function OnboardingWizard({ initialState, stripeEnabled = true }:
       <aside className="relative hidden overflow-hidden bg-[#0e0d0c] px-7 py-7 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
         <div className="auth-mesh">
           <span className="auth-blob" style={{ width: 230, height: 230, background: '#2563eb', top: '-70px', left: '-60px' }} />
-          <span className="auth-blob" style={{ width: 180, height: 180, background: '#10b981', top: '34%', right: '-70px', opacity: 0.8, animationDelay: '-6s' }} />
-          <span className="auth-blob" style={{ width: 160, height: 160, background: '#f59e0b', bottom: '-50px', left: '-20px', opacity: 0.7, animationDelay: '-11s' }} />
+          <span className="auth-blob" style={{ width: 180, height: 180, background: '#facc15', top: '34%', right: '-70px', opacity: 0.8, animationDelay: '-6s' }} />
+          <span className="auth-blob" style={{ width: 160, height: 160, background: '#a16207', bottom: '-50px', left: '-20px', opacity: 0.7, animationDelay: '-11s' }} />
         </div>
         <div className="auth-grain" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Link href="/" className="flex items-center font-heading text-lg text-white">
-            <Image src="/iconLogo.png" alt="" width={40} height={40} className="nav-logo-icon" priority />
-            <span><b>Simpler</b> Development</span>
+            <KumoLogo size={30} />
           </Link>
 
           <div className="mb-4 mt-7 flex items-center gap-2.5 font-mono text-[10.5px] uppercase tracking-[0.2em] text-white/50">
-            <span className="auth-dot inline-block h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+            <span className="auth-dot inline-block h-[7px] w-[7px] rounded-full bg-yellow-400 shadow-[0_0_10px_#facc15]" />
             Get set up
           </div>
 

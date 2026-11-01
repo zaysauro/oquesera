@@ -6,6 +6,9 @@ import { clientWebsites } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { getPortalClient } from '@/lib/portal-client';
 import { authorizePortal, isAuthError } from '@/lib/portal-auth';
+import { applySiteTemplate } from '@/lib/kumo/apply-site-template';
+import { auditEvent } from '@/lib/kumo/audit';
+import { isSiteTemplateKey } from '@/lib/kumo/site-templates';
 import { generateUniqueSubdomain, validateSubdomain, isSubdomainAvailable } from '@/lib/subdomain';
 
 export async function GET() {
@@ -42,7 +45,10 @@ export async function POST(req: Request) {
   if (!client) return NextResponse.json({ success: false, message: 'Client not found' }, { status: 404 });
 
   const body = await req.json();
-  const { name, domain, description, subdomain: requestedSubdomain } = body;
+  const { name, domain, description, subdomain: requestedSubdomain, template, templateInfo } = body;
+  if (template !== undefined && template !== null && !isSiteTemplateKey(template)) {
+    return NextResponse.json({ success: false, message: 'Modelo de site desconhecido.' }, { status: 400 });
+  }
 
   if (!name) return NextResponse.json({ success: false, message: 'Website name is required' }, { status: 400 });
 
@@ -70,6 +76,44 @@ export async function POST(req: Request) {
     deploymentStatus: 'pending',
     active: true,
   }).returning();
+
+  if (template) {
+    const info = (templateInfo ?? {}) as Record<string, unknown>;
+    const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : undefined) || undefined;
+    try {
+      await applySiteTemplate({
+        websiteId: site.id,
+        clientId: client.id,
+        subdomain,
+        template,
+        info: {
+          company: str(info.company, 120) || client.company || name,
+          phone: str(info.phone, 40),
+          whatsapp: str(info.whatsapp, 40),
+          email: str(info.email, 200),
+          address: str(info.address, 300),
+          city: str(info.city, 120),
+          bookingSlug: str(info.bookingSlug, 120),
+        },
+      });
+    } catch (err) {
+      // Don't leave an empty site behind when the template could not be applied.
+      await db.delete(clientWebsites).where(eq(clientWebsites.id, site.id));
+      console.error('[websites] template apply failed:', err);
+      return NextResponse.json(
+        { success: false, message: 'Não foi possível criar o site a partir do modelo. Tente novamente.' },
+        { status: 500 },
+      );
+    }
+    await auditEvent({
+      clientId: client.id,
+      actorId: userId,
+      action: 'website.created_from_template',
+      entityType: 'website',
+      entityId: site.id,
+      metadata: { template },
+    });
+  }
 
   return NextResponse.json({ success: true, data: site });
 }

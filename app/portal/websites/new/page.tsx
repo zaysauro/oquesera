@@ -1,33 +1,39 @@
 'use client';
 
 import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { slugify } from '@/lib/publishing/slug';
 import { pBtnPrimary, pBtnGhost, pCard, pInput } from '@/components/portal/portal-ui';
+import { SITE_TEMPLATES } from '@/lib/kumo/site-templates';
 
-const WEBSITE_TYPES = [
-  { value: 'business', label: 'Business Website', icon: 'business', description: 'Company homepage, about, services, contact' },
-  { value: 'portfolio', label: 'Portfolio', icon: 'photo_library', description: 'Showcase your work and projects' },
-  { value: 'blog', label: 'Blog', icon: 'rss_feed', description: 'Articles, news, and long-form content' },
-  { value: 'landing', label: 'Landing Page', icon: 'web', description: 'Single-page focused on one goal' },
-  { value: 'ecommerce', label: 'E-commerce', icon: 'shopping_cart', description: 'Sell products online' },
-  { value: 'other', label: 'Something Else', icon: 'more_horiz', description: 'Custom setup — we\'ll figure it out together' },
-];
+const BLANK = 'em-branco';
+
+interface BookingPageOption { slug: string; title: string }
 
 export default function PortalCmsNewPage() {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [form, setForm] = useState({ name: '', domain: '', description: '', websiteType: '', subdomain: '' });
+  const [template, setTemplate] = useState<string>('');
+  const [form, setForm] = useState({ name: '', domain: '', description: '', subdomain: '' });
+  const [info, setInfo] = useState({ company: '', phone: '', whatsapp: '', email: '', address: '', city: '', bookingSlug: '' });
+  const [bookingPages, setBookingPages] = useState<BookingPageOption[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  // Auto-generate subdomain from name
+  useEffect(() => {
+    fetch('/api/portal/tools/booking')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => { if (json?.success) setBookingPages(json.data || []); })
+      .catch(() => {});
+  }, []);
+
   const effectiveSubdomain = form.subdomain || slugify(form.name, 63);
+  const usesTemplate = template && template !== BLANK;
 
   const handleCreate = async () => {
-    if (!form.name) { setError('Please enter a website name.'); return; }
+    if (!form.name) { setError('Informe o nome do site.'); return; }
     setSaving(true); setError('');
     const res = await fetch('/api/portal/cms/websites', {
       method: 'POST',
@@ -37,227 +43,183 @@ export default function PortalCmsNewPage() {
         domain: form.domain || null,
         description: form.description || null,
         subdomain: effectiveSubdomain || null,
+        ...(usesTemplate ? { template, templateInfo: { ...info, company: info.company || form.name } } : {}),
       }),
     });
-    const data = await res.json();
-    if (!data.success) { setSaving(false); setError(data.message || 'Failed to create website.'); return; }
-
-    setSaving(false);
+    const data = await res.json().catch(() => ({ success: false }));
+    if (!data.success) { setSaving(false); setError(data.message || 'Não foi possível criar o site.'); return; }
     router.push(`/portal/websites/${data.data.id}?created=1`);
   };
 
+  const field = (key: keyof typeof info, label: string, placeholder: string, type = 'text') => (
+    <div>
+      <label htmlFor={`info-${key}`} className="block text-sm font-medium text-foreground mb-1.5">{label}</label>
+      <input
+        id={`info-${key}`}
+        type={type}
+        value={info[key]}
+        onChange={(e) => setInfo((i) => ({ ...i, [key]: e.target.value }))}
+        placeholder={placeholder}
+        className={`${pInput} w-full`}
+      />
+    </div>
+  );
+
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Back */}
-      <Link
-        href="/portal/websites"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-      >
+    <div className="max-w-3xl mx-auto space-y-6">
+      <Link href="/portal/websites" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <span className="material-icons text-base">arrow_back</span>
-        Back to Websites
+        Voltar para Sites
       </Link>
 
-      {/* Progress */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2" aria-label="Etapas">
         {([1, 2, 3] as const).map((s) => (
           <div key={s} className="flex items-center gap-2">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
-              step > s ? 'bg-primary text-primary-foreground' :
-              step === s ? 'bg-primary text-primary-foreground' :
-              'bg-muted text-muted-foreground'
-            }`}>
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${step >= s ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
               {step > s ? <span className="material-icons text-sm">check</span> : s}
             </div>
-            {s < 3 && <div className={`h-px flex-1 w-8 transition-colors ${step > s ? 'bg-primary' : 'bg-border'}`} />}
+            {s < 3 && <div className={`h-px w-8 ${step > s ? 'bg-primary' : 'bg-border'}`} />}
           </div>
         ))}
         <div className="ml-2 text-xs text-muted-foreground">
-          {step === 1 && 'Choose type'}
-          {step === 2 && 'Name your site'}
-          {step === 3 && 'Domain (optional)'}
+          {step === 1 && 'Escolha o modelo'}
+          {step === 2 && 'Dados da empresa'}
+          {step === 3 && 'Endereço do site'}
         </div>
       </div>
 
-      {/* Step 1 — Website type */}
       {step === 1 && (
         <div className="space-y-4">
           <div>
-            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">What kind of website are you building?</h1>
-            <p className="text-muted-foreground text-sm mt-1">This helps us set things up for you, but you can change it anytime.</p>
+            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">Escolha um modelo inicial</h1>
+            <p className="text-muted-foreground text-sm mt-1">O modelo cria as páginas Início, Serviços, Sobre e Contato com textos de exemplo, cores e um formulário de contato. Tudo pode ser editado depois.</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
-            {WEBSITE_TYPES.map((type) => (
+            {SITE_TEMPLATES.map((t) => (
               <button
-                key={type.value}
-                onClick={() => { setForm(f => ({ ...f, websiteType: type.value })); setStep(2); }}
-                className={`flex items-start gap-3 p-4 rounded-2xl border text-left transition-all hover:border-primary/60 hover:bg-primary/5 group ${
-                  form.websiteType === type.value ? 'border-primary bg-primary/5' : 'border-border bg-card'
-                }`}
+                key={t.key}
+                type="button"
+                onClick={() => { setTemplate(t.key); setStep(2); }}
+                className={`flex items-start gap-3 p-4 rounded-2xl border text-left transition-all hover:border-primary/60 ${template === t.key ? 'border-primary bg-primary/5' : 'border-border bg-card'}`}
               >
-                <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-                  <span className="material-icons text-muted-foreground group-hover:text-primary transition-colors">{type.icon}</span>
+                <div className="flex shrink-0 overflow-hidden rounded-lg" aria-hidden="true">
+                  {t.colors.map((c) => <span key={c} className="h-9 w-3" style={{ background: c }} />)}
                 </div>
                 <div>
-                  <p className="font-medium text-foreground text-sm">{type.label}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{type.description}</p>
+                  <p className="font-medium text-foreground text-sm">{t.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{t.description}</p>
                 </div>
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => { setTemplate(BLANK); setStep(3); }}
+              className={`flex items-start gap-3 p-4 rounded-2xl border text-left transition-all hover:border-primary/60 ${template === BLANK ? 'border-primary bg-primary/5' : 'border-border bg-card'}`}
+            >
+              <span className="material-icons text-muted-foreground">add</span>
+              <div>
+                <p className="font-medium text-foreground text-sm">Em branco</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Comece sem páginas e monte tudo no editor.</p>
+              </div>
+            </button>
           </div>
         </div>
       )}
 
-      {/* Step 2 — Name */}
       {step === 2 && (
         <div className="space-y-5">
           <div>
-            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">Name your website</h1>
-            <p className="text-muted-foreground text-sm mt-1">This is just an internal label — your visitors won&apos;t see it.</p>
+            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">Dados da empresa</h1>
+            <p className="text-muted-foreground text-sm mt-1">Usados nos textos, no rodapé e na página de contato. Deixe em branco o que não quiser exibir.</p>
           </div>
-          <div className={`${pCard} p-5 space-y-4`}>
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Website name *</label>
+          <div className={`${pCard} p-5 grid gap-4 sm:grid-cols-2`}>
+            <div className="sm:col-span-2">
+              <label htmlFor="site-name" className="block text-sm font-medium text-foreground mb-1.5">Nome da empresa no site *</label>
               <input
+                id="site-name"
                 autoFocus
                 value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                onKeyDown={e => { if (e.key === 'Enter' && form.name) setStep(3); }}
-                placeholder={
-                  form.websiteType === 'business' ? 'e.g. Acme Corp Website' :
-                  form.websiteType === 'blog' ? 'e.g. My Blog' :
-                  form.websiteType === 'portfolio' ? 'e.g. My Portfolio' :
-                  'e.g. My Website'
-                }
+                onChange={(e) => { setForm((f) => ({ ...f, name: e.target.value })); setInfo((i) => ({ ...i, company: e.target.value })); }}
+                placeholder="Ex.: Barbearia do Centro"
                 className={`${pInput} w-full`}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Brief description <span className="text-muted-foreground font-normal">(optional)</span></label>
-              <textarea
-                value={form.description}
-                onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                rows={2}
-                placeholder="What is this website for?"
-                className={`${pInput} w-full resize-none`}
-              />
-            </div>
-          </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <div className="flex gap-3">
-            <button onClick={() => setStep(1)} className={pBtnGhost}>
-              Back
-            </button>
-            <button
-              onClick={() => { if (!form.name) { setError('Please enter a name.'); return; } setError(''); setStep(3); }}
-              disabled={!form.name}
-              className={`${pBtnPrimary} flex-1 disabled:opacity-50`}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3 — Subdomain + Domain + create */}
-      {step === 3 && (
-        <div className="space-y-5">
-          <div>
-            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">Your website address</h1>
-            <p className="text-muted-foreground text-sm mt-1">Your site will be live at a {PLATFORM_ROOT_DOMAIN} subdomain. You can add a custom domain later.</p>
-          </div>
-
-          {/* Subdomain */}
-          <div className={`${pCard} p-5 space-y-4`}>
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Subdomain</label>
-              <div className="flex items-center gap-0">
-                <div className="flex items-center gap-2 px-3 py-2.5 bg-background border border-border rounded-l-lg flex-1 focus-within:border-primary transition-colors">
-                  <input
-                    autoFocus
-                    value={form.subdomain || slugify(form.name, 63)}
-                    onChange={e => setForm(f => ({ ...f, subdomain: slugify(e.target.value, 63) }))}
-                    className="bg-transparent outline-none flex-1 text-sm text-foreground font-mono"
-                  />
-                </div>
-                <div className="px-3 py-2.5 bg-muted border border-l-0 border-border rounded-r-lg text-sm text-muted-foreground font-mono shrink-0">
-                  .{PLATFORM_ROOT_DOMAIN}
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1.5">
-                This will be your website&apos;s default URL
-              </p>
-            </div>
-
-            {/* Custom domain (optional) */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Custom domain <span className="text-muted-foreground font-normal">(optional)</span></label>
-              <div className="flex items-center gap-2 px-3 py-2.5 bg-background border border-border rounded-lg focus-within:border-primary transition-colors">
-                <span className="material-icons text-muted-foreground text-base">language</span>
-                <input
-                  value={form.domain}
-                  onChange={e => setForm(f => ({ ...f, domain: e.target.value.replace(/^https?:\/\//, '') }))}
-                  placeholder="yoursite.com"
-                  className="bg-transparent outline-none flex-1 text-sm text-foreground font-mono"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-1.5">You can configure this later too</p>
-            </div>
-          </div>
-
-          {/* Summary */}
-          <div className="bg-muted/30 border border-border rounded-2xl p-4 space-y-2 text-sm">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Summary</p>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Type</span>
-              <span className="text-foreground font-medium capitalize">{WEBSITE_TYPES.find(t => t.value === form.websiteType)?.label || form.websiteType}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Name</span>
-              <span className="text-foreground font-medium">{form.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">URL</span>
-              <span className="text-foreground font-mono text-xs">{effectiveSubdomain}.{PLATFORM_ROOT_DOMAIN}</span>
-            </div>
-            {form.domain && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Custom domain</span>
-                <span className="text-foreground font-mono text-xs">{form.domain}</span>
+            {field('phone', 'Telefone', '(11) 3333-4444', 'tel')}
+            {field('whatsapp', 'WhatsApp', '(11) 99999-8888', 'tel')}
+            {field('email', 'E-mail de contato', 'contato@empresa.com.br', 'email')}
+            {field('city', 'Cidade / UF', 'São Paulo — SP')}
+            <div className="sm:col-span-2">{field('address', 'Endereço', 'Rua Exemplo, 123 — Bairro')}</div>
+            {bookingPages.length > 0 && (
+              <div className="sm:col-span-2">
+                <label htmlFor="info-booking" className="block text-sm font-medium text-foreground mb-1.5">Página de agendamento <span className="text-muted-foreground font-normal">(opcional)</span></label>
+                <select
+                  id="info-booking"
+                  value={info.bookingSlug}
+                  onChange={(e) => setInfo((i) => ({ ...i, bookingSlug: e.target.value }))}
+                  className={`${pInput} w-full`}
+                >
+                  <option value="">Botões apontam para a página de contato</option>
+                  {bookingPages.map((p) => <option key={p.slug} value={p.slug}>{p.title}</option>)}
+                </select>
               </div>
             )}
           </div>
-
-          {error && <p className="text-sm text-red-600">{error}</p>}
-
           <div className="flex gap-3">
-            <button onClick={() => setStep(2)} className={pBtnGhost}>
-              Back
-            </button>
-            <button
-              onClick={handleCreate}
-              disabled={saving}
-              className={`${pBtnPrimary} flex-1 disabled:opacity-50`}
-            >
-              {saving && <span className="material-icons text-base animate-spin">refresh</span>}
-              {saving ? 'Creating...' : 'Create Website'}
-            </button>
+            <button type="button" onClick={() => setStep(1)} className={pBtnGhost}>Voltar</button>
+            <button type="button" onClick={() => (form.name ? (setError(''), setStep(3)) : setError('Informe o nome da empresa.'))} className={pBtnPrimary}>Continuar</button>
           </div>
+          {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+        </div>
+      )}
 
-          {/* Request help */}
-          <div className={`${pCard} flex items-center gap-3 p-4`}>
-            <span className="material-icons text-muted-foreground">support_agent</span>
-            <div className="flex-1 text-sm">
-              <p className="font-medium text-foreground">Need a hand?</p>
-              <p className="text-muted-foreground text-xs mt-0.5">Our team can set everything up for you.</p>
-            </div>
-            <Link
-              href="/portal/tickets/new"
-              className="text-sm text-primary hover:underline shrink-0 flex items-center gap-1"
-            >
-              Get help
-              <span className="material-icons text-sm">arrow_forward</span>
-            </Link>
+      {step === 3 && (
+        <div className="space-y-5">
+          <div>
+            <h1 className="text-xl font-display font-extrabold tracking-[-0.02em] text-foreground">Endereço do site</h1>
+            <p className="text-muted-foreground text-sm mt-1">O site fica disponível em um subdomínio de {PLATFORM_ROOT_DOMAIN}. Você pode adicionar um domínio próprio depois.</p>
           </div>
+          <div className={`${pCard} p-5 space-y-4`}>
+            {template === BLANK && (
+              <div>
+                <label htmlFor="site-name-blank" className="block text-sm font-medium text-foreground mb-1.5">Nome do site *</label>
+                <input id="site-name-blank" autoFocus value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="Ex.: Site da empresa" className={`${pInput} w-full`} />
+              </div>
+            )}
+            <div>
+              <label htmlFor="site-sub" className="block text-sm font-medium text-foreground mb-1.5">Subdomínio</label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="site-sub"
+                  value={effectiveSubdomain}
+                  onChange={(e) => setForm((f) => ({ ...f, subdomain: slugify(e.target.value, 63) }))}
+                  className={`${pInput} w-full font-mono`}
+                />
+                <span className="text-sm text-muted-foreground whitespace-nowrap">.{PLATFORM_ROOT_DOMAIN}</span>
+              </div>
+            </div>
+            <div>
+              <label htmlFor="site-domain" className="block text-sm font-medium text-foreground mb-1.5">Domínio próprio <span className="text-muted-foreground font-normal">(opcional)</span></label>
+              <input
+                id="site-domain"
+                value={form.domain}
+                onChange={(e) => setForm((f) => ({ ...f, domain: e.target.value.replace(/^https?:\/\//, '') }))}
+                placeholder="www.suaempresa.com.br"
+                className={`${pInput} w-full font-mono`}
+              />
+              <p className="text-xs text-muted-foreground mt-1">Depois de criar, aponte o DNS do domínio conforme as instruções nas configurações do site.</p>
+            </div>
+            {effectiveSubdomain && (
+              <p className="text-xs text-muted-foreground">Endereço: <span className="text-foreground font-mono">{effectiveSubdomain}.{PLATFORM_ROOT_DOMAIN}</span></p>
+            )}
+          </div>
+          {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+          <div className="flex gap-3">
+            <button type="button" onClick={() => setStep(template === BLANK ? 1 : 2)} className={pBtnGhost}>Voltar</button>
+            <button type="button" onClick={handleCreate} disabled={saving || !form.name} className={pBtnPrimary}>
+              {saving ? 'Criando…' : usesTemplate ? 'Criar site com o modelo' : 'Criar site'}
+            </button>
+          </div>
+          {usesTemplate && <p className="text-xs text-muted-foreground">As páginas são criadas como rascunho. Revise na pré-visualização e publique quando estiver pronto.</p>}
         </div>
       )}
     </div>

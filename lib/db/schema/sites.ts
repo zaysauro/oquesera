@@ -511,6 +511,11 @@ export const siteBranding = pgTable('site_branding', {
     logoUrl?: string; logoSquareUrl?: string; logoRectUrl?: string; logoIconUrl?: string;
   }>(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  // Public contact details rendered by the site footer (Kumo One).
+  contactEmail: varchar('contact_email', { length: 255 }),
+  contactPhone: varchar('contact_phone', { length: 50 }),
+  contactWhatsapp: varchar('contact_whatsapp', { length: 50 }),
+  contactAddress: text('contact_address'),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 

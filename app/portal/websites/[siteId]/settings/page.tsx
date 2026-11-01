@@ -11,6 +11,7 @@ import DeploymentList from '@/components/portal/DeploymentList';
 import GitHubConnectButton from '@/components/portal/GitHubConnectButton';
 import CustomDomainForm from '@/components/portal/CustomDomainForm';
 import WebsiteSettingsForm from '@/components/portal/WebsiteSettingsForm';
+import SiteContactForm from '@/components/portal/SiteContactForm';
 import DeleteWebsiteButton from '@/components/portal/DeleteWebsiteButton';
 import GoogleConnectionCard from '@/components/portal/GoogleConnectionCard';
 import HttpLogViewer from '@/components/portal/HttpLogViewer';
@@ -90,6 +91,8 @@ export default async function WebsiteSettingsPage({
         initialPublicAccess={site.publicAccess}
         initialPreviewCode={site.previewCode || null}
       />
+
+      <SiteContactForm siteId={site.id} />
 
       {/* Custom Domains */}
       <CustomDomainForm siteId={site.id} initialDomains={domains} />

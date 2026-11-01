@@ -9,6 +9,8 @@ import ApiKeysManager from '@/components/portal/ApiKeysManager';
 import UploadHtmlPageButton from '@/components/portal/UploadHtmlPageButton';
 import CreateSnapshotButton from '@/components/portal/CreateSnapshotButton';
 import RequestActivationButton from './_components/RequestActivationButton';
+import SitePublishPanel from './_components/SitePublishPanel';
+import { platformSubdomainHost } from '@/config/brand';
 import { PortalPageHeader } from '@/components/portal/PortalPageHeader';
 import { pCard } from '@/components/portal/portal-ui';
 
@@ -50,9 +52,9 @@ export default async function PortalCmsDashboardPage({
           domain + +Entry button; this page is the dashboard, so its title
           reflects that. */}
       <PortalPageHeader
-        eyebrow="Website"
-        title="Dashboard"
-        subtitle="Overview of your content, types, and entries."
+        eyebrow="Site"
+        title="Visão geral"
+        subtitle="Conteúdo, publicação e atalhos do site."
         actions={
           <>
             <CreateSnapshotButton siteId={site.id} siteName={site.name} />
@@ -65,13 +67,29 @@ export default async function PortalCmsDashboardPage({
         <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300">
           <span className="material-icons text-green-600">check_circle</span>
           <div>
-            <p className="font-medium text-sm">Website created successfully!</p>
-            <p className="text-xs mt-0.5">Create your first page to start building your site.</p>
+            <p className="font-medium text-sm">Site criado!</p>
+            <p className="text-xs mt-0.5">
+              {sitePosts.length > 0
+                ? 'As páginas do modelo foram criadas como rascunho. Edite os textos e imagens, pré-visualize e publique.'
+                : 'Crie a primeira página para começar a montar o site.'}
+            </p>
           </div>
         </div>
       )}
 
-      {site.deploymentStatus === 'pending' && (
+      <SitePublishPanel
+        siteId={site.id}
+        host={site.domain || (site.subdomain ? platformSubdomainHost(site.subdomain) : '')}
+        publicAccess={site.publicAccess}
+        pageCount={sitePosts.filter((p) => p.postType === 'page').length}
+        publishedCount={published.filter((p) => p.postType === 'page').length}
+        hasPublicDomain={!!process.env.NEXT_PUBLIC_PLATFORM_ROOT_DOMAIN || !!site.domain}
+      />
+
+      {/* Dedicated per-site provisioning (GitHub/Vercel/Cloudflare) is an
+          optional upstream flow. Kumo One serves sites from the shared app, so
+          the "pending" banner only shows when that flow is enabled. */}
+      {process.env.KUMO_DEDICATED_SITE_PROVISIONING === 'true' && site.deploymentStatus === 'pending' && (
         <div className="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-yellow-900 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-300">
           <span className="material-icons text-yellow-600 mt-0.5">pending</span>
           <div className="flex-1 min-w-0">

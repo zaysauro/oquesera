@@ -1,5 +1,7 @@
 'use server';
 
+import { extractPlatformSubdomain } from '@/config/brand';
+
 import { db } from '@/lib/db';
 import { clientWebsites, posts, categories, postCategories, pitchDecks, clients, siteNavigation, websiteDomains, postTypes } from '@/lib/db/schema';
 import { eq, and, or, asc, isNull, sql } from 'drizzle-orm';
@@ -33,13 +35,13 @@ export async function getClientWebsiteByDomain(domain: string) {
 
   if (via?.site) return via.site;
 
-  // Fall back to subdomain match (e.g. sd-testing.simplerdevelopment.com → subdomain "sd-testing")
-  const subdomainMatch = domain.match(/^([^.]+)\.simplerdevelopment\.com$/);
-  if (subdomainMatch) {
+  // Fall back to the platform subdomain (acme.<NEXT_PUBLIC_PLATFORM_ROOT_DOMAIN> → "acme")
+  const platformSub = extractPlatformSubdomain(domain);
+  if (platformSub) {
     const [subSite] = await db
       .select()
       .from(clientWebsites)
-      .where(and(eq(clientWebsites.subdomain, subdomainMatch[1]), eq(clientWebsites.active, true)))
+      .where(and(eq(clientWebsites.subdomain, platformSub), eq(clientWebsites.active, true)))
       .limit(1);
     return subSite ?? null;
   }

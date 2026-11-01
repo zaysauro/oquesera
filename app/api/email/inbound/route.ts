@@ -86,7 +86,8 @@ export async function POST(req: Request) {
     // Extract prefix from to address: prefix@simplerdevelopment.com (supports
     // plus-tagging like brain+<token>@…). The prefix used for client lookup is
     // the part before any '+', so client+anything@… still matches a client.
-    const toMatch = to.toLowerCase().match(/^([^@]+)@simplerdevelopment\.com$/);
+    const toLower = to.toLowerCase();
+    const toMatch = toLower.endsWith(`@${EMAIL_DOMAIN}`) ? [toLower, toLower.slice(0, -(EMAIL_DOMAIN.length + 1))] : null;
     if (!toMatch) {
       return NextResponse.json({ error: 'Invalid destination address' }, { status: 400 });
     }
