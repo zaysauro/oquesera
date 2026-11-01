@@ -1,0 +1,203 @@
+// Page-level Google Fonts collection.
+//
+// Historically every block that carried a `style.fontFamily` emitted its OWN
+// `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=...">`
+// (see the old code in BlockStyleWrapper). On a real page that meant 40-50
+// render-blocking font requests — and because authored values are full CSS
+// stacks ("Raleway, -apple-system, BlinkMacSystemFont, sans-serif") the
+// `family=` param was malformed and resolved to nothing, so the font never
+// loaded AND the page sat blocked on dozens of dead requests.
+//
+// These helpers (a) extract the bare Google-Font family name from a possibly-
+// stacked value, and (b) collect every unique family used across a page's
+// block tree so the renderer can emit a SINGLE combined request.
+
+import { renderHtmlTemplate } from '@/lib/blocks/html-render-template';
+// cssFontStack lives in its own dependency-free module so CLIENT code
+// (BlockStyleWrapper) can use it without importing this file, which drags in
+// html-render-template → the sanitize-html stack (~170 KB raw). Re-exported so
+// existing server-side importers keep working.
+export { cssFontStack } from '@/lib/blocks/css-font-stack';
+
+// Generic CSS keywords and common system fonts that are NOT Google Fonts and
+// must never be sent to the css2 endpoint. Compared lowercase.
+const NON_GOOGLE_FAMILIES = new Set([
+  'sans-serif', 'serif', 'monospace', 'system-ui', 'ui-sans-serif', 'ui-serif',
+  'ui-monospace', 'cursive', 'fantasy', 'emoji', 'math', 'fangsong',
+  '-apple-system', 'blinkmacsystemfont', 'segoe ui', 'inherit', 'initial',
+  'unset', 'revert', 'revert-layer', 'none',
+]);
+
+/**
+ * Reduce a fontFamily value to the bare Google-Font family name, or null if it
+ * isn't a Google Font we should request. Handles:
+ *  - full stacks  → takes the first family ("Raleway, -apple-system, ..." → "Raleway")
+ *  - quotes       → strips them ('"Open Sans", ...' → "Open Sans")
+ *  - tailwind     → "font-sans"  → null
+ *  - brand tokens → "brand.headingFont" → null
+ *  - generics     → "sans-serif" → null
+ */
+export function bareFontFamily(raw: string | null | undefined): string | null {
+  if (!raw || typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith('font-')) return null; // tailwind utility class
+  if (trimmed.startsWith('brand.')) return null; // brand sentinel
+  if (trimmed.startsWith('var(')) return null; // CSS variable
+  const first = trimmed.split(',')[0].trim().replace(/^["']|["']$/g, '').trim();
+  if (!first) return null;
+  if (NON_GOOGLE_FAMILIES.has(first.toLowerCase())) return null;
+  return first;
+}
+
+/**
+ * Walk a parsed block tree (any shape) and collect every unique bare Google
+ * Font family referenced by `style.fontFamily` or `elementStyles[*].fontFamily`.
+ * Generic recursion makes this resilient to all nesting shapes (columns, tabs,
+ * accordion items, sections, etc.) without depending on their exact schemas.
+ */
+function walkForFonts(node: unknown, out: Set<string>): void {
+  if (!node || typeof node !== 'object') return;
+  if (Array.isArray(node)) {
+    for (const child of node) walkForFonts(child, out);
+    return;
+  }
+  const obj = node as Record<string, unknown>;
+
+  const style = obj.style as Record<string, unknown> | undefined;
+  if (style && typeof style === 'object') {
+    const f = bareFontFamily(style.fontFamily as string | undefined);
+    if (f) out.add(f);
+  }
+
+  const elementStyles = obj.elementStyles as Record<string, unknown> | undefined;
+  if (elementStyles && typeof elementStyles === 'object') {
+    for (const v of Object.values(elementStyles)) {
+      if (v && typeof v === 'object') {
+        const f = bareFontFamily((v as Record<string, unknown>).fontFamily as string | undefined);
+        if (f) out.add(f);
+      }
+    }
+  }
+
+  for (const v of Object.values(obj)) walkForFonts(v, out);
+}
+
+/** Collect unique Google-Font families used by a page's serialized block content. */
+export function collectBlockFonts(content: string): string[] {
+  const out = new Set<string>();
+  try {
+    walkForFonts(JSON.parse(content), out);
+  } catch {
+    // Non-JSON content (raw HTML fallback) carries no block font metadata.
+  }
+  return Array.from(out);
+}
+
+/**
+ * Resolve every html-render block's template against its field values and
+ * return a scan corpus in document order (substituted html for html-render
+ * blocks, raw JSON for everything else).
+ *
+ * WHY (ITM-031): the content string the page routes hand to HeroPreload is
+ * PRE-substitution — a hero authored as `url('{{bgImage}}')` shows the
+ * literal token here, while the actual URL sits in the block's `values`
+ * dict. Scanning the raw string half-works by accident (the URL is found in
+ * the serialized values), but any pairing that must see the SUBSTITUTED
+ * neighborhood of a URL (e.g. the `-w828.webp` mobile-variant reference in a
+ * media query) never matches. Substituting first makes the corpus look like
+ * what the page actually renders.
+ */
+export function resolveHtmlRenderCorpus(content: string): string {
+  try {
+    const parsed = JSON.parse(content);
+    const parts: string[] = [];
+    const walk = (node: unknown): void => {
+      if (Array.isArray(node)) {
+        for (const item of node) walk(item);
+        return;
+      }
+      if (!node || typeof node !== 'object') return;
+      const block = node as Record<string, unknown>;
+      if (block.type === 'html-render' && typeof block.html === 'string') {
+        parts.push(
+          renderHtmlTemplate(
+            block.html,
+            block.fields as Parameters<typeof renderHtmlTemplate>[1],
+            block.values as Parameters<typeof renderHtmlTemplate>[2],
+          ),
+        );
+        return;
+      }
+      // Non-html-render blocks: their image props (backgroundImage, cards[].
+      // image, …) are literal in the JSON — serialize the block as-is so the
+      // scanner still sees them in document order. Recurse for containers
+      // (columns) whose nested blocks may include html-render.
+      parts.push(JSON.stringify(block));
+      for (const v of Object.values(block)) {
+        if (Array.isArray(v)) walk(v);
+      }
+    };
+    walk(parsed);
+    return parts.join('\n');
+  } catch {
+    // Non-JSON content (raw HTML fallback) — already "rendered".
+    return content;
+  }
+}
+
+/**
+ * Find the first image URL in a page's serialized block content — used to
+ * <link rel=preload> the likely LCP image. Heroes are frequently authored as a
+ * CSS background-image (often inside an html-render block), which the browser's
+ * preload scanner cannot see, so the image doesn't even START loading until
+ * other resources clear — wrecking LCP. The site chrome's images (logo, trust
+ * seals, OG/favicon) live in the LAYOUT, not in `content`, so the first image
+ * URL in `content` is reliably the first on-page (hero) image.
+ */
+const CONTENT_IMAGE_RX = /(https?:\/\/[^"'()\s\\]+?\.(?:png|jpe?g|webp|avif|gif)|\/[^"'()\s\\]+?\.(?:png|jpe?g|webp|avif))/gi;
+
+export function firstContentImageUrl(content: string): string | null {
+  return firstContentImageUrls(content, 1)[0] ?? null;
+}
+
+/**
+ * Find the first `max` DISTINCT on-page image URLs, in document order. Used to
+ * preload the likely-LCP image(s). One URL isn't always enough: the LCP element
+ * differs by viewport. A common home layout is a small hero photo (the desktop
+ * LCP, first in `content`) followed by a full-width image grid whose first cell
+ * is the MOBILE LCP (second in `content`, and authored as `loading="lazy"`).
+ * Preloading only the first leaves the mobile LCP image undiscovered until the
+ * page JS clears, pushing its load-delay to several seconds. Returning the first
+ * couple of URLs lets HeroPreload cover both candidates.
+ */
+export function firstContentImageUrls(content: string, max = 2): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const m of content.matchAll(CONTENT_IMAGE_RX)) {
+    const url = m[1];
+    // Pre-generated mobile variants (`<path>-w828.webp` siblings, see
+    // HeroPreload) pair with their full-size original via srcset — they are
+    // never LCP candidates themselves and must not eat a scan slot.
+    if (/-w828\.webp$/i.test(url)) continue;
+    if (seen.has(url)) continue;
+    seen.add(url);
+    out.push(url);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+/**
+ * Build a single combined Google Fonts css2 URL for the given families, or null
+ * if there are none. Dedupes and applies `display=swap` so text paints
+ * immediately with a fallback and swaps when the webfont arrives.
+ */
+export function googleFontsHref(families: Array<string | null | undefined>): string | null {
+  const unique = Array.from(
+    new Set(families.map((f) => bareFontFamily(f)).filter((f): f is string => !!f)),
+  );
+  if (unique.length === 0) return null;
+  const params = unique.map((f) => `family=${encodeURIComponent(f)}`).join('&');
+  return `https://fonts.googleapis.com/css2?${params}&display=swap`;
+}

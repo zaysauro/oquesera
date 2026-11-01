@@ -1,0 +1,784 @@
+@import "tailwindcss";
+
+/* `dark:` utilities are CLASS-driven, not media-driven (Tailwind 4 defaults to
+ * `prefers-color-scheme`, which made every raw `dark:*` utility in the public
+ * booking/survey widgets flip dark from the VISITOR'S OS — sailing straight
+ * past the `.force-light` token shield below, which only pins CSS variables.
+ * Operator-reported on founddelivery.com/contact, 2026-08-20).
+ * Rules: `dark:` applies under a `.dark` ancestor (the root layout's theme
+ * script stamps .dark/.light on <html>, so the portal behaves exactly as
+ * before) — EXCEPT inside a `.force-light` subtree (tenant public sites),
+ * where it never applies. A `.force-dark` subtree applies it unconditionally
+ * (the survey dark-mode opt-in wraps in `force-dark dark`, which also flips
+ * the theme tokens via the nearest-ancestor `.dark` block). */
+@custom-variant dark {
+  &:where(.dark, .dark *):not(:where(.force-light, .force-light *)) {
+    @slot;
+  }
+  &:where(.force-dark, .force-dark *) {
+    @slot;
+  }
+}
+
+/* Self-hosted Material Icons — mirrors Google's hosted CSS but serves the woff2
+ * from /public/fonts so icons don't depend on fonts.gstatic.com being reachable.
+ * The literal ligature text (e.g. "menu", "add_circle_outline") shows through
+ * whenever this font fails to load — hotlinking Google broke for any visitor
+ * with a privacy/ad blocker or restrictive network. font-display: block hides
+ * the source text during the (now local, instant) load instead of flashing it. */
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/fonts/material-icons.woff2") format("woff2");
+}
+
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  /* Neutral secondary surface for the button `secondary` variant — VEQA-039. */
+  --secondary: #e7e5e4;
+  --secondary-foreground: #292524;
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --muted: #f5f5f4;
+  --muted-foreground: #78716c;
+  --accent: #f5f5f4;
+  --accent-foreground: #1c1917;
+  --border: #e7e5e4;
+  --accent-warm: #f59e0b;
+  --accent-secondary: #10b981;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  /* Portal redesign helper tokens (additive — chrome + dashboard widgets).
+     Status tones, the active-nav soft accent, a second surface, and a
+     stronger border used by the persistent sidebar/topbar + widget board. */
+  --portal-ok: #15803d;        --portal-ok-bg: rgba(21,128,61,0.09);
+  --portal-warn: #b45309;      --portal-warn-bg: rgba(180,83,9,0.10);
+  --portal-bad: #dc2626;       --portal-bad-bg: rgba(220,38,38,0.08);
+  --portal-accent-soft: rgba(37,99,235,0.10);
+  --portal-surface-2: #f7f6f4;
+  --portal-border-strong: #c9c5c1;
+}
+
+/* Tenant public sites render with the site's own brand palette and must not
+   follow the portal viewer's OS/portal dark mode — typed blocks consume
+   theme tokens (bg-card, text-foreground, dark: variants), so in a dark-mode
+   browser cards/text silently flipped dark on client sites (operator-
+   reported). Nearest-ancestor var definitions beat both :root.dark and the
+   prefers-color-scheme override, so this class on the sites-layout wrapper
+   pins the whole subtree light. KEEP VALUES IN STEP WITH bare :root above. */
+.force-light {
+  --secondary: #e7e5e4;
+  --secondary-foreground: #292524;
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --muted: #f5f5f4;
+  --muted-foreground: #78716c;
+  --accent: #f5f5f4;
+  --accent-foreground: #1c1917;
+  --border: #e7e5e4;
+  --accent-warm: #f59e0b;
+  --accent-secondary: #10b981;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  color-scheme: light;
+}
+
+.nav-logo-icon {
+  height: 3.5rem;
+  width: 3.5rem;
+  margin-right: -0.5rem;
+  transition: filter 300ms;
+}
+
+.dark .nav-logo-icon {
+  filter: invert(1);
+}
+
+.dark {
+  --secondary: #3f3f46;
+  --secondary-foreground: #fafafa;
+  --background: #18181b;
+  --foreground: #ededed;
+  --card: #0c0c0d;
+  --card-foreground: #ededed;
+  --popover: #1f1f23;
+  --popover-foreground: #ededed;
+  /* --primary does double duty in dark mode: it is the `bg-primary` button
+     surface (which needs to be DARK enough for its foreground) and it is also
+     `text-primary` on dark cards (which needs to be LIGHT enough against them).
+     Those pull in opposite directions and no single value satisfies both —
+     white-on-X needs luminance <= 0.184, X-on-#18181b needs >= 0.213. So the
+     contrast is fixed on the foreground instead: white on #3b82f6 was 3.68:1,
+     under the 4.5:1 AA floor, and every dark-mode `bg-primary` button failed
+     axe color-contrast because of it (60 of the 72 affected screens in the
+     Aug 2026 sweep). #0b1220 on #3b82f6 is 5.09:1, and leaving --primary alone
+     keeps `text-primary` where it was rather than making it worse.
+     Splitting the roles into two tokens is the real fix, but `text-primary`
+     has ~1459 usages, so that is its own piece of work. */
+  --primary: #3b82f6;
+  --primary-foreground: #0b1220;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #ededed;
+  --border: #3f3f46;
+  --accent-warm: #f59e0b;
+  --accent-secondary: #10b981;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --portal-ok: #34d399;        --portal-ok-bg: rgba(52,211,153,0.14);
+  --portal-warn: #fbbf24;      --portal-warn-bg: rgba(251,191,36,0.14);
+  --portal-bad: #f87171;       --portal-bad-bg: rgba(248,113,113,0.14);
+  --portal-accent-soft: rgba(59,130,246,0.18);
+  --portal-surface-2: #1c1c1f;
+  --portal-border-strong: #52525b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --secondary: #3f3f46;
+    --secondary-foreground: #fafafa;
+    --background: #18181b;
+    --foreground: #ededed;
+    --card: #0c0c0d;
+    --card-foreground: #ededed;
+    --popover: #1f1f23;
+    --popover-foreground: #ededed;
+    /* Keep in step with the .dark block above — same AA contrast reason. */
+    --primary: #3b82f6;
+    --primary-foreground: #0b1220;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --accent: #27272a;
+    --accent-foreground: #ededed;
+    --border: #3f3f46;
+    --accent-warm: #f59e0b;
+    --accent-secondary: #10b981;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --portal-ok: #34d399;        --portal-ok-bg: rgba(52,211,153,0.14);
+    --portal-warn: #fbbf24;      --portal-warn-bg: rgba(251,191,36,0.14);
+    --portal-bad: #f87171;       --portal-bad-bg: rgba(248,113,113,0.14);
+    --portal-accent-soft: rgba(59,130,246,0.18);
+    --portal-surface-2: #1c1c1f;
+    --portal-border-strong: #52525b;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-accent-warm: var(--accent-warm);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-inter);
+  --font-display: var(--font-dm-sans);
+  --font-playfair: var(--font-playfair);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  /* Was `Arial, Helvetica, sans-serif` — a Next scaffold default that never
+     matched the project's own type. Point it at the sans the app actually
+     loads so anything not explicitly classed inherits the right face.
+     Marketing pages opt into the retro stack via `.retro` below. */
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Retro-future marketing design system ─────────────────────────────────
+   Scoped to `.retro` rather than :root because the portal and admin trees keep
+   their own palette — this is the public marketing skin only.
+
+   "Deep Space", adopted 2026-08-07, replacing the teal palette the original
+   component-library board specified. The structure is unchanged and load-
+   bearing: ONE dark ground, ONE light paper, ONE warm accent, with gold as
+   ornament. What moved is the ground — from mid-teal to a near-black with a
+   violet cast — which raises contrast sharply and lets most of the vintage
+   read fall away.
+
+   The narrowness is the system. Every colour on the marketing tree resolves
+   through the eight values below, which is why swapping palettes is an edit
+   to this block and nothing else. Keep it that way: a one-off hex in a
+   component is what turns the next palette change into a hunt.
+
+   The one hard constraint on any future palette: the illustrations in
+   /public/retro are fixed raster art painted in teal, cream, orange and gold.
+   A ground that abandons those hues leaves the art fighting the page, and the
+   fix is regenerating twenty images rather than editing eight values. */
+.retro {
+  --retro-ink: #0B0D14;        /* near-black, violet cast — ground, nav, footer */
+  --retro-deep: #171B27;       /* raised panels on ink */
+  --retro-mid: #3D4558;        /* borders, muted text on paper */
+  --retro-gold: #D8B15A;       /* ornament, stars, badge rules */
+  --retro-orange: #FF5C2B;     /* primary action */
+  --retro-rust: #E03F12;       /* pressed / emphasis */
+  --retro-cream: #F6F4F0;      /* paper */
+  --retro-black: #111111;
+  /* Label ink for small caps ON PAPER. Same family as --retro-gold, darkened
+     until it clears AA (6.3:1 on paper vs gold's 1.5:1 there). Ornament keeps
+     gold; anything a reader has to actually read uses this. */
+  --retro-label: #9A3D12;
+
+  --retro-display: var(--font-orbitron), ui-sans-serif, system-ui, sans-serif;
+  --retro-body: var(--font-raleway), ui-sans-serif, system-ui, sans-serif;
+
+  /* Hairline rules read as "printed" rather than "UI" at this weight. */
+  --retro-rule: 1px solid color-mix(in srgb, var(--retro-mid) 40%, transparent);
+
+  /* Type only — deliberately NO background/color here. `.retro` is applied to
+     both cream surfaces (page bodies) and ink ones (nav, footer, CTA bands);
+     painting a background from the token class made those fight it and lose,
+     which rendered the nav cream-on-cream with invisible links. Surfaces set
+     their own bg/text; this class only carries the variables and the fonts. */
+  font-family: var(--retro-body);
+}
+
+/* Page bodies opt in explicitly. */
+.retro-paper {
+  background: var(--retro-cream);
+  color: var(--retro-ink);
+}
+
+/* Form controls inside the marketing skin.
+   Shared form components (ContactForm, newsletter, booking) style their inputs
+   with `bg-background`, which resolves to the app's dark surface and rendered
+   as charcoal boxes sitting on a cream band. Rather than fork every form
+   component for the marketing tree, override the controls once here — the forms
+   keep their markup, actions and validation untouched. */
+.retro input[type='text'],
+.retro input[type='email'],
+.retro input[type='tel'],
+.retro input[type='url'],
+.retro input[type='search'],
+.retro input[type='number'],
+.retro textarea,
+.retro select {
+  background: color-mix(in srgb, var(--retro-cream) 60%, #fff);
+  color: var(--retro-ink);
+  border-color: color-mix(in srgb, var(--retro-mid) 45%, transparent);
+  border-radius: 4px;
+}
+
+.retro input::placeholder,
+.retro textarea::placeholder {
+  color: color-mix(in srgb, var(--retro-ink) 45%, transparent);
+}
+
+.retro input:focus-visible,
+.retro textarea:focus-visible,
+.retro select:focus-visible {
+  outline: 2px solid var(--retro-gold);
+  outline-offset: 1px;
+  border-color: var(--retro-mid);
+}
+
+/* Buttons rendered by shared form components pick up the app's primary blue.
+   Inside the marketing skin they should read as the retro action colour. */
+.retro button[type='submit'] {
+  background: var(--retro-orange);
+  color: var(--retro-cream);
+  border-radius: 4px;
+}
+
+.retro button[type='submit']:hover:not(:disabled) {
+  background: var(--retro-rust);
+}
+
+.retro h1, .retro h2, .retro h3, .retro .font-display {
+  font-family: var(--retro-display);
+  letter-spacing: -0.01em;
+}
+
+/* Section eyebrows: uppercase, wide-tracked — the board uses these to separate
+   every band. Small caps at this tracking is the single strongest period signal
+   in the whole system.
+
+   Colour is NOT --retro-gold here, though the board draws them that way. Gold
+   is an ornament value: it sings on ink (7.7:1) and collapses to 1.6:1 on
+   cream, and eyebrows sit on cream far more often than on ink. At 0.75rem with
+   0.18em tracking that was unreadable, not merely low-contrast. Paper gets a
+   burnt amber of the same hue (5.0:1); ink surfaces opt back into real gold
+   with `.eyebrow--on-ink`. Stars, rules and other ornament keep --retro-gold
+   everywhere, because none of them carry information. */
+.retro .eyebrow {
+  font-family: var(--retro-display);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--retro-label);
+}
+
+.retro .eyebrow--on-ink {
+  color: var(--retro-gold);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Dot grid pattern background */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Dark section — inverted colors for contrast breaks */
+.section-dark {
+  background: var(--foreground);
+  color: var(--background);
+}
+.section-dark .text-muted-foreground {
+  color: color-mix(in srgb, var(--background) 70%, transparent);
+}
+.section-dark .text-primary {
+  color: #60a5fa;
+}
+
+/* Signature accent stripe */
+.accent-stripe {
+  position: relative;
+}
+.accent-stripe::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--primary), var(--accent-warm));
+  border-radius: 4px;
+}
+
+/*
+ * Minimal highlight.js token coloring for the brain markdown preview.
+ * Scoped to .markdown-preview so other surfaces (MarkdownView etc.) are unaffected.
+ * Designed to read on both the light (#fafaf9) and dark (#18181b) themes.
+ */
+.markdown-preview .hljs { color: var(--foreground); background: transparent; }
+.markdown-preview .hljs-comment,
+.markdown-preview .hljs-quote { color: color-mix(in srgb, var(--foreground) 50%, transparent); font-style: italic; }
+.markdown-preview .hljs-keyword,
+.markdown-preview .hljs-selector-tag,
+.markdown-preview .hljs-built_in,
+.markdown-preview .hljs-meta { color: #2563eb; }
+.dark .markdown-preview .hljs-keyword,
+.dark .markdown-preview .hljs-selector-tag,
+.dark .markdown-preview .hljs-built_in,
+.dark .markdown-preview .hljs-meta { color: #60a5fa; }
+.markdown-preview .hljs-string,
+.markdown-preview .hljs-doctag,
+.markdown-preview .hljs-attr { color: #059669; }
+.dark .markdown-preview .hljs-string,
+.dark .markdown-preview .hljs-doctag,
+.dark .markdown-preview .hljs-attr { color: #34d399; }
+.markdown-preview .hljs-number,
+.markdown-preview .hljs-literal,
+.markdown-preview .hljs-symbol { color: #d97706; }
+.dark .markdown-preview .hljs-number,
+.dark .markdown-preview .hljs-literal,
+.dark .markdown-preview .hljs-symbol { color: #fbbf24; }
+.markdown-preview .hljs-title,
+.markdown-preview .hljs-section,
+.markdown-preview .hljs-name { color: #be185d; font-weight: 600; }
+.dark .markdown-preview .hljs-title,
+.dark .markdown-preview .hljs-section,
+.dark .markdown-preview .hljs-name { color: #f472b6; }
+.markdown-preview .hljs-variable,
+.markdown-preview .hljs-template-variable { color: #b45309; }
+.dark .markdown-preview .hljs-variable,
+.dark .markdown-preview .hljs-template-variable { color: #fbbf24; }
+.markdown-preview .hljs-emphasis { font-style: italic; }
+.markdown-preview .hljs-strong { font-weight: 700; }
+
+/* Large section number watermark */
+.section-number {
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--border);
+  position: absolute;
+  right: 0;
+  top: -1rem;
+  pointer-events: none;
+  user-select: none;
+}
+.dark .section-number {
+  color: var(--muted);
+}
+
+html,body {
+  /* `clip` (vs `hidden`) prevents these from becoming scroll containers, so
+     position: sticky inside the document works against the real viewport
+     instead of pinning to a never-scrolling body. */
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+/* Column responsive stacking */
+[data-col-stacks-md] {
+  width: 100%;
+  flex: 0 0 100%;
+}
+@media (min-width: 768px) {
+  [data-col-stacks-md] {
+    width: var(--col-width) !important;
+    flex: 0 0 var(--col-width) !important;
+  }
+}
+
+[data-col-stacks-lg] {
+  width: 100%;
+  flex: 0 0 100%;
+}
+@media (min-width: 1024px) {
+  [data-col-stacks-lg] {
+    width: var(--col-width) !important;
+    flex: 0 0 var(--col-width) !important;
+  }
+}
+
+[data-col-stacks-never] {
+  width: var(--col-width);
+  flex: 0 0 var(--col-width);
+}
+
+
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
+
+/* Single blue light traveling around a card's border */
+@property --light-loop-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.light-loop {
+  position: relative;
+}
+
+.light-loop::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(1rem + 2px);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--light-loop-angle),
+    transparent 0deg 280deg,
+    rgba(96, 165, 250, 0.35) 320deg,
+    #60a5fa 350deg,
+    #3b82f6 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: light-loop-spin 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes light-loop-spin {
+  to { --light-loop-angle: 360deg; }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Scroll-reveal animations (FadeIn / SlideIn)
+
+   Pure CSS, zero JS. These replaced framer-motion `motion.div` wrappers that
+   were a large hydration / Total-Blocking-Time cost on every marketing page and
+   (worse) hid above-the-fold content at opacity 0 until JS ran, pushing hero
+   LCP to ~7s on throttled mobile.
+
+   - Chromium (what Lighthouse runs) reveals each element as it scrolls into view
+     via a scroll-driven `animation-timeline: view()`.
+   - Browsers without scroll-driven animation support fall back to playing the
+     entrance once on load; `both` fill-mode leaves the element visible, so no
+     content is ever permanently hidden.
+   - prefers-reduced-motion: no animation, content shown immediately.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@keyframes sd-reveal-fade {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes sd-slide-x {
+  from { opacity: 0; transform: translateX(var(--sd-slide-translate, -50px)); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes sd-slide-y {
+  from { opacity: 0; transform: translateY(var(--sd-slide-translate, 50px)); }
+  to   { opacity: 1; transform: none; }
+}
+
+.sd-reveal {
+  animation: sd-reveal-fade 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.sd-slide--x {
+  animation: sd-slide-x 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.sd-slide--y {
+  animation: sd-slide-y 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@supports (animation-timeline: view()) {
+  .sd-reveal,
+  .sd-slide--x,
+  .sd-slide--y {
+    animation-timeline: view();
+    animation-range: entry 0% entry 85%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-reveal,
+  .sd-slide--x,
+  .sd-slide--y {
+    animation: none;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Admin panel — scoped "stark" (Geist / Vercel) theme.
+
+   Overrides the semantic design tokens ONLY for descendants of `.admin-shell`,
+   so the client portal (app/portal) and public sites (app/sites, app/s) keep
+   the original palette untouched. Custom-property inheritance resolves to the
+   nearest defining ancestor, so redefining the tokens on `.admin-shell` flips
+   every `bg-card` / `text-foreground` / `border-border` / `bg-primary`
+   utility inside admin without changing :root.
+
+   Theme: light is the base; dark applies when the admin shell opts in
+   (data-theme="dark") OR the OS prefers dark and the admin shell hasn't
+   explicitly chosen light. Mirrors the global :root:not(.light) pattern.
+   ─────────────────────────────────────────────────────────────────────────── */
+.admin-shell {
+  /* semantic tokens (override globals within this subtree) */
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --muted: #fafafa;
+  --muted-foreground: #666666;
+  --accent: #f4f4f4;
+  --accent-foreground: #0a0a0a;
+  --border: #ebebeb;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+
+  /* admin-only extras (referenced via var() / arbitrary values) */
+  --admin-accent: #0070f3;
+  --admin-accent-glow: rgba(0, 112, 243, 0.10);
+  --admin-surface-2: #fafafa;
+  --admin-hover: #f4f4f4;
+  --admin-border-strong: #d4d4d4;
+  --admin-ok: #15803d;       --admin-ok-bg: rgba(21, 128, 61, 0.08);
+  --admin-warn: #b45309;     --admin-warn-bg: rgba(180, 83, 9, 0.08);
+  --admin-bad: #dc2626;      --admin-bad-bg: rgba(220, 38, 38, 0.07);
+  --admin-neutral: #b0b0b0;
+
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.admin-shell[data-theme="dark"] {
+  --background: #000000;
+  --foreground: #ededed;
+  --card: #0a0a0a;
+  --card-foreground: #ededed;
+  --popover: #0a0a0a;
+  --popover-foreground: #ededed;
+  --muted: #111111;
+  --muted-foreground: #8f8f8f;
+  --accent: #161616;
+  --accent-foreground: #ededed;
+  --border: #1f1f1f;
+  --primary: #ededed;
+  --primary-foreground: #0a0a0a;
+
+  --admin-accent: #3291ff;
+  --admin-accent-glow: rgba(50, 145, 255, 0.18);
+  --admin-surface-2: #111111;
+  --admin-hover: #161616;
+  --admin-border-strong: #383838;
+  --admin-ok: #34d399;       --admin-ok-bg: rgba(52, 211, 153, 0.12);
+  --admin-warn: #fbbf24;     --admin-warn-bg: rgba(251, 191, 36, 0.12);
+  --admin-bad: #f87171;      --admin-bad-bg: rgba(248, 113, 113, 0.12);
+  --admin-neutral: #6e6e6e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-shell:not([data-theme="light"]) {
+    --background: #000000;
+    --foreground: #ededed;
+    --card: #0a0a0a;
+    --card-foreground: #ededed;
+    --popover: #0a0a0a;
+    --popover-foreground: #ededed;
+    --muted: #111111;
+    --muted-foreground: #8f8f8f;
+    --accent: #161616;
+    --accent-foreground: #ededed;
+    --border: #1f1f1f;
+    --primary: #ededed;
+    --primary-foreground: #0a0a0a;
+
+    --admin-accent: #3291ff;
+    --admin-accent-glow: rgba(50, 145, 255, 0.18);
+    --admin-surface-2: #111111;
+    --admin-hover: #161616;
+    --admin-border-strong: #383838;
+    --admin-ok: #34d399;       --admin-ok-bg: rgba(52, 211, 153, 0.12);
+    --admin-warn: #fbbf24;     --admin-warn-bg: rgba(251, 191, 36, 0.12);
+    --admin-bad: #f87171;      --admin-bad-bg: rgba(248, 113, 113, 0.12);
+    --admin-neutral: #6e6e6e;
+  }
+}
+
+/* tabular, mono numerals for any element opting in */
+.admin-shell .num { font-family: var(--font-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* stark scrollbars within admin */
+.admin-shell *::-webkit-scrollbar { width: 9px; height: 9px; }
+.admin-shell *::-webkit-scrollbar-thumb { background: var(--admin-border-strong); border-radius: 99px; }
+.admin-shell *::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Auth split-screen brand panel (login / signup / forgot) ─────────────────
+   The drifting color-mesh behind the auth pages' right panel — brand-agnostic,
+   the tenant's name renders over it. Honors prefers-reduced-motion. */
+@keyframes auth-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(8%, -10%) scale(1.12); }
+  66% { transform: translate(-6%, 8%) scale(0.92); }
+}
+@keyframes auth-pulse { 50% { opacity: 0.4; } }
+.auth-mesh { position: absolute; inset: -30%; filter: blur(70px); opacity: 0.85; z-index: 0; }
+.auth-blob { position: absolute; border-radius: 50%; mix-blend-mode: screen; animation: auth-drift 18s ease-in-out infinite; }
+.auth-grain {
+  position: absolute; inset: 0; z-index: 1; opacity: 0.5;
+  background: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+.auth-dot { animation: auth-pulse 2s infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .auth-blob, .auth-dot { animation: none; }
+}
+
+/* ── Portal dark chrome (sidebar) — scoped token override ─────────────────────
+   The persistent sidebar carries the redesign's signature #0e0d0c brand
+   surface (same as the auth panel / onboarding rail). Rather than rewrite the
+   sidebar's ~50 semantic classNames, we re-point the design tokens INSIDE this
+   scope to dark values — so `bg-card`, `text-foreground`, `hover:bg-accent`,
+   `border-border`, `--portal-accent-soft`, `text-primary` etc. all resolve dark
+   automatically. White-label inline color overrides still win (set via style=).
+   Reverting the whole dark sidebar = remove the `portal-chrome-dark` class. */
+.portal-chrome-dark {
+  --card: #0e0d0c;
+  --card-foreground: #f5f5f4;
+  --foreground: #ededed;
+  --muted: #1c1b1a;
+  --muted-foreground: #a8a29e;
+  --accent: rgba(255, 255, 255, 0.06);
+  --accent-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.09);
+  --primary: #60a5fa;             /* lighter blue reads on the dark surface */
+  --primary-foreground: #0b1220;
+  --portal-accent-soft: rgba(255, 255, 255, 0.09);
+  --portal-surface-2: #1a1917;
+  --portal-border-strong: rgba(255, 255, 255, 0.18);
+  background-color: #0e0d0c;
+  color: var(--foreground);
+}
+/* Subtle top-edge brand glow echoing the auth mesh — static (this is a work
+   tool, not a landing page; no drifting blobs). */
+.portal-chrome-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 240px;
+  background:
+    radial-gradient(130px 120px at 16% 4%, rgba(37, 99, 235, 0.30), transparent 70%),
+    radial-gradient(150px 130px at 96% 0%, rgba(16, 185, 129, 0.16), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+.portal-chrome-dark > * { position: relative; z-index: 1; }
+/* The sidebar header hosts the company-switcher dropdown, which must overlay
+   the nav below it. Header and nav are both direct children of
+   .portal-chrome-dark and get z-index:1 above, so the nav (later in the DOM)
+   would paint over the dropdown — hiding it and stealing its clicks. Lift the
+   header's stacking context above its siblings. Higher specificity than the
+   blanket rule, so it wins without touching the shared z-index:1 default. */
+.portal-chrome-dark > *:first-child { z-index: 40; }
+
+/* Portal typography — lift the shell out of the Arial default into the
+   product's Geist sans. Scoped to `.portal-shell` so marketing pages are
+   untouched. Matches the redesigned auth/onboarding body type. */
+.portal-shell {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+}

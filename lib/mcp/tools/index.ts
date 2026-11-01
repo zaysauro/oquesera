@@ -1,0 +1,137 @@
+/**
+ * Barrel for the per-domain MCP tool registrars.
+ *
+ * Each register*Tools function takes the McpServer instance plus the portal
+ * context and registers every tool that belongs to its domain. The
+ * dispatcher in lib/mcp/server.ts iterates `allToolRegistrars` to compose
+ * the full registry — adding a domain is now a one-line change here, not a
+ * new branch in the monolith.
+ */
+import type { McpToolRegistrar } from '../types';
+
+import { registerProjectsTools } from './projects';
+import { registerProjectCustomFieldTools } from './project-custom-fields';
+import { registerKanbanTools } from './kanban';
+import { registerKanbanArtifactsTools } from './kanban-artifacts';
+import { registerKanbanSearchTools } from './kanban-search';
+import { registerSprintsTools } from './sprints';
+import { registerTicketsTools } from './tickets';
+import { registerCrmTools } from './crm';
+import { registerCmsTools } from './cms';
+import { registerEmailTools } from './email';
+import { registerPitchDecksTools } from './pitch-decks';
+import { registerSurveysTools } from './surveys';
+import { registerBookingsTools } from './bookings';
+import { registerTeamTools } from './team';
+import { registerProfileTools } from './profile';
+import { registerIntegrationsTools } from './integrations';
+import { registerBillingTools } from './billing';
+import { registerServicesTools } from './services';
+import { registerSeoTools } from './seo';
+import { registerAiTools } from './ai';
+import { registerAutomationsTools } from './automations';
+import { registerHostingTools } from './hosting';
+import { registerSiteRedirectTools } from './site-redirects';
+import { registerMetaTools } from './meta';
+import { registerResourceDocs } from './resources';
+import { registerPromptTemplates } from './prompts';
+import { registerWorkflowTools } from './workflows';
+import { registerBrandingTools } from './branding';
+import { registerStorefrontTools } from './storefront';
+import { registerBrainTools } from './brain';
+import { registerPostTypesTools } from './post-types';
+import { registerApprovalsTools } from './approvals';
+import { registerNotificationsTools } from './notifications';
+import { registerChatTools } from './chat';
+import { registerLinkedinTools } from './linkedin';
+import { registerPathvizTools } from './pathviz';
+import { registerPathvizCoordinationTools } from './pathviz-coordination';
+import { registerAgentFlowTools } from './agent-flows';
+
+export {
+  registerProjectsTools,
+  registerProjectCustomFieldTools,
+  registerKanbanTools,
+  registerKanbanArtifactsTools,
+  registerKanbanSearchTools,
+  registerSprintsTools,
+  registerTicketsTools,
+  registerCrmTools,
+  registerCmsTools,
+  registerEmailTools,
+  registerPitchDecksTools,
+  registerSurveysTools,
+  registerBookingsTools,
+  registerTeamTools,
+  registerProfileTools,
+  registerIntegrationsTools,
+  registerBillingTools,
+  registerServicesTools,
+  registerSeoTools,
+  registerAiTools,
+  registerAutomationsTools,
+  registerHostingTools,
+  registerSiteRedirectTools,
+  registerMetaTools,
+  registerResourceDocs,
+  registerPromptTemplates,
+  registerWorkflowTools,
+  registerBrandingTools,
+  registerStorefrontTools,
+  registerBrainTools,
+  registerPostTypesTools,
+  registerApprovalsTools,
+  registerNotificationsTools,
+  registerChatTools,
+  registerLinkedinTools,
+  registerPathvizTools,
+  registerPathvizCoordinationTools,
+  registerAgentFlowTools,
+};
+
+/**
+ * Ordered list of every domain registrar. Order is intentional — `meta` runs
+ * first so the unscoped resources/`whoami` tool register before any domain
+ * gate. The remaining order matches the original section order in
+ * lib/mcp/server.ts so behaviour is identical to the pre-refactor monolith.
+ */
+export const allToolRegistrars: readonly McpToolRegistrar[] = [
+  registerMetaTools,
+  registerResourceDocs,
+  registerPromptTemplates,
+  registerWorkflowTools,
+  registerProjectsTools,
+  registerProjectCustomFieldTools,
+  registerPathvizTools,
+  registerPathvizCoordinationTools,
+  registerKanbanTools,
+  registerKanbanArtifactsTools,
+  registerKanbanSearchTools,
+  registerTicketsTools,
+  registerCrmTools,
+  registerCmsTools,
+  registerEmailTools,
+  registerPitchDecksTools,
+  registerSurveysTools,
+  registerBookingsTools,
+  registerSprintsTools,
+  registerProfileTools,
+  registerIntegrationsTools,
+  registerBillingTools,
+  registerServicesTools,
+  registerSeoTools,
+  registerAiTools,
+  registerAutomationsTools,
+  registerHostingTools,
+  registerSiteRedirectTools,
+  registerTeamTools,
+  registerBrandingTools,
+  registerStorefrontTools,
+  registerBrainTools,
+  registerPostTypesTools,
+  registerApprovalsTools,
+  registerNotificationsTools,
+  registerChatTools,
+  registerLinkedinTools,
+  registerAgentFlowTools,
+];

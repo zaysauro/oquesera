@@ -1,0 +1,649 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    # `labeled`/`unlabeled` are NOT in the default type set. Without them, adding
+    # the `hotfix` label to an already-open PR fires no event and the skip never
+    # takes effect until the next push.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Changed-path detection ──────────────────────────────────────────────────
+  # Wall-clock on this workflow is set by ONE job — `Critical e2e` at ~12m — with
+  # everything else finishing in <=5m alongside it. So path-filtering the cheap
+  # parallel jobs (lint/typecheck/unit/secret-scan) would buy exactly 0 seconds
+  # of PR latency, and Actions is free on this public repo. The only lever that
+  # moves the number is skipping the e2e legs, and the only diff where that is
+  # safe is one that cannot change runtime behaviour at all: docs/vault/markdown.
+  #
+  # Deliberately does NOT gate `lint` — that job runs check-doc-drift.ts, which is
+  # precisely the check a doc-only PR needs.
+  #
+  # Fails OPEN by design: any base sha we can't resolve (force-push, first push of
+  # a branch, shallow clone) yields code=true and the full suite runs. A missed
+  # skip costs 12 minutes; a missed e2e run costs a production incident.
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      data_access: ${{ steps.filter.outputs.data_access }}
+      packages: ${{ steps.filter.outputs.packages }}
+      # `hotfix` label on the PR => skip lint/typecheck/unit/tenancy/e2e.
+      # Push-to-main has no pull_request context; contains(null, …) is false, so
+      # main always runs the full suite. Deliberate.
+      hotfix: ${{ contains(github.event.pull_request.labels.*.name, 'hotfix') }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # ponytail: plain `git diff`, not dorny/paths-filter — one fewer third-party
+      # action in the supply chain for ~6 lines of shell.
+      - id: filter
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git rev-parse --verify -q "$BASE^{commit}" >/dev/null \
+            || { echo "base '$BASE' unresolvable — running everything"; \
+                 { echo "code=true"; echo "data_access=true"; echo "packages=true"; } >> "$GITHUB_OUTPUT"; \
+                 exit 0; }
+          CHANGED=$(git diff --name-only "$BASE" "${{ github.sha }}")
+          echo "--- changed files ---"; echo "$CHANGED"
+          # `.claude/` counts as prose, but ONLY for prose. It also holds real
+          # TypeScript (skill helper scripts), and tsconfig.json's `include` is
+          # '**/*.ts' with no `.claude/` in `exclude` — so those files ARE in the
+          # typecheck graph even though this classifier called their diffs docs.
+          # That let broken TS land under `.claude/` on a green board and break
+          # `tsc` on main for the next PR, which would look like that PR's fault.
+          # The second clause forces the full suite for them. PUX-113.
+          if grep -qvE '^(vault/|docs/|\.claude/)|\.md$' <<<"$CHANGED" \
+             || grep -qE '^\.claude/.*\.ts$' <<<"$CHANGED"; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; echo "==> code change detected: full suite"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"; echo "==> doc-only diff: doc-drift + gitleaks only"
+          fi
+          # Tenancy is scoped tighter than `code`, because it only proves
+          # something about diffs that can actually reach a tenant-scoped query.
+          # Restyling a component is a code change but cannot leak a clientId,
+          # and running the suite for it spent ~18 min of CI on a result that
+          # could not have failed for a reason the diff caused. Paths mirror the
+          # trigger .githooks/pre-push used before the gate became CI-only,
+          # plus lib/mcp/: 31 tool registrars run tenant-scoped queries behind
+          # `ctx.client.id`, so a scoping bug there leaks exactly what this suite
+          # exists to catch — and none of them matched the paths above.
+          # plus lib/portal/: the data-access helpers the tools delegate to
+          # (wip-limit, sprint-snapshots, card-move) issue card and label writes
+          # of their own. Extracting logic out of a matched file and into an
+          # unmatched one would otherwise silently drop it out of this gate.
+          # plus app/portal/.*route\.ts: a Route Handler under app/portal/
+          # issues tenant-scoped queries exactly like one under app/api/, but
+          # lives outside that prefix — PUX-123's /portal/store resolver was
+          # the first, and it would have merged with the tenancy gate silently
+          # skipped. Same failure as the lib/portal/ one above, one directory
+          # over: page.tsx files under app/portal/ are not data access and
+          # stay unmatched on purpose.
+          # Fails OPEN with the block above: an unresolvable base runs it.
+          if grep -qE '^(lib/db/|app/api/|lib/mcp/|lib/portal/|lib/active-client\.ts|app/portal/.*route\.ts)' <<<"$CHANGED"; then
+            echo "data_access=true" >> "$GITHUB_OUTPUT"; echo "==> data-access change: tenancy suite runs"
+          else
+            echo "data_access=false" >> "$GITHUB_OUTPUT"; echo "==> no data-access change: skipping tenancy"
+          fi
+          # PUX-120: root tsconfig's `exclude` hides these directories from
+          # `bun run typecheck`, so they get their own gated job below with
+          # their own tsconfigs. Scoped tighter than `code` — a portal-only PR
+          # gets no benefit from typechecking a Cloudflare worker or the Yjs
+          # relay, and matrix.dir below lists exactly the paths matched here.
+          # Fails OPEN with the block above: an unresolvable base runs it.
+          if grep -qE '^(packages/realtime-server/|workers/email-inbound/|packages/cli/|packages/sdk/|sd-chat-mobile/)' <<<"$CHANGED"; then
+            echo "packages=true" >> "$GITHUB_OUTPUT"; echo "==> covered package/worker change: packages typecheck runs"
+          else
+            echo "packages=false" >> "$GITHUB_OUTPUT"; echo "==> no covered package/worker change: skipping packages typecheck"
+          fi
+          # The hotfix lane is for presentation-only changes (CLAUDE.md "Hotfix
+          # lane"). Skipping typecheck+unit+e2e on a schema/auth/tenancy/API diff
+          # is how a 2-line "copy fix" takes prod down, so refuse the label there
+          # rather than trusting the labeller. Fails the run => red board.
+          if [ "${{ contains(github.event.pull_request.labels.*.name, 'hotfix') }}" = "true" ] \
+             && grep -qE '^(lib/db/|lib/mcp/|lib/billing/|lib/auth|drizzle/|app/.*/api/|auth\.|middleware\.)' <<<"$CHANGED"; then
+            echo "::error::hotfix label is not allowed on a diff touching schema/auth/billing/tenancy/API routes. Remove the label and run the full suite."
+            exit 1
+          fi
+  # ── Secret scan (gitleaks) — cheap, fails fast ──────────────────────────────
+  # Uses the gitleaks BINARY (the gitleaks-action is org-license-gated) in
+  # filesystem mode (`--no-git`) so it scans the working tree a PR proposes,
+  # NOT full history. History-only leaks are remediated separately via a
+  # filter-repo scrub; this job stops NEW secrets from landing. Config +
+  # allowlist live in .gitleaks.toml.
+  secret-scan:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install gitleaks
+        run: |
+          VER=8.21.2
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" \
+            | tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+      - name: Scan working tree
+        run: gitleaks detect --no-git --source . --config .gitleaks.toml --redact --verbose
+
+  # ── Fast gates that need no database ────────────────────────────────────────
+  # Split from a single serial "Lint · Typecheck · Unit" job into parallel jobs
+  # so the required merge gate is bounded by the slowest single piece (unit +
+  # coverage) instead of their sum. All three are required status checks on main
+  # — keep branch-protection contexts in sync with these job `name:`s.
+  lint:
+    name: Lint & checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Runs even on a doc-only diff — check-doc-drift.ts is precisely the check a
+    # markdown PR needs, and it is the only thing standing between the vault /
+    # CLAUDE.md tree and rotted path citations. Its two code-only siblings below
+    # stand down instead, at the step level.
+    needs: [changes]
+    if: needs.changes.outputs.hotfix != 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Lint
+        if: needs.changes.outputs.code == 'true'
+        run: bun run lint
+      - name: File-size budget (god-file guard)
+        if: needs.changes.outputs.code == 'true'
+        run: bun scripts/check-file-budget.ts
+      - name: Doc drift (cited paths must exist)
+        run: bun scripts/check-doc-drift.ts
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # No markdown diff can move either needle; `code` also covers the hotfix
+    # label. `changes` costs 12s and is already on the e2e critical path, so
+    # depending on it here adds no PR latency.
+    needs: [changes]
+    if: needs.changes.outputs.code == 'true' && needs.changes.outputs.hotfix != 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run typecheck
+
+  # ── Typecheck for packages the root tsconfig excludes (PUX-120) ────────────
+  # The root tsconfig.json `exclude`s node_modules/workers/packages/scripts/
+  # sd-chat-mobile/etc so `bun run typecheck` above never sees them — including
+  # packages/realtime-server, a deployed production service (Railway `realtime`)
+  # that owns Yjs snapshot persistence for posts/decks/email campaigns. This job
+  # typechecks each one against ITS OWN tsconfig instead of widening the root
+  # exclude list (which would pull them into the main typecheck under different
+  # compiler settings — a much bigger change, tracked separately).
+  #
+  # Only the packages verified to pass today are listed. `packages/starter` and
+  # `extension`/`simplerdevelopment-agents` are deliberately NOT here — see the
+  # PUX-120 card for why. `components/product-designer` and
+  # `components/booking-app` have no tsconfig of their own at all, so they stay
+  # out entirely rather than getting one invented here.
+  #
+  # `realtime-server`/`email-inbound`/`cli`/`sdk` are root bun workspaces, so the
+  # root `bun install` step already installs their deps — `install-dir: .` runs
+  # it there. `sd-chat-mobile` is deliberately NOT a root workspace member (its
+  # own React Native / Expo dependency tree) and carries its own bun.lock, so
+  # its matrix entry installs from its own directory instead.
+  packages-typecheck:
+    name: Typecheck ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: needs.changes.outputs.packages == 'true' && needs.changes.outputs.hotfix != 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: realtime-server
+            dir: packages/realtime-server
+            install-dir: .
+            command: bun run typecheck
+          - name: email-inbound
+            dir: workers/email-inbound
+            install-dir: .
+            command: bunx tsc --noEmit -p tsconfig.json
+          - name: cli
+            dir: packages/cli
+            install-dir: .
+            command: bun run typecheck
+          - name: sdk
+            dir: packages/sdk
+            install-dir: .
+            command: bun run typecheck
+          - name: sd-chat-mobile
+            dir: sd-chat-mobile
+            install-dir: sd-chat-mobile
+            command: bunx tsc --noEmit -p tsconfig.json
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - name: Install dependencies (${{ matrix.install-dir }})
+        working-directory: ${{ matrix.install-dir }}
+        run: bun install --frozen-lockfile
+      - name: Typecheck (${{ matrix.name }})
+        working-directory: ${{ matrix.dir }}
+        run: ${{ matrix.command }}
+
+  # The unit suite is sharded 4 ways to cut wall-clock. Each shard runs its slice
+  # WITH v8 coverage and emits a Vitest "blob" report (test results + coverage
+  # data). Coverage floors are NOT enforced per-shard — a shard only sees its
+  # slice — they are enforced on the MERGED report by the `unit` gate job below.
+  # fail-fast:false so one red shard doesn't cancel the others (surface every
+  # shard's failures, not just the first).
+  unit-shard:
+    name: Unit shard ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # No markdown diff can move either needle; `code` also covers the hotfix
+    # label. `changes` costs 12s and is already on the e2e critical path, so
+    # depending on it here adds no PR latency.
+    needs: [changes]
+    if: needs.changes.outputs.code == 'true' && needs.changes.outputs.hotfix != 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      # Collect coverage into the blob but DON'T enforce thresholds here — a
+      # single shard only covers ~1/4 of the suite. The `unit` gate re-applies
+      # the floors on the merged coverage.
+      - name: Unit tests (shard ${{ matrix.shard }}/4, coverage → blob)
+        env:
+          VITEST_SKIP_THRESHOLDS: "1"
+          # Fork workers hit the default ~2GB heap under v8 coverage (shard 4
+          # OOM'd deterministically, incl. on main's own run at 11599ca0).
+          # 4 forks x 4GB fits the 16GB runner.
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: >-
+          bunx vitest run --project=unit
+          --shard=${{ matrix.shard }}/4
+          --coverage
+          --reporter=default
+          --reporter=blob --outputFile.blob=.vitest-reports/blob-${{ matrix.shard }}.json
+      - name: Upload shard blob report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-blob-${{ matrix.shard }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          retention-days: 1
+
+  # Required status check — keeps the job name "Unit tests" so branch protection
+  # needs no change. Merges all 4 shard blobs and RE-APPLIES the coverage floors
+  # (vitest.config.ts thresholds) on the combined coverage. `needs` without
+  # `if: always()` means a failed shard SKIPS this gate, leaving the required
+  # check unfulfilled → PR stays blocked (fail-safe). Passes iff every shard
+  # passed AND the merged coverage clears every floor.
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [unit-shard]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Download shard blob reports
+        uses: actions/download-artifact@v8
+        with:
+          path: .vitest-reports
+          pattern: unit-blob-*
+          merge-multiple: true
+      - name: Merge reports + enforce coverage floors
+        run: bunx vitest run --merge-reports --coverage
+
+  # ── Multi-tenant leak regression — needs Postgres + pgvector ────────────────
+  # Mirrors the local `bun test:tenancy` gate. Uses the pgvector image so the
+  # `vector` extension (required by lib/db/schema) is available for migrations.
+  tenancy:
+    name: Tenancy regression
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.data_access == 'true' && needs.changes.outputs.hotfix != 'true'
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: simplerdev_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+      DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Enable required Postgres extensions (pgvector etc.)
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -d simplerdev_test -c "CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+      - name: Apply schema (Drizzle migrations)
+        run: bun run db:migrate
+
+      - name: Tenancy gate
+        run: bun run test:tenancy
+
+  # ── Golden-path + security e2e — shared build, cached browsers, sharded ────
+  # Restructured (PUX-082): both e2e suites previously each paid their own app
+  # build (~5m) and Playwright browser install (which hung to the 45m job
+  # timeout seven times on 2026-08-19/20 — ITM-036). Now one `e2e-build` job
+  # builds once and shares `.next` + the ephemeral secrets as artifacts (the
+  # secrets must be shared: NEXT_PUBLIC_*/NEXTAUTH values inlined at build time
+  # have to match what the serving jobs run with). The matrix job restores a
+  # cached browser download and fast-fails the install instead of hanging.
+  # Critical runs as three Playwright shards (each leg is its own pass/fail
+  # check; no merged HTML report — per-leg reports upload on failure).
+  # All secrets are ephemeral — optional integrations (Stripe, Google, S3…)
+  # stay dormant exactly as on a fresh `simpler create` instance.
+  e2e-build:
+    name: e2e build
+    runs-on: ubuntu-latest
+    # Gated by the changed-path detector (doc-only PRs skip e2e entirely).
+    # The matrix legs below need this job, so skipping it cascades to them.
+    needs: [changes]
+    if: needs.changes.outputs.code == 'true' && needs.changes.outputs.hotfix != 'true'
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: simplerdev_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+      DRIZZLE_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      AUTH_TRUST_HOST: "true"
+      BASE_URL: http://localhost:3000
+      AUTH_INSECURE_COOKIES: "1"
+      DISABLE_AUTH_RATE_LIMIT: "1"
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # NEXTAUTH_SECRET + ENCRYPTION_KEY are generated ephemerally (never
+      # literals in the repo) ONCE here, then shared to every e2e leg via a
+      # short-lived artifact — the build inlines env, so build and serve must
+      # agree. ENCRYPTION_KEY is @security's AAF-001 capture/decrypt path.
+      - name: Generate ephemeral secrets (shared with e2e legs)
+        run: |
+          echo "NEXTAUTH_SECRET=$(openssl rand -hex 32)" > e2e-secrets.env
+          echo "ENCRYPTION_KEY=$(openssl rand -hex 32)" >> e2e-secrets.env
+          cat e2e-secrets.env >> "$GITHUB_ENV"
+
+      - name: Enable required Postgres extensions
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -d simplerdev_test -c "CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+      - name: Apply schema (drizzle-kit push)
+        run: bunx drizzle-kit push --force
+
+      - name: Build app
+        run: bun run build
+
+      # .next/cache is the build cache (can be hundreds of MB) — the serving
+      # jobs only need the compiled output.
+      - name: Pack build output
+        run: tar -czf next-build.tgz --exclude='.next/cache' .next
+
+      - name: Upload build + secrets
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-build
+          path: |
+            next-build.tgz
+            e2e-secrets.env
+          retention-days: 1
+
+  e2e:
+    name: ${{ matrix.job-name }}
+    needs: e2e-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - job-name: Critical e2e 1/3 (@critical)
+            tag: "@critical"
+            shard: "1/3"
+            report: playwright-report-critical-1
+          - job-name: Critical e2e 2/3 (@critical)
+            tag: "@critical"
+            shard: "2/3"
+            report: playwright-report-critical-2
+          - job-name: Critical e2e 3/3 (@critical)
+            tag: "@critical"
+            shard: "3/3"
+            report: playwright-report-critical-3
+          - job-name: Security e2e (@security)
+            tag: "@security"
+            shard: ""
+            report: playwright-report-security
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: simplerdev_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+      DRIZZLE_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplerdev_test
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      AUTH_TRUST_HOST: "true"
+      BASE_URL: http://localhost:3000
+      # The app is a production BUILD served over http://localhost here, so the
+      # default __Secure-/secure session cookie is rejected on the insecure origin
+      # and the credentials callback 500s (QAD-047). Force http-compatible cookies
+      # + skip the (Upstash-less) rate limiter for the seeded logins.
+      AUTH_INSECURE_COOKIES: "1"
+      DISABLE_AUTH_RATE_LIMIT: "1"
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Cache bun global install cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Download build + secrets
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build
+
+      - name: Unpack build + adopt shared secrets
+        run: |
+          tar -xzf next-build.tgz
+          cat e2e-secrets.env >> "$GITHUB_ENV"
+
+      - name: Enable required Postgres extensions
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -d simplerdev_test -c "CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+      - name: Apply schema (drizzle-kit push)
+        run: bunx drizzle-kit push --force
+
+      - name: Seed e2e fixture (admin + client)
+        run: bun scripts/seed-admin-e2e.ts
+
+      # Browser binaries cached across runs; the install becomes a near-no-op
+      # on a hit (apt deps still apply). timeout-minutes turns the recurring
+      # 45-minute download hang (7 occurrences, 2026-08-19/20) into a fast
+      # fail that a rerun clears.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright browsers
+        timeout-minutes: 8
+        run: bunx playwright install --with-deps chromium
+
+      - name: Start app + wait for health
+        run: |
+          bun run start > /tmp/app-server.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:3000/api/health >/dev/null; then echo "app healthy"; exit 0; fi
+            sleep 2
+          done
+          echo "app never became healthy" >&2; exit 1
+
+      - name: e2e (${{ matrix.tag }}${{ matrix.shard != '' && format(' shard {0}', matrix.shard) || '' }})
+        run: scripts/test.sh --layer=e2e --tag=${{ matrix.tag }} --no-coverage ${{ matrix.shard != '' && format('--shard={0}', matrix.shard) || '' }}
+
+      - name: Dump server log (diagnostics)
+        if: failure() && matrix.tag == '@security'
+        run: |
+          echo "=== [mcp-telemetry] capture/audit lines ==="
+          grep -aE "mcp-telemetry|agent_action_captures|posts_delete|capture (encrypt|insert)" /tmp/app-server.log || echo "(no matching lines)"
+          echo "=== agent_action_captures rows (does ANY capture exist, and with what client_id/tool_name?) ==="
+          PGPASSWORD=postgres psql -h localhost -U postgres -d simplerdev_test -c "SELECT id, client_id, tool_name, created_at FROM agent_action_captures ORDER BY id DESC LIMIT 10;" || echo "(query failed)"
+          echo "=== agent_audit_logs high-risk rows (does the wrapper run at all?) ==="
+          PGPASSWORD=postgres psql -h localhost -U postgres -d simplerdev_test -c "SELECT id, client_id, tool_name, status FROM agent_action_logs WHERE tool_name LIKE '%delete%' OR tool_name='posts_delete' ORDER BY id DESC LIMIT 10;" || echo "(query failed)"
+          echo "=== last 120 server log lines ==="
+          tail -120 /tmp/app-server.log || true
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.report }}
+          path: playwright-report/
+          retention-days: 7

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.fallow.tools/schema/fallowrc.json",
+  "ignorePatterns": [
+    "scripts/**",
+    "docs/marketing/**",
+    "drizzle/**",
+    "vault/**",
+    "graphify-out/**",
+    ".planning/**",
+    ".agents/**",
+    "extension/**",
+    "packages/starter/**",
+    "**/__generated__/**",
+    "**/*.generated.*"
+  ],
+  "health": {
+    "ignore": ["dist", ".next", "coverage", "__generated__"]
+  }
+}

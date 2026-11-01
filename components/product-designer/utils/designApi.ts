@@ -1,0 +1,489 @@
+// @ts-nocheck
+// TODO(designer): clean up types — ported from CRA, see .planning/product-designer-integration.md
+// Design API client for managing designs
+import { SessionManager } from './sessionManager';
+
+export interface Design {
+  id: number;
+  uuid: string;
+  name: string;
+  description?: string;
+  productId: string;
+  styleId: number;
+  side: string;
+  layers: any[];
+  styleOverrides: any;
+  thumbnailUrl?: string;
+  isPublic: boolean;
+  isTemplate: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastAccessedAt: string;
+  userId?: number;
+  sessionId?: string;
+  deletedAt?: string;
+}
+
+export interface CreateDesignRequest {
+  name?: string;
+  description?: string;
+  productId: number;
+  styleId: number;
+  side?: string;
+  layers?: any[];
+  styleOverrides?: any;
+}
+
+export interface UpdateDesignRequest {
+  name?: string;
+  description?: string;
+  layers?: any[];
+  styleOverrides?: any;
+  side?: string;
+  isPublic?: boolean;
+  thumbnailUrl?: string;
+}
+
+/**
+ * Normalise a styles+sides payload into the shape the editor's views expect.
+ *
+ * The storefront styles endpoint returns `product_sides` rows verbatim, so a
+ * side carries `imageUrl`. Every view component (MainView, ScalableMainView,
+ * StoreAssignmentTable) reads `imageFilePath` — the editor's own name, inherited
+ * from the monorepo this was ported from. Without the bridge the mockup renders
+ * with an empty src, the design surface collapses, and the print-file export
+ * refuses to run against it.
+ *
+ * Applied at the single boundary where API data enters the editor rather than
+ * renaming the field across every consumer.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function normalizeStyles(rawStyles: any[]): any[] {
+  if (!Array.isArray(rawStyles)) return [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return rawStyles.map((style: any) => ({
+    ...style,
+    imageFilePathFront:
+      style.imageFilePathFront ?? style.frontImageUrl ?? style.thumbnailUrl ?? null,
+    sides: Array.isArray(style.sides)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ? style.sides.map((sd: any) => ({
+          ...sd,
+          imageFilePath: sd.imageFilePath ?? sd.imageUrl ?? null,
+        }))
+      : style.sides,
+  }));
+}
+
+export class DesignApi {
+  // overridden by ProductDesigner via static init
+  static baseUrl = '/api/designs';
+  // sd2026 site/website id — used by helpers that build their own URLs
+  // (claim-designs, generate-thumbnail) and don't go through baseUrl.
+  static siteId: number = 0;
+  // When true, every request carries the x-portal-staff header so the API's
+  // staff gate authorizes via the portal (NextAuth) session instead of a
+  // customer bearer token / anonymous sessionId. Set by ProductDesigner from
+  // its `staffMode` prop.
+  static staffMode = false;
+
+  /**
+   * Shared headers for every fetch call. `json` controls whether
+   * Content-Type: application/json is included (skip for bodyless GETs).
+   * The x-portal-staff header is the CSRF signal the storefront design
+   * API's staff gate requires — it only takes effect alongside a valid
+   * portal session, which rides along via credentials: 'include'.
+   */
+  private static baseHeaders(json = true): Record<string, string> {
+    return {
+      ...(json ? { 'Content-Type': 'application/json' } : {}),
+      ...(this.staffMode ? { 'x-portal-staff': '1' } : {}),
+    };
+  }
+
+  static setBaseUrl(url: string) {
+    this.baseUrl = url;
+  }
+
+  /**
+   * Convenience: set base URL + siteId from the sd2026 site id.
+   * Equivalent to setBaseUrl(`/api/storefront/${id}/designs`) plus
+   * stashing the id for sibling helpers (claim, thumbnail).
+   */
+  static setSiteId(id: number) {
+    this.siteId = id;
+    this.baseUrl = `/api/storefront/${id}/designs`;
+  }
+
+  /**
+   * Get query parameters for API calls (includes session ID for anonymous users)
+   */
+  private static getQueryParams(): URLSearchParams {
+    const params = new URLSearchParams();
+    const sessionId = SessionManager.getCurrentSessionId();
+    
+    if (sessionId) {
+      params.set('sessionId', sessionId);
+    }
+    
+    return params;
+  }
+
+  /**
+   * Fetch user's designs
+   */
+  static async getDesigns(): Promise<Design[]> {
+    const params = this.getQueryParams();
+    const url = params.toString() ? `${this.baseUrl}?${params}` : this.baseUrl;
+    
+    const response = await fetch(url, {
+      credentials: 'include',
+      headers: this.baseHeaders(false),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch designs: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Get a specific design
+   */
+  static async getDesign(id: number, userId?: number): Promise<Design> {
+    const params = this.getQueryParams();
+    if (userId) {
+      params.set('userId', userId.toString());
+    }
+    const url = params.toString() ? `${this.baseUrl}/${id}?${params}` : `${this.baseUrl}/${id}`;
+    
+    const response = await fetch(url, {
+      credentials: 'include',
+      headers: this.baseHeaders(false),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch design: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Create a new design
+   */
+  static async createDesign(data: CreateDesignRequest, userId?: number): Promise<Design> {
+    const sessionId = SessionManager.getCurrentSessionId();
+    
+    // Prepare the payload with userId or sessionId
+    const payload = {
+      ...data,
+      userId,
+      sessionId: sessionId,
+    };
+    
+    const response = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || `Failed to create design: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Update an existing design
+   */
+  static async updateDesign(id: number, data: UpdateDesignRequest, userId?: number): Promise<Design> {
+    const sessionId = SessionManager.getCurrentSessionId();
+    
+    // Include authorization data in the request body
+    const payload = {
+      ...data,
+      userId,
+      sessionId,
+    };
+    
+    const response = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'PUT',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || `Failed to update design: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Delete a design
+   */
+  static async deleteDesign(id: number, userId?: number): Promise<void> {
+    const sessionId = SessionManager.getCurrentSessionId();
+    
+    const response = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'DELETE',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ userId, sessionId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || `Failed to delete design: ${response.statusText}`);
+    }
+  }
+
+  /**
+   * Clone a design
+   */
+  static async cloneDesign(id: number, name: string): Promise<Design> {
+    const params = this.getQueryParams();
+    const url = params.toString() ? `${this.baseUrl}/${id}/clone?${params}` : `${this.baseUrl}/${id}/clone`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || `Failed to clone design: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Get count of anonymous designs for current session
+   */
+  static async getAnonymousDesignCount(): Promise<number> {
+    const sessionId = SessionManager.getCurrentSessionId();
+    
+    if (!sessionId) return 0;
+
+    const response = await fetch(`${this.baseUrl}/anonymous/count?sessionId=${sessionId}`, {
+      credentials: 'include',
+      headers: this.baseHeaders(false),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get design count: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    return result.count;
+  }
+
+  /**
+   * Claim (i.e. transfer ownership of) anonymous designs after the customer
+   * signs up / signs in. Unlike a legacy endpoint, sd2026 does
+   * NOT create the account here — sd2026 has its own signup flow. This just
+   * re-points existing anonymous designs at the now-known customerId.
+   *
+   * Hits `/api/storefront/${siteId}/designs/claim` (see Wave 2I).
+   */
+  static async claimDesigns(payload: {
+    sessionId: string;
+    customerId: number;
+  }): Promise<{ designsTransferred: number }> {
+    if (!this.siteId) {
+      throw new Error('DesignApi.claimDesigns requires DesignApi.setSiteId() first');
+    }
+    const response = await fetch(`/api/storefront/${this.siteId}/designs/claim`, {
+      method: 'POST',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || `Failed to claim designs: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+
+    // Clear session after successful claim
+    SessionManager.clearSessionId();
+
+    return result;
+  }
+
+  /**
+   * Get public design by UUID
+   */
+  static async getPublicDesign(uuid: string): Promise<Design> {
+    const response = await fetch(`${this.baseUrl}/public/${uuid}`, {
+      credentials: 'include',
+      headers: this.baseHeaders(false),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch public design: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return json?.data ?? json;
+  }
+
+  /**
+   * Generate shareable link for a design
+   */
+  static async shareDesign(id: number, isPublic = true): Promise<{
+    design: Design;
+    shareableUrl: string;
+    uuid: string;
+    isPublic: boolean;
+  }> {
+    const params = this.getQueryParams();
+    const url = params.toString() ? `${this.baseUrl}/${id}/share?${params}` : `${this.baseUrl}/${id}/share`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ isPublic }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || `Failed to share design: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Ask the server to render and store the print-ready file for one side.
+   *
+   * The render happens server-side from the design's stored layers — the
+   * browser sends no image. A failure here is a real defect (missing artwork,
+   * an unconfigured side, a renderer regression), not a transient error, so it
+   * is surfaced rather than swallowed: an order without a print file cannot be
+   * fulfilled.
+   */
+  /**
+   * Render print files for every side the design actually uses.
+   *
+   * Not just the visible one: a customer who designs a back and then switches
+   * to the front would otherwise have the back silently dropped at fulfilment.
+   * Returns a user-facing message on failure, or null on success, so the caller
+   * can surface it without the loop leaking into the component.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async requestPrintFilesForDesign(
+    id: number,
+    layers: any[] | null | undefined,
+    fallbackSide: string,
+  ): Promise<string | null> {
+    const sides = [...new Set((layers ?? []).map((l) => l?.side).filter(Boolean))];
+    if (sides.length === 0) sides.push(fallbackSide);
+
+    const failures: string[] = [];
+    for (const s of sides) {
+      try {
+        await this.requestPrintFile(id, s as string);
+      } catch (e) {
+        failures.push(`${s}: ${e instanceof Error ? e.message : 'unknown error'}`);
+      }
+    }
+    return failures.length ? `Design saved, but the print file failed — ${failures.join('; ')}` : null;
+  }
+
+  static async requestPrintFile(
+    id: number,
+    side: string,
+  ): Promise<{ side: string; url: string; printFiles: Record<string, string> }> {
+    const params = this.getQueryParams();
+    const base = `${this.baseUrl}/${id}/print-file`;
+    const url = params.toString() ? `${base}?${params}` : base;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.baseHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ side }),
+    });
+
+    const json = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(json?.message || `Failed to upload print file: ${response.statusText}`);
+    }
+
+    // The storefront API returns a { success, data } envelope.
+    return json?.data ?? json;
+  }
+}
+
+// Export utility functions for common operations
+export const designUtils = {
+  /**
+   * Check if user should be prompted to create account
+   */
+  async shouldPromptSignup(): Promise<{ shouldPrompt: boolean; designCount: number }> {
+    try {
+      const count = await DesignApi.getAnonymousDesignCount();
+      // Prompt after user has 2 or more designs
+      return { shouldPrompt: count >= 2, designCount: count };
+    } catch (error) {
+      console.error('Failed to check design count:', error);
+      return { shouldPrompt: false, designCount: 0 };
+    }
+  },
+
+  /**
+   * Auto-save design with debouncing
+   */
+  debounceAutoSave: (() => {
+    let timeout: NodeJS.Timeout;
+    return (designId: number, data: UpdateDesignRequest, delay = 2000) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(async () => {
+        try {
+          await DesignApi.updateDesign(designId, data);
+          console.log('Design auto-saved');
+        } catch (error) {
+          console.error('Auto-save failed:', error);
+        }
+      }, delay);
+    };
+  })(),
+
+  /**
+   * Generate design thumbnail URL.
+   * Builds an sd2026 storefront URL — DesignApi.setSiteId() must have been
+   * called first. Falls back to legacy `/api/generate-image` only if no
+   * siteId is wired (which means the editor was mounted without
+   * ProductDesigner — should not happen in production).
+   *
+   * NOTE: the storefront generate-thumbnail endpoint is POST-only (it
+   * accepts a data URL and uploads to S3). This helper still returns a GET
+   * URL for legacy preview/<img> consumers — those callers should migrate
+   * to POST. TODO(designer): remove once all callers POST.
+   */
+  generateThumbnailUrl(layers: any[], styleId: number): string {
+    const base = DesignApi.siteId
+      ? `/api/storefront/${DesignApi.siteId}/designs/generate-thumbnail`
+      : '/api/generate-image';
+    return `${base}?layers=${encodeURIComponent(JSON.stringify(layers))}&style=${styleId}&thumbnail=true`;
+  },
+};

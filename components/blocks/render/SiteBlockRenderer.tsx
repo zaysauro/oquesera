@@ -1,0 +1,130 @@
+// SERVER component (PUX-241). It was 'use client' only because it hosted the
+// edit-mode dynamic() imports and HydrationSignal; those now live in
+// SiteBlockRenderer.client.tsx. Staying on the server keeps page-fonts / the
+// sanitize-html stack (~170 KB raw) out of the client bundle of every tenant
+// page. Every caller is a server page, props are all serializable.
+import { BlockRenderer } from './BlockRenderer';
+import type { ResolvedBranding } from '@/lib/branding';
+import { BrandingProvider } from '@/contexts/BrandingContext';
+import { collectBlockFonts, googleFontsHref } from '@/lib/blocks/page-fonts';
+import { DeferredStylesheet } from '@/components/sites/DeferredStylesheet';
+import { HydrationSignal, SiteEditRenderer } from './SiteBlockRenderer.client';
+
+interface CodeLayer {
+  customCss?: string | null;
+  customJs?: string | null;
+}
+
+interface SiteBlockRendererProps {
+  content: string;
+  siteId?: number;
+  branding?: ResolvedBranding;
+  /** Site-wide custom code (cascades first, weakest) */
+  site?: CodeLayer;
+  /** Content-type custom code (cascades after site, before post) */
+  type?: CodeLayer;
+  /** Per-post custom code (cascades last, strongest). Aliases for the legacy
+   *  customCss/customJs props are still accepted to avoid churn at every call site. */
+  customCss?: string | null;
+  customJs?: string | null;
+  /** Server-detected `?_edit=true` (the visual-editor iframe). Must be read from
+   *  the page route's `searchParams` and passed down — detecting it here via
+   *  useSearchParams() forced a Suspense boundary whose fallback re-rendered the
+   *  ENTIRE block tree, so every public page shipped its DOM twice (visible
+   *  fallback + hidden real tree). The editor iframe always carries `_edit=true`
+   *  in its initial URL (PortalPostForm/TemplateEditor build it into src), so
+   *  server-side detection loses nothing. */
+  isEditMode?: boolean;
+}
+
+// Wrap user JS in an IIFE so each layer's `var`/function declarations don't
+// leak into the next, and so a thrown error in one layer doesn't kill the
+// others. Layered tag names make stray errors easy to attribute in DevTools.
+//
+// Execution is gated on the `sd:hydrated` signal (dispatched by <HydrationSignal>
+// once React has committed the block tree on the client). Custom JS frequently
+// mutates block DOM imperatively — e.g. a hero block that prepends a canvas
+// element for a particle network effect. Running that BEFORE React finishes
+// hydrating the hero produces a hydration mismatch (React expected the section
+// <div>, found the <canvas>). Waiting for hydration makes these progressive
+// enhancements safe. A `load`-based fallback still fires if the hydration
+// signal never arrives (JS error upstream, etc.) so enhancements are never
+// silently lost.
+function jsWrapper(label: string, body: string): string {
+  return `(function(){function run(){try{${body}\n}catch(e){console.error('[${label}]',e);}}var done=false;function go(){if(done)return;done=true;run();}if(window.__sdSiteHydrated){go();}else{document.addEventListener('sd:hydrated',go,{once:true});function fb(){setTimeout(go,2500);}if(document.readyState==='complete'){fb();}else{window.addEventListener('load',fb,{once:true});}}})();`;
+}
+
+// Custom CSS + collected fonts + custom JS. Rendered OUTSIDE the Suspense
+// boundary below (and without useSearchParams) so it is part of the initial
+// SSR HTML and applies BEFORE first paint. Previously this lived inside
+// SiteBlockRendererInner (which calls useSearchParams), so during SSR the
+// Suspense fallback — which lacks these tags — was emitted and the custom CSS
+// (including the hero's background-image and all layout styling) only applied
+// after hydration. That produced a large layout shift (CLS) and a very late
+// LCP once first paint got fast. Hoisting it fixes both.
+function SiteCodeAndFonts({ content, branding, site, type, customCss, customJs }: SiteBlockRendererProps) {
+  // Cascade order: site → type → post. Earliest in the document wins least.
+  const cssLayers: Array<[string, string]> = [];
+  if (site?.customCss) cssLayers.push(['site-custom-css', site.customCss]);
+  if (type?.customCss) cssLayers.push(['type-custom-css', type.customCss]);
+  if (customCss) cssLayers.push(['post-custom-css', customCss]);
+
+  const jsLayers: Array<[string, string]> = [];
+  if (site?.customJs) jsLayers.push(['site-custom-js', site.customJs]);
+  if (type?.customJs) jsLayers.push(['type-custom-js', type.customJs]);
+  if (customJs) jsLayers.push(['post-custom-js', customJs]);
+
+  // Collect every Google Font used by this page's blocks into ONE combined
+  // request. `branding.headingFont`/`bodyFont` are emitted by the site layout,
+  // so exclude them here to avoid a duplicate request.
+  const brandingFonts = [branding?.headingFont, branding?.bodyFont];
+  const fontsHref = googleFontsHref(
+    collectBlockFonts(content).filter(
+      (f) => !brandingFonts.some((b) => (b || '').trim().split(',')[0].trim().replace(/^["']|["']$/g, '') === f),
+    ),
+  );
+
+  // NOTE: the LCP/hero image preload is emitted from the SERVER component
+  // <HeroPreload> (rendered in the page route) via ReactDOM.preload so it lands
+  // in <head> early. Emitting it here (client component, in <body>) was too
+  // late to help on real infra.
+
+  return (
+    <>
+      {fontsHref && <DeferredStylesheet href={fontsHref} />}
+      {cssLayers.map(([label, css]) => (
+        <style key={label} data-layer={label} dangerouslySetInnerHTML={{ __html: css }} />
+      ))}
+      {jsLayers.map(([label, js]) => (
+        <script
+          key={label}
+          data-layer={label}
+          dangerouslySetInnerHTML={{ __html: jsWrapper(label, js) }}
+        />
+      ))}
+    </>
+  );
+}
+
+export function SiteBlockRenderer(props: SiteBlockRendererProps) {
+  const { content, siteId, branding, isEditMode } = props;
+
+  if (isEditMode) {
+    const rendered = <SiteEditRenderer content={content} />;
+    return (
+      <>
+        <SiteCodeAndFonts {...props} />
+        {branding ? <BrandingProvider branding={branding}>{rendered}</BrandingProvider> : rendered}
+        <HydrationSignal />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <SiteCodeAndFonts {...props} />
+      <BlockRenderer content={content} siteId={siteId} branding={branding} />
+      <HydrationSignal />
+    </>
+  );
+}

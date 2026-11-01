@@ -1,0 +1,257 @@
+import { notFound, redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+import { db } from '@/lib/db';
+import { pitchDecks, surveys, clientWebsites } from '@/lib/db/schema';
+import type { PitchDeckSlide, PitchDeckSlideV2, PitchDeckTheme } from '@/lib/db/schema';
+import { eq, and, inArray } from 'drizzle-orm';
+import { auth } from '@/lib/auth';
+import { getPortalClient } from '@/lib/portal-client';
+import { convertAllSlidesToV2, isV2Slides } from '@/lib/pitch-deck-migration';
+import { applyAbToDeckSlides } from '@/lib/ab/render';
+import { AbGoalTracker } from '@/components/blocks/AbGoalTracker';
+import { getBrandingByProfileId, getBrandingByClientId } from '@/lib/branding';
+import type { Metadata } from 'next';
+import PitchDeckPresentation from '@/app/sites/[domain]/slides/[slug]/PitchDeckPresentation';
+import { resolveApprovalContext, approvalNoIndexMetadata } from '@/lib/mcp/approval-mode';
+import { ApprovalBar } from '@/components/approvals/ApprovalBar';
+import type { SurveyDataForDeck } from '@/app/sites/[domain]/slides/[slug]/PitchDeckPresentation';
+
+/** Convert v1 slides on read if needed */
+function resolveSlides(raw: unknown, theme: PitchDeckTheme): PitchDeckSlideV2[] {
+  const arr = (raw || []) as PitchDeckSlide[] | PitchDeckSlideV2[];
+  if (!arr.length) return [];
+  if (isV2Slides(arr)) return arr;
+  return convertAllSlidesToV2(arr as PitchDeckSlide[]);
+}
+
+/** Fetch survey data for any survey slides in the deck */
+async function fetchSurveyData(deckSlides: PitchDeckSlideV2[]): Promise<Record<number, SurveyDataForDeck>> {
+  const surveyIds = deckSlides
+    .filter(s => s.surveySlide && s.surveyId)
+    .map(s => s.surveyId!);
+  if (surveyIds.length === 0) return {};
+
+  const uniqueIds = [...new Set(surveyIds)];
+  const rows = await db.select({
+    id: surveys.id,
+    title: surveys.title,
+    slug: surveys.slug,
+    fields: surveys.fields,
+    requireEmail: surveys.requireEmail,
+    thankYouTitle: surveys.thankYouTitle,
+    thankYouMessage: surveys.thankYouMessage,
+    redirectUrl: surveys.redirectUrl,
+    status: surveys.status,
+    recommendation: surveys.recommendation,
+  }).from(surveys).where(inArray(surveys.id, uniqueIds));
+
+  const result: Record<number, SurveyDataForDeck> = {};
+  for (const row of rows) {
+    // Only include active surveys (or drafts for preview)
+    result[row.id] = {
+      id: row.id,
+      title: row.title,
+      slug: row.slug,
+      fields: (row.fields || []) as SurveyDataForDeck['fields'],
+      requireEmail: row.requireEmail,
+      thankYouTitle: row.thankYouTitle || 'Thank you!',
+      thankYouMessage: row.thankYouMessage || '',
+      redirectUrl: row.redirectUrl,
+      recommendation: row.recommendation,
+    };
+  }
+  return result;
+}
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
+}
+
+async function getDeck(slug: string, allowDraft: boolean) {
+  if (allowDraft) {
+    // Preview mode: allow any status
+    const [deck] = await db.select().from(pitchDecks)
+      .where(eq(pitchDecks.slug, slug))
+      .limit(1);
+    return deck ?? null;
+  }
+  // Public: published only
+  const [deck] = await db.select().from(pitchDecks)
+    .where(and(eq(pitchDecks.slug, slug), eq(pitchDecks.status, 'published')))
+    .limit(1);
+  return deck ?? null;
+}
+
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const { preview } = await searchParams;
+  const isPreview = preview === '1';
+
+  // A deck being reviewed under an approval link must not be indexed (PUX-079).
+  // Returned early so it wins regardless of which branch below would have run.
+  const approvalRobots = await approvalNoIndexMetadata();
+  if (approvalRobots.robots) return { title: 'Draft review', ...approvalRobots };
+
+  // On the main app host, non-preview requests for a published deck either get
+  // redirected to the tenant subdomain (prod) or rendered inline (local dev).
+  // Local-dev inline rendering needs real metadata so the browser tab + share
+  // cards reflect the deck instead of "Not Found".
+  //
+  // Per fix/slides-public-route: public access on the main app host is blocked
+  // — pitch decks must be viewed on the owning tenant's subdomain. That intent
+  // is preserved by the !isPreview && !isLocal branch below.
+  const headersList = await headers();
+  const reqHost = headersList.get('host') || '';
+  const isLocal = reqHost.startsWith('localhost') || reqHost.startsWith('127.0.0.1');
+
+  if (!isPreview && !isLocal) {
+    return { title: 'Not Found', robots: { index: false } };
+  }
+
+  const deck = await getDeck(slug, isPreview);
+  if (!deck) return { title: 'Not Found', robots: { index: false } };
+
+  const title = deck.title?.trim() || deck.slug;
+  const description = deck.description?.trim() || `${title} - Pitch Deck`;
+  const branding = deck.brandingProfileId
+    ? await getBrandingByProfileId(deck.brandingProfileId)
+    : await getBrandingByClientId(deck.clientId);
+  const metadata: Metadata = {
+    title,
+    description,
+    robots: { index: false },
+  };
+  if (branding?.faviconUrl) metadata.icons = { icon: branding.faviconUrl };
+  return metadata;
+}
+
+/**
+ * Resolve the owning tenant's subdomain for a published deck.
+ * Prefers `clientWebsites.subdomain` (the slug used for <sub>.simplerdevelopment.com);
+ * falls back to `clientWebsites.domain` if a custom domain is configured.
+ * Returns null if the deck has no active website with a routable host.
+ */
+async function getTenantHostForDeck(clientId: number): Promise<string | null> {
+  const [site] = await db
+    .select({
+      subdomain: clientWebsites.subdomain,
+      domain: clientWebsites.domain,
+    })
+    .from(clientWebsites)
+    .where(and(eq(clientWebsites.clientId, clientId), eq(clientWebsites.active, true)))
+    .orderBy(clientWebsites.id)
+    .limit(1);
+  if (!site) return null;
+  if (site.subdomain) return `${site.subdomain}.simplerdevelopment.com`;
+  if (site.domain) return site.domain;
+  return null;
+}
+
+export default async function PublicPitchDeckPage({ params, searchParams }: PageProps) {
+  const { slug } = await params;
+  const { preview } = await searchParams;
+  const isPreview = preview === '1';
+
+  // Draft-preview path. Two principals may reach a draft deck, and both are
+  // scoped to the deck's own clientId so neither can cross tenants:
+  //
+  //   - a logged-in portal user (the portal's "Preview" button), or
+  //   - an external reviewer holding an approval cookie for THIS deck (PUX-061),
+  //     who sees the real presentation with the approval bar overlaid instead of
+  //     the stacked BlockRenderer cards the old approval page drew.
+  //
+  // No A/B here: this path never calls applyAbToDeckSlides, so a reviewer is
+  // never enrolled in an experiment and no goal tracker is mounted (PUX-067).
+  if (isPreview) {
+    const deck = await getDeck(slug, true);
+    if (!deck) notFound();
+
+    const approval = await resolveApprovalContext('pitch_deck', deck.id);
+    // resolveApprovalContext proves "a live link for this deck exists"; it does
+    // NOT prove the deck belongs to that link's tenant. That check is here.
+    const viaApproval = !!approval && approval.clientId === deck.clientId;
+
+    let authorized = viaApproval;
+    if (!authorized) {
+      const session = await auth();
+      if (!session?.user?.id) notFound();
+      const client = await getPortalClient(parseInt(session.user.id, 10));
+      if (!client || deck.clientId !== client.id) notFound();
+      authorized = true;
+    }
+    if (!authorized) notFound();
+
+    const theme = (deck.theme || {}) as PitchDeckTheme;
+    const slides = resolveSlides(deck.slides, theme);
+    const surveyData = await fetchSurveyData(slides);
+    const branding = deck.brandingProfileId
+      ? await getBrandingByProfileId(deck.brandingProfileId)
+      : await getBrandingByClientId(deck.clientId);
+    return (
+      <>
+        <PitchDeckPresentation key={deck.id} slides={slides} theme={theme} title={deck.title} isDraft={deck.status !== 'published'} surveys={surveyData} branding={branding} />
+        {viaApproval && approval && (
+          // auto-hide: a deck is a fixed 16:9 stage, so the bar gets out of the
+          // way and returns on any input — including the arrow keys the reviewer
+          // is already pressing to advance slides.
+          <ApprovalBar
+            entityLabel="Pitch deck"
+            title={deck.title}
+            summary={approval.summary}
+            status={approval.status}
+            expiresAt={approval.expiresAt ? approval.expiresAt.toISOString() : null}
+            reviewerName={approval.reviewerName}
+            reviewedAt={approval.reviewedAt ? approval.reviewedAt.toISOString() : null}
+            variant="auto-hide"
+          />
+        )}
+      </>
+    );
+  }
+
+  // Non-preview: the main-app host never renders published decks — it
+  // redirects to the owning tenant's subdomain so the tenant-scoped
+  // /sites/[domain]/pitch-deck/[slug] route handles rendering. Guessing a
+  // slug on the apex domain can never leak cross-tenant content — at worst
+  // it redirects to the correct tenant, which will only render if the
+  // deck belongs to that tenant (already enforced by getPitchDeckByDomainAndSlug).
+  const deck = await getDeck(slug, false);
+  if (!deck) notFound();
+
+  // Local dev: `<sub>.simplerdevelopment.com` doesn't resolve from localhost,
+  // so the cross-host redirect would dead-end. Render the deck inline instead.
+  const headersList = await headers();
+  const reqHost = headersList.get('host') || '';
+  const isLocal = reqHost.startsWith('localhost') || reqHost.startsWith('127.0.0.1');
+  if (isLocal) {
+    const theme = (deck.theme || {}) as PitchDeckTheme;
+    const rawSlides = resolveSlides(deck.slides, theme);
+    const ab = await applyAbToDeckSlides({ deckId: deck.id, slides: rawSlides, skip: isPreview });
+    // Variant payloads may be stored in V1 shape — normalize again (no-op for V2).
+    const slides = resolveSlides(ab.slides, theme);
+    const surveyData = await fetchSurveyData(slides);
+    const branding = deck.brandingProfileId
+      ? await getBrandingByProfileId(deck.brandingProfileId)
+      : await getBrandingByClientId(deck.clientId);
+    return (
+      <>
+        <PitchDeckPresentation key={deck.id} slides={slides} theme={theme} title={deck.title} surveys={surveyData} branding={branding} />
+        {ab.ab && ab.visitorId ? (
+          <AbGoalTracker
+            experimentId={ab.ab.experimentId}
+            variantKey={ab.ab.variantKey}
+            goalMetric={ab.ab.goalMetric}
+            goalSelector={ab.ab.goalSelector}
+            visitorId={ab.visitorId}
+          />
+        ) : null}
+      </>
+    );
+  }
+
+  const host = await getTenantHostForDeck(deck.clientId);
+  if (!host) notFound();
+
+  redirect(`https://${host}/pitch-deck/${slug}`);
+}

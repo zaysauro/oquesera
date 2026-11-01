@@ -1,0 +1,91 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { media } from '@/lib/db/schema';
+import { uploadToS3 } from '@/lib/s3/upload';
+import { auth } from '@/lib/auth';
+import { getPortalClient } from '@/lib/portal-client';
+import { getImageDimensions } from '@/lib/media/image-dimensions';
+
+const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '10485760'); // 10MB default
+const ALLOWED_TYPES = process.env.ALLOWED_FILE_TYPES?.split(',') || [];
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+    const userId = parseInt(session.user.id as string, 10);
+    const client = await getPortalClient(userId);
+    if (!client) {
+      return NextResponse.json({ success: false, error: 'No portal client found' }, { status: 403 });
+    }
+
+    const formData = await request.formData() as unknown as globalThis.FormData;
+    const file = formData.get('file') as File | null;
+    const alt = formData.get('alt') as string | null;
+    const caption = formData.get('caption') as string | null;
+
+    if (!file) {
+      return NextResponse.json(
+        { success: false, error: 'No file provided' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file type
+    if (ALLOWED_TYPES.length > 0 && !ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { success: false, error: `File type ${file.type} not allowed` },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { success: false, error: `File size exceeds ${MAX_FILE_SIZE} bytes` },
+        { status: 400 }
+      );
+    }
+
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Get image dimensions if it's an image
+    const { width, height } = await getImageDimensions(buffer, file.type);
+
+    // Upload to S3
+    const uploadResult = await uploadToS3(buffer, file.name, file.type);
+
+    // Save to database
+    const [newMedia] = await db
+      .insert(media)
+      .values({
+        filename: file.name,
+        storedFilename: uploadResult.storedFilename,
+        mimeType: uploadResult.mimeType,
+        fileSize: uploadResult.fileSize,
+        url: uploadResult.url,
+        width,
+        height,
+        alt: alt || null,
+        caption: caption || null,
+        uploadedBy: userId,
+        clientId: client.id,
+      })
+      .returning();
+
+    return NextResponse.json(
+      { success: true, data: newMedia },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('Upload error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Upload failed' },
+      { status: 500 }
+    );
+  }
+}
