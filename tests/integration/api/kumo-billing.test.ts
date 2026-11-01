@@ -64,3 +64,28 @@ describe('Kumo checkout without a payment provider @kumo @billing', () => {
     expect(await activeServices()).toHaveLength(1);
   });
 });
+
+describe('Kumo plan tiers grant their modules @kumo @billing @tenancy', () => {
+  it('Essencial grants CRM and bookings but not e-mail marketing; Profissional grants e-mail', async () => {
+    const { hasServiceAccess } = await import('@/lib/portal-auth');
+    const C = await sessionForNewClientUser('kumo-tier');
+    const sql = getTestSql();
+    await sql`UPDATE ${sql(TEST_SCHEMA)}.clients SET billing_mode = 'saas' WHERE id = ${C.client.id}`;
+    for (const [slug, price] of [['plan-starter', 4990], ['plan-growth', 9990]] as const) {
+      await sql`
+        INSERT INTO ${sql(TEST_SCHEMA)}.services (name, slug, category, price, billing_cycle, active)
+        VALUES (${slug}, ${slug}, ${slug}, ${price}, 'monthly', true) ON CONFLICT (slug) DO NOTHING`;
+    }
+    const [starter] = await sql<{ id: number }[]>`SELECT id FROM ${sql(TEST_SCHEMA)}.services WHERE slug = 'plan-starter'`;
+    await sql`INSERT INTO ${sql(TEST_SCHEMA)}.client_services (client_id, service_id, status) VALUES (${C.client.id}, ${starter.id}, 'active')`;
+    expect(await hasServiceAccess(C.client.id, 'crm')).toBe(true);
+    expect(await hasServiceAccess(C.client.id, 'booking')).toBe(true);
+    expect(await hasServiceAccess(C.client.id, 'websites')).toBe(true);
+    expect(await hasServiceAccess(C.client.id, 'email')).toBe(false);
+
+    const [growth] = await sql<{ id: number }[]>`SELECT id FROM ${sql(TEST_SCHEMA)}.services WHERE slug = 'plan-growth'`;
+    await sql`UPDATE ${sql(TEST_SCHEMA)}.client_services SET service_id = ${growth.id} WHERE client_id = ${C.client.id}`;
+    expect(await hasServiceAccess(C.client.id, 'email')).toBe(true);
+    expect(await hasServiceAccess(C.client.id, 'store')).toBe(false);
+  });
+});

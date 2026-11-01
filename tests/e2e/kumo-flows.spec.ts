@@ -64,8 +64,6 @@ async function logout(page: Page) {
   const { csrfToken } = (await (await page.request.get('/api/auth/csrf')).json()) as { csrfToken: string };
   await page.request.post('/api/auth/signout', { form: { csrfToken, callbackUrl: '/portal/login' } });
   // A real navigation must land on the login page again.
-  page.on('request', (r) => { if (r.url().includes('/portal/')) console.log('DEBUG req', r.url(), (r.headers()['cookie'] || '').split(';').map((c) => c.split('=')[0].trim())); });
-  console.log('DEBUG jar', (await page.context().cookies()).map((c) => `${c.name}@${c.domain}${c.path}`));
   await page.goto('/portal/dashboard');
   await expect(page).toHaveURL(/\/portal\/login/);
 }
@@ -190,17 +188,6 @@ test('10–11. project, task, status change', async ({ page }) => {
   expect(row.column_id).toBe(done);
 });
 
-test('12. document upload', async ({ page }) => {
-  await login(page, A.email, A.password);
-  const res = await page.request.post('/api/portal/media/upload', {
-    multipart: {
-      file: { name: 'contrato.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4\n% Kumo e2e\n') },
-      alt: 'Contrato de teste',
-    },
-  });
-  expect(res.status()).toBe(201);
-});
-
 test('13–15. website from template, edit, publish, public page', async ({ page }) => {
   await login(page, A.email, A.password);
   const sub = `kumo-e2e-${stamp}`;
@@ -229,6 +216,18 @@ test('13–15. website from template, edit, publish, public page', async ({ page
   await expect(ap.getByText('Salão E2E — editado')).toBeVisible({ timeout: 30_000 });
   await expect(ap).toHaveTitle(/Salão E2E/);
   await anon.close();
+});
+
+// The media library belongs to a website, so the company uploads after it has one.
+test('12. document upload', async ({ page }) => {
+  await login(page, A.email, A.password);
+  const res = await page.request.post('/api/portal/media/upload', {
+    multipart: {
+      file: { name: 'contrato.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4\n% Kumo e2e\n') },
+      alt: 'Contrato de teste',
+    },
+  });
+  expect(res.status(), await res.text()).toBe(201);
 });
 
 test('16–17. public booking, conflict prevention, reschedule and cancel', async ({ page, browser }) => {
@@ -262,8 +261,11 @@ test('16–17. public booking, conflict prevention, reschedule and cancel', asyn
     data: { token: tok.reschedule_token, newStartTime: newStart.toISOString(), newEndTime: new Date(newStart.getTime() + 30 * 60_000).toISOString(), timezone: 'America/Sao_Paulo' },
   });
   expect(resched.ok()).toBeTruthy();
-  const [after] = await sql<{ start_time: Date; cancel_token: string }[]>`SELECT start_time, cancel_token FROM bookings WHERE id = ${bookingId}`;
-  expect(new Date(after.start_time).toISOString()).toBe(newStart.toISOString());
+  // start_time is a naive UTC timestamp; compare it as text so the test's
+  // local timezone does not shift it.
+  const [after] = await sql<{ start_utc: string; cancel_token: string }[]>`
+    SELECT to_char(start_time, 'YYYY-MM-DD"T"HH24:MI:SS') AS start_utc, cancel_token FROM bookings WHERE id = ${bookingId}`;
+  expect(after.start_utc).toBe(newStart.toISOString().slice(0, 19));
 
   const cancel = await ap.request.post('/api/public/booking/cancel', { data: { token: after.cancel_token } });
   expect(cancel.ok()).toBeTruthy();

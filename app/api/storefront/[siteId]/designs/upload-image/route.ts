@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadToS3 } from '@/lib/s3/upload';
 
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '10485760'); // 10MB
+const MAX_FILE_SIZE = (parseInt(process.env.MAX_FILE_SIZE || '', 10) || 10485760); // 10MB
 
 // POST /api/storefront/[siteId]/designs/upload-image  (multipart/form-data, `file`)
 // Customer-supplied image for use as a designer layer. Returns { url }.

@@ -6,8 +6,10 @@ import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
 import { getImageDimensions } from '@/lib/media/image-dimensions';
 
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '10485760'); // 10MB default
-const ALLOWED_TYPES = process.env.ALLOWED_FILE_TYPES?.split(',') || [];
+const MAX_FILE_SIZE = (parseInt(process.env.MAX_FILE_SIZE || '', 10) || 10485760); // 10MB default
+// Blank env (as shipped in .env.example) means "no restriction"; a bare
+// split would yield [''] and reject every file type.
+const ALLOWED_TYPES = (process.env.ALLOWED_FILE_TYPES || '').split(',').map((t) => t.trim()).filter(Boolean);
 
 export async function POST(request: NextRequest) {
   try {

@@ -3,7 +3,7 @@ import { requireBrainEntitlement } from '@/lib/brain/entitlement';
 import { createNote } from '@/lib/brain/notes';
 import { uploadToS3 } from '@/lib/s3/upload';
 
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '10485760'); // 10MB
+const MAX_FILE_SIZE = (parseInt(process.env.MAX_FILE_SIZE || '', 10) || 10485760); // 10MB
 
 /**
  * POST /api/portal/brain/knowledge/upload

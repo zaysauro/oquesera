@@ -14,6 +14,8 @@ import { NextResponse } from 'next/server';
 // (requireService, action) each route already declares — see
 // lib/oauth/required-scope.ts.
 
+import { getTierByCategory, tierDomainKeys } from '@/lib/billing/domain-catalog';
+
 export type PortalAction = 'read' | 'write' | 'admin' | 'owner';
 
 export type PortalRole = 'owner' | 'admin' | 'member' | 'viewer';
@@ -328,7 +330,15 @@ export async function hasServiceAccess(clientId: number, category: string): Prom
       eq(clientServices.status, 'active'),
     ));
 
-  return subscriptions.some(s => serviceCategoryMatches(s.category, category));
+  if (subscriptions.some(s => serviceCategoryMatches(s.category, category))) return true;
+  // Kumo One: a plan TIER row (category = tier slug, e.g. 'plan-growth') grants
+  // the tier's whole module set. This gate only matched per-module rows, so a
+  // company on any plan was denied every module its plan includes.
+  const wanted = category === 'booking' ? 'bookings' : category;
+  return subscriptions.some((s) => {
+    const tier = getTierByCategory(s.category);
+    return !!tier && tierDomainKeys(tier).includes(wanted);
+  });
 }
 
 /**
