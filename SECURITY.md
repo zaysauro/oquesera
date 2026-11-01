@@ -1,58 +1,64 @@
-# Security Policy
+# Segurança do Kumo One
 
-## Supported Versions
+## Comunicar uma vulnerabilidade
 
-Only the latest release on the `main` branch receives security fixes. Older
-versions are not actively maintained.
+Não abra uma issue pública. Envie os detalhes para o e-mail de suporte do
+operador (`NEXT_PUBLIC_SUPPORT_EMAIL`) ou use "Report a vulnerability" na aba
+Security do repositório `zaysauro/oquesera`. A política original do projeto-base
+está em `docs/UPSTREAM_SECURITY.md`; falhas no código herdado também devem ser
+comunicadas ao SimplerDevelopment.
 
-| Version / Branch | Supported |
-|---|---|
-| `main` (latest) | Yes |
-| Older releases | No |
+## Modelo de segurança
 
-## Reporting a Vulnerability
+**Isolamento entre empresas**
+- A empresa ativa é resolvida no servidor a partir da sessão
+  (`authorizePortal`), nunca a partir de um parâmetro do navegador.
+- Consultas filtram por `clientId`; recursos de outra empresa respondem 404.
+- Coberto por testes de integração `@tenancy` (59 arquivos, 478 casos) e
+  `tests/integration/api/kumo-sites.test.ts`.
 
-**Please do not open a public GitHub issue for security vulnerabilities.**
-Public disclosure before a fix is available puts all users at risk.
+**Autenticação e sessões**
+- NextAuth v5 com senha (bcrypt), confirmação de e-mail, recuperação de senha
+  por link de uso único (1 hora), 2FA (TOTP) opcional, login Google opcional.
+- Cookies `httpOnly`/`secure` em produção; domínio do cookie configurável.
 
-To report a vulnerability, send an email to:
+**Autorização**
+- Papéis na empresa: proprietário, administrador, membro, leitor.
+- Acesso aos módulos depende do plano (`requireService`).
+- Ações externas ou destrutivas (publicar site, despublicar, enviar contratos,
+  pagamentos) passam por confirmação na interface e checagem de papel no servidor.
 
-**security@simplerdevelopment.com**
+**Segredos**
+- Nenhuma credencial no repositório (`.env*` no `.gitignore`; gitleaks no
+  pre-commit; varredura do GitHub ativa).
+- Chaves de IA e de integrações de cada empresa ficam criptografadas no banco
+  (`ENCRYPTION_KEY`, `WORKSPACE_TENANT_SECRETS_KEY`) e só são usadas no servidor.
+- O frontend nunca recebe chaves de API.
 
-Include as much of the following as possible:
+**Cobrança**
+- Sem provedor de pagamento configurado, a contratação on-line é recusada; um
+  plano só é ativado por confirmação do Stripe (webhook/verificação da sessão)
+  ou por atribuição manual de um administrador da plataforma.
 
-- A description of the vulnerability and its potential impact
-- The component or area of the codebase affected (e.g. auth, billing, data
-  access, MCP tools)
-- Steps to reproduce or a proof-of-concept (even a partial one is helpful)
-- Any suggested mitigations you have identified
+**Auditoria**
+- Operações relevantes geram registros (`brain_audit_logs`; publicação e
+  criação de site por modelo no Kumo; eventos de assinatura de contratos;
+  execuções de automações e chamadas MCP).
 
-We will acknowledge receipt within **72 hours** and aim to provide an initial
-assessment (confirmed / not confirmed, severity, rough timeline) within **7
-business days**.
+**Assinatura eletrônica**
+- O produto oferece assinatura eletrônica simples (registro de data, hora, IP).
+  Não é assinatura qualificada ICP-Brasil e não deve ser apresentada como tal.
 
-## Coordinated Disclosure
+## LGPD
 
-We follow a coordinated disclosure model:
+- A empresa cliente é controladora dos dados que cadastra; o Kumo One é operador.
+- Política em `/privacidade`; canal do encarregado via `NEXT_PUBLIC_DPO_EMAIL`.
+- Contas não confirmadas são removidas após 7 dias (`/api/cron/purge-unverified`).
+- Exportação de dados de CRM em CSV disponível no painel.
 
-1. Reporter submits the vulnerability privately.
-2. We confirm and assess the issue.
-3. We develop and test a fix.
-4. We release the fix and notify the reporter.
-5. Reporter may publish details **30 days** after the fix ships (or sooner by
-   mutual agreement).
+## Pendências conhecidas
 
-We appreciate researchers who give us a reasonable window to respond before
-going public. If you believe a vulnerability poses immediate, critical risk to
-users, please say so in your initial report and we will prioritize accordingly.
-
-## Scope
-
-This policy covers the SimplerDevelopment platform codebase in this repository.
-Third-party dependencies are out of scope for this policy — please report those
-directly to the upstream project.
-
-## Credits
-
-We are happy to publicly credit researchers who report valid vulnerabilities,
-unless you prefer to remain anonymous.
+- Revisão jurídica dos termos e da política de privacidade antes do lançamento.
+- Revisão da licença Hippocratic do `react-leaflet` (ver `THIRD_PARTY_NOTICES.md`).
+- Rodar uma varredura completa de dependências transitivas
+  (`bun audit` / `npm audit`) antes de cada release.

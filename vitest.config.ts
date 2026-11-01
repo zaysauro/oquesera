@@ -84,6 +84,7 @@ export default defineConfig({
           name: 'unit',
           environment: 'jsdom',
           include: ['tests/unit/**/*.test.{ts,tsx}'],
+          setupFiles: ['./tests/setup-unit-kumo.ts'],
           // Cold-starting heavy transitive deps (next-auth, drizzle schema) can
           // take 5-8 s on the first dynamic import in a file. Match integration.
           // Under v8 coverage instrumentation everything runs ~2x slower, so a

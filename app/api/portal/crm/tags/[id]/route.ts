@@ -1,3 +1,4 @@
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -10,6 +11,8 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const { id } = await params;
   const session = await auth();
   if (!session?.user?.id)

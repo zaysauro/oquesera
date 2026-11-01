@@ -1,3 +1,4 @@
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -8,6 +9,8 @@ import { crmEntitlementError } from '@/lib/crm/entitlement';
 
 // PUT /api/portal/crm/pipelines/[id] — rename a pipeline
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -47,6 +50,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 // pipeline still has deals (crm_deals.pipeline_id cascades, so an unguarded
 // delete would silently destroy those deals).
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });

@@ -1,3 +1,4 @@
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -58,6 +59,8 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const { id } = await params;
   const dealId = parseInt(id, 10);
   if (isNaN(dealId)) return NextResponse.json({ success: false, message: 'Invalid ID' }, { status: 400 });
@@ -182,6 +185,8 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const { id } = await params;
   const dealId = parseInt(id, 10);
   if (isNaN(dealId)) return NextResponse.json({ success: false, message: 'Invalid ID' }, { status: 400 });

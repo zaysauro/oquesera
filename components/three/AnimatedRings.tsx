@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import gsap from 'gsap';
+import { tween as gsap } from './tween';
 
 interface AnimatedRingsProps {
   formation?: 'view1' | 'view2' | 'view3' | 'view4' | 'view5';

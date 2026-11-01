@@ -1,3 +1,4 @@
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -31,6 +32,8 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string; stageId: string }> }
 ) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const result = await getAuthedClient();
   if ('error' in result) return result.error;
   const { client } = result;
@@ -86,6 +89,8 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string; stageId: string }> }
 ) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const result = await getAuthedClient();
   if ('error' in result) return result.error;
   const { client } = result;

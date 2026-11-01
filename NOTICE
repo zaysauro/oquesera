@@ -1,0 +1,12 @@
+Kumo One
+Copyright 2026 the Kumo One authors.
+
+This product includes software developed by SimplerDevelopment
+(https://github.com/SimplerDevelopment/SimplerDevelopment), licensed under
+the Apache License, Version 2.0. The upstream source was imported at commit
+2b6b7cc75ebb7872977f5487c2f05c5ca60c1c0c and modified for Kumo One
+(branding, pt-BR localisation, BRL billing, website templates and other
+changes recorded in this repository's git history).
+
+See LICENSE for the Apache License 2.0 text and THIRD_PARTY_NOTICES.md for
+other third-party components.

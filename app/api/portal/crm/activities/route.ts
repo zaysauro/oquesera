@@ -1,3 +1,4 @@
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getPortalClient } from '@/lib/portal-client';
@@ -66,6 +67,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });

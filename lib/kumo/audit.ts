@@ -1,4 +1,3 @@
-import 'server-only';
 import { logAudit } from '@/lib/brain/audit';
 
 /**

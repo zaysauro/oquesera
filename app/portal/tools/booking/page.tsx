@@ -222,11 +222,11 @@ export default async function BookingPagesListPage() {
                           : 'bg-muted text-muted-foreground'
                       }`}
                     >
-                      {page.active ? 'active' : 'inactive'}
+                      {page.active ? 'ativa' : 'inativa'}
                     </span>
                     {!page.active && (
                       <span className="text-xs text-muted-foreground text-right leading-tight max-w-[14rem]">
-                        Novas páginas de agendamento são revisadas antes de ficarem públicas
+                        Ative a página para que ela fique disponível ao público
                       </span>
                     )}
                   </div>

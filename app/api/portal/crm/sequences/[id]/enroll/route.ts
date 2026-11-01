@@ -1,6 +1,7 @@
 // Enroll a contact into a CRM email sequence. Phase 2 of
 // [[Spec - CRM Email Sync + Sequences]]. POST { contactId }.
 // The process-crm-sequences cron then advances the enrollment step by step.
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -10,6 +11,8 @@ import { getPortalClient } from '@/lib/portal-client';
 import { crmEntitlementError } from '@/lib/crm/entitlement';
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });

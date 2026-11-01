@@ -2,6 +2,7 @@
 // GET  — list the client's sequences
 // POST — create a sequence with inline steps
 // Tenant-scoped via getPortalClient → crmSequences.clientId.
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -33,6 +34,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });

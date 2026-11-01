@@ -1,5 +1,6 @@
 // CRM email sequence — single-row. Phase 2 of [[Spec - CRM Email Sync + Sequences]].
 // GET (with steps) · PATCH (name/enabled) · DELETE. Tenant-scoped by clientId.
+import { crmWriteGuard } from '@/lib/crm/write-guard';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -39,6 +40,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -70,6 +73,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const crmDenied = await crmWriteGuard();
+  if (crmDenied) return crmDenied;
   const session = await auth();
   if (!session?.user?.id)
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });

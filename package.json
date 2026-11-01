@@ -111,7 +111,6 @@
     "drizzle-orm": "^0.45.3",
     "framer-motion": "^13.1.1",
     "googleapis": "^171.4.0",
-    "gsap": "^3.14.2",
     "html2canvas": "^1.4.1",
     "immer": "^11.1.18",
     "jsonwebtoken": "^9.0.3",

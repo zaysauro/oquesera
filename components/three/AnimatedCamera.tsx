@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
-import gsap from 'gsap';
+import { tween as gsap } from './tween';
 
 interface AnimatedCameraProps {
   position: [number, number, number];

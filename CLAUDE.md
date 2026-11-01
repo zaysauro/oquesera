@@ -1,3 +1,12 @@
+> **Kumo One fork — read first.** This repository is Kumo One, a fork of
+> SimplerDevelopment. Everything below is the upstream agent guide, kept for
+> its code knowledge. Sections about the upstream company's infrastructure
+> (Railway "metro" production DB, `railway` commands, Vercel project, project
+> 153 Kanban board, `/grill-me`, private sibling repos) do **not** apply here —
+> never run them; this fork has no access to that infrastructure. Kumo-specific
+> docs: `README.md`, `ARCHITECTURE.md`, `DEPLOYMENT.md`, `TESTING.md`,
+> `DELIVERY_REPORT.md`. Use Node 22 for tests and builds.
+
 # SimplerDevelopment 2026 — Agent Notes
 
 Multi-tenant SaaS platform: admin + client portal + per-tenant client websites + CRM + Company Brain (AI/RAG) + automations + Google Workspace + Stripe billing. `README.md` is the human developer-onboarding doc; this file is the agent operating guide.
