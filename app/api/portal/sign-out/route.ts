@@ -1,9 +1,6 @@
 import { PLATFORM_ROOT_DOMAIN } from '@/config/brand';
 import { secureCookiesEnabled } from '@/lib/auth-cookies';
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { authRevokedSessions } from '@/lib/db/schema';
 
 /**
  * Custom sign-out endpoint that clears session cookies on both the bare domain
@@ -14,6 +11,12 @@ export async function POST() {
   // Kumo One: revoke this session server-side first, so a cookie re-issued by
   // a request that was still in flight cannot bring it back.
   try {
+    // Imported lazily so loading this route never requires a database.
+    const [{ auth }, { db }, { authRevokedSessions }] = await Promise.all([
+      import('@/lib/auth'),
+      import('@/lib/db'),
+      import('@/lib/db/schema'),
+    ]);
     const session = await auth();
     const sid = (session as { sid?: string } | null)?.sid;
     const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;

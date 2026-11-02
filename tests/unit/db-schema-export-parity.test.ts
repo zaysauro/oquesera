@@ -66,6 +66,7 @@ function collectSchemaExportNames(): string[] {
 // + manually appended path_chart_* additions 2026-07-18 (PVIZ Phase 1 schema, lib/db/schema/pathviz.ts).
 // + manually appended agent_flows 2026-08-02 (Workflow Designer / APWD-003, lib/db/schema/agentFlows.ts).
 // + manually appended agent_flow_runs + agent_flow_run_events 2026-08-03 (executions, same module).
+// + 2026-11-01 (Kumo One): authRevokedSessions (per-session sign-out).
 // + regenerated 2026-08-12: seo_* tables (SEO Intelligence core audit + GSC history, lib/db/schema/seo.ts).
 // + regenerated 2026-08-26: SurveyMediaCarouselItem (media-carousel survey field type, PUX-028).
 const EXPECTED_EXPORTS: readonly string[] = [
@@ -292,6 +293,7 @@ const EXPECTED_EXPORTS: readonly string[] = [
   'aiCreditPackages',
   'aiMessages',
   'apiKeys',
+  'authRevokedSessions',
   'automationJobs',
   'automationLogs',
   'automationRules',
@@ -621,6 +623,7 @@ const EXPECTED_TABLE_NAMES: Readonly<Record<string, string>> = {
   aiCreditPackages: 'ai_credit_packages',
   aiMessages: 'ai_messages',
   apiKeys: 'api_keys',
+  authRevokedSessions: 'auth_revoked_sessions',
   automationJobs: 'automation_jobs',
   automationLogs: 'automation_logs',
   automationRules: 'automation_rules',
@@ -952,13 +955,13 @@ describe('lib/db/schema export parity', () => {
     expect(actualTables).toEqual(EXPECTED_TABLE_NAMES);
   });
 
-  it('reports the recorded number of tables (312)', () => {
+  it('reports the recorded number of tables (313)', () => {
     const schemaMap = Schema as unknown as Record<string, unknown>;
     let count = 0;
     for (const value of Object.values(schemaMap)) {
       if (value && typeof value === 'object' && isTable(value)) count += 1;
     }
     expect(count).toBe(Object.keys(EXPECTED_TABLE_NAMES).length);
-    expect(count).toBe(312);
+    expect(count).toBe(313);
   });
 });

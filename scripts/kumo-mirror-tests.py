@@ -6,7 +6,7 @@ import glob, json, os, re, sys
 ROOT = sys.argv[1]
 tests = sys.argv[2:]
 pairs = {}
-for f in glob.glob(os.path.join(ROOT, 'scripts/kumo-i18n/[!_]*.json')):
+for f in glob.glob(os.path.join(ROOT, 'scripts/kumo-i18n/[!_]*.json')) + [os.path.join(ROOT, 'scripts/kumo-i18n/_diff-map.json')]:
     for k, v in json.load(open(f)).items():
         k = k.split(':', 1)[1] if k.startswith(('jsx:', 'q:')) else k
         fix = lambda t: t.replace('&apos;', "'").replace('&amp;', '&').replace('&nbsp;', ' ')
@@ -44,11 +44,16 @@ for t in tests:
     if not srcs: continue
     blob = '\n'.join(open(p).read() for p in srcs)
     norm = re.sub(r'\s+', ' ', blob)
-    def present_as_ui(text):
-        e = re.escape(text)
-        return bool(re.search(r'>\s*' + e + r'\s*<', norm) or re.search(r"['\"`]" + e + r"['\"`]", norm))
-    local = {k: v for k, v in pairs.items() if not present_as_ui(k) and v in norm}
+    ui = {t.strip() for t in re.findall(r'>([^<>{}]+)<', norm)}
+    ui |= set(re.findall(r"'([^'\n]*)'", norm)) | set(re.findall(r'"([^"\n]*)"', norm)) | set(re.findall(r'`([^`\n]*)`', norm))
+    local = {k: v for k, v in pairs.items() if k not in ui and v in norm}
     if not local: continue
+    def prefix_target(body):
+        # A partial assertion (toContain / regex prefix) of one translated
+        # sentence: use that sentence's translation, minus end punctuation.
+        if len(body) < 8 or body in local: return local.get(body)
+        hits = {v.rstrip('.!?…:') for k, v in local.items() if k.startswith(body) or (len(body) >= 14 and body in k)}
+        return next(iter(hits)) if len(hits) == 1 else None
     def lit(m):
         q, body = m.group(1), m.group(2)
         return q + local[body] + q if body in local else m.group(0)
