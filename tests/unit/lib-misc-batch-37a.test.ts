@@ -452,7 +452,7 @@ describe('lib/portal-nav', () => {
       const items = portalNav.buildPortalNavItems(null, null);
       const labels = items.map((i) => i.label);
       expect(labels).toContain('Painel');
-      expect(labels).toContain('Company Brain');
+      expect(labels).toContain('Cérebro da Empresa');
       expect(labels).toContain('Projetos');
       expect(labels).toContain('CRM');
       expect(labels).toContain('Marketing');
@@ -474,7 +474,7 @@ describe('lib/portal-nav', () => {
       expect(siteNode?.label).toBe('Acme Co');
       expect(siteNode?.children?.some((c) => c.label === 'Conteúdo')).toBe(true);
       expect(siteNode?.children?.some((c) => c.label === 'Loja')).toBe(true);
-      expect(siteNode?.children?.some((c) => c.label === 'Website Settings')).toBe(true);
+      expect(siteNode?.children?.some((c) => c.label === 'Configurações do site')).toBe(true);
     });
 
     it('falls back to "Current Site" label when activeSiteName is null', () => {
@@ -491,17 +491,17 @@ describe('lib/portal-nav', () => {
       const store = siteNode?.children?.find((c) => c.label === 'Loja');
       const storeChildrenLabels = store?.children?.map((c) => c.label) ?? [];
       expect(storeChildrenLabels).toEqual(
-        expect.arrayContaining(['Products', 'Orders', 'Categories', 'Discounts', 'Shipping']),
+        expect.arrayContaining(['Produtos', 'Pedidos', 'Categorias', 'Descontos', 'Frete']),
       );
     });
 
     it('agency branch is always included with its children', () => {
       const items = portalNav.buildPortalNavItems(null, null);
-      const agency = items.find((i) => i.label === 'Agency');
+      const agency = items.find((i) => i.label === 'Agência');
       expect(agency).toBeDefined();
       const labels = agency?.children?.map((c) => c.label) ?? [];
       expect(labels).toEqual(
-        expect.arrayContaining(['Overview', 'Custom Domain', 'Agency Branding']),
+        expect.arrayContaining(['Visão geral', 'Domínio próprio', 'Marca da agência']),
       );
     });
   });
@@ -525,7 +525,7 @@ describe('lib/portal-nav', () => {
       const items = portalNav.buildPortalNavItems(null, null);
       const flat = portalNav.flattenPortalNav(items);
       const tasks = flat.find((t) => t.href === '/portal/brain/tasks');
-      expect(tasks?.breadcrumb).toEqual(['Company Brain']);
+      expect(tasks?.breadcrumb).toEqual(['Cérebro da Empresa']);
       const root = flat.find((t) => t.href === '/portal/dashboard');
       expect(root?.breadcrumb).toEqual([]);
     });

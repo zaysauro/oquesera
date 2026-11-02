@@ -27,7 +27,7 @@ const SECOND_APP_FIXTURE: UserAppNavMeta = {
   name: 'Analytics Pro',
   icon: 'analytics',
   manifestStale: false,
-  navItems: [{ label: 'Overview', href: '/overview', icon: 'dashboard' }],
+  navItems: [{ label: 'Visão geral', href: '/overview', icon: 'dashboard' }],
 };
 
 describe('buildPortalNavItems — no apps arg (legacy callers)', () => {

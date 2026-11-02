@@ -170,7 +170,7 @@ describe('BrainCalendarPage — shell', () => {
     const { container } = renderPage();
     await waitFor(() => {
       const txt = container.textContent || '';
-      ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach((d) =>
+      ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].forEach((d) =>
         expect(txt).toContain(d),
       );
     });

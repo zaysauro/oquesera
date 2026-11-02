@@ -540,7 +540,7 @@ describe('ShippingSettingsPage — rate table', () => {
     const zoneHeader = container.querySelector('[class*="cursor-pointer"]') as HTMLElement;
     fireEvent.click(zoneHeader);
     await waitFor(() => {
-      expect(container.textContent).toContain('$9.99');
+      expect(container.textContent).toContain('R$\u00a09,99');
       expect(container.textContent).toContain('Flat Rate');
     });
   });
@@ -683,7 +683,7 @@ describe('ShippingSettingsPage — rate table', () => {
     const zoneHeader = container.querySelector('[class*="cursor-pointer"]') as HTMLElement;
     fireEvent.click(zoneHeader);
     await waitFor(() => {
-      expect(container.textContent).toContain('$50.00');
+      expect(container.textContent).toContain('R$\u00a050,00');
     });
   });
 

@@ -1217,7 +1217,7 @@ describe('CrmContactDetailPage', () => {
       fireEvent.change(bodyTextarea, { target: { value: 'there' } });
       fireEvent.submit(subjectInput.closest('form')!);
       await waitFor(() => {
-        expect(container.textContent).toContain('Failed to send email.');
+        expect(container.textContent).toContain('Não foi possível enviar email.');
       });
     });
   });
@@ -1239,7 +1239,7 @@ describe('CrmContactDetailPage', () => {
       openDealsTab(container);
       expect(container.textContent).toContain('Big Deal');
       expect(container.textContent).toContain('Proposal');
-      expect(container.textContent).toContain('$1,500.00');
+      expect(container.textContent).toContain('R$\u00a01.500,00');
       expect(container.textContent).toContain('open');
       expect(container.textContent).toContain('Lost Cause');
       expect(container.textContent).toContain('lost');

@@ -337,7 +337,7 @@ describe('ProjectRecurrencesPanel — cadence fields', () => {
   it('shows "Day" select when cadence is weekly (default)', async () => {
     await openForm();
     // The day-of-week select has DAYS options (Sun, Mon, …)
-    expect(screen.getByRole('option', { name: 'Mon' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Seg' })).toBeInTheDocument();
   });
 
   it('hides day-of-week select when cadence is daily', async () => {
@@ -346,7 +346,7 @@ describe('ProjectRecurrencesPanel — cadence fields', () => {
       (s) => s.querySelector('option[value="daily"]'),
     )!;
     fireEvent.change(cadenceSelect, { target: { value: 'daily' } });
-    expect(screen.queryByRole('option', { name: 'Mon' })).toBeNull();
+    expect(screen.queryByRole('option', { name: 'Seg' })).toBeNull();
   });
 
   it('shows "Day of month" input when cadence is monthly', async () => {

@@ -524,7 +524,7 @@ describe('PUT /api/portal/crm/contracts/[id]', () => {
         clauses: [{ heading: 'h' }],
         lineItems: [{ name: 'x' }],
         fees: { tax: 10 },
-        currency: 'USD',
+        currency: 'BRL',
         validUntil: '2026-12-31T00:00:00.000Z',
         contactId: '',
         companyId: 0,
@@ -545,7 +545,7 @@ describe('PUT /api/portal/crm/contracts/[id]', () => {
     expect(patch.clauses).toEqual([{ heading: 'h' }]);
     expect(patch.lineItems).toEqual([{ name: 'x' }]);
     expect(patch.fees).toEqual({ tax: 10 });
-    expect(patch.currency).toBe('USD');
+    expect(patch.currency).toBe('BRL');
     expect(patch.validUntil).toBeInstanceOf(Date);
     // Falsy contactId/companyId become null; truthy dealId passes through
     expect(patch.contactId).toBeNull();

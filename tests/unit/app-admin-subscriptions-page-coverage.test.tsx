@@ -198,7 +198,7 @@ describe('AdminSubscriptionsPage — renders after load', () => {
     const { container } = renderPage();
     await waitFor(() => {
       // $49.00 MRR from the default sub (price=4900, monthly, active)
-      expect(container.textContent).toContain('$49.00');
+      expect(container.textContent).toContain('R$\u00a049,00');
     });
   });
 
@@ -208,7 +208,7 @@ describe('AdminSubscriptionsPage — renders after load', () => {
     );
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('$1,200.00');
+      expect(container.textContent).toContain('R$\u00a01.200,00');
     });
   });
 
@@ -239,7 +239,7 @@ describe('AdminSubscriptionsPage — renders after load', () => {
   it('renders formatted price in table', async () => {
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('$49.00');
+      expect(container.textContent).toContain('R$\u00a049,00');
     });
   });
 
@@ -996,7 +996,7 @@ describe('AdminSubscriptionsPage — summary stats edge cases', () => {
     const { container } = renderPage();
     await waitFor(() => {
       // MRR should be $50.00, not $140.00 or $50.00+$90.00
-      expect(container.textContent).toContain('$50.00');
+      expect(container.textContent).toContain('R$\u00a050,00');
     });
   });
 

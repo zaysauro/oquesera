@@ -386,7 +386,7 @@ describe('ProposalEditorPage', () => {
 
     it('renders Save / Send / Delete / Save as Template buttons', async () => {
       const { container } = await renderPage();
-      expect(container.textContent).toContain('Save');
+      expect(container.textContent).toContain('Salvar');
       expect(container.textContent).toContain('Enviar');
       expect(container.textContent).toContain('Salvar como modelo');
     });
@@ -512,7 +512,7 @@ describe('ProposalEditorPage', () => {
       // @ts-ignore
       global.fetch = fetchSpy;
       const { container } = await renderPage();
-      const saveBtn = findButtonByLabel(container, 'Save')!;
+      const saveBtn = findButtonByLabel(container, 'Salvar')!;
       fireEvent.click(saveBtn);
       await waitFor(() => {
         expect(container.textContent).toContain('Salvo');
@@ -529,7 +529,7 @@ describe('ProposalEditorPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      const saveBtn = findButtonByLabel(container, 'Save')!;
+      const saveBtn = findButtonByLabel(container, 'Salvar')!;
       fireEvent.click(saveBtn);
       await waitFor(() => {
         expect(container.textContent).toContain('Save failed');
@@ -544,7 +544,7 @@ describe('ProposalEditorPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      const saveBtn = findButtonByLabel(container, 'Save')!;
+      const saveBtn = findButtonByLabel(container, 'Salvar')!;
       fireEvent.click(saveBtn);
       await waitFor(() => {
         expect(container.textContent).toContain('Failed to save');
@@ -559,7 +559,7 @@ describe('ProposalEditorPage', () => {
       // Clear summary
       const summary = container.querySelector('textarea[placeholder="Breve resumo desta proposta..."]') as HTMLTextAreaElement;
       fireEvent.change(summary, { target: { value: '' } });
-      const saveBtn = findButtonByLabel(container, 'Save')!;
+      const saveBtn = findButtonByLabel(container, 'Salvar')!;
       fireEvent.click(saveBtn);
       await waitFor(() => {
         const put = fetchSpy.mock.calls.find(c => c[1]?.method === 'PUT');
@@ -708,7 +708,7 @@ describe('ProposalEditorPage', () => {
       })!;
       fireEvent.click(deleteIconBtn);
       const confirmBtn = Array.from(container.querySelectorAll('button')).find(b =>
-        b.textContent?.trim() === 'Delete',
+        b.textContent?.trim() === 'Excluir',
       )!;
       fireEvent.click(confirmBtn);
       await waitFor(() => {
@@ -774,7 +774,7 @@ describe('ProposalEditorPage', () => {
       const { container } = await renderPage();
       // Add buttons (in the "Seções de conteúdo" panel, at the bottom)
       // Find by text — each type has a button
-      fireEvent.click(screen.getByText('Heading'));
+      fireEvent.click(screen.getByText('Título'));
       fireEvent.click(screen.getByText('Texto'));
       fireEvent.click(screen.getByText('Image'));
       fireEvent.click(screen.getByText('Divider'));
@@ -939,13 +939,13 @@ describe('ProposalEditorPage', () => {
       const { container } = await renderPage();
       // baseProposal: 2 line items, only first (Dev qty 2 * 50000) counts (optional excluded)
       // subtotal = 100000c = $1,000.00
-      expect(container.textContent).toContain('$1,000.00');
+      expect(container.textContent).toContain('R$\u00a01.000,00');
       // Flat fee 5000c = $50.00
-      expect(container.textContent).toContain('$50.00');
+      expect(container.textContent).toContain('R$\u00a050,00');
       // Percent 10% of subtotal = 10000c = $100.00
-      expect(container.textContent).toContain('$100.00');
+      expect(container.textContent).toContain('R$\u00a0100,00');
       // Grand total = 100000 + 5000 + 10000 = 115000c = $1,150.00
-      expect(container.textContent).toContain('$1,150.00');
+      expect(container.textContent).toContain('R$\u00a01.150,00');
     });
   });
 
@@ -1079,7 +1079,7 @@ describe('ProposalEditorPage', () => {
       expect(introH2).toBeTruthy();
     });
 
-    it('renders fallback "Heading" when content empty', async () => {
+    it('renders fallback "Título" when content empty', async () => {
       setFetchHandler((url, init) => {
         if (/^\/api\/portal\/crm\/proposals\/\d+$/.test(url) && (!init || init.method === undefined)) {
           return jsonResponse({
@@ -1090,7 +1090,7 @@ describe('ProposalEditorPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      const previewH2 = Array.from(container.querySelectorAll('h2')).find(h => h.textContent === 'Heading');
+      const previewH2 = Array.from(container.querySelectorAll('h2')).find(h => h.textContent === 'Título');
       expect(previewH2).toBeTruthy();
     });
 

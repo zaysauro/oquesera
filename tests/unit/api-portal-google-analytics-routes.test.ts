@@ -428,7 +428,7 @@ describe('POST /api/portal/websites/[siteId]/google/analytics', () => {
         parent: 'accounts/1',
         displayName: 'Site Title',
         timeZone: 'America/New_York',
-        currencyCode: 'USD',
+        currencyCode: 'BRL',
       }),
     });
     // domain resolution prefers subdomain.kumo.localhost when site.domain is null

@@ -276,7 +276,7 @@ describe('ContentCalendar — navigation', () => {
 describe('ContentCalendar — calendar grid', () => {
   it('renders the seven weekday header labels', async () => {
     await renderCalendar();
-    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach((name) => {
+    ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].forEach((name) => {
       expect(screen.getByText(name)).toBeTruthy();
     });
   });

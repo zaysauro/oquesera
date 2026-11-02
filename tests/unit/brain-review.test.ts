@@ -756,7 +756,7 @@ describe('approveReviewItem', () => {
     await approveReviewItem({ clientId: 1, itemId: 1, actorId: 2 });
     const d = state.crmDeals[0];
     expect(d.value).toBeNull();
-    expect(d.currency).toBe('USD');
+    expect(d.currency).toBe('BRL');
     expect(d.priority).toBe('medium'); // default
   });
 

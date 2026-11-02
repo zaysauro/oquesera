@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act, cleanup } from '@testing-library/react';
-import React from 'react';
+import React from '@/config/brand';
 
 // ---------------------------------------------------------------------------
 // Mock next/link — renders as a plain <a> so hrefs are inspectable.
@@ -97,8 +97,8 @@ describe('PublishingCalendar', () => {
     // Loading text disappears
     expect(screen.queryByText(/loading calendar/i)).not.toBeInTheDocument();
     // Day-of-week headers always render
-    expect(screen.getByText('Sun')).toBeInTheDocument();
-    expect(screen.getByText('Sat')).toBeInTheDocument();
+    expect(screen.getByText('Dom')).toBeInTheDocument();
+    expect(screen.getByText('Sáb')).toBeInTheDocument();
   });
 
   // -------------------------------------------------------------------------

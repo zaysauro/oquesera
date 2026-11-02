@@ -308,7 +308,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               <MediaPicker
                 value={form.avatarUrl ?? ''}
                 onChange={(url) => setForm(f => ({ ...f, avatarUrl: url }))}
-                label="Avatar"
+                label="Foto"
                 mimeTypeFilter="image"
               />
             </div>
@@ -320,7 +320,7 @@ export default function CrmAddContactModal({ onClose, onCreated }: CrmAddContact
               className={pBtnPrimary}
             >
               {saving && <span className="material-icons animate-spin text-sm">refresh</span>}
-              Create Contact
+              Criar contato
             </button>
           </div>
         </form>

@@ -593,7 +593,7 @@ describe('DealDetailDrawer — inline company creation', () => {
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
     const toggleBtn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === '+ New Company',
+      (b) => b.textContent === '+ Nova empresa',
     );
     expect(toggleBtn).toBeTruthy();
     fireEvent.click(toggleBtn!);
@@ -619,7 +619,7 @@ describe('DealDetailDrawer — inline company creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Company',
+        (b) => b.textContent === '+ Nova empresa',
       )!,
     );
     const input = container.querySelector(
@@ -642,7 +642,7 @@ describe('DealDetailDrawer — inline company creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Company',
+        (b) => b.textContent === '+ Nova empresa',
       )!,
     );
     const input = container.querySelector(
@@ -660,7 +660,7 @@ describe('DealDetailDrawer — inline company creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Company',
+        (b) => b.textContent === '+ Nova empresa',
       )!,
     );
     const input = container.querySelector(
@@ -683,7 +683,7 @@ describe('DealDetailDrawer — inline company creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Company',
+        (b) => b.textContent === '+ Nova empresa',
       )!,
     );
     const input = container.querySelector(
@@ -709,7 +709,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     const { container } = render(<DealDetailDrawer {...defaultProps()} />);
     await flush();
     const toggleBtn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === '+ New Contact',
+      (b) => b.textContent === '+ Novo contato',
     );
     fireEvent.click(toggleBtn!);
     const first = container.querySelector(
@@ -727,7 +727,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     // Re-open: should be empty
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     const reopened = container.querySelector(
@@ -751,7 +751,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     fireEvent.change(
@@ -799,7 +799,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     fireEvent.change(
@@ -831,7 +831,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     fireEvent.change(
@@ -854,7 +854,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     const submit = Array.from(container.querySelectorAll('button')).find(
@@ -870,7 +870,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     fireEvent.change(
@@ -893,7 +893,7 @@ describe('DealDetailDrawer — inline contact creation', () => {
     await flush();
     fireEvent.click(
       Array.from(container.querySelectorAll('button')).find(
-        (b) => b.textContent === '+ New Contact',
+        (b) => b.textContent === '+ Novo contato',
       )!,
     );
     expect(container.textContent).toContain('Will be assigned to');
@@ -1405,7 +1405,7 @@ describe('DealDetailDrawer — comments tab', () => {
     switchToComments(container);
     expect(container.textContent).toContain('soon-gone');
     const delBtn = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.getAttribute('title') === 'Delete',
+      (b) => b.getAttribute('title') === 'Excluir',
     );
     await act(async () => {
       fireEvent.click(delBtn!);

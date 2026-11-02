@@ -132,9 +132,9 @@ describe('ThemeToggle', () => {
     themeState.toggleTheme = vi.fn();
   });
 
-  it('renders a button labelled "Toggle theme"', () => {
+  it('renders a button labelled "Alternar tema claro/escuro"', () => {
     render(<ThemeToggle />);
-    expect(screen.getByRole('button', { name: /Toggle theme/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Alternar tema claro\/escuro/i })).toBeTruthy();
   }, 15_000);
 
   it('renders the moon icon path when resolvedTheme is "light"', () => {
@@ -153,7 +153,7 @@ describe('ThemeToggle', () => {
 
   it('invokes toggleTheme when the button is clicked', () => {
     render(<ThemeToggle />);
-    fireEvent.click(screen.getByRole('button', { name: /Toggle theme/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Alternar tema claro\/escuro/i }));
     expect(themeState.toggleTheme).toHaveBeenCalledTimes(1);
   });
 });

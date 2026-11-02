@@ -249,7 +249,7 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
     );
   });
 
-  it('renders an "Owner" role label with the article "an"', async () => {
+  it('renders an "Proprietário" role label with the article "an"', async () => {
     process.env.RESEND_API_KEY = 're_test_invite2';
     const { sendInviteEmail } = await import('@/lib/email/invite-email');
     await sendInviteEmail({
@@ -261,7 +261,7 @@ describe('lib/email/invite-email — sendInviteEmail', () => {
       inviteToken: 'tok',
     });
     const html = resendInstances[0].emails.send.mock.calls[0][0].html as string;
-    expect(html).toContain('Owner');
+    expect(html).toContain('Proprietário');
     expect(html).toMatch(/as an\s+<strong>Owner<\/strong>/);
   });
 

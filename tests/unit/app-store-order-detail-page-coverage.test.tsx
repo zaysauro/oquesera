@@ -215,16 +215,16 @@ describe('OrderDetailPage — main render', () => {
     expect(container.textContent).toContain('Widget');
     expect(container.textContent).toContain('Red'); // variantName
     expect(container.textContent).toContain('WID-R'); // sku
-    expect(container.textContent).toContain('$10.00');
-    expect(container.textContent).toContain('$20.00');
+    expect(container.textContent).toContain('R$\u00a010,00');
+    expect(container.textContent).toContain('R$\u00a020,00');
   });
 
   it('renders order totals', async () => {
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('ORD-0042'));
-    expect(container.textContent).toContain('$5.00');   // shipping
-    expect(container.textContent).toContain('$1.50');   // tax
-    expect(container.textContent).toContain('$26.50');  // total
+    expect(container.textContent).toContain('R$\u00a05,00');   // shipping
+    expect(container.textContent).toContain('R$\u00a01,50');   // tax
+    expect(container.textContent).toContain('R$\u00a026,50');  // total
   });
 
   it('does not render discount row when discountCents is 0', async () => {
@@ -237,7 +237,7 @@ describe('OrderDetailPage — main render', () => {
     fetchMock.mockResolvedValue(makeRes({ success: true, data: baseOrder({ discountCents: 200 }) }));
     const { container } = renderPage();
     await waitFor(() => expect(container.textContent).toContain('Discount'));
-    expect(container.textContent).toContain('-$2.00');
+    expect(container.textContent).toContain('-R$\u00a02,00');
   });
 
   it('renders SKU as "--" when not provided', async () => {
@@ -657,7 +657,7 @@ describe('OrderDetailPage — computeRates', () => {
       expect(container.textContent).toContain('Priority');
       expect(container.textContent).toContain('Best value');
       expect(container.textContent).toContain('UPS');
-      expect(container.textContent).toContain('$8.99');
+      expect(container.textContent).toContain('R$\u00a08,99');
     });
   });
 
@@ -916,7 +916,7 @@ describe('OrderDetailPage — refundLabel', () => {
     await waitFor(() => expect(container.textContent).toContain('ORD-0042'));
     expect(container.textContent).toContain('USPS');
     expect(container.textContent).toContain('Priority Mail');
-    expect(container.textContent).toContain('$7.99');
+    expect(container.textContent).toContain('R$\u00a07,99');
     expect(container.textContent).toContain('View Label');
   });
 

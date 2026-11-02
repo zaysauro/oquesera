@@ -35,6 +35,9 @@ def sources_for(test_src):
             b = os.path.normpath(os.path.join(d, spec))
             for c in [b + '.tsx', b + '.ts', b + '/index.tsx']:
                 if os.path.isfile(c): extra.append(c); break
+        for spec in re.findall(r"""from\s+['"](@/(?:components|app)/[^'"]+)['"]""", open(p).read()):
+            q = resolve(spec)
+            if q: extra.append(q)
     return out + extra
 
 changed = 0

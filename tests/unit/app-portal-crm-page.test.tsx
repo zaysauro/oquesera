@@ -705,7 +705,7 @@ describe('CrmDashboardPage — Top Deals table', () => {
   it('renders formatted deal values', async () => {
     const { container } = await renderLoaded();
     // value=300000 cents → $3,000
-    expect(container.textContent).toMatch(/\$3[,.]?000/);
+    expect(container.textContent).toMatch(/R\$\s?3[,.]?000/);
   });
 
   it('renders "Ver" links for each deal', async () => {
@@ -762,7 +762,7 @@ describe('CrmDashboardPage — currency formatting', () => {
   it('formats MRR ($5,000) with dollar sign', async () => {
     // mrr=500000 cents → $5,000
     const { container } = await renderLoaded();
-    expect(container.textContent).toMatch(/\$5[,.]?000/);
+    expect(container.textContent).toMatch(/R\$\s?5[,.]?000/);
   });
 
   it('renders formatCompact for revenue axis labels', async () => {

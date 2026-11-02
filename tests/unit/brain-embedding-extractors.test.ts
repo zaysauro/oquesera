@@ -307,7 +307,7 @@ describe('extractContentForEntity — deals', () => {
     enqueue('crmDeals', {
       title: 'Big Co Renewal', notes: 'deal notes',
       status: 'open', priority: 'high',
-      value: 1234500, currency: 'USD',
+      value: 1234500, currency: 'BRL',
       companyId: 5, contactId: 7,
     });
     enqueue('crmCompanies', { name: 'Acme' });

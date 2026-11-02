@@ -408,7 +408,7 @@ describe('CrmCompanyDetailPage', () => {
   describe('edit company', () => {
     it('clicking edit opens the edit form with current values', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       expect(container.textContent).toContain('Editar empresa');
       const nameInput = container.querySelector('input[required]') as HTMLInputElement;
       expect(nameInput.value).toBe('Acme Corp');
@@ -416,13 +416,13 @@ describe('CrmCompanyDetailPage', () => {
 
     it('switches the custom fields panel to edit mode when editing', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       expect(container.textContent).toContain('panel:company:42:edit');
     });
 
     it('Cancel button closes the edit modal without prompting (no changes made)', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const cancelBtns = Array.from(container.querySelectorAll('button')).filter(
         b => b.textContent === 'Cancel'
       );
@@ -440,7 +440,7 @@ describe('CrmCompanyDetailPage', () => {
       const confirmSpy = window.confirm as unknown as ReturnType<typeof vi.fn>;
       confirmSpy.mockReturnValue(false);
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const nameInput = container.querySelector('input[required]') as HTMLInputElement;
       fireEvent.change(nameInput, { target: { value: 'Dirty Name' } });
 
@@ -460,7 +460,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('Escape closes a clean edit modal directly, without prompting', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       expect(container.textContent).toContain('Editar empresa');
       fireEvent.keyDown(document, { key: 'Escape' });
       expect(container.textContent).not.toContain('Editar empresa');
@@ -471,7 +471,7 @@ describe('CrmCompanyDetailPage', () => {
       const confirmSpy = window.confirm as unknown as ReturnType<typeof vi.fn>;
       confirmSpy.mockReturnValue(false);
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const nameInput = container.querySelector('input[required]') as HTMLInputElement;
       fireEvent.change(nameInput, { target: { value: 'Dirty Name' } });
 
@@ -486,7 +486,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('clicking the modal backdrop closes a clean edit modal', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       // The backdrop is the outer fixed-inset overlay — the dialog's own
       // container stops propagation, so this must be the wrapping element.
       const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
@@ -497,7 +497,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('updates form fields on change', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const nameInput = container.querySelector('input[required]') as HTMLInputElement;
       fireEvent.change(nameInput, { target: { value: 'New Name' } });
       expect(nameInput.value).toBe('New Name');
@@ -510,7 +510,7 @@ describe('CrmCompanyDetailPage', () => {
       // @ts-ignore
       global.fetch = fetchSpy;
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const nameInput = container.querySelector('input[required]') as HTMLInputElement;
       fireEvent.change(nameInput, { target: { value: 'Renamed' } });
       const form = container.querySelector('form')!;
@@ -548,7 +548,7 @@ describe('CrmCompanyDetailPage', () => {
       global.fetch = fetchSpy;
       const { container } = render(<CrmCompanyDetailPage />);
       await waitFor(() => screen.getByText('Acme Corp'));
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       fireEvent.submit(container.querySelector('form')!);
       await waitFor(() => {
         const put = fetchSpy.mock.calls.find(c =>
@@ -573,7 +573,7 @@ describe('CrmCompanyDetailPage', () => {
       });
       const { container } = render(<CrmCompanyDetailPage />);
       await waitFor(() => screen.getByText('Acme Corp'));
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const latInput = container.querySelector('input[type="number"][min="-90"]') as HTMLInputElement;
       expect(latInput.value).toBe('12.34');
       const lngInput = container.querySelector('input[type="number"][min="-180"]') as HTMLInputElement;
@@ -588,7 +588,7 @@ describe('CrmCompanyDetailPage', () => {
         return defaultFetch(url, init);
       });
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       fireEvent.submit(container.querySelector('form')!);
       await flush();
       // Still in edit mode
@@ -600,7 +600,7 @@ describe('CrmCompanyDetailPage', () => {
     it('aborts close when custom-fields save returns false', async () => {
       customFieldsSaveSpy.mockResolvedValueOnce(false);
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       fireEvent.submit(container.querySelector('form')!);
       await flush();
       // Should stay in edit mode because cfOk was false
@@ -610,7 +610,7 @@ describe('CrmCompanyDetailPage', () => {
     it('handles missing customFieldsRef.save() (resolves true via fallback)', async () => {
       customFieldsSaveSpy.mockResolvedValueOnce(true);
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       fireEvent.submit(container.querySelector('form')!);
       await waitFor(() => {
         expect(container.textContent).not.toContain('Editar empresa');
@@ -619,7 +619,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('passes latitude/longitude through trim when user types values', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const latInput = container.querySelector('input[type="number"][min="-90"]') as HTMLInputElement;
       expect(latInput).toBeTruthy();
       fireEvent.change(latInput, { target: { value: '25.5' } });
@@ -628,7 +628,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('MediaPicker mock updates logoUrl when "pick-logo" is clicked', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const pickBtns = screen.getAllByText('pick-logo');
       fireEvent.click(pickBtns[0]);
       // Value text shown in mock
@@ -638,7 +638,7 @@ describe('CrmCompanyDetailPage', () => {
 
     it('updates select for size', async () => {
       const { container } = await renderPage();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const sizeSelect = container.querySelector('select') as HTMLSelectElement;
       fireEvent.change(sizeSelect, { target: { value: '201-500' } });
       expect(sizeSelect.value).toBe('201-500');
@@ -664,7 +664,7 @@ describe('CrmCompanyDetailPage', () => {
       });
       const { container } = render(<CrmCompanyDetailPage />);
       await waitFor(() => screen.getByText('Acme Corp'));
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       const inputs = container.querySelectorAll('input');
       // First input is required name (value=Acme Corp); subsequent inputs should be empty
       const domain = inputs[1] as HTMLInputElement;
@@ -1097,8 +1097,8 @@ describe('CrmCompanyDetailPage', () => {
     it('formats deal values as currency', async () => {
       const result = await renderPage();
       await openDeals(result);
-      expect(result.container.textContent).toContain('$1,500.00');
-      expect(result.container.textContent).toContain('$500.00');
+      expect(result.container.textContent).toContain('R$\u00a01.500,00');
+      expect(result.container.textContent).toContain('R$\u00a0500,00');
     });
 
     it('shows stageName, contactName, expectedCloseDate when present', async () => {
@@ -1267,7 +1267,7 @@ describe('CrmCompanyDetailPage', () => {
         expect(result.container.textContent).toContain('Sales');
       });
       const titleInput = result.container.querySelector('input[required]') as HTMLInputElement;
-      fireEvent.change(titleInput, { target: { value: 'New Deal' } });
+      fireEvent.change(titleInput, { target: { value: 'Nova oportunidade' } });
       const valueInput = result.container.querySelector('input[type="number"]') as HTMLInputElement;
       fireEvent.change(valueInput, { target: { value: '250.00' } });
       fireEvent.submit(result.container.querySelector('form')!);
@@ -1277,7 +1277,7 @@ describe('CrmCompanyDetailPage', () => {
         );
         expect(post).toBeTruthy();
         const body = JSON.parse(post![1]!.body);
-        expect(body.title).toBe('New Deal');
+        expect(body.title).toBe('Nova oportunidade');
         expect(body.value).toBe(25000);
         expect(body.pipelineId).toBe(1);
         expect(body.stageId).toBe(100);
@@ -1440,7 +1440,7 @@ describe('CrmCompanyDetailPage', () => {
       );
       fireEvent.click(dealsTab!);
       await flush();
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('Editar'));
       // Edit modal is open, and the page still shows the Deals tab underneath.
       expect(result.container.textContent).toContain('Editar empresa');
       expect(result.container.textContent).toContain('Q1 Project');

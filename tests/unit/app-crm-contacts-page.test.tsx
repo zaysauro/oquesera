@@ -374,10 +374,10 @@ describe('CrmContactsPage', () => {
     it('renders all status filter options', async () => {
       const { container } = await renderPage();
       expect(container.textContent).toContain('Todos os status');
-      expect(container.textContent).toContain('Active');
-      expect(container.textContent).toContain('Inactive');
+      expect(container.textContent).toContain('Ativo');
+      expect(container.textContent).toContain('Inativo');
       expect(container.textContent).toContain('Lead');
-      expect(container.textContent).toContain('Customer');
+      expect(container.textContent).toContain('Cliente');
     });
 
     it('renders the All Companies select option', async () => {
@@ -427,7 +427,7 @@ describe('CrmContactsPage', () => {
       render(<CrmContactsPage />);
       await waitFor(() => screen.getByText('Adicionar o primeiro contato'));
       fireEvent.click(screen.getByText('Adicionar o primeiro contato'));
-      expect(screen.getByText('New Contact')).toBeTruthy();
+      expect(screen.getByText('Novo contato')).toBeTruthy();
     });
 
     it('falls back to data.data array shape when data.contacts is missing', async () => {
@@ -516,23 +516,23 @@ describe('CrmContactsPage', () => {
     it('Add Contact toggles the form open', async () => {
       await renderPage();
       fireEvent.click(screen.getByText('Adicionar contato'));
-      expect(screen.getByText('New Contact')).toBeTruthy();
-      expect(screen.getByText('First Name *')).toBeTruthy();
-      expect(screen.getByText('Last Name *')).toBeTruthy();
+      expect(screen.getByText('Novo contato')).toBeTruthy();
+      expect(screen.getByText('Nome *')).toBeTruthy();
+      expect(screen.getByText('Sobrenome *')).toBeTruthy();
     });
 
     it('Add Contact button toggles to Cancel when open', async () => {
       await renderPage();
       fireEvent.click(screen.getByText('Adicionar contato'));
       // The header button now reads Cancel
-      expect(screen.getByText('Cancel')).toBeTruthy();
+      expect(screen.getByText('Cancelar')).toBeTruthy();
     });
 
     it('Cancel closes the form', async () => {
       await renderPage();
       fireEvent.click(screen.getByText('Adicionar contato'));
-      fireEvent.click(screen.getByText('Cancel'));
-      expect(screen.queryByText('New Contact')).toBeNull();
+      fireEvent.click(screen.getByText('Cancelar'));
+      expect(screen.queryByText('Novo contato')).toBeNull();
     });
 
     it('typing in first/last name updates inputs', async () => {
@@ -588,7 +588,7 @@ describe('CrmContactsPage', () => {
         expect(post).toBeTruthy();
       });
       await waitFor(() => {
-        expect(screen.queryByText('New Contact')).toBeNull();
+        expect(screen.queryByText('Novo contato')).toBeNull();
       });
     });
 
@@ -664,7 +664,7 @@ describe('CrmContactsPage', () => {
         expect(screen.getByText('Email taken')).toBeTruthy();
       });
       // Form should still be open after a failure
-      expect(screen.queryByText('New Contact')).toBeTruthy();
+      expect(screen.queryByText('Novo contato')).toBeTruthy();
     });
 
     it('falls back to default error message when API returns no message', async () => {
@@ -693,7 +693,7 @@ describe('CrmContactsPage', () => {
       expect(screen.getByRole('dialog')).toBeTruthy();
     });
 
-    it('choosing "+ Create new company…" and submitting a name POSTs to the companies endpoint and selects the new company', async () => {
+    it('choosing "+ Criar nova empresa…" and submitting a name POSTs to the companies endpoint and selects the new company', async () => {
       const fetchSpy = vi.fn((url: string, init?: any) =>
         Promise.resolve(defaultFetch(url, init)),
       );
@@ -701,8 +701,8 @@ describe('CrmContactsPage', () => {
       global.fetch = fetchSpy;
       await renderPage();
       fireEvent.click(screen.getByText('Adicionar contato'));
-      fireEvent.click(screen.getByText('+ Create new company…'));
-      const nameInput = screen.getByPlaceholderText('New company name');
+      fireEvent.click(screen.getByText('+ Criar nova empresa…'));
+      const nameInput = screen.getByPlaceholderText('Nome da nova empresa');
       fireEvent.change(nameInput, { target: { value: 'Newco' } });
       fireEvent.click(screen.getByText('Create'));
       await waitFor(() => {

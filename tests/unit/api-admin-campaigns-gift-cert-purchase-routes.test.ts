@@ -778,7 +778,7 @@ describe('POST /api/public/gift-certificates/purchase', () => {
     );
     expect(res.status).toBe(400);
     const body = await res.json();
-    expect(body.message).toMatch(/\$1\.00/);
+    expect(body.message).toMatch(/R\$\s?1\.00/);
   });
 
   it('returns 400 when amount is below minimum', async () => {

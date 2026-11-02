@@ -357,13 +357,13 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       // Acme: subtotal 2*50000 = 100000, fees flat 5000 + 10% of 100000 = 15000
       // total = 115000 cents = $1,150.00
-      expect(container.textContent).toContain('$1,150.00');
+      expect(container.textContent).toContain('R$\u00a01.150,00');
     });
 
     it('handles proposals with empty lineItems / fees', async () => {
       const { container } = await renderPage();
       // viewedProposal has empty lineItems and fees => $0.00
-      expect(container.textContent).toContain('$0.00');
+      expect(container.textContent).toContain('R$\u00a00,00');
     });
 
     it('renders sent and last viewed dates', async () => {
@@ -452,10 +452,10 @@ describe('ProposalsPage', () => {
         b.textContent?.includes('Nova proposta'));
       fireEvent.click(headerBtn!);
       expect(screen.getByText('Título *')).toBeTruthy();
-      // Header button now reads "Cancel" with a close icon
+      // Header button now reads "Cancelar" with a close icon
       const cancelHeaderBtn = Array.from(container.querySelectorAll('button')).find(b => {
         const t = b.textContent || '';
-        return t.includes('Cancel') && t.includes('close');
+        return t.includes('Cancelar') && t.includes('close');
       });
       expect(cancelHeaderBtn).toBeTruthy();
       fireEvent.click(cancelHeaderBtn!);
@@ -466,7 +466,7 @@ describe('ProposalsPage', () => {
       await renderPage();
       fireEvent.click(screen.getByText('Nova proposta'));
       // Click the inline Cancel inside the form (type=button)
-      const cancelButtons = screen.getAllByText('Cancel');
+      const cancelButtons = screen.getAllByText('Cancelar');
       const inlineCancel = cancelButtons.find(b => (b as HTMLButtonElement).type === 'button');
       fireEvent.click(inlineCancel!);
       expect(screen.queryByText('Título *')).toBeNull();
@@ -654,7 +654,7 @@ describe('ProposalsPage', () => {
       const { container } = await renderPage();
       const sendButtons = container.querySelectorAll('button[title="Send"]');
       fireEvent.click(sendButtons[0]);
-      const cancel = screen.getAllByText('Cancel').find(el => (el as HTMLButtonElement).tagName === 'BUTTON');
+      const cancel = screen.getAllByText('Cancelar').find(el => (el as HTMLButtonElement).tagName === 'BUTTON');
       fireEvent.click(cancel!);
       expect(screen.queryByText('Enviar proposta')).toBeNull();
     });

@@ -218,7 +218,7 @@ describe('BookingFormInline — initial render', () => {
   it('renders the price badge when price > 0', async () => {
     const { container } = await renderWithInfo({ price: 5000, priceLabel: 'per session' });
     // $50.00
-    expect(container.textContent).toContain('$50.00');
+    expect(container.textContent).toContain('R$\u00a050,00');
     expect(container.textContent).toContain('per session');
   });
 
@@ -303,7 +303,7 @@ describe('BookingFormInline — initial render', () => {
     const titles = Array.from(container.querySelectorAll('[title]')).map((b) =>
       b.getAttribute('title'),
     );
-    expect(titles).toContain('Extras');
+    expect(titles).toContain('Adicionais');
   });
 
   it('includes a Pay step when price > 0', async () => {
@@ -311,7 +311,7 @@ describe('BookingFormInline — initial render', () => {
     const titles = Array.from(container.querySelectorAll('[title]')).map((b) =>
       b.getAttribute('title'),
     );
-    expect(titles).toContain('Pay');
+    expect(titles).toContain('Pagamento');
   });
 
   it('applies branding fonts via the <link> tag once', async () => {
@@ -565,7 +565,7 @@ describe('BookingFormInline — date → time flow', () => {
       fireEvent.click(backBtn);
     });
     // Back on the date step — calendar Sunday header visible.
-    expect(container.textContent).toContain('Su');
+    expect(container.textContent).toContain('Do');
   });
 });
 

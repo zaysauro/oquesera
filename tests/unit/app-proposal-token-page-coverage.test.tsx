@@ -20,7 +20,7 @@
  * Mocks: next/navigation (useParams), global fetch, sanitize-html.
  */
 
-import React from 'react';
+import React from '@/config/brand';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
 
@@ -65,7 +65,7 @@ function makeProposal(overrides: Record<string, unknown> = {}) {
     sections: [],
     lineItems: [],
     fees: [],
-    currency: 'USD',
+    currency: 'BRL',
     validUntil: null,
     signatureName: null,
     signedAt: null,
@@ -436,7 +436,7 @@ describe('PublicProposalPage — pricing section', () => {
     await waitFor(() => {
       // After toggling, the optional subtotal is added
       // $1000 required + $500 optional = $1500
-      expect(container.textContent).toContain('$1,500.00');
+      expect(container.textContent).toContain('R$\u00a01.500,00');
     });
   });
 
@@ -451,7 +451,7 @@ describe('PublicProposalPage — pricing section', () => {
     const { container } = renderPage();
     await waitFor(() => {
       // flat fee $50 + service $1000 = $1050 grand total
-      expect(container.textContent).toContain('$1,050.00');
+      expect(container.textContent).toContain('R$\u00a01.050,00');
       expect(container.textContent).toContain('Setup fee');
     });
   });
@@ -467,7 +467,7 @@ describe('PublicProposalPage — pricing section', () => {
     const { container } = renderPage();
     await waitFor(() => {
       // 10% of $1000 = $100, total $1100
-      expect(container.textContent).toContain('$1,100.00');
+      expect(container.textContent).toContain('R$\u00a01.100,00');
       expect(container.textContent).toContain('Tax');
       expect(container.textContent).toContain('(10%)');
     });
@@ -484,7 +484,7 @@ describe('PublicProposalPage — pricing section', () => {
     const { container } = renderPage();
     await waitFor(() => {
       expect(container.textContent).toContain('Subtotal');
-      expect(container.textContent).toContain('$500.00');
+      expect(container.textContent).toContain('R$\u00a0500,00');
     });
   });
 

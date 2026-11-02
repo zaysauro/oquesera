@@ -39,7 +39,7 @@ const closePalette = async () => {
 };
 
 const typeInInput = async (value: string) => {
-  const input = screen.getByPlaceholderText(/Jump to a page/i) as HTMLInputElement;
+  const input = screen.getByPlaceholderText(/Vá a uma página/i) as HTMLInputElement;
   await act(async () => {
     fireEvent.change(input, { target: { value } });
   });
@@ -88,7 +88,7 @@ describe('CmdKPalette', () => {
 
   it('does not render a search input while closed', () => {
     render(<CmdKPalette />);
-    expect(screen.queryByPlaceholderText(/Jump to a page/i)).toBeNull();
+    expect(screen.queryByPlaceholderText(/Vá a uma página/i)).toBeNull();
   });
 
   // -------------------------------------------------------------------------
@@ -97,7 +97,7 @@ describe('CmdKPalette', () => {
   it('opens when Cmd+K is pressed', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   it('opens with Ctrl+K (non-mac users)', async () => {
@@ -105,7 +105,7 @@ describe('CmdKPalette', () => {
     await act(async () => {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
     });
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   it('opens with capital K too', async () => {
@@ -113,13 +113,13 @@ describe('CmdKPalette', () => {
     await act(async () => {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'K', metaKey: true }));
     });
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   it('toggles closed when Cmd+K is pressed twice', async () => {
     const { container } = render(<CmdKPalette />);
     await openPalette();
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
     await closePalette();
     expect(container.firstChild).toBeNull();
   });
@@ -127,7 +127,7 @@ describe('CmdKPalette', () => {
   it('closes when Escape is pressed', async () => {
     const { container } = render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'Escape' });
     });
@@ -176,7 +176,7 @@ describe('CmdKPalette', () => {
   it('renders the Dashboard nav entry on first open', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    expect(screen.getAllByText('Dashboard').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Painel').length).toBeGreaterThan(0);
   });
 
   it('renders the ESC keyboard hint chip', async () => {
@@ -208,7 +208,7 @@ describe('CmdKPalette', () => {
     render(<CmdKPalette />);
     await openPalette();
     await typeInInput('crm');
-    expect(screen.getByText('Navigate')).toBeInTheDocument();
+    expect(screen.getByText('Navegar')).toBeInTheDocument();
     expect(screen.queryByText('Acesso rápido')).toBeNull();
   });
 
@@ -232,7 +232,7 @@ describe('CmdKPalette', () => {
     render(<CmdKPalette />);
     await openPalette();
     await typeInInput('something');
-    expect(screen.queryByText(/Type to jump to any page/i)).toBeNull();
+    expect(screen.queryByText(/Digite para ir a qualquer página/i)).toBeNull();
   });
 
   it('filters create actions by query', async () => {
@@ -250,7 +250,7 @@ describe('CmdKPalette', () => {
   it('moves selection down with ArrowDown', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'ArrowDown' });
     });
@@ -261,7 +261,7 @@ describe('CmdKPalette', () => {
   it('moves selection up with ArrowUp', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'ArrowDown' });
       fireEvent.keyDown(input, { key: 'ArrowUp' });
@@ -272,7 +272,7 @@ describe('CmdKPalette', () => {
   it('clamps selection at zero when pressing ArrowUp at the top', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'ArrowUp' });
       fireEvent.keyDown(input, { key: 'ArrowUp' });
@@ -283,7 +283,7 @@ describe('CmdKPalette', () => {
   it('triggers navigation on Enter on the selected create item', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'Enter' });
     });
@@ -294,7 +294,7 @@ describe('CmdKPalette', () => {
   it('closes after Enter activates an item', async () => {
     const { container } = render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'Enter' });
     });
@@ -306,7 +306,7 @@ describe('CmdKPalette', () => {
     await openPalette();
     await typeInInput('zzzqqqxxx_no_match_at_all');
     await waitForDebounce();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.keyDown(input, { key: 'Enter' });
     });
@@ -332,7 +332,7 @@ describe('CmdKPalette', () => {
     // Click the first nav-section button
     const navButtons = screen
       .getAllByRole('button')
-      .filter((b) => b.textContent?.includes('Page'));
+      .filter((b) => b.textContent?.includes('Página'));
     expect(navButtons.length).toBeGreaterThan(0);
     await act(async () => {
       fireEvent.click(navButtons[0]);
@@ -364,12 +364,12 @@ describe('CmdKPalette', () => {
   it('does NOT close when clicking inside the panel', async () => {
     render(<CmdKPalette />);
     await openPalette();
-    const input = screen.getByPlaceholderText(/Jump to a page/i);
+    const input = screen.getByPlaceholderText(/Vá a uma página/i);
     await act(async () => {
       fireEvent.mouseDown(input);
     });
     // Still open
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   // -------------------------------------------------------------------------
@@ -540,7 +540,7 @@ describe('CmdKPalette', () => {
     await typeInInput('net');
     await waitForDebounce();
     // No crash, still rendered
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   it('does not fire brain search when query is whitespace only', async () => {
@@ -587,7 +587,7 @@ describe('CmdKPalette', () => {
     await waitForDebounce();
     // Still works — open it
     await openPalette();
-    expect(screen.getByPlaceholderText(/Jump to a page/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Vá a uma página/i)).toBeInTheDocument();
   });
 
   it('does NOT fetch websites for non-site routes', async () => {
@@ -614,13 +614,13 @@ describe('CmdKPalette', () => {
     render(<CmdKPalette />);
     await openPalette();
     await typeInInput('typed-text');
-    expect((screen.getByPlaceholderText(/Jump to a page/i) as HTMLInputElement).value).toBe(
+    expect((screen.getByPlaceholderText(/Vá a uma página/i) as HTMLInputElement).value).toBe(
       'typed-text',
     );
     await closePalette();
     await openPalette();
     expect(
-      (screen.getByPlaceholderText(/Jump to a page/i) as HTMLInputElement).value,
+      (screen.getByPlaceholderText(/Vá a uma página/i) as HTMLInputElement).value,
     ).toBe('');
   });
 
@@ -639,6 +639,6 @@ describe('CmdKPalette', () => {
     render(<CmdKPalette />);
     await openPalette();
     // At least one "Page" label exists (one per nav row)
-    expect(screen.getAllByText('Page').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Página').length).toBeGreaterThan(0);
   });
 });

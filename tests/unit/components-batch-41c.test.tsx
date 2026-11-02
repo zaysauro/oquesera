@@ -295,7 +295,7 @@ describe('resolvePortalTitle', () => {
   it('falls back to the nav label for routes the table never got', () => {
     // These sections all rendered a generic "Portal" tab for months —
     // the drift the fallback chain exists to kill.
-    expect(resolvePortalTitle('/portal/seo')).toBe('SEO Intelligence');
+    expect(resolvePortalTitle('/portal/seo')).toBe('SEO');
     expect(resolvePortalTitle('/portal/brain/decisions')).toBe('Decisions');
     expect(resolvePortalTitle('/portal/brain/decisions/123')).toBe('Decisions');
     expect(resolvePortalTitle('/portal/publishing/board')).toBe('Board');

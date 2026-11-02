@@ -69,7 +69,7 @@ const MOCK_NAV_ITEMS = [
   },
   {
     href: '/portal/brain',
-    label: 'Company Brain',
+    label: 'Cérebro da Empresa',
     icon: 'psychology',
     children: [
       { href: '/portal/brain/knowledge', label: 'Knowledge Base', icon: 'book' },
@@ -261,7 +261,7 @@ describe('PortalSidebar — nav items', () => {
   it('renders nav items from buildPortalNavItems', async () => {
     render(<PortalSidebar mobileOpen={true} />);
     expect(screen.getByText('Painel')).toBeInTheDocument();
-    expect(screen.getByText('Company Brain')).toBeInTheDocument();
+    expect(screen.getByText('Cérebro da Empresa')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });
 
@@ -288,8 +288,8 @@ describe('PortalSidebar — nav items', () => {
   it('parent item with active child gets childActive styling', async () => {
     mockPathname.mockReturnValue('/portal/brain/knowledge');
     render(<PortalSidebar mobileOpen={true} />);
-    // "Company Brain" is a parent — its div should get text-foreground (childActive)
-    const brainRow = screen.getByText('Company Brain').closest('div');
+    // "Cérebro da Empresa" is a parent — its div should get text-foreground (childActive)
+    const brainRow = screen.getByText('Cérebro da Empresa').closest('div');
     expect(brainRow?.className).toContain('text-foreground');
   });
 
@@ -302,8 +302,8 @@ describe('PortalSidebar — nav items', () => {
 
   it('renders a div toggle (not a link) for items with children', async () => {
     render(<PortalSidebar mobileOpen={true} />);
-    // "Company Brain" has children — rendered as a div toggle, not an anchor
-    const brainRow = screen.getByText('Company Brain').closest('div');
+    // "Cérebro da Empresa" has children — rendered as a div toggle, not an anchor
+    const brainRow = screen.getByText('Cérebro da Empresa').closest('div');
     expect(brainRow?.tagName).toBe('DIV');
     expect(brainRow?.closest('a')).toBeNull();
   });
@@ -329,7 +329,7 @@ describe('PortalSidebar — accordion expand/collapse', () => {
     render(<PortalSidebar mobileOpen={true} />);
     // Children not visible initially
     expect(screen.queryByText('Knowledge Base')).toBeNull();
-    const brainToggle = screen.getByText('Company Brain').closest('div');
+    const brainToggle = screen.getByText('Cérebro da Empresa').closest('div');
     await act(async () => { fireEvent.click(brainToggle!); });
     expect(screen.getByText('Knowledge Base')).toBeInTheDocument();
   });
@@ -339,7 +339,7 @@ describe('PortalSidebar — accordion expand/collapse', () => {
     render(<PortalSidebar mobileOpen={true} />);
     // Children should be visible because route is active
     expect(screen.getByText('Knowledge Base')).toBeInTheDocument();
-    const brainToggle = screen.getByText('Company Brain').closest('div');
+    const brainToggle = screen.getByText('Cérebro da Empresa').closest('div');
     await act(async () => { fireEvent.click(brainToggle!); });
     expect(screen.queryByText('Knowledge Base')).toBeNull();
   });
@@ -359,7 +359,7 @@ describe('PortalSidebar — accordion expand/collapse', () => {
     render(<PortalSidebar mobileOpen={true} />);
 
     // Expand Company Brain
-    const brainToggle = screen.getByText('Company Brain').closest('div');
+    const brainToggle = screen.getByText('Cérebro da Empresa').closest('div');
     await act(async () => { fireEvent.click(brainToggle!); });
     expect(screen.getByText('Knowledge Base')).toBeInTheDocument();
 

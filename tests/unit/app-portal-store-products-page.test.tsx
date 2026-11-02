@@ -238,7 +238,7 @@ describe('ProductsListPage — product list', () => {
   it('renders formatted price', async () => {
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('$19.99');
+      expect(container.textContent).toContain('R$\u00a019,99');
     });
   });
 
@@ -249,8 +249,8 @@ describe('ProductsListPage — product list', () => {
     });
     const { container } = renderPage();
     await waitFor(() => {
-      expect(container.textContent).toContain('$9.99');
-      expect(container.textContent).toContain('$19.99');
+      expect(container.textContent).toContain('R$\u00a09,99');
+      expect(container.textContent).toContain('R$\u00a019,99');
     });
   });
 

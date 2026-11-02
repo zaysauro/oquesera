@@ -521,7 +521,7 @@ describe('PortalContractDetailPage', () => {
       )!;
       fireEvent.click(sendBtn);
       await waitFor(() => {
-        expect(container.textContent).toContain('Failed to send for signature');
+        expect(container.textContent).toContain('Não foi possível enviar for signature');
       });
     });
   });
